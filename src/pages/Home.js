@@ -13,7 +13,7 @@ const StylredMain = styled.main`
     display: flex; 
     flex-direction: column; 
     justify-content: space-between; 
-    height: 45%; 
+    height: 200px; 
     margin: auto 0rem; 
     font-size: 1.7rem; 
     margin-left: 4rem; 
@@ -33,7 +33,7 @@ const StylredMain = styled.main`
       align-items: center; 
       color: #68B0C9; 
       margin-top: 3rem; 
-      height: 15%; 
+      height: 60px; 
       font-size: 2rem; 
       font-weight: 600; 
       border-radius: 10px;
@@ -47,7 +47,7 @@ const StylredMain = styled.main`
     }
     .best {
       margin-top: 2rem; 
-      height: 55%; 
+      height: 200px; 
       width: 90%; 
       display: flex; 
       justify-content: space-between;
@@ -66,7 +66,7 @@ const StylredMain = styled.main`
         }
         div {
           margin-top: 2rem; 
-          height: 50%; 
+          height: 100px; 
           display: flex; 
           flex-direction: column; 
           justify-content: space-between; 
@@ -97,7 +97,7 @@ const StylredMain = styled.main`
             flex-direction: column; 
             align-items: center;
             img {
-              width: 95%; height: 50%; margin-top: 1rem; border-radius: 10px;
+              width: 200px; height: 100px; margin-top: 1rem; border-radius: 10px;
             }
           }
         }
@@ -109,7 +109,7 @@ const StylredMain = styled.main`
 const Home = () => {
   return (
     <div>
-      <img src={Banner} style={{width: "100%", height: "60vh"}}/>
+      <img src={Banner} style={{width: "100%", height: "59vh"}}/>
       <StylredMain>
         <div className="leftNav">
             <p>MAIN</p>
