@@ -2,13 +2,11 @@ import styled from "styled-components";
 
 const StyledLSide = styled.div`
   background-color: pink;
-  width: 15%;
+  width: 10%;
   height: 80%;
   display: flex;
   justify-content: center;
-  position: fixed;
-  top: 0;
-  left: 0;
+  margin-left: 100px;
 
   .lMenu {
     display: flex;

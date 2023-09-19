@@ -7,13 +7,8 @@ import BLayout from "./components/BLayout";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-    ],
+    element: <Home />,
+    index: true,
   },
   {
     path: "/main",

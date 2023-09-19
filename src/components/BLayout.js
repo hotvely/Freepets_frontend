@@ -6,19 +6,26 @@ import styled from "styled-components";
 
 const StyleMain = styled.main`
   display: flex;
+  padding: 150px 0;
+  /* justify-content: center; */
+`;
+const StyleSide = styled.div`
+  display: flex;
   flex-direction: row;
-  justify-content: center;
-  width: 100%;
+  position: sticky;
+  top: 400px;
 `;
 
 const BLayout = () => {
   return (
     <>
       <Header></Header>
+
+      <RSide></RSide>
+
       <StyleMain>
         <LSide></LSide>
         <Outlet></Outlet>
-        <RSide></RSide>
       </StyleMain>
     </>
   );

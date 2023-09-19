@@ -2,13 +2,14 @@ import styled from "styled-components";
 
 const StyledRSide = styled.div`
   background-color: pink;
-  width: 15%;
-  height: 80%;
+  width: 10%;
+  height: 300px;
   display: flex;
   justify-content: center;
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 150px;
+  right: 80px;
+  margin: 0;
 
   .rMenu {
     display: flex;
