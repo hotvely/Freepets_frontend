@@ -28,7 +28,12 @@ const router = createBrowserRouter([
       },
       {
         path: "product",
-        element: <ProductReview />
+        element: <ProductReview />,
+        children : [
+          {
+            path: "view"
+          }
+        ]
       },
       {
         path: "hospital",
