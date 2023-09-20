@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 const StyledLSide = styled.div`
-  background-color: pink;
+  background-color: lightgray;
   width: 10%;
   height: 80%;
   display: flex;
   justify-content: center;
-  margin-left: 100px;
+  margin-left: 50px;
 
   .lMenu {
     display: flex;
@@ -15,7 +15,7 @@ const StyledLSide = styled.div`
     margin: 50px 0;
     border: 1px solid black;
     justify-content: center;
-    div {
+    a {
       padding: 20px 0;
     }
 
@@ -28,12 +28,13 @@ const LSide = () => {
     <>
       <StyledLSide>
         <div className="lMenu">
-          <div>왼쪽메뉴..</div>
-          <div>게시판</div>
-          <div>게시판</div>
-          <div>게시판</div>
-          <div>게시판</div>
-          <div>게시판</div>
+          <a href="#">왼쪽메뉴..</a>
+          <a href="#">게시판1</a>
+          <a href="#">게시판2</a>
+
+          <a href="#">게시판3</a>
+          <a href="#">게시판4</a>
+          <a href="#">게시판5</a>
         </div>
       </StyledLSide>
     </>

@@ -32,9 +32,9 @@ const RSide = () => {
     <>
       <StyledRSide>
         <div className="rMenu">
-          <div>우측 기능1</div>
-          <div>우측 기능1</div>
-          <div>우측 기능1</div>
+          <div>우측 기능1 asdasdasdadas asdsd </div>
+          <div>우측 기능1ads sa ada sasd a </div>
+          <div>우측 기능1 ads dasd ad </div>
         </div>
       </StyledRSide>
     </>

@@ -9,12 +9,6 @@ const StyleMain = styled.main`
   padding: 150px 0;
   /* justify-content: center; */
 `;
-const StyleSide = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: sticky;
-  top: 400px;
-`;
 
 const BLayout = () => {
   return (

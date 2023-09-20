@@ -1,13 +1,15 @@
 import styled from "styled-components";
+import testimg from "../resources/image.jpg";
 
 const StyledMain = styled.main`
   justify-content: center;
   width: 70%;
   background-color: skyblue;
 
-  .test {
+  .BoardTitleImg {
     color: white;
     background-color: black;
+    width: 100%;
   }
   .test2 {
     border: 1px solid #444444;
@@ -19,10 +21,10 @@ const StyledMain = styled.main`
   }
 `;
 
-const Mypage = () => {
+const BoardTest = () => {
   return (
     <StyledMain>
-      <div className="test">여기에는 이미지 들어갈 꺼에여!</div>
+      <img src={testimg} className="BoardTitleImg"></img>
       <table className="test2">
         <thead>
           <tr>
@@ -43,4 +45,4 @@ const Mypage = () => {
   );
 };
 
-export default Mypage;
+export default BoardTest;

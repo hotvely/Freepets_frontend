@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
-import Mypage from "./pages/Mypage";
 import BLayout from "./components/BLayout";
+import BoardTest from "./pages/BoardTest";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Mypage />,
+        element: <BoardTest />,
       },
     ],
   },
