@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
+import Lost from "./pages/Lost";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,11 @@ const router = createBrowserRouter([
         index: true,
         element: <BoardTest />,
       },
+      {
+        path: "lost",
+        element: <Lost />,
+      }
+    
     ],
   },
 ]);
