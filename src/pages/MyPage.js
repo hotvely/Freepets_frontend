@@ -1,10 +1,43 @@
 import styled from "styled-components";
 import image from "../resources/image.jpg";
+import banner from "../resources/bannerTest.png";
 
 const MyPageMain = styled.main`
   margin: 0;
   flex: 0 1 auto;
   padding: 0 100px;
+  img {
+    width: 100%;
+  }
+
+  header {
+    font-size: 1.3rem;
+    margin-top: 20px;
+    justify-content: center;
+    font-weight: bold;
+    background-color: black;
+    width: 100%;
+    height: 80px;
+    color: white;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    p {
+      padding-left: 30px;
+    }
+    .alarm {
+      display: flex;
+      background-color: orange;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      margin-right: 50px;
+    }
+  }
 
   .profile {
     display: flex;
@@ -37,12 +70,6 @@ const MyPageMain = styled.main`
       flex: 0 1 100%;
       flex-direction: column;
       padding: 20px 20px;
-
-      header {
-        font-size: 1.3rem;
-        padding: 25px 15px;
-        font-weight: bold;
-      }
 
       div {
         margin: 0 20px;
@@ -85,19 +112,53 @@ const MyPageMain = styled.main`
       margin: 0 10px;
     }
   }
+
+  .check-Alarm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 10px 50px;
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .check-Alarm-Content {
+      width: 100%;
+      height: 50px;
+      margin-left: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .check_Alarm-info {
+        display: flex;
+        flex-direction: row;
+        margin: 5px 0;
+        div {
+          margin-right: 40px;
+        }
+      }
+    }
+  }
 `;
 
 const MyPage = () => {
   return (
     <>
       <MyPageMain>
+        <img src={banner}></img>
+        <header>
+          <p>기본정보</p>
+        </header>
         <div className="profile">
           <div className="profile-photo">
             <img src={image} className="profileImg"></img>
             <label>NICKNAME</label>
           </div>
           <div className="profileInfo">
-            <header>기본정보</header>
             <div>
               <p>Id</p>
               <div>hotvely</div>
@@ -133,50 +194,57 @@ const MyPage = () => {
             </div>
           </div>
         </div>
+
         <div className="profile_btn">
           <button>회원 정보수정</button>
           <button style={{ backgroundColor: "pink" }}>회원 탈퇴</button>
         </div>
-        <hr
+        {/* <hr
           style={{
             width: "100%",
             height: "2px",
             backgroundColor: "#818181",
             border: 0,
           }}
-        />
-
-        <div className="profile">
-          <div className="profile-photo">
-            <img src={image} className="profileImg"></img>
+        /> */}
+        <header>
+          <p>알림 확인하기</p>
+          <div className="alarm">
+            <div>1</div>
           </div>
-          <div className="profileInfo">
-            <div>
-              <label>
-                <label>NICKNAME</label>'s profile Card
-              </label>
+        </header>
+        <div className="check-Alarm">
+          <img src={image}></img>
+          <div className="check-Alarm-Content">
+            <div className="check_Alarm-info">
+              XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
             </div>
-            <div>
-              <p>id</p>
-              <div>ID</div>
-            </div>
-            <div>
-              <p>e-mail</p>
-              <div>EMAIL</div>
-            </div>
-            <div>
-              <p>phone</p>
-              <div>PHONE</div>
-            </div>
-            <div>
-              <label>
-                hi i am hotvely. this page admin. hellohellohellohellohello
-                hellohellohellohellohellohellohel zlohellohellohellohellohello
-                nice to meet you!! Ty!
-              </label>
+            <div className="check_Alarm-info">
+              <div>2시간전...</div>
+              <div>hotvely</div>
             </div>
           </div>
+          <button>X</button>
         </div>
+        <header>
+          <p>내가 쓴 게시글 확인하기</p>
+        </header>
+        <div className=""></div>
+
+        <header>
+          <p>내가 쓴 댓글 확인하기</p>
+        </header>
+        <div className=""></div>
+
+        <header>
+          <p>내가 좋아요 한 게시글 확인하기</p>
+        </header>
+        <div className=""></div>
+
+        <header>
+          <p>최근 방문한 게시글 확인하기</p>
+        </header>
+        <div className=""></div>
       </MyPageMain>
     </>
   );
