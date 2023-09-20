@@ -9,13 +9,15 @@ const StyledRSide = styled.div`
   padding: 0 50px;
 
   .rMenu {
-    background-color: pink;
     width: 100%;
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    border: 10px solid skyblue;
+    border-radius: 25px;
+
     .rMenuAction {
       display: flex;
       flex-direction: column;

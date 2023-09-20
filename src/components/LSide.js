@@ -5,25 +5,31 @@ const StyledLSide = styled.div`
   display: flex;
   flex: 0 1 300px;
   padding: 0 50px;
-  justify-content: center;
+
+  /* justify-content: center; */
 
   .Laside {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     border: 8px solid skyblue;
     border-radius: 25px;
     width: 100%;
-
+    padding: 30px 10px;
     .lMenu {
       display: flex;
       flex-direction: column;
-      width: 80%;
+      width: 100%;
       justify-content: space-between;
+
+      hr {
+        width: 90%;
+      }
       label {
         font-size: 1.2rem;
         font-weight: bold;
         color: skyblue;
+        padding: 15px 0;
       }
       a {
         color: black;
@@ -44,15 +50,16 @@ const LSide = () => {
             <label>커뮤니티</label>
             <a href="#">자유게시판</a>
             <a href="#">펫시터</a>
-
+            <hr />
             <label>플리마켓</label>
             <a href="#">자유게시판</a>
             <a href="#">자유게시판</a>
-
+            <hr />
             <label>정보나눔</label>
             <a href="#">자유게시판</a>
             <a href="#">자유게시판</a>
             <a href="#">자유게시판</a>
+            <hr />
           </div>
         </div>
       </StyledLSide>
