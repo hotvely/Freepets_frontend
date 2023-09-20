@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
-import Lost from "./pages/Lost";
+import MyPage from "./pages/MyPage";
 
 const router = createBrowserRouter([
   {
@@ -19,11 +19,16 @@ const router = createBrowserRouter([
         index: true,
         element: <BoardTest />,
       },
+    ],
+  },
+  {
+    path: "/mypage",
+    element: <BLayout />,
+    children: [
       {
-        path: "lost",
-        element: <Lost />,
-      }
-    
+        index: true,
+        element: <MyPage />,
+      },
     ],
   },
 ]);
