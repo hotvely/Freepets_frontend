@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { faCaretDown, faComments, faEye, faMagnifyingGlass, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faBackward, faCaretDown, faComments, faEye, faForward, faMagnifyingGlass, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Main = styled.div`
@@ -11,7 +11,7 @@ const Main = styled.div`
 
 const MainBox = styled.div`
     padding: 20px 10px;
-    width : 1200px;
+    width : 900px;
     border : 1px solid #B1DEEC;
 `
 
@@ -28,12 +28,19 @@ const MainHeader = styled.header`
         font-size: 0.8rem;
         font-weight: bold;
         background-color: #EDEDED;
-
-        option {
-            padding: 10px 0;
-        }
-
     }
+
+    .button-write {
+        width: 90px;
+        height: 32px;
+        border: none;
+        margin-left: 10px;
+        border-radius: 10px;
+        color: #3a98b9;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    
 `
 
 const MainContent = styled.main`
@@ -43,19 +50,20 @@ const ProductReview = () => {
     return (
         <Main>
             <MainBox>
-                <MainHeader>
-                    <select>
-                        <option value="1">추천순</option>
-                        <option value="2">댓글순</option>
-                        <option value="3">조회수</option>
-                    </select>
-
+                <MainHeader>                    
                     <div>
                         <label htmlFor="search">용품 후기</label>
                         <FontAwesomeIcon icon={faCaretDown} />
                         <input type="search" id="search" name="search"/>
                         <button><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                     </div>
+
+                    <select>
+                        <option value="1">추천순</option>
+                        <option value="2">댓글순</option>
+                        <option value="3">조회수</option>
+                    </select>
+                    <button className="button-write">글쓰기</button>
                 </MainHeader>
                 <MainContent>
                     <section>
@@ -113,12 +121,15 @@ const ProductReview = () => {
                             <p><span>7일</span> 전</p>
                             <p><FontAwesomeIcon icon={faThumbsUp}/><span id="like">50</span> <FontAwesomeIcon icon={faEye}/><span id="views">150</span> <FontAwesomeIcon icon={faComments}/><span id="comment">30</span></p>
                         </a>
-                        <a href="#">
-                            <h2>우리 집 강아지가 엄청 좋아하는 장난감</h2>
-                            <h3><span id="image">사진</span>임지우</h3>
-                            <p><span>7일</span> 전</p>
-                            <p><FontAwesomeIcon icon={faThumbsUp}/><span id="like">50</span> <FontAwesomeIcon icon={faEye}/><span id="views">150</span> <FontAwesomeIcon icon={faComments}/><span id="comment">30</span></p>
-                        </a>
+                        <nav>
+                            <FontAwesomeIcon icon={faBackward} />
+                            <button>5</button>
+                            <button>6</button>
+                            <button>7</button>
+                            <button>8</button>
+                            <button>9</button>
+                            <FontAwesomeIcon icon={faForward} />
+                        </nav>
                     </section>
                 </MainContent>
             </MainBox>

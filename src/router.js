@@ -5,8 +5,10 @@ import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
 import MyPage from "./pages/MyPage";
 import ProductReview from "./pages/information/ProductReview";
+import ProductReviewView from "./pages/information/ProductReviewView";
 import HospitalReview from "./pages/information/HospitalReview";
 import Videoinfo from "./pages/information/Videoinfo";
+import ProductReviewCreate from "./pages/information/ProductReviewCreate";
 
 const router = createBrowserRouter([
   {
@@ -29,11 +31,6 @@ const router = createBrowserRouter([
       {
         path: "product",
         element: <ProductReview />,
-        children : [
-          {
-            path: "view"
-          }
-        ]
       },
       {
         path: "hospital",
@@ -42,7 +39,15 @@ const router = createBrowserRouter([
       {
         path: "videoinfo",
         element: <Videoinfo />,
-      }
+      },
+      {
+        path: "product/view",
+        element: <ProductReviewView />
+      },
+      {
+        path: "product/create",
+        element: <ProductReviewCreate />
+      },
     ],
   },
 ]);
