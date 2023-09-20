@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
+import MyPage from "./pages/MyPage";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,16 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <BoardTest />,
+      },
+    ],
+  },
+  {
+    path: "/mypage",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <MyPage />,
       },
     ],
   },

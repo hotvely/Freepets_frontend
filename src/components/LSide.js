@@ -1,25 +1,37 @@
 import styled from "styled-components";
 
 const StyledLSide = styled.div`
-  background-color: lightgray;
-  width: 10%;
-  height: 80%;
+  background-color: white;
   display: flex;
+  flex: 0 1 300px;
+  padding: 0 50px;
   justify-content: center;
-  margin-left: 50px;
 
-  .lMenu {
+  .Laside {
     display: flex;
-    flex-direction: column;
-    width: 50%;
-    margin: 50px 0;
-    border: 1px solid black;
     justify-content: center;
-    a {
-      padding: 20px 0;
-    }
+    align-items: center;
+    border: 8px solid skyblue;
+    border-radius: 25px;
+    width: 100%;
 
-    text-align: center;
+    .lMenu {
+      display: flex;
+      flex-direction: column;
+      width: 80%;
+      justify-content: space-between;
+      label {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: skyblue;
+      }
+      a {
+        color: black;
+        padding: 10px 0;
+      }
+
+      text-align: center;
+    }
   }
 `;
 
@@ -27,14 +39,21 @@ const LSide = () => {
   return (
     <>
       <StyledLSide>
-        <div className="lMenu">
-          <a href="#">왼쪽메뉴..</a>
-          <a href="#">게시판1</a>
-          <a href="#">게시판2</a>
+        <div className="Laside">
+          <div className="lMenu">
+            <label>커뮤니티</label>
+            <a href="#">자유게시판</a>
+            <a href="#">펫시터</a>
 
-          <a href="#">게시판3</a>
-          <a href="#">게시판4</a>
-          <a href="#">게시판5</a>
+            <label>플리마켓</label>
+            <a href="#">자유게시판</a>
+            <a href="#">자유게시판</a>
+
+            <label>정보나눔</label>
+            <a href="#">자유게시판</a>
+            <a href="#">자유게시판</a>
+            <a href="#">자유게시판</a>
+          </div>
         </div>
       </StyledLSide>
     </>

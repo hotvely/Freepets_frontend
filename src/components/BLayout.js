@@ -5,9 +5,11 @@ import RSide from "./RSide";
 import styled from "styled-components";
 
 const StyleMain = styled.main`
-  display: flex;
   padding: 150px 0;
-  /* justify-content: center; */
+
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 `;
 
 const BLayout = () => {
@@ -15,11 +17,10 @@ const BLayout = () => {
     <>
       <Header></Header>
 
-      <RSide></RSide>
-
       <StyleMain>
         <LSide></LSide>
         <Outlet></Outlet>
+        <RSide></RSide>
       </StyleMain>
     </>
   );
