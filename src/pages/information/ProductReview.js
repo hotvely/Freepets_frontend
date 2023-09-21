@@ -4,14 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Main = styled.div`
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     justify-content: center;
+    flex-direction: column;
 `
 
 const MainBox = styled.div`
     padding: 20px 10px;
-    width : 900px;
+    width : 100%;
     border : 1px solid #B1DEEC;
 `
 
@@ -49,6 +50,7 @@ const MainContent = styled.main`
 const ProductReview = () => {
     return (
         <Main>
+            <div style={{width : "100%", height : "100px", backgroundColor: "black", marginBottom : "50px", padding: "0px 10px"}}></div>
             <MainBox>
                 <MainHeader>                    
                     <div>
@@ -121,18 +123,18 @@ const ProductReview = () => {
                             <p><span>7일</span> 전</p>
                             <p><FontAwesomeIcon icon={faThumbsUp}/><span id="like">50</span> <FontAwesomeIcon icon={faEye}/><span id="views">150</span> <FontAwesomeIcon icon={faComments}/><span id="comment">30</span></p>
                         </a>
-                        <nav>
-                            <FontAwesomeIcon icon={faBackward} />
-                            <button>5</button>
-                            <button>6</button>
-                            <button>7</button>
-                            <button>8</button>
-                            <button>9</button>
-                            <FontAwesomeIcon icon={faForward} />
-                        </nav>
                     </section>
                 </MainContent>
             </MainBox>
+            <div>
+                <FontAwesomeIcon icon={faBackward} />
+                <button>5</button>
+                <button>6</button>
+                <button>7</button>
+                <button>8</button>
+                <button>9</button>
+                <FontAwesomeIcon icon={faForward} />
+            </div>
         </Main>
     )
 }
