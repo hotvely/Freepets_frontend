@@ -4,6 +4,8 @@ import Layout from "./components/Layout";
 import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
 import MyPage from "./pages/MyPage";
+import Lost from "./pages/Lost";
+import LostDetail from "./pages/LostDeatail";
 
 const router = createBrowserRouter([
   {
@@ -18,19 +20,23 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <BoardTest />,
-      },
-    ],
-  },
-  {
-    path: "/mypage",
-    element: <BLayout />,
-    children: [
+      }, 
       {
-        index: true,
+        path:"mypage",
         element: <MyPage />,
       },
+      {
+        path : "lost",
+        element:<Lost/>
+      },
+      {
+        path:"lostdetail",
+        element:<LostDetail />
+      }
     ],
+
   },
+ 
 ]);
 
 export default router;
