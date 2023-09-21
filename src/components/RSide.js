@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 const StyledRSide = styled.div`
   width: 200px;
+  height: 400px;
   display: flex;
   justify-content: center;
   position: block;
   flex: 0 1 300px;
-  padding: 0 50px;
-
+  padding-right: 50px;
   .rMenu {
     width: 100%;
 

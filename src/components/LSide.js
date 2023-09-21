@@ -4,7 +4,7 @@ const StyledLSide = styled.div`
   background-color: white;
   display: flex;
   flex: 0 1 300px;
-  padding: 0 50px;
+  padding-left: 50px;
 
   /* justify-content: center; */
 
@@ -15,7 +15,8 @@ const StyledLSide = styled.div`
     border: 8px solid skyblue;
     border-radius: 25px;
     width: 100%;
-    padding: 30px 10px;
+    height: 500px;
+    padding: 30px 0px;
     .lMenu {
       display: flex;
       flex-direction: column;
