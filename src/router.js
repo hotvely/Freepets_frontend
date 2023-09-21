@@ -7,6 +7,8 @@ import MyPage from "./pages/MyPage";
 import ProductReview from "./pages/information/ProductReview";
 import HospitalReview from "./pages/information/HospitalReview";
 import Videoinfo from "./pages/information/Videoinfo";
+import Lost from "./pages/Lost";
+import LostDetail from "./pages/LostDeatail";
 
 const router = createBrowserRouter([
   {
@@ -22,22 +24,16 @@ const router = createBrowserRouter([
         index: true,
         element: <BoardTest />,
       },
+    ],
+  },
+  {
+    path: "/mypage",
+    element: <BLayout />,
+    children: [
       {
-        path: "mypage",
+        index: true,
         element: <MyPage />,
       },
-      {
-        path: "product",
-        element: <ProductReview />
-      },
-      {
-        path: "hospital",
-        element: <HospitalReview />,
-      },
-      {
-        path: "videoinfo",
-        element: <Videoinfo />,
-      }
     ],
   },
 ]);
