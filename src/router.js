@@ -5,6 +5,7 @@ import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
 import MyPage from "./pages/MyPage";
 import Lost from "./pages/Lost";
+import LostDetail from "./pages/LostDeatail";
 
 const router = createBrowserRouter([
   {
@@ -27,8 +28,13 @@ const router = createBrowserRouter([
       {
         path : "lost",
         element:<Lost/>
+      },
+      {
+        path:"lostdetail",
+        element:<LostDetail />
       }
     ],
+
   },
  
 ]);

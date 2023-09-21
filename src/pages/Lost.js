@@ -10,8 +10,13 @@ const StyledMain = styled.main`
     height: 100vw;
     align-items: center;
 
-    .select{
+    .venner{
         width: 100%;
+        border: 2px solid black;
+        height: 100px;
+    }
+    .select{
+     width: 100%;
      display:flex;
      justify-content: space-between;
      align-items: center;
@@ -21,7 +26,10 @@ const StyledMain = styled.main`
         
     }
      .search{
-        margin-right: 100px;
+        margin-right: 70px;
+        label{
+            margin: 5px;
+        }
      }
     }
 
@@ -29,13 +37,7 @@ const StyledMain = styled.main`
    
 `;
 
-const BorderBox = styled.div`
-      width: 1200px;
-      border: 2px solid #C1F1FC;
-    
 
-     
-`;
 
 const MainContent = styled.div`
     width: 100%;
@@ -46,6 +48,10 @@ const MainContent = styled.div`
 
         .post{
             margin: 15px 10px;
+
+            div {
+               margin: 15px 0px;
+            }
         }
     }   
    
@@ -69,7 +75,10 @@ const Lost = () => {
 
 
         <StyledMain>
-           
+           <div className="venner">
+              <h1>커뮤니티</h1>
+              <span>여기는 커뮤니티 게시판입니다(베너)</span>
+           </div>
             <div className="select">
                 <div className="option"> 
                     <select>
@@ -79,9 +88,8 @@ const Lost = () => {
                     </select>
                 </div>
                 <div className="search">
-                    {/* <h1>Lost 게시판 </h1>    */}
                     <label>검색</label><input type="text" id="search" name="search"/>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} style={{color:"#138CA7"}}/>
+                    <FontAwesomeIcon icon={faMagnifyingGlass} style={{color:"#138CA7", margin:"0px 5px"}}/>
                 </div>
             </div>
             
@@ -179,7 +187,127 @@ const Lost = () => {
                             </div>
                         </a>    <hr style={{width:"100%"}}/>
                     </div>
-                    
+                    <div className="post">
+                        <a href="#">
+                            <div>
+                            <span id="profile">프로필</span>
+                            <span id="date">7일 전</span>
+                            </div>
+                            <div>
+                            <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+                            </div>
+                            <div>
+                            <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                            </div>
+                        </a>    <hr style={{width:"100%"}}/>
+                    </div>
+                    <div className="post">
+                        <a href="#">
+                            <div>
+                            <span id="profile">프로필</span>
+                            <span id="date">7일 전</span>
+                            </div>
+                            <div>
+                            <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+                            </div>
+                            <div>
+                            <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                            </div>
+                        </a>    <hr style={{width:"100%"}}/>
+                    </div>
+                    <div className="post">
+                        <a href="#">
+                            <div>
+                            <span id="profile">프로필</span>
+                            <span id="date">7일 전</span>
+                            </div>
+                            <div>
+                            <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+                            </div>
+                            <div>
+                            <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                            </div>
+                        </a>    <hr style={{width:"100%"}}/>
+                    </div>
+                    <div className="post">
+                        <a href="#">
+                            <div>
+                            <span id="profile">프로필</span>
+                            <span id="date">7일 전</span>
+                            </div>
+                            <div>
+                            <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+                            </div>
+                            <div>
+                            <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                            </div>
+                        </a>    <hr style={{width:"100%"}}/>
+                    </div>
+                    <div className="post">
+                        <a href="#">
+                            <div>
+                            <span id="profile">프로필</span>
+                            <span id="date">7일 전</span>
+                            </div>
+                            <div>
+                            <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+                            </div>
+                            <div>
+                            <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                            </div>
+                        </a>    <hr style={{width:"100%"}}/>
+                    </div>
+                    <div className="post">
+                        <a href="#">
+                            <div>
+                            <span id="profile">프로필</span>
+                            <span id="date">7일 전</span>
+                            </div>
+                            <div>
+                            <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+                            </div>
+                            <div>
+                            <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                            </div>
+                        </a>    <hr style={{width:"100%"}}/>
+                    </div>
+                    <div className="post">
+                        <a href="#">
+                            <div>
+                            <span id="profile">프로필</span>
+                            <span id="date">7일 전</span>
+                            </div>
+                            <div>
+                            <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+                            </div>
+                            <div>
+                            <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                            </div>
+                        </a>    <hr style={{width:"100%"}}/>
+                    </div>
+                    <div className="post">
+                        <a href="#">
+                            <div>
+                            <span id="profile">프로필</span>
+                            <span id="date">7일 전</span>
+                            </div>
+                            <div>
+                            <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+                            </div>
+                            <div>
+                            <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                            </div>
+                        </a>    <hr style={{width:"100%"}}/>
+                    </div>
+
                 </section>
             </MainContent>
             <Paging>
