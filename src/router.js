@@ -7,6 +7,7 @@ import MyPage from "./pages/MyPage";
 import ProductReview from "./pages/information/ProductReview";
 import HospitalReview from "./pages/information/HospitalReview";
 import Videoinfo from "./pages/information/Videoinfo";
+import MyCalendar from "./pages/MyCalendar";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
       },
       {
         path: "product",
-        element: <ProductReview />
+        element: <ProductReview />,
       },
       {
         path: "hospital",
@@ -37,7 +38,11 @@ const router = createBrowserRouter([
       {
         path: "videoinfo",
         element: <Videoinfo />,
-      }
+      },
+      {
+        path: "calendar",
+        element: <MyCalendar />,
+      },
     ],
   },
 ]);
