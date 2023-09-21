@@ -11,7 +11,7 @@ const Main = styled.div`
 
 const MainBox = styled.div`
     padding: 20px 10px;
-    width : 1200px;
+    width : 1000px;
     border : 1px solid #B1DEEC;
 `
 

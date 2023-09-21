@@ -7,6 +7,7 @@ import MyPage from "./pages/MyPage";
 import ProductReview from "./pages/information/ProductReview";
 import HospitalReview from "./pages/information/HospitalReview";
 import Videoinfo from "./pages/information/Videoinfo";
+import Media from "./pages/Media";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,12 @@ const router = createBrowserRouter([
       {
         path: "videoinfo",
         element: <Videoinfo />,
+      },
+      {
+        path: "media",
+        element: <Media />,
       }
+
     ],
   },
 ]);
