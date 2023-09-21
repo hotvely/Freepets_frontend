@@ -23,9 +23,10 @@ const MainBox = styled.main`
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-bottom: 30px;
 
         .select-category {
-        width: 80%;
+        width: 81%;
         height: 30px;
         margin-bottom: 10px;
         border: solid 1px #eee;
@@ -39,13 +40,15 @@ const MainBox = styled.main`
 
             #saleshopName {
                 width: 39%;
-                height: 30px;
+                height: 20px;
+                padding: 5px;
                 border: 1px solid #eee;
                 margin-right: 13px;
             }
 
             #saleshopUrl {
-                width: 39%;
+                width: 38%;
+                padding: 5px;
                 border: 1px solid #eee;
             }
         }
@@ -58,13 +61,16 @@ const MainBox = styled.main`
 
             #productReviewTitle {
                 width: 80%;
-                height: 30px;
+                padding: 5px;
+                height: 20px;
                 border: 1px solid #eee;
             }
         }       
     }
 
     .main-content {
+        width: 80%;
+        margin-bottom: 30px;
 
         .btn-font {
             background-color: white;
@@ -72,6 +78,29 @@ const MainBox = styled.main`
             width: 60px;
             margin-bottom: 10px;
             cursor: pointer;
+        }
+
+        .input-desc {
+            width: 100%;
+            height: 500px;
+            padding: 10px;
+            border: 1px solid #eee;
+            font-size: 0.8rem;
+        }
+    }
+
+    .footer-content {
+
+        .btn-footer {
+            width: 100px;
+            height: 30px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: #237A8E;
+            font-weight: bold;
+            cursor: pointer;
+            
         }
     }
 `
@@ -82,6 +111,11 @@ const ContentButton = () => {
 
 const ProductReviewCreate = () => {
     const [fileInput, setFileInput] = useState("hidden");
+    const [desc, setDesc] = useState("");
+
+    const InputHandler = (e) => {
+        setDesc(e.currentTarget.innerText);
+    }
 
     const FileClick = () => {
         setFileInput("file");
@@ -122,14 +156,13 @@ const ProductReviewCreate = () => {
                         <button className="btn btn-font btn-file-image" onClick={FileClick}><FontAwesomeIcon icon={faImage}/></button>
                         <button className="btn btn-font btn-file-video" onClick={FileClick}><FontAwesomeIcon icon={faVideo}/></button>
                         <button className="btn btn-font btn-file" onClick={FileClick}><FontAwesomeIcon icon={faFile}/></button>
-                        <input type={fileInput}></input>
+                        <input type={fileInput} name="productReviewUrl" id="productReviewUrl"></input>
                     </div>
-                    
-                    <textarea cols="150" rows="30" style={{resize: "none"}} id="productReviewDesc" name="productReviewDesc" placeholder="내용을 입력해 주세요."></textarea>
+                    <div contentEditable="true" className="input-desc" onInput={InputHandler} suppressContentEditableWarning="true"></div>                   
                 </div>
                 <div className="footer-content">
-                    <button onClick={ContentButton} className="btn btn-reset">초기화</button>
-                    <button onClick={ContentButton} className="btn btn-submit">등록</button>
+                    <button onClick={ContentButton} className="btn btn-footer btn-reset">초기화</button>
+                    <button onClick={ContentButton} className="btn btn-footer btn-submit">등록</button>
                 </div>
             </MainBox>
         </Main>
