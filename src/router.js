@@ -36,6 +36,16 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/lost",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <Lost />,
+      },
+    ],
+  },
 ]);
 
 export default router;
