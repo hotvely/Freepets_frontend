@@ -113,33 +113,117 @@ const MyPageMain = styled.main`
     }
   }
 
-  .check-Alarm {
+  .profile-alram {
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
 
-    margin: 10px 50px;
-    img {
-      width: 50px;
-      height: 50px;
-    }
-
-    .check-Alarm-Content {
-      width: 100%;
-      height: 50px;
-      margin-left: 20px;
+    .check-Alarm {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      flex-direction: row;
+      width: 90%;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0;
 
-      .check_Alarm-info {
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+      button {
+        background-color: white;
+        border: 0;
+        font-weight: bold;
+      }
+
+      .check-Alarm-Content {
+        width: 800px;
+        height: 50px;
+        margin-left: 20px;
+        /* margin-right: 100px; */
         display: flex;
-        flex-direction: row;
-        margin: 5px 0;
-        div {
-          margin-right: 40px;
+        flex-direction: column;
+        justify-content: center;
+
+        .check_Alarm-info {
+          display: flex;
+          flex-direction: row;
+          margin: 5px 0;
+          div {
+            margin-right: 40px;
+          }
         }
+      }
+    }
+  }
+
+  .profile-Post {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .Post {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      margin: 20px 50px;
+
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+
+      .postInfo_basic {
+        flex: 0 1 50px;
+        padding-left: 20px;
+        font-weight: bold;
+      }
+      .postInfo_boardname {
+        flex: 0 1 100px;
+        padding-left: 20px;
+        font-weight: bold;
+      }
+      .postInfo_title {
+        flex: 0 1 500px;
+        padding-left: 20px;
+      }
+      .postInfo_date {
+        flex: 0 1 150px;
+        padding-left: 20px;
+      }
+    }
+  }
+
+  .profile-myReview {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .myReview {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 20px;
+
+      height: 40px;
+      .review_boardname {
+        flex: 0 1 150px;
+        font-weight: bold;
+      }
+      .review_title {
+        flex: 0 1 250px;
+        padding-left: 20px;
+        font-weight: bold;
+      }
+      .review_content {
+        flex: 0 1 400px;
+      }
+      .review_date {
+        flex: 0 1 150px;
+        padding-left: 20px;
       }
     }
   }
@@ -199,52 +283,209 @@ const MyPage = () => {
           <button>회원 정보수정</button>
           <button style={{ backgroundColor: "pink" }}>회원 탈퇴</button>
         </div>
-        {/* <hr
-          style={{
-            width: "100%",
-            height: "2px",
-            backgroundColor: "#818181",
-            border: 0,
-          }}
-        /> */}
-        <header>
-          <p>알림 확인하기</p>
-          <div className="alarm">
-            <div>1</div>
-          </div>
-        </header>
-        <div className="check-Alarm">
-          <img src={image}></img>
-          <div className="check-Alarm-Content">
-            <div className="check_Alarm-info">
-              XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
+
+        <div className="profile-alram">
+          <header>
+            <p>알림 확인하기</p>
+            <div className="alarm">
+              <div>1</div>
             </div>
-            <div className="check_Alarm-info">
-              <div>2시간전...</div>
-              <div>hotvely</div>
-            </div>
+          </header>
+          <div className="check-Alarm">
+            <img src={image}></img>
+            <a href="#">
+              <div className="check-Alarm-Content">
+                <div className="check_Alarm-info">
+                  XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
+                </div>
+                <div className="check_Alarm-info">
+                  <div>2시간전...</div>
+                  <div>hotvely</div>
+                </div>
+              </div>
+            </a>
+            <button>X</button>
           </div>
-          <button>X</button>
+          <div className="check-Alarm">
+            <img src={image}></img>
+            <a href="#">
+              <div className="check-Alarm-Content">
+                <div className="check_Alarm-info">
+                  XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
+                </div>
+                <div className="check_Alarm-info">
+                  <div>2시간전...</div>
+                  <div>hotvely</div>
+                </div>
+              </div>
+            </a>
+            <button>X</button>
+          </div>
+          <div className="check-Alarm">
+            <img src={image}></img>
+            <a href="#">
+              <div className="check-Alarm-Content">
+                <div className="check_Alarm-info">
+                  XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
+                </div>
+                <div className="check_Alarm-info">
+                  <div>2시간전...</div>
+                  <div>hotvely</div>
+                </div>
+              </div>
+            </a>
+            <button>X</button>
+          </div>{" "}
+          <div className="check-Alarm">
+            <img src={image}></img>
+            <a href="#">
+              <div className="check-Alarm-Content">
+                <div className="check_Alarm-info">
+                  XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
+                </div>
+                <div className="check_Alarm-info">
+                  <div>2시간전...</div>
+                  <div>hotvely</div>
+                </div>
+              </div>
+            </a>
+            <button>X</button>
+          </div>
         </div>
-        <header>
-          <p>내가 쓴 게시글 확인하기</p>
-        </header>
-        <div className=""></div>
 
-        <header>
-          <p>내가 쓴 댓글 확인하기</p>
-        </header>
-        <div className=""></div>
+        <div className="profile-Post">
+          <header>
+            <p>내가 쓴 게시글 확인하기</p>
+          </header>
+          <div className="Post">
+            <img src={image}></img>
+            <div className="postInfo_basic">닉네임</div>
+            <div className="postInfo_boardname">게시판이름</div>
+            <div className="postInfo_title">
+              <a>
+                게시글 제as dasdasd모 dasdasd구람sadas das뉴ㅜdsfsdfㅎ마ㅓasds
+                ad규히ㅏ휴김하sadasdsad asfasfasf sfdadasdadㅓ
+              </a>
+            </div>
+            <div className="postInfo_date">2023-09-21</div>
+          </div>
 
-        <header>
-          <p>내가 좋아요 한 게시글 확인하기</p>
-        </header>
-        <div className=""></div>
+          <div className="Post">
+            <img src={image}></img>
+            <div className="postInfo_basic">닉네임</div>
+            <div className="postInfo_boardname">게시판이름</div>
+            <div className="postInfo_title">
+              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
+            </div>
+            <div className="postInfo_date">2023-09-21</div>
+          </div>
+          <div className="Post">
+            <img src={image}></img>
+            <div className="postInfo_basic">닉네임</div>
+            <div className="postInfo_boardname">게시판이름</div>
+            <div className="postInfo_title">
+              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
+            </div>
+            <div className="postInfo_date">2023-09-21</div>
+          </div>
+        </div>
 
-        <header>
-          <p>최근 방문한 게시글 확인하기</p>
-        </header>
-        <div className=""></div>
+        <div className="profile-myReview">
+          <header>
+            <p>내가 쓴 댓글 확인하기</p>
+          </header>
+          <div className="myReview">
+            <div className="review_boardname">게시판이름</div>
+            <div className="review_title">
+              <a>게시글 제모오오옥as dasdasd모 da</a>
+            </div>
+            <div className="review_content">
+              리뷰내용....아아아아돌겠따 짜증난다 미치겠따 화가난다
+            </div>
+            <div className="review_date">2023-09-21</div>
+          </div>
+          <div className="myReview">
+            <div className="review_boardname">게시판이름</div>
+            <div className="review_title">
+              <a>게시글 제모오오옥as dasdasd모 da</a>
+            </div>
+            <div className="review_content">
+              리뷰내용....아아아아돌겠따 짜증난다 미치겠따 화가난다
+            </div>
+            <div className="review_date">2023-09-21</div>
+          </div>
+          <div className="myReview">
+            <div className="review_boardname">게시판이름</div>
+            <div className="review_title">
+              <a>게시글 제모오오옥as dasdasd모 da</a>
+            </div>
+            <div className="review_content">
+              리뷰내용....아아아아돌겠따 짜증난다 미치겠따 화가난다
+            </div>
+            <div className="review_date">2023-09-21</div>
+          </div>
+          <div className="myReview">
+            <div className="review_boardname">게시판이름</div>
+            <div className="review_title">
+              <a>게시글 제모오오옥as dasdasd모 da</a>
+            </div>
+            <div className="review_content">
+              리뷰내용....아아아아돌겠따 짜증난다 미치겠따 화가난다
+            </div>
+            <div className="review_date">2023-09-21</div>
+          </div>
+        </div>
+
+        <div className="profile-Post">
+          <header>
+            <p>내가 좋아요 한 게시글 확인하기</p>
+          </header>
+          <div className="Post">
+            <img src={image}></img>
+            <div className="postInfo_basic">닉네임</div>
+            <div className="postInfo_boardname">게시판이름</div>
+            <div className="postInfo_title">
+              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
+            </div>
+            <div className="postInfo_date">2023-09-21</div>
+          </div>
+          <div className="Post">
+            <img src={image}></img>
+            <div className="postInfo_basic">닉네임</div>
+            <div className="postInfo_boardname">게시판이름</div>
+            <div className="postInfo_title">
+              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
+            </div>
+            <div className="postInfo_date">2023-09-21</div>
+          </div>
+          <div className="Post">
+            <img src={image}></img>
+            <div className="postInfo_basic">닉네임</div>
+            <div className="postInfo_boardname">게시판이름</div>
+            <div className="postInfo_title">
+              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
+            </div>
+            <div className="postInfo_date">2023-09-21</div>
+          </div>
+          <div className="Post">
+            <img src={image}></img>
+            <div className="postInfo_basic">닉네임</div>
+            <div className="postInfo_boardname">게시판이름</div>
+            <div className="postInfo_title">
+              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
+            </div>
+            <div className="postInfo_date">2023-09-21</div>
+          </div>
+          <div className="Post">
+            <img src={image}></img>
+            <div className="postInfo_basic">닉네임</div>
+            <div className="postInfo_boardname">게시판이름</div>
+            <div className="postInfo_title">
+              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
+            </div>
+            <div className="postInfo_date">2023-09-21</div>
+          </div>
+        </div>
       </MyPageMain>
     </>
   );
