@@ -240,11 +240,13 @@ const Lost = () => {
             <div className="postInfo">
               <a href="#">
                 <div className="userInfo">
-                  <div id="nickName">hotvely</div>
+                  <div id="nickName">달꿈</div>
                   <div id="date">7일 전</div>
                 </div>
                 <div className="postTitle">
-                  <div className="title">우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</div>
+                  <div className="title">
+                    이번 월드 공성전 개 꾸르잼 일 것 같다.. 참여해야 하는데 ㅠㅠ
+                  </div>
                 </div>
                 <div className="postIcons">
                   <FontAwesomeIcon
@@ -275,11 +277,11 @@ const Lost = () => {
             <div className="postInfo">
               <a href="#">
                 <div className="userInfo">
-                  <div id="nickName">hotvely</div>
+                  <div id="nickName">별꿈</div>
                   <div id="date">7일 전</div>
                 </div>
                 <div className="postTitle">
-                  <div className="title">우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</div>
+                  <div className="title">우리 블리 괴롭히지 말라구 !! </div>
                 </div>
                 <div className="postIcons">
                   <FontAwesomeIcon
@@ -310,11 +312,14 @@ const Lost = () => {
             <div className="postInfo">
               <a href="#">
                 <div className="userInfo">
-                  <div id="nickName">hotvely</div>
-                  <div id="date">7일 전</div>
+                  <div id="nickName">핫블리</div>
+                  <div id="date">17일 전</div>
                 </div>
                 <div className="postTitle">
-                  <div className="title">우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</div>
+                  <div className="title">
+                    님덜님덜 안녕하세요 첨뵙겠습니다. 앞으로 잘 부탁드려요 서울
+                    사는 꼰대 훈장님 이에요!
+                  </div>
                 </div>
                 <div className="postIcons">
                   <FontAwesomeIcon
