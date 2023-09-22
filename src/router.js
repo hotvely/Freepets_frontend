@@ -43,9 +43,19 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Lost />,
+
       },
     ],
   },
+  {
+    path:"/lostdetail",
+    element:<BLayout />,
+    children: [{
+      index : true,
+      element:<LostDetail />
+    }]
+  }
+  
 ]);
 
 export default router;

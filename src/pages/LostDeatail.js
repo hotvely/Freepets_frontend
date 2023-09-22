@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faEye, faComments, faArrowUpFromBracket, faBookmark } from "@fortawesome/free-solid-svg-icons";
+import testImg from "../resources/image.jpg";
 const StyledMain = styled.main`
     display: flex;
     flex-direction:column;
@@ -10,7 +11,7 @@ const StyledMain = styled.main`
     align-items: center;
 
     .venner{
-        width: 100%;
+        width: 90%;
         border: 2px solid black;
         height: 100px;
     }
@@ -18,7 +19,7 @@ const StyledMain = styled.main`
     .vennerBottom {
         display: flex;
         align-items: center;
-        width: 100%;
+        width: 90%;
         margin-top: 1.75rem;
         margin-bottom: 1.75rem;
         position: relative;
@@ -27,7 +28,7 @@ const StyledMain = styled.main`
             display: flex;
             flex-direction: column;      
             position: absolute;
-            width: 100%;
+            width: 90%;
            
             
             .full-line{
@@ -49,15 +50,17 @@ const StyledMain = styled.main`
                 }
             }
         }
+
+
         
     }
 
-    .contentBox{
+    .contentHeader{
          display: flex;
          flex-direction: row;
          justify-content: space-between;
          
-         width: 100%;
+         width: 90%;
         
 
          .userProfile{
@@ -74,6 +77,31 @@ const StyledMain = styled.main`
             
         }
     }
+
+ 
+    .descHeader{
+        width: 90%;
+        margin: 15px 0px;
+        font-weight: bolder;
+        font-size: 45px;
+    }
+    .desc{
+        width: 90%;
+        border: 1px solid hsla(220,9%,46%,.3);
+        height: 30%;
+        margin: 30px 0px;
+    }
+    .commentProfile {
+       // flex: 0 1 10%;
+        //margin: 0 15px;
+
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+      }
+    
    
    
 `;
@@ -102,7 +130,7 @@ const LostDeatail = () => {
               </div>
            </div>
 
-           <div className="contentBox">
+           <div className="contentHeader">
               <div className="userProfile">
                   <div className="profile">
                 <img src={"/upload/"} alt="프로필" />
@@ -119,10 +147,27 @@ const LostDeatail = () => {
                  <FontAwesomeIcon icon={faArrowUpFromBracket} style={{}}/>
                  <FontAwesomeIcon icon={faBookmark}/>
               </div>
-             
-
            </div>
            
+           
+           <div className="descHeader">
+                  <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+           </div>
+           <div className="desc">
+                   <div>
+                       제가 문을 살짝 열어놓고 방 청소를 하고 왔는데 집에 있던 흰둥이가 사라졌어요 ㅠㅠㅠ 
+                       나이는 3살, 털은 흰색, 종류는 치와와입니다.
+                       저희 흰둥이를 보시게 된다면 채팅 및 010-1234-5678로 연락주세요!!
+                   </div>
+           </div>
+
+
+           <div className="commentProfile">
+             <img src={testImg}></img>
+           </div>
+           <div>
+             <input type="text" placeholder="작성하려면 로그인이 필요합니다."/>
+           </div>
             
 
      
