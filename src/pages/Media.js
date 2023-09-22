@@ -23,7 +23,29 @@ const MainArea = styled.div`
 `;
 
 const MainContent = styled.div`
+    &.media-summary{
+        padding: 10px;
+        width: 25%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    section {
+        display: flex;
+        background-color: pink;
+        width: 25%
+    
+    .media-thumbnail{
+        display: block;
+        width: 237px;
+        background-color: orange;
 
+    }
+
+    .media-info{
+        background-color: lightblue;
+    }
+
+    }
 `;
 
 const Media = () => {
@@ -35,13 +57,22 @@ const Media = () => {
             </HeadImg>
             
             <MainArea>
-               <MainContent>
+               <MainContent className="media-summary">
                 <section>
                     <a href="#">
                         <div className="media-thumbnail">
                         <img src="./resources/pebbleTV.jpg" alt="미디어썸네일"/>
                             <div className="media-info">
-                                <h3>돌멩2_TV</h3>
+                                <a href="#">
+                                <h3>이불 빨래하는 돌맹이</h3>
+                                </a>
+                                <a href="#">
+                                <p>[<span>7</span>]</p>
+                                </a>
+                                <p>노릇한 군밤이</p>
+                                <p>
+                                    <span>2023.09.22</span>ㆍ조회수<span className="viewCount">22</span>회
+                                </p>
 
                             </div>
                         </div>
