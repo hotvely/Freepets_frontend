@@ -22,7 +22,9 @@ const MainHeader = styled.header`
     padding-bottom: 20px;
 
     select {
-        padding: 8px 15px;
+        width: 90px;
+        height: 30px;
+        text-align: center;
         border: none;
         border-radius: 10px;
         color: #3a98b9;
@@ -33,13 +35,14 @@ const MainHeader = styled.header`
 
     .button-write {
         width: 90px;
-        height: 32px;
+        height: 30px;
         border: none;
         margin-left: 10px;
         border-radius: 10px;
         color: #3a98b9;
         font-size: 0.8rem;
         font-weight: bold;
+        background-color: #EDEDED;
     }
     
 `
@@ -59,7 +62,6 @@ const ProductReview = () => {
                         <input type="search" id="search" name="search"/>
                         <button><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                     </div>
-
                     <select>
                         <option value="1">추천순</option>
                         <option value="2">댓글순</option>

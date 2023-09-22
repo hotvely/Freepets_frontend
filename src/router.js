@@ -3,12 +3,14 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
-import MyPage from "./pages/MyPage";
 import ProductReview from "./pages/information/ProductReview";
 import ProductReviewView from "./pages/information/ProductReviewView";
+import ProductReviewCreate from "./pages/information/ProductReviewCreate";
 import HospitalReview from "./pages/information/HospitalReview";
 import Videoinfo from "./pages/information/Videoinfo";
-import ProductReviewCreate from "./pages/information/ProductReviewCreate";
+import HLayout from "./components/HLayout";
+import Chatting from "./pages/Chatting";
+
 
 const router = createBrowserRouter([
   {
@@ -17,39 +19,38 @@ const router = createBrowserRouter([
     index: true,
   },
   {
-    path: "/main",
+    path: "/information",
     element: <BLayout />,
     children: [
       {
         index: true,
-        element: <BoardTest />,
-      },
-      {
-        path: "mypage",
-        element: <MyPage />,
-      },
-      {
-        path: "product",
         element: <ProductReview />,
       },
       {
-        path: "hospital",
-        element: <HospitalReview />,
-      },
-      {
-        path: "videoinfo",
-        element: <Videoinfo />,
+        path: "product",
+        element: <ProductReview />
       },
       {
         path: "product/view",
-        element: <ProductReviewView />
+        element: <ProductReviewView />,
       },
       {
         path: "product/create",
-        element: <ProductReviewCreate />
-      },
+        element: <ProductReviewCreate />,
+      }
     ],
   },
+  {
+    path: "/chatting",
+    element: <HLayout />,
+    children: [
+      {
+        index: true,
+        element: <Chatting />,
+      }
+    ]
+  }
+
 ]);
 
 export default router;

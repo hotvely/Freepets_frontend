@@ -39,7 +39,7 @@ const MainBox = styled.main`
             margin-bottom: 10px;
 
             #saleshopName {
-                width: 39%;
+                width: 40%;
                 height: 20px;
                 padding: 5px;
                 border: 1px solid #eee;
