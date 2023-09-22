@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
-import MyPage from "./pages/MyPage";
+import MyPage from "./pages/member/MyPage";
 import ProductReview from "./pages/information/ProductReview";
 import HospitalReview from "./pages/information/HospitalReview";
 import Videoinfo from "./pages/information/Videoinfo";
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <BoardTest />,
+        element: <MyPage />,
       },
     ],
   },
@@ -38,6 +38,26 @@ const router = createBrowserRouter([
   },
   {
     path: "/lost",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <Lost />,
+      },
+    ],
+  },
+  {
+    path: "/community",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <Lost />,
+      },
+    ],
+  },
+  {
+    path: "/test",
     element: <BLayout />,
     children: [
       {

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import banner from "../resources/bannerTest.png";
 import testImg from "../resources/image.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +9,8 @@ import {
   faEye,
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
-const StyledMain = styled.main`
+
+const MainStyle = styled.main`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -67,7 +69,7 @@ const StyledMain = styled.main`
   }
 `;
 
-const MainContent = styled.div`
+const ContentStyle = styled.div`
   width: 100%;
   //border: 5px solid black; //#C1F1FC;
 
@@ -78,91 +80,91 @@ const MainContent = styled.div`
       border: 0px;
       border-top: 4px dotted lightblue;
     }
+  }
+`;
 
-    .post {
-      width: 100%;
-      height: 100px;
+const PostStyle = styled.div`
+  width: 100%;
+  height: 100px;
+  display: flex;
+  /* align-items: center; */
+  margin: 20px 0;
+
+  flex-direction: row;
+  .memberPhoto {
+    flex: 0 1 10%;
+    margin: 0 15px;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+  }
+  .postInfo {
+    flex: 0 1 75%;
+
+    .userInfo {
       display: flex;
-      /* align-items: center; */
-      margin: 20px 0;
-
       flex-direction: row;
-      .memberPhoto {
-        flex: 0 1 10%;
-        margin: 0 15px;
+      justify-content: space-between;
+      align-items: center;
 
-        img {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-        }
+      #nickName {
+        line-height: 200%;
+        padding: 0 10px;
+        background-color: black;
+        color: white;
+        border-radius: 15px;
+        font-size: 1.2rem;
+        font-weight: bold;
       }
-      .postInfo {
-        flex: 0 1 75%;
-
-        .userInfo {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-
-          #nickName {
-            line-height: 200%;
-            padding: 0 10px;
-            background-color: black;
-            color: white;
-            border-radius: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
-          }
-          #date {
-            margin-right: 20px;
-            font-size: 1.2rem;
-          }
-        }
-        .postTitle {
-          font-size: 1.25rem;
-          font-weight: bold;
-          margin: 8px 0;
-          title {
-          }
-        }
-        .postIcons {
-          display: flex;
-          flex-direction: row;
-          margin-top: 10px;
-          font-size: 1.1rem;
-          div {
-            margin-right: 15px;
-          }
-        }
+      #date {
+        margin-right: 20px;
+        font-size: 1.2rem;
       }
-      .postBtn {
-        display: flex;
-        flex-direction: row;
-        justify-content: end;
-        align-items: center;
-        flex: 0 0 15%;
-
-        button {
-          width: 50px;
-          height: 50px;
-          background-color: skyblue;
-          color: black;
-          font-size: 1rem;
-          border: 2px solid darkgray;
-          text-decoration: none;
-          font-weight: bold;
-          border-radius: 15px;
-          margin-right: 5px;
-          outline: none;
-        }
+    }
+    .postTitle {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin: 8px 0;
+      title {
       }
+    }
+    .postIcons {
+      display: flex;
+      flex-direction: row;
+      margin-top: 10px;
+      font-size: 1.1rem;
+      div {
+        margin-right: 15px;
+      }
+    }
+  }
+  .postBtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    flex: 0 0 15%;
+
+    button {
+      width: 50px;
+      height: 50px;
+      background-color: skyblue;
+      color: black;
+      font-size: 1rem;
+      border: 2px solid darkgray;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 15px;
+      margin-right: 5px;
+      outline: none;
     }
   }
 `;
 
-const Paging = styled.div`
+const PagingStyle = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -171,12 +173,13 @@ const Paging = styled.div`
     padding: 5px;
   }
 `;
+
 const Lost = () => {
   return (
-    <StyledMain>
+    <MainStyle>
       <div className="venner">
         <img src={banner}></img>
-        <div className="board_title">커뮤니티 게시판</div>
+        <div className="board_title">... 게시판</div>
       </div>
       <div className="select">
         <div className="option">
@@ -196,9 +199,9 @@ const Lost = () => {
         </div>
       </div>
 
-      <MainContent>
+      <ContentStyle>
         <section>
-          <div className="post">
+          <PostStyle>
             <div className="memberPhoto">
               <img src={testImg}></img>
             </div>
@@ -231,9 +234,9 @@ const Lost = () => {
               <button style={{ backgroundColor: "lightyellow" }}>수정</button>
               <button style={{ backgroundColor: "pink" }}>삭제</button>
             </div>
-          </div>
+          </PostStyle>
           <hr className="hr-dotted" />
-          <div className="post">
+          <PostStyle>
             <div className="memberPhoto">
               <img src={testImg}></img>
             </div>
@@ -268,9 +271,9 @@ const Lost = () => {
               <button style={{ backgroundColor: "lightyellow" }}>수정</button>
               <button style={{ backgroundColor: "pink" }}>삭제</button>
             </div>
-          </div>
+          </PostStyle>
           <hr className="hr-dotted" />{" "}
-          <div className="post">
+          <PostStyle>
             <div className="memberPhoto">
               <img src={testImg}></img>
             </div>
@@ -303,9 +306,9 @@ const Lost = () => {
               <button style={{ backgroundColor: "lightyellow" }}>수정</button>
               <button style={{ backgroundColor: "pink" }}>삭제</button>
             </div>
-          </div>
+          </PostStyle>
           <hr className="hr-dotted" />{" "}
-          <div className="post">
+          <PostStyle>
             <div className="memberPhoto">
               <img src={testImg}></img>
             </div>
@@ -341,18 +344,18 @@ const Lost = () => {
               <button style={{ backgroundColor: "lightyellow" }}>수정</button>
               <button style={{ backgroundColor: "pink" }}>삭제</button>
             </div>
-          </div>
+          </PostStyle>
           <hr className="hr-dotted" />
         </section>
-      </MainContent>
-      <Paging>
+      </ContentStyle>
+      <PagingStyle>
         <div>
           <a href="#"> Prev</a>
           <a href="#">Num</a>
           <a href="#">Next</a>
         </div>
-      </Paging>
-    </StyledMain>
+      </PagingStyle>
+    </MainStyle>
   );
 };
 export default Lost;
