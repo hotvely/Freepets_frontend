@@ -32,22 +32,15 @@ const MainBox = styled.main`
         border: solid 1px #eee;
         }
 
-        .input-hospital {
+        .input-videoinfo {
             width: 100%;
             display: flex;
             justify-content: center;
             margin-bottom: 10px;
 
-            #hospitalName {
-                width: 40%;
+            #videoInfoKind {
+                width: 80%;
                 height: 20px;
-                padding: 5px;
-                border: 1px solid #eee;
-                margin-right: 13px;
-            }
-
-            #hospitalAddress {
-                width: 38%;
                 padding: 5px;
                 border: 1px solid #eee;
             }
@@ -59,7 +52,7 @@ const MainBox = styled.main`
             display: flex;
             justify-content: center;
 
-            #hospitalReviewTitle {
+            #videoInfoTitle {
                 width: 80%;
                 padding: 5px;
                 height: 20px;
@@ -70,9 +63,9 @@ const MainBox = styled.main`
 
     .main-content {
         display: flex;
-        width: 80%;
         flex-direction: column;
         align-items: center;
+        width: 80%;
         margin-bottom: 30px;
 
         .btn-font {
@@ -112,7 +105,7 @@ const ContentButton = () => {
     
 }
 
-const HospitalReviewCreate = () => {
+const VideoinfoCreate = () => {
     const [fileInput, setFileInput] = useState("hidden");
     const [desc, setDesc] = useState("");
 
@@ -137,17 +130,16 @@ const HospitalReviewCreate = () => {
                             <option value="3">동영상 정보</option>
                         </optgroup>
                     </select>
-                    <div className="input-hospital">
-                        <input type="text" name="hospitalName" id="hospitalName" placeholder="병원 이름을 입력해 주세요."/>
-                        <input type="text" name="hospitalAddress" id="hospitalAddress" placeholder="병원 주소를 입력해 주세요."/>
+                    <div className="input-videoinfo">
+                        <input type="text" name="videoInfoKind" id="videoInfoKind" placeholder="정보의 종류를 입력해 주세요. 예) 행동 교정, 훈련 등..."/>
                     </div>
                     <div className="input-title">
-                        <input type="text" name="hospitalReviewTitle" id="hospitalReviewTitle" placeholder="제목을 입력해 주세요."/>
+                        <input type="text" name="videoInfoTitle" id="videoInfoTitle" placeholder="제목을 입력해 주세요."/>
                     </div>
                 </div>
                 <div className="main-content">
                     <div>
-                    <button className="btn btn-font btn-font-emph" style={{backgroundColor: "yellow"}} onClick={ContentButton}>강조</button>
+                        <button className="btn btn-font btn-font-emph" style={{backgroundColor: "yellow"}} onClick={ContentButton}>강조</button>
                         <button className="btn btn-font btn-font-common" onClick={ContentButton}>기본</button>
                         <button className="btn btn-font btn-font-bold" style={{fontWeight : "bold"}} onClick={ContentButton}>굵게</button>
                         <button className="btn btn-font btn-font-italic" style={{fontStyle: "italic"}} onClick={ContentButton}>기울게</button>
@@ -160,9 +152,8 @@ const HospitalReviewCreate = () => {
                         <button className="btn btn-font btn-file-video" onClick={FileClick}><FontAwesomeIcon icon={faVideo}/></button>
                         <button className="btn btn-font btn-file" onClick={FileClick}><FontAwesomeIcon icon={faFile}/></button>
                         <div>
-                            <input type={fileInput} name="productReviewUrl" id="productReviewUrl"></input>
+                            <input type={fileInput} name="videoInfoFileUrl" id="videoInfoFileUrl"></input>
                         </div>
-                        
                     </div>
                     <div contentEditable="true" className="input-desc" onInput={InputHandler} suppressContentEditableWarning="true"></div>                   
                 </div>
@@ -175,4 +166,4 @@ const HospitalReviewCreate = () => {
     )
 }
 
-export default HospitalReviewCreate;
+export default VideoinfoCreate;

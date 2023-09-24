@@ -69,7 +69,10 @@ const MainBox = styled.main`
     }
 
     .main-content {
+        display: flex;
         width: 80%;
+        flex-direction: column;
+        align-items: center;
         margin-bottom: 30px;
 
         .btn-font {
@@ -86,6 +89,7 @@ const MainBox = styled.main`
             padding: 10px;
             border: 1px solid #eee;
             font-size: 0.8rem;
+            line-height: 20px;
         }
     }
 
@@ -144,19 +148,22 @@ const ProductReviewCreate = () => {
                 </div>
                 <div className="main-content">
                     <div>
-                        <button className="btn btn-font btn-font-thin" onClick={ContentButton}>얇게</button>
-                        <button className="btn btn-font btn-font-midium" onClick={ContentButton}>중간</button>
-                        <button className="btn btn-font btn-font-bold" onClick={ContentButton}>굵게</button>
-                        <button className="btn btn-font btn-font-itelic" onClick={ContentButton}>기울게</button>
-                        <button className="btn btn-font btn-font-line" onClick={ContentButton}>밑줄</button>
-                        <button className="btn btn-font btn-font-cancel" onClick={ContentButton}>취소선</button>
+                    <button className="btn btn-font btn-font-emph" style={{backgroundColor: "yellow"}} onClick={ContentButton}>강조</button>
+                        <button className="btn btn-font btn-font-common" onClick={ContentButton}>기본</button>
+                        <button className="btn btn-font btn-font-bold" style={{fontWeight : "bold"}} onClick={ContentButton}>굵게</button>
+                        <button className="btn btn-font btn-font-italic" style={{fontStyle: "italic"}} onClick={ContentButton}>기울게</button>
+                        <button className="btn btn-font btn-font-line" style={{textDecoration : "underline"}} onClick={ContentButton}>밑줄</button>
+                        <button className="btn btn-font btn-font-cancel" style={{textDecoration : "line-through"}} onClick={ContentButton}>취소선</button>
                         <button className="btn btn-font btn-font-left" onClick={ContentButton}>왼쪽</button>
                         <button className="btn btn-font btn-font-center" onClick={ContentButton}>가운데</button>
                         <button className="btn btn-font btn-font-right" onClick={ContentButton}>오른쪽</button>
                         <button className="btn btn-font btn-file-image" onClick={FileClick}><FontAwesomeIcon icon={faImage}/></button>
                         <button className="btn btn-font btn-file-video" onClick={FileClick}><FontAwesomeIcon icon={faVideo}/></button>
                         <button className="btn btn-font btn-file" onClick={FileClick}><FontAwesomeIcon icon={faFile}/></button>
-                        <input type={fileInput} name="productReviewUrl" id="productReviewUrl"></input>
+                        <div>
+                            <input type={fileInput} name="productReviewUrl" id="productReviewUrl"></input>
+                        </div>
+                        
                     </div>
                     <div contentEditable="true" className="input-desc" onInput={InputHandler} suppressContentEditableWarning="true"></div>                   
                 </div>
