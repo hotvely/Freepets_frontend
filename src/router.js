@@ -1,18 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
-import Layout from "./components/Layout";
 import BLayout from "./components/BLayout";
-import BoardTest from "./pages/BoardTest";
 import MyPage from "./pages/member/MyPage";
-import ProductReview from "./pages/information/ProductReview";
-import HospitalReview from "./pages/information/HospitalReview";
-import Videoinfo from "./pages/information/Videoinfo";
-// <<<<<<< HEAD
-import Media from "./pages/Media";
-// =======
 import Lost from "./pages/Lost";
-import LostDetail from "./pages/LostDeatail";
-// >>>>>>> main
+import Media from "./pages/Media";
 
 const router = createBrowserRouter([
   {
@@ -55,21 +46,22 @@ const router = createBrowserRouter([
     element: <BLayout />,
     children: [
       {
-// <<<<<<< HEAD
-        path: "videoinfo",
-        element: <Videoinfo />,
-      },
-      {
-        path: "media",
-        element: <Media />,
-      }
-
-// =======
         index: true,
         element: <Lost />,
       },
     ],
   },
+  {
+    path: "/media",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <Media />,
+      },
+    ],
+  },
+
   {
     path: "/test",
     element: <BLayout />,
@@ -78,7 +70,6 @@ const router = createBrowserRouter([
         index: true,
         element: <Lost />,
       },
-// >>>>>>> main
     ],
   },
 ]);
