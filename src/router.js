@@ -3,11 +3,16 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import BLayout from "./components/BLayout";
 import BoardTest from "./pages/BoardTest";
-import MyPage from "./pages/MyPage";
+import MyPage from "./pages/member/MyPage";
 import ProductReview from "./pages/information/ProductReview";
 import HospitalReview from "./pages/information/HospitalReview";
 import Videoinfo from "./pages/information/Videoinfo";
+// <<<<<<< HEAD
 import Media from "./pages/Media";
+// =======
+import Lost from "./pages/Lost";
+import LostDetail from "./pages/LostDeatail";
+// >>>>>>> main
 
 const router = createBrowserRouter([
   {
@@ -21,21 +26,36 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <BoardTest />,
-      },
-      {
-        path: "mypage",
         element: <MyPage />,
       },
+    ],
+  },
+  {
+    path: "/mypage",
+    element: <BLayout />,
+    children: [
       {
-        path: "product",
-        element: <ProductReview />
+        index: true,
+        element: <MyPage />,
       },
+    ],
+  },
+  {
+    path: "/lost",
+    element: <BLayout />,
+    children: [
       {
-        path: "hospital",
-        element: <HospitalReview />,
+        index: true,
+        element: <Lost />,
       },
+    ],
+  },
+  {
+    path: "/community",
+    element: <BLayout />,
+    children: [
       {
+// <<<<<<< HEAD
         path: "videoinfo",
         element: <Videoinfo />,
       },
@@ -44,6 +64,21 @@ const router = createBrowserRouter([
         element: <Media />,
       }
 
+// =======
+        index: true,
+        element: <Lost />,
+      },
+    ],
+  },
+  {
+    path: "/test",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <Lost />,
+      },
+// >>>>>>> main
     ],
   },
 ]);

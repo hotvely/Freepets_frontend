@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import image from "../resources/image.jpg";
-import banner from "../resources/bannerTest.png";
+import image from "../../resources/image.jpg";
+import border from "../../resources/borderImg.png";
+import banner from "../../resources/bannerTest.png";
 
 const MyPageMain = styled.main`
   margin: 0;
-  flex: 0 1 auto;
+  flex: 0 1 100%-800px;
   padding: 0 100px;
   img {
     width: 100%;
@@ -46,16 +47,31 @@ const MyPageMain = styled.main`
     .profile-photo {
       padding: 30px 20px;
       display: flex;
-      flex: 0 1 250px;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      div {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 280px;
+        height: 280px;
 
-      .profileImg {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        border: 20px solid skyblue;
+        .profileImg {
+          width: 200px;
+          height: 200px;
+          border-radius: 50%;
+
+          position: absolute;
+          z-index: -2;
+        }
+
+        .profileBorder {
+          position: absolute;
+          width: 280px;
+          height: 280px;
+          z-index: -1;
+        }
       }
 
       label {
@@ -239,7 +255,10 @@ const MyPage = () => {
         </header>
         <div className="profile">
           <div className="profile-photo">
-            <img src={image} className="profileImg"></img>
+            <div>
+              <img src={border} className="profileBorder"></img>
+              <img src={image} className="profileImg"></img>
+            </div>
             <label>NICKNAME</label>
           </div>
           <div className="profileInfo">
