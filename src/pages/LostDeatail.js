@@ -28,7 +28,7 @@ const StyledMain = styled.main`
             display: flex;
             flex-direction: column;      
             position: absolute;
-            width: 90%;
+            width: 100%;
            
             
             .full-line{
@@ -100,7 +100,92 @@ const StyledMain = styled.main`
           height: 50px;
           border-radius: 50%;
         }
+    }
+    .commentBox{
+      display: flex;
+      flex-direction: row;
+      width:90%;
+      height: 70px;
+      margin-top: 30px;
+
+      .commentDesc{
+        width:90%;
+        display: flex;
+        margin-left: 25px;
+        input{
+          width:100%;
+        }
+        
       }
+
+    }
+    .submit{
+      width: 90%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      margin-top: 15px;
+      input{
+       
+
+      }
+    }
+
+    .commentBox2{
+      width: 90%;
+      .comment{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 80px;
+
+      .userProfile{
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+
+       
+          .useruser{
+         
+            display: flex;
+            flex-direction: row;
+
+             .profile{
+                margin: 0px 5px;
+                img {
+                  width: 50px;
+                  height: 50px;
+                  border-radius: 50%;
+                }  
+             }
+            
+
+              .user{
+                display: flex;
+                flex-direction: column;
+               justify-content: center;
+
+                p{
+                 margin-left: 10px;
+                }
+              }
+          }
+           .comment-desc{
+            padding: 20px;
+             margin-top: 10px;
+           }
+
+           .commentBox2-button{
+            padding: 20px;
+           }
+           
+      }
+      
+    }
+    }
+
+  
     
    
    
@@ -133,13 +218,13 @@ const LostDeatail = () => {
            <div className="contentHeader">
               <div className="userProfile">
                   <div className="profile">
-                <img src={"/upload/"} alt="프로필" />
+                    <img src={"/upload/"} alt="프로필" />
                   </div> 
 
                   <div className="user">
-                <p>작성자 닉네임</p>
-                <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
-                            <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                    <p>흰둥이를 찾자</p>
+                    <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                    <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
                   </div>
               </div>
 
@@ -161,16 +246,98 @@ const LostDeatail = () => {
                    </div>
            </div>
 
-
-           <div className="commentProfile">
-             <img src={testImg}></img>
+          <div className="commentBox">
+             <div className="commentProfile">
+               <img src={testImg}></img>
+             </div>
+             <div className="commentDesc">
+               <input type="text" placeholder="작성하려면 로그인이 필요합니다."/>
+             </div>
            </div>
-           <div>
-             <input type="text" placeholder="작성하려면 로그인이 필요합니다."/>
-           </div>
-            
 
-     
+           <div className="submit">
+            <input type="submit" value="댓글 쓰기"/>
+           </div>
+          
+          <section className="commentBox2">
+           <ul className="comment">
+              <li className="userProfile">
+                 <div className="useruser">
+                    <div className="profile">
+                     <img src={testImg} alt="작성자 프로필"/>
+                    </div> 
+
+                    <div className="user">
+                     <p>최강 우주 귀요미</p>
+                    </div>
+                 </div>                
+
+                  <div className="comment-desc">
+                     <p>
+                     아 진짜 지금 엄청 마음 졸이고 있겠써요,,,,, 흰둥이 어디갔니
+                     얼른 돌아와 돌아와 돌아와 어디갔써 흰둥이 어디갓니 어디로 갔니 
+                     ㅠㅠㅠ 얼른 찾길 바랄께요 ㅠㅠㅠ
+                     </p>  
+                  </div>
+                  
+                  <div  className="commentBox2-button">
+                    <button>댓글 쓰기</button>
+                  </div>
+                  <hr style={{width :"100%"}}/>
+              </li>
+              
+              <li className="userProfile">
+                 <div className="useruser">
+                    <div className="profile">
+                     <img src={testImg} alt="작성자 프로필"/>
+                    </div> 
+
+                    <div className="user">
+                     <p>최강 우주 귀요미</p>
+                    </div>
+                 </div>                
+
+                  <div className="comment-desc">
+                     <p>
+                     아 진짜 지금 엄청 마음 졸이고 있겠써요,,,,, 흰둥이 어디갔니
+                     얼른 돌아와 돌아와 돌아와 어디갔써 흰둥이 어디갓니 어디로 갔니 
+                     ㅠㅠㅠ 얼른 찾길 바랄께요 ㅠㅠㅠ
+                     </p>  
+                  </div>
+                  
+                  <div  className="commentBox2-button">
+                    <button>댓글 쓰기</button>
+                  </div>
+                  <hr style={{width :"100%"}}/>
+              </li>
+
+              <li className="userProfile">
+                 <div className="useruser">
+                    <div className="profile">
+                     <img src={testImg} alt="작성자 프로필"/>
+                    </div> 
+
+                    <div className="user">
+                     <p>최강 우주 귀요미</p>
+                    </div>
+                 </div>                
+
+                  <div className="comment-desc">
+                     <p>
+                     아 진짜 지금 엄청 마음 졸이고 있겠써요,,,,, 흰둥이 어디갔니
+                     얼른 돌아와 돌아와 돌아와 어디갔써 흰둥이 어디갓니 어디로 갔니 
+                     ㅠㅠㅠ 얼른 찾길 바랄께요 ㅠㅠㅠ
+                     </p>  
+                  </div>
+                  
+                  <div  className="commentBox2-button">
+                    <button>댓글 쓰기</button>
+                  </div>
+                  <hr style={{width :"100%"}}/>
+              </li>
+            </ul>
+          </section>
+          
           
     
           
