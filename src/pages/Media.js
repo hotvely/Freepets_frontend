@@ -7,6 +7,16 @@ import chestnut from "../resources/hamster.test.jpg";
 const MainStlye = styled.div`
   padding: 20px;
   width: 100vw;
+  /* @media screen and (min-width: 1600px) {
+    .banner-img {
+      width: auto;
+    }
+    .media-content {
+      width: auto;
+    }
+  } 
+  
+  다음에 반응형 웹 적용하기ㅜ*/
 `;
 
 const MainBanner = styled.div`
@@ -25,7 +35,9 @@ const MainBanner = styled.div`
 
 const MainContent = styled.div`
   border: 1px solid #3a98b9;
-
+  display: flex;
+  flex-direction: column;
+  width: 70vw;
   .midea-headerbox {
     border-bottom: 1px solid #3a98b9;
     display: flex;
@@ -108,7 +120,7 @@ const MainContent = styled.div`
           img {
             width: 100%;
             height: 100%;
-            background-size: cover;
+            object-fit: cover;
           }
         }
         .media-info {
@@ -120,9 +132,11 @@ const MainContent = styled.div`
             height: 40%;
             h3 {
               padding-right: 3px;
+              font-size: 1rem;
             }
             p {
               color: tomato;
+              font-size: 1rem;
             }
           }
           #media-info-writer {
@@ -130,7 +144,7 @@ const MainContent = styled.div`
             align-items: center;
             padding: 2px;
             p {
-              font-size: 12px;
+              font-size: 0.8rem;
             }
           }
 
@@ -138,10 +152,26 @@ const MainContent = styled.div`
             padding-top: 2px;
             padding-left: 2px;
             p {
-              font-size: 12px;
+              font-size: 0.8rem;
             }
           }
         }
+      }
+    }
+  }
+
+  .main-bottom {
+    margin: 20px;
+    display: flex;
+    flex-direction: row-reverse;
+    #write-btn {
+      button {
+        font-weight: bold;
+        color: #3a98b9;
+        width: 80px;
+        height: 40px;
+        border: none;
+        border-radius: 10px;
       }
     }
   }
@@ -737,6 +767,16 @@ const Media = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="main-bottom">
+          {/* 페이지 넘기는 바 만들기
+         <div id="paging"></div> */}
+          <div id="write-btn">
+            <a href="#">
+              <button>글쓰기</button>
+            </a>
           </div>
         </div>
       </MainContent>
