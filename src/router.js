@@ -9,6 +9,7 @@ import HospitalReview from "./pages/information/HospitalReview";
 import Videoinfo from "./pages/information/Videoinfo";
 import Lost from "./pages/Lost";
 import LostDetail from "./pages/LostDeatail";
+import EventCalendar from "./pages/EventCalendar";
 
 const router = createBrowserRouter([
   {
@@ -57,12 +58,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/test",
+    path: "/event",
     element: <BLayout />,
     children: [
       {
         index: true,
-        element: <Lost />,
+        element: <EventCalendar />,
       },
     ],
   },
