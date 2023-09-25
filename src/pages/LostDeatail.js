@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faEye, faComments, faArrowUpFromBracket, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import testImg from "../resources/image.jpg";
+import banner from "../resources/bannerTest.png";
 const StyledMain = styled.main`
     display: flex;
     flex-direction:column;
@@ -11,9 +12,12 @@ const StyledMain = styled.main`
     align-items: center;
 
     .venner{
-        width: 90%;
-        border: 2px solid black;
-        height: 100px;
+      width: 90%;
+      img{
+        width: 100%;
+        height: 150px;
+      }
+        
     }
     
     .vennerBottom {
@@ -31,11 +35,15 @@ const StyledMain = styled.main`
             width: 100%;
            
             
-            .full-line{
+            .full-line-left{
               border: 1px solid hsla(220,9%,46%,.3);;   
-              width: 100%;
+              width: 1%;
+           }
 
-              
+           .full-line-right{
+              border: 1px solid hsla(220,9%,46%,.3);;   
+              width: 92.7%;
+              margin-left: 103px;
            }
         }
         .vennerText{
@@ -68,9 +76,38 @@ const StyledMain = styled.main`
             flex-direction: row;
            .profile{
             margin: 0px 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            
+            img{
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+            }
            }
            .user{
             margin: 0px 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .usertTitle{
+              display: flex;
+              p{
+              margin: 5px 0px;
+              border: 2px solid #DEDEDE;
+              border-radius: 5px;
+              padding: 5px;
+              font-weight: bolder;
+             }
+            }
+          
+            .viewicon{
+              margin: 5px 0px;
+              span{
+                margin-right: 15px;
+               }
+            }
            }
          }
         .icon{
@@ -107,13 +144,19 @@ const StyledMain = styled.main`
       width:90%;
       height: 70px;
       margin-top: 30px;
-
+      .commentProfile{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
       .commentDesc{
-        width:90%;
+        width:100%;
         display: flex;
         margin-left: 25px;
+        
         input{
           width:100%;
+          border-radius: 5px;
         }
         
       }
@@ -126,7 +169,13 @@ const StyledMain = styled.main`
       justify-content: flex-end;
       margin-top: 15px;
       input{
-       
+       background-color: #1CC0E4;
+       height: 40px;
+       width: 100px;
+       font-size: large;
+       border: #DEDEDE;
+       border-radius: 5px;
+       color: white;
 
       }
     }
@@ -164,20 +213,34 @@ const StyledMain = styled.main`
               .user{
                 display: flex;
                 flex-direction: column;
-               justify-content: center;
+                justify-content: center;
 
                 p{
                  margin-left: 10px;
+                 border: 2px solid #DEDEDE;
+                 border-radius: 5px;
+                 padding: 5px;
+                 font-weight: bolder;
+                 
+                }
+                span{
+                  margin-right: 10px;
                 }
               }
           }
            .comment-desc{
-            padding: 20px;
+             padding: 20px;
              margin-top: 10px;
            }
 
            .commentBox2-button{
             padding: 20px;
+            button{
+              background-color: white;
+              border: 1px solid #DEDEDE;
+              border-radius: 5px;
+              color: #ACACAC;
+            }
            }
            
       }
@@ -199,38 +262,48 @@ const LostDeatail = () => {
 
         <StyledMain>
            <div className="venner">
-              <h1>커뮤니티</h1>
-              <span>여기는 커뮤니티 게시판입니다(베너)</span>
+              <img src={banner}/>
            </div>
 
            <div className="vennerBottom">
               <div className="full">
-                <div className="full-line"></div>
+                <div className="full-line-left"></div>
               </div>
 
               <div className="vennerText">
                 <div className="text-box">
+                  <span></span>
                     <a className="text-blue" href="#">커뮤니티</a>
+                    <span></span>
                 </div>
+              </div>
+
+              <div className="full">
+                <div className="full-line-right"></div>
               </div>
            </div>
 
            <div className="contentHeader">
               <div className="userProfile">
                   <div className="profile">
-                    <img src={"/upload/"} alt="프로필" />
+                     <img src={testImg} alt="작성자 프로필"/>
                   </div> 
 
                   <div className="user">
-                    <p>흰둥이를 찾자</p>
-                    <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
-                    <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                    <div className="usertTitle">
+                      <p style={{fontSize:"18px", fontWeight:"border"}}>흰둥이를 찾자</p>
+                    </div>
+                    
+                    <div className="viewicon">
+                      <FontAwesomeIcon icon={faThumbsUp} style={{color:"#1FB1D1"}}/><span id="like">50</span> <FontAwesomeIcon icon={faEye} style={{color:"#1FB1D1"}}/><span id="views">150</span> 
+                      <FontAwesomeIcon icon={faComments} style={{color:"#1FB1D1"}}/><span id="comment">30</span>   
+                    </div>
                   </div>
               </div>
 
               <div className="icon">
-                 <FontAwesomeIcon icon={faArrowUpFromBracket} style={{}}/>
-                 <FontAwesomeIcon icon={faBookmark}/>
+                 <FontAwesomeIcon icon={faArrowUpFromBracket} style={{color:"#C9C9C9", margin:"0px 5px", fontSize:"20px"}}/>
+                 <FontAwesomeIcon icon={faBookmark} style={{color:"#C9C9C9", margin:"0px 5px", fontSize:"20px"}}/>
               </div>
            </div>
            
@@ -268,7 +341,7 @@ const LostDeatail = () => {
                     </div> 
 
                     <div className="user">
-                     <p>최강 우주 귀요미</p>
+                     <p style={{fontSize:"18px", fontWeight:"border"}}>최강 우주 귀요미</p>
                     </div>
                  </div>                
 
@@ -283,7 +356,7 @@ const LostDeatail = () => {
                   <div  className="commentBox2-button">
                     <button>댓글 쓰기</button>
                   </div>
-                  <hr style={{width :"100%"}}/>
+                  <hr style={{width :"100%", border:"0px",borderTop: "1px solid #7BCFE1"}}/>
               </li>
               
               <li className="userProfile">
@@ -293,7 +366,7 @@ const LostDeatail = () => {
                     </div> 
 
                     <div className="user">
-                     <p>최강 우주 귀요미</p>
+                     <p style={{fontSize:"18px", fontWeight:"border"}}>최강 우주 귀요미</p>
                     </div>
                  </div>                
 
@@ -308,7 +381,7 @@ const LostDeatail = () => {
                   <div  className="commentBox2-button">
                     <button>댓글 쓰기</button>
                   </div>
-                  <hr style={{width :"100%"}}/>
+                  <hr style={{width :"100%", border:"0px",borderTop: "1px solid #7BCFE1"}}/>
               </li>
 
               <li className="userProfile">
@@ -318,7 +391,7 @@ const LostDeatail = () => {
                     </div> 
 
                     <div className="user">
-                     <p>최강 우주 귀요미</p>
+                     <p style={{fontSize:"18px", fontWeight:"border"}}>최강 우주 귀요미</p>
                     </div>
                  </div>                
 
@@ -333,7 +406,7 @@ const LostDeatail = () => {
                   <div  className="commentBox2-button">
                     <button>댓글 쓰기</button>
                   </div>
-                  <hr style={{width :"100%"}}/>
+                  <hr style={{width :"100%", border:"0px",borderTop: "1px solid #7BCFE1"}}/>
               </li>
             </ul>
           </section>
