@@ -64,13 +64,23 @@ const Map = () => {
             <div className="map">
                <h1>병원 api</h1>
             </div>
+
+            <div>
+                <label>키워드 : </label>
+            </div>
             
             <div className="footer">
-                <div className="footerDesc">
-                  <p>여긴 병원정보 기입????????</p>
-                  <p> oo 병원</p>
-                  <p>24시 병원</p>
-                </div>
+                <ul className="footerDesc">
+                  <li>
+                     <div className="hospitalList">
+                        <p>oo병원 이태원점</p>
+                        <p>서울 용산구 녹사평대로 136</p>
+                        <p>지번 : 서울 용산구 이태원동 34-14</p>
+                        <p>02-790-7300</p>
+                     </div>
+                  </li>
+                  
+                </ul>
             </div>
         
         </StyledMain>
