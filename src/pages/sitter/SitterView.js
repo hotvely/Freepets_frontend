@@ -29,7 +29,8 @@ const MainContent = styled.div`
         flex-direction: column;
 
         .main-header_start {
-            margin-bottom: 15px;
+            margin-left: 10px;
+            margin-bottom: 25px;
 
             #sitterTitle {
                 font-weight: bold;
@@ -75,8 +76,7 @@ const MainContent = styled.div`
                     color: #FFF;
                     padding: 3px;
                     border-radius: 5px;
-                }
-                
+                }               
             }
         }
     }
@@ -136,7 +136,7 @@ const ReviewContent = styled.div`
                         }
                     }
 
-                    .write-content_ratings {
+                    .write-content_header-start_ratings {
 
                         button {
                             background-color: white;
@@ -145,9 +145,9 @@ const ReviewContent = styled.div`
                         }
                     }
                 }
-                
-            }
+            }               
         }
+    }
 
         #sitterReviewDesc {
             border: 1px solid #eee;
@@ -155,20 +155,87 @@ const ReviewContent = styled.div`
             margin: 10px;
             font-size: 0.8rem;
         }
-    }
+
+        .write-content_center-button {
+            display: flex;
+            justify-content: center;
+
+            button {
+                width: 150px;
+                height: 30px;
+                border: none;
+                border-radius: 5px;
+                background-color: #98DBF2;
+                color: white;
+                cursor: pointer;
+            }
+        }
+    
 
     .review {
-        margin: 10px;     
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+
+        .review-header {
+            display: flex;
+
+            p {
+                margin: 10px;
+                font-size: 0.9rem;
+                border-radius: 5px;
+                padding: 5px;
+                border-bottom: 2px solid #98DBF2;
+            }
+        }
 
         .review-content {
             background-color: #F5F5F5;
+            border-radius: 5px;
+            margin-bottom: 10px;
+
+            .review-content_start {
+                padding: 10px;
+                display: flex;
+
+                .review-content_start-user {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 10px;
+
+                    .review-content_start-user_name {
+                        display: flex;
+
+                        #nickname {
+                            font-size: 0.9rem;
+                            border: 1px solid #000;
+                            border-radius: 5px;
+                            padding: 3px;
+                        }
+                    }
+                    
+                    .review-content_start-user_ratings {
+                        display: flex;
+                        margin-top: 5px;
+                    }
+                }
+
+                .review-content_main {
+                    width: 100%;
+                    margin-left: 10px;
+                    
+                    #sitterReviewDesc {
+                        background-color: #fff;
+                    }
+                }
+            }
         }
     }
 
 `
 
 const SitterView = () => {
-    const [star, setStar] = useState("#aaa")
+    const [star, setStar] = useState("");
 
     const onRatings = (event) => {
         const color = event.target.style.color;
@@ -217,60 +284,104 @@ const SitterView = () => {
                                     <div className="write-content_header-start_name">
                                         <p id="nickname">베로</p>
                                     </div>
-                                    <div>
-                                        <div className="write-content_ratings">
-                                            <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></button>
-                                            <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
-                                            <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
-                                            <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
-                                            <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
-                                        </div>
-                                        <div>
-                                            <button>등록</button>
-                                        </div>
+                                    <div className="write-content_header-start_ratings">
+                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></button>
+                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
+                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
+                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
+                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
                                     </div>
                                 </div>                               
                             </div>                
-                            <div contentEditable="true" id="sitterReviewDesc"></div>                           
+                            <div contentEditable="true" id="sitterReviewDesc"></div>
+                            <div className="write-content_center-button">
+                                <button>등록</button>
+                            </div>                       
                         </div>
                     </div>
                     <div className="review">
-                        <p>시터 후기</p>
+                        <div className="review-header">
+                            <p>시터 후기</p>
+                        </div>
                         <div className="review-content">
-                            <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
-                            <p>베로</p>
-                            <div>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                            <div className="review-content_start">
+                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
+                                <div className="review-content_start-user">
+                                    <div className="review-content_start-user_name">
+                                        <p id="nickname">베로</p>
+                                    </div>
+                                    <div className="review-content_start-user_ratings">
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                    </div>
+                                </div>
+                                <div className="review-content_main">
+                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
+                                </div>
                             </div>
-                            <p>이분 만나고 강아지 사람 됐습니다 강추합니다</p>
                         </div>
-                        <div>
-                            <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
-                            <p>베로</p>
-                            <div>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                        <div className="review-content">
+                            <div className="review-content_start">
+                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
+                                <div className="review-content_start-user">
+                                    <div className="review-content_start-user_name">
+                                        <p id="nickname">베로</p>
+                                    </div>
+                                    <div className="review-content_start-user_ratings">
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                    </div>
+                                </div>
+                                <div className="review-content_main">
+                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
+                                </div>
                             </div>
-                            <p>이분 만나고 강아지 사람 됐습니다 강추합니다</p>
                         </div>
-                        <div>
-                            <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
-                            <p>베로</p>
-                            <div>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                        <div className="review-content">
+                            <div className="review-content_start">
+                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
+                                <div className="review-content_start-user">
+                                    <div className="review-content_start-user_name">
+                                        <p id="nickname">베로</p>
+                                    </div>
+                                    <div className="review-content_start-user_ratings">
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                    </div>
+                                </div>
+                                <div className="review-content_main">
+                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
+                                </div>
                             </div>
-                            <p>이분 만나고 강아지 사람 됐습니다 강추합니다</p>
+                        </div>
+                        <div className="review-content">
+                            <div className="review-content_start">
+                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
+                                <div className="review-content_start-user">
+                                    <div className="review-content_start-user_name">
+                                        <p id="nickname">베로</p>
+                                    </div>
+                                    <div className="review-content_start-user_ratings">
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                    </div>
+                                </div>
+                                <div className="review-content_main">
+                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </ReviewContent>

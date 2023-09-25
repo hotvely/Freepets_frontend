@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { faMagnifyingGlass, faCaretDown, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faCaretDown, faStar, faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Img from "../../resources/kero.jpeg";
 
@@ -9,6 +9,27 @@ const Main = styled.div`
     height: 100%;
     justify-content: center;
     flex-direction: column;
+
+    .page {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+
+        .page-btn {
+            margin: 0px 10px;
+            
+            button {
+                width: 35px;
+                height: 35px;
+                border: none;
+                border-radius: 5px;
+                margin: 0px 5px;
+            }
+        }
+        
+    }
 `
 
 const MainBox = styled.div`
@@ -283,6 +304,17 @@ const Sitter = () => {
                     </section>
                 </MainContent>
             </MainBox>
+            <div className="page">
+                <FontAwesomeIcon icon={faCaretLeft} style={{fontSize: "2.5rem", color: "#aaa"}}/>
+                <div className="page-btn">
+                    <button>5</button>
+                    <button>6</button>
+                    <button>7</button>
+                    <button>8</button>
+                    <button>9</button>
+                </div>
+                <FontAwesomeIcon icon={faCaretRight} style={{fontSize: "2.5rem", color: "#aaa"}}/>
+            </div>
         </Main>
     )
 }

@@ -81,6 +81,16 @@ const router = createBrowserRouter([
         element: <SitterView/>
       }
     ]
+  },
+  {
+    path: "/chatting",
+    element: <HLayout />,
+    children: [
+      {
+        index: true,
+        element: <Chatting />,
+      }
+    ]
   }
 ]);
 
