@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import banner from "../resources/bannerTest.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faMapLocationDot, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import map from "../resources/map.png";
 
 const StyledMain = styled.main`
@@ -82,11 +82,36 @@ const StyledMain = styled.main`
 
     }
     .map{
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         img{
           margin-top: 20px;
-          width: 100%;
-          height: 90%;
+          width: 90%;
+          height: 100%;
         }
+    }
+    .search{
+      margin-top: 10px;
+      display: flex;
+      flex-direction: row;
+        #text{
+          width: 500px;
+          height: 30px;
+          border: 3px solid #2687A6;
+          background-color: #F9F9F9;
+        }
+        div{
+          margin-left: 5px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          #search{
+          color: #2687A6;
+          }
+        }
+        
     }
     .footer{
         display: flex;
@@ -100,6 +125,7 @@ const StyledMain = styled.main`
         }
         
     }
+    
 
 `;
 
@@ -140,8 +166,13 @@ const Map = () => {
                <img src={map}/>
             </div>
 
-            <div>
-                <label>키워드</label> <input type="submit"/>
+            <div className="search">
+                
+                 <input type="text" id="text" name="text"style={{borderRadius:"10px"}}/>
+                 <div>
+                   <FontAwesomeIcon icon={faMagnifyingGlass} id="search" style={{fontSize:"25px"}}/>
+                 </div>
+                 
             </div>
             
             <div className="footer">
