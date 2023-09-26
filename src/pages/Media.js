@@ -4,7 +4,7 @@ import banner from "../resources/bannerTest.png";
 import pebble from "../resources/pebble.jpg";
 import chestnut from "../resources/hamster.test.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBorderAll } from "@fortawesome/free-solid-svg-icons";
+import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
 
 const MainStlye = styled.div`
   padding: 20px;
@@ -33,12 +33,14 @@ const MainContentBox = styled.div`
   .midea-headerbox {
     border-bottom: 1px solid #3a98b9;
     display: flex;
+    justify-content: space-between;
     align-items: center;
 
     .media-sort {
       margin-right: 5px;
       display: flex;
-      justify-content: flex-start;
+      /* flex: row; */
+      /* justify-content: start; */
       padding: 10px;
 
       select {
@@ -55,18 +57,25 @@ const MainContentBox = styled.div`
         padding-right: 10px;
       }
       .view-board {
+        display: flex;
+        .view-check-board {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
         button {
-          background-color: tomato;
-          width: 50px;
+          background-color: #eeee;
+          width: 30px;
           height: 30px;
           border: none;
+          border-radius: 10px;
         }
       }
     }
 
     .search-box {
       display: flex;
-      justify-content: end;
+      /* flex-direction: row; */
+      /* justify-content: end; */
       align-items: center;
       width: 400px;
       height: 30px;
@@ -176,9 +185,18 @@ const MainContentBox = styled.div`
 
   .main-bottom {
     margin: 20px;
-    display: flex;
-    flex-direction: row-reverse;
+    .page {
+      #pagination {
+        display: flex;
+        justify-content: center;
+        /* flex-direction: row; */
+        /* text-align: center; */
+      }
+    }
+
     #write-btn {
+      display: flex;
+      justify-content: end;
       button {
         font-weight: bold;
         color: #3a98b9;
@@ -192,6 +210,16 @@ const MainContentBox = styled.div`
 `;
 
 const Media = () => {
+  const onClickCheckBoard = () => {
+    window.location.href = "#";
+    // 게시글 타입 변경
+  };
+
+  const onClickListBoard = () => {
+    window.location.href = "#";
+    // 게시글 타입 변경
+  };
+
   return (
     <MainStlye>
       <MainBanner>
@@ -224,12 +252,25 @@ const Media = () => {
                 <option value="4">찾아줘요펫츠</option>
               </select>
             </div>
-          </div>
 
-          <div className="view-board">
-            <button>
-              <FontAwesomeIcon icon={faBorderAll} style={{ color: "pink" }} />
-            </button>
+            <div className="view-board">
+              <div className="view-check-board">
+                <button onClick={onClickCheckBoard}>
+                  <FontAwesomeIcon
+                    icon={faBorderAll}
+                    style={{ color: "#3a98b9", height: "18px" }}
+                  />
+                </button>
+              </div>
+              <div className="view-list-board">
+                <button onClick={onClickListBoard}>
+                  <FontAwesomeIcon
+                    icon={faList}
+                    style={{ color: "3a98b9", height: "16px" }}
+                  />
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="search-box">
@@ -733,6 +774,75 @@ const Media = () => {
         <div className="main-bottom">
           {/* 페이지 넘기는 바 만들기
          <div id="paging"></div> */}
+          <div className="page">
+            <ul id="pagination">
+              <li>
+                <a href="#" id="first">
+                  처음 페이지
+                </a>
+              </li>
+              <li>
+                <a href="#" id="arrow-left">
+                  ◀
+                </a>
+              </li>
+              <li>
+                <a href="#" id="active-num">
+                  1
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  2
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  3
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  4
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  5
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  6
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  7
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  8
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  9
+                </a>
+              </li>
+              <li>
+                <a href="#" id="arrow-right">
+                  ▶
+                </a>
+              </li>
+              <li>
+                <a href="#" id="last">
+                  마지막 페이지
+                </a>
+              </li>
+            </ul>
+          </div>
           <div id="write-btn">
             <a href="#">
               <button>글쓰기</button>
