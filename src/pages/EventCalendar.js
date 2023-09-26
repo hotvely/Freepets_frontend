@@ -81,6 +81,7 @@ const Calendar = styled.div`
           justify-content: center;
           padding-top: 15px;
           flex: 1 1 13%;
+
           height: 150px;
         }
       }
@@ -90,14 +91,15 @@ const Calendar = styled.div`
 
 const EventCalendar = () => {
   const today = new Date();
+  const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
 
   const daysArray = ["일", "월", "화", "수", "목", "금", "토"];
   // 이번달 첫날짜
-  const firstDate = new Date(today.getFullYear(), month, 1);
+  const firstDate = new Date(year, month, 1);
   // 이번달 마지막 날짜
-  const lastDate = new Date(today.getFullYear(), month + 1, 0);
-  console.log("마지막날.." + lastDate.getDate());
+  const lastDate = new Date(year, month + 1, 0);
+  // console.log("마지막날.." + lastDate.getDate());
 
   //-----------------------캘린더 월~금 출력
   const calendar_days = () => {
@@ -123,7 +125,7 @@ const EventCalendar = () => {
   //-----------------------캘린더 1일 ~ 마지막날
   const calendar_dates = () => {
     //이번달 첫 날짜의 요일까지 채워넣기...
-    const prevLastDate = new Date(today.getFullYear(), month, 0);
+    const prevLastDate = new Date(year, month, 0);
     //이번달 1일 이전에 표시해줘야 하는 갯수 구하기
     let prevDate = prevLastDate.getDate() - firstDate.getDay() + 1;
 
@@ -131,14 +133,22 @@ const EventCalendar = () => {
     let result = [];
     for (let prev = 0; prev < firstDate.getDay(); prev++) {
       result.push(
-        <div className="date prevDate" style={{ color: "darkgrey" }}>
+        <div
+          className="date prevDate"
+          key={`${month}_${prevDate}`}
+          style={{ color: "darkgrey" }}
+        >
           {prevDate}
         </div>
       );
       prevDate += 1;
     }
     for (let day = 0; day < lastDate.getDate(); day++) {
-      result.push(<div className="date currDate">{day + 1}</div>);
+      result.push(
+        <div className="date currDate" key={`${month + 1}_${day + 1}`}>
+          {day + 1}
+        </div>
+      );
     }
     // 총 6줄 7칸 -> 42개 에서 내가 표현한 개수 빼주면 다음달 꺼 표현해 줘야 하는 갯수 나오네?
     for (
@@ -147,7 +157,11 @@ const EventCalendar = () => {
       next++
     ) {
       result.push(
-        <div className="date nextDate" style={{ color: "darkgrey" }}>
+        <div
+          className="date nextDate"
+          key={`${month + 2}_${next + 1}`}
+          style={{ color: "darkgrey" }}
+        >
           {next + 1}
         </div>
       );
@@ -158,15 +172,19 @@ const EventCalendar = () => {
 
   const prevMonth = () => {
     if (month > 0) {
-      console.log("아 짜증나네?");
       setMonth(month - 1);
+    } else {
+      setMonth(11);
+      setYear(year - 1);
     }
   };
 
   const nextMonth = () => {
     if (month < 11) {
-      console.log("너네 왜 들어와 슈벌럼들아");
       setMonth(month + 1);
+    } else {
+      setMonth(1);
+      setYear(year + 1);
     }
   };
 
@@ -177,8 +195,7 @@ const EventCalendar = () => {
           <div className="calendar_header">
             <div>
               <button onClick={() => prevMonth()}>prev</button>
-              {console.log(month + 1)}
-              {month + 1}
+              {year}년 {month + 1}월
               <button onClick={() => nextMonth()}>next</button>
             </div>
           </div>
