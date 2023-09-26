@@ -10,6 +10,8 @@ import Videoinfo from "./pages/information/Videoinfo";
 import Lost from "./pages/Lost";
 import LostDetail from "./pages/LostDeatail";
 import EventCalendar from "./pages/EventCalendar";
+import Login from "./pages/member/Login";
+import Register from "./pages/member/Register";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +68,14 @@ const router = createBrowserRouter([
         element: <EventCalendar />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
 ]);
 

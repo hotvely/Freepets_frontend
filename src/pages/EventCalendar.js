@@ -2,11 +2,13 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const Calendar = styled.div`
-  width: 100%;
   margin: 0 30px;
+  flex: 0 0 1000px;
+  height: 550px;
 
   .calendar_content {
-    width: 100%;
+    /* flex: 1 0 70%; */
+    /* width: 100%; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -59,7 +61,7 @@ const Calendar = styled.div`
       padding-top: 50px;
 
       .days {
-        flex: 1 1 13%;
+        flex: 0 0 13%;
         display: flex;
         justify-content: center;
       }
@@ -80,7 +82,7 @@ const Calendar = styled.div`
           display: flex;
           justify-content: center;
           padding-top: 15px;
-          flex: 1 1 13%;
+          flex: 0 0 13%;
 
           height: 150px;
         }
@@ -183,7 +185,7 @@ const EventCalendar = () => {
     if (month < 11) {
       setMonth(month + 1);
     } else {
-      setMonth(1);
+      setMonth(0);
       setYear(year + 1);
     }
   };

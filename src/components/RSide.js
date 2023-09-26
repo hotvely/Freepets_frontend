@@ -1,28 +1,30 @@
 import styled from "styled-components";
 
 const StyledRSide = styled.div`
-  width: 300px;
+  /* width: 300px; */
   height: 400px;
   display: flex;
   justify-content: center;
-  position: block;
+  flex: 0 0 250px;
+  margin-left: 30px;
   padding-right: 50px;
   .rMenu {
     width: 100%;
 
     display: flex;
+    flex: 1 0 250px;
     flex-direction: column;
     justify-content: start;
     align-items: center;
 
+    border: 10px solid skyblue;
+    border-radius: 25px;
     .rMenuAction {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 100%;
-      border: 10px solid skyblue;
-      border-radius: 25px;
       width: 100%;
       div {
         flex: 1 1 80%;
