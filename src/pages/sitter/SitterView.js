@@ -35,6 +35,7 @@ const MainContent = styled.div`
             #sitterTitle {
                 font-weight: bold;
                 font-size: 1.2rem;
+                text-shadow: -1px 0 #ddd, 0 1px #ddd, 1px 0 #ddd, 0 -1px #ddd;
             }
         }
 

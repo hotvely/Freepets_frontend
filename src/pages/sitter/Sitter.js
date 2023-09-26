@@ -97,6 +97,7 @@ const MainHeader = styled.header`
         font-size: 0.8rem;
         font-weight: bold;
         background-color: #EDEDED;
+        cursor: pointer;
     }
     
 `

@@ -43,13 +43,13 @@ const Header = () => {
   return (
     <StyledHeader>
       <nav>
-        <a href="#">
+        <a href="/">
           <img src={Logo}></img>
         </a>
         <a href="#">공지사항</a>
         <a href="#">플리마켓</a>
         <a href="#">커뮤니티</a>
-        <a href="#">정보나눔</a>
+        <a href="/information">정보나눔</a>
         <a href="#">고객센터</a>
         <div className="rightNav">
           <a href="#">로그인</a>
