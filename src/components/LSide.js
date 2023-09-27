@@ -3,21 +3,24 @@ import styled from "styled-components";
 const StyledLSide = styled.div`
   background-color: white;
   display: flex;
-  flex: 0 1 300px;
-  padding: 0 50px;
+  width: 500px;
+  padding-left: 50px;
 
   /* justify-content: center; */
 
   .Laside {
     display: flex;
+    flex: 1 1 500px;
     justify-content: center;
     align-items: start;
     border: 8px solid skyblue;
     border-radius: 25px;
-    width: 100%;
-    padding: 30px 10px;
+    /* width: 300px; */
+    height: 500px;
+    padding: 30px 0px;
     .lMenu {
       display: flex;
+      flex: 1 1 100%;
       flex-direction: column;
       width: 100%;
       justify-content: space-between;

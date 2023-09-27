@@ -1,13 +1,12 @@
 import styled from "styled-components";
 
 const StyledRSide = styled.div`
-  width: 200px;
+  width: 300px;
+  height: 400px;
   display: flex;
   justify-content: center;
   position: block;
-  flex: 0 1 300px;
-  padding: 0 50px;
-
+  padding-right: 50px;
   .rMenu {
     width: 100%;
 
@@ -15,15 +14,19 @@ const StyledRSide = styled.div`
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    border: 10px solid skyblue;
-    border-radius: 25px;
 
     .rMenuAction {
       display: flex;
       flex-direction: column;
-
-      width: 80%;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      border: 10px solid skyblue;
+      border-radius: 25px;
+      width: 100%;
       div {
+        flex: 1 1 80%;
+        width: 80%;
         border: 1px solid black;
         margin: 20px 0;
       }
