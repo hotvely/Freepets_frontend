@@ -155,7 +155,7 @@ const Home = () => {
             <img src={Logo}></img>
           </a>
           <a href="#">공지사항</a>
-          <a href="#">플리마켓</a>
+          <a href="/sitter">플리마켓</a>
           <a href="#">커뮤니티</a>
           <a href="/information">정보나눔</a>
           <a href="#">고객센터</a>

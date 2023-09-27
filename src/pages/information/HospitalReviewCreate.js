@@ -4,6 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const Main = styled.div`
+    margin: 0px 40px;
     display: flex;
     width: 100%;
     height: 100%;
@@ -78,7 +79,7 @@ const MainBox = styled.main`
         .btn-font {
             background-color: white;
             border: none;
-            width: 60px;
+            width: 55px;
             margin-bottom: 10px;
             cursor: pointer;
         }

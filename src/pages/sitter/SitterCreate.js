@@ -4,6 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const Main = styled.div`
+    margin: 0px 40px;
     display: flex;
     width: 100%;
     height: 100%;
@@ -32,15 +33,22 @@ const MainBox = styled.main`
         border: solid 1px #eee;
         }
 
-        .input-videoinfo {
+        .input-sitter {
             width: 100%;
             display: flex;
             justify-content: center;
             margin-bottom: 10px;
 
-            #videoInfoKind {
-                width: 80%;
+            #sitterPrice {
+                width: 40%;
                 height: 20px;
+                padding: 5px;
+                border: 1px solid #eee;
+                margin-right: 13px;
+            }
+
+            #sitterLoc {
+                width: 38%;
                 padding: 5px;
                 border: 1px solid #eee;
             }
@@ -52,7 +60,7 @@ const MainBox = styled.main`
             display: flex;
             justify-content: center;
 
-            #videoInfoTitle {
+            #sitterTitle {
                 width: 80%;
                 padding: 5px;
                 height: 20px;
@@ -63,15 +71,15 @@ const MainBox = styled.main`
 
     .main-content {
         display: flex;
+        width: 80%;
         flex-direction: column;
         align-items: center;
-        width: 80%;
         margin-bottom: 30px;
 
         .btn-font {
             background-color: white;
             border: none;
-            width: 60px;
+            width: 55px;
             margin-bottom: 10px;
             cursor: pointer;
         }
@@ -82,6 +90,7 @@ const MainBox = styled.main`
             padding: 10px;
             border: 1px solid #eee;
             font-size: 0.8rem;
+            line-height: 20px;
         }
     }
 
@@ -105,7 +114,7 @@ const ContentButton = () => {
     
 }
 
-const VideoinfoCreate = () => {
+const SitterCreate = () => {
     const [fileInput, setFileInput] = useState("hidden");
     const [desc, setDesc] = useState("");
 
@@ -124,22 +133,22 @@ const VideoinfoCreate = () => {
                 <div className="header-content">
                     <select className="select select-category">
                         <option>게시판을 선택해 주세요.</option>
-                        <optgroup label="정보나눔">
-                            <option value="1">용품 후기</option>
-                            <option value="2">병원 후기</option>
-                            <option value="3">동영상 정보</option>
+                        <optgroup label="플리마켓">
+                            <option value="1">펫시터</option>
+                            <option value="2">중고마켓</option>
                         </optgroup>
                     </select>
-                    <div className="input-videoinfo">
-                        <input type="text" name="videoInfoKind" id="videoInfoKind" placeholder="정보의 종류를 입력해 주세요. 예) 행동 교정, 훈련 등..."/>
+                    <div className="input-sitter">
+                        <input type="text" name="sitterPrice" id="sitterPrice" placeholder="시터 비용을 입력해 주세요."/>
+                        <input type="text" name="sitterLoc" id="sitterLoc" placeholder="시터 활동 가능 지역을 입력해 주세요."/>
                     </div>
                     <div className="input-title">
-                        <input type="text" name="videoInfoTitle" id="videoInfoTitle" placeholder="제목을 입력해 주세요."/>
+                        <input type="text" name="sitterTitle" id="sitterTitle" placeholder="제목을 입력해 주세요."/>
                     </div>
                 </div>
                 <div className="main-content">
                     <div>
-                        <button className="btn btn-font btn-font-emph" style={{backgroundColor: "yellow"}} onClick={ContentButton}>강조</button>
+                    <button className="btn btn-font btn-font-emph" style={{backgroundColor: "yellow"}} onClick={ContentButton}>강조</button>
                         <button className="btn btn-font btn-font-common" onClick={ContentButton}>기본</button>
                         <button className="btn btn-font btn-font-bold" style={{fontWeight : "bold"}} onClick={ContentButton}>굵게</button>
                         <button className="btn btn-font btn-font-italic" style={{fontStyle: "italic"}} onClick={ContentButton}>기울게</button>
@@ -152,8 +161,9 @@ const VideoinfoCreate = () => {
                         <button className="btn btn-font btn-file-video" onClick={FileClick}><FontAwesomeIcon icon={faVideo}/></button>
                         <button className="btn btn-font btn-file" onClick={FileClick}><FontAwesomeIcon icon={faFile}/></button>
                         <div>
-                            <input type={fileInput} name="videoInfoFileUrl" id="videoInfoFileUrl"></input>
+                            <input type={fileInput} name="sitterDesc" id="sitterDesc"></input>
                         </div>
+                        
                     </div>
                     <div contentEditable="true" className="input-desc" onInput={InputHandler} suppressContentEditableWarning="true"></div>                   
                 </div>
@@ -166,4 +176,4 @@ const VideoinfoCreate = () => {
     )
 }
 
-export default VideoinfoCreate;
+export default SitterCreate;

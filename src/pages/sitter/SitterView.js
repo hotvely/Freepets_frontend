@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const Main = styled.div`
     display: flex;
+    margin: 0px 40px;
     width: 100%;
     height: 100%;
     justify-content: center;
