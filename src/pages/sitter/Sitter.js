@@ -267,7 +267,7 @@ const Sitter = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>                      
                     </section>
                 </MainContent>
             </MainBox>

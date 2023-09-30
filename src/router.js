@@ -9,7 +9,6 @@ import HospitalReview from "./pages/information/HospitalReview";
 import HospitalReviewCreate from "./pages/information/HospitalReviewCreate";
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
-import Chatting from "./pages/Chatting";
 import SitterCreate from "./pages/sitter/SitterCreate";
 
 const router = createBrowserRouter([
