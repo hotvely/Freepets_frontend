@@ -208,14 +208,16 @@ const MainContentBox = styled.div`
           padding: 5px 12px;
           color: #96a0ad;
           line-height: 1.5;
-          
         }
-        a:active{
+        a:active {
           cursor: default;
           color: #ffffff;
           outline: none;
         }
-        #first:hover, #last:hover, #arrow-left:hover, #arrow-right:hover{
+        #first:hover,
+        #last:hover,
+        #arrow-left:hover,
+        #arrow-right:hover {
           color: #2e9cdf;
         }
 
@@ -229,11 +231,9 @@ const MainContentBox = styled.div`
           background-color: #2e9cdf;
           color: #ffffff;
         }
-        #num.active{
+        #num.active {
           background-color: #2e9cdf;
           cursor: pointer;
-        }
-          
         }
       }
     }
