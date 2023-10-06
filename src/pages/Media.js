@@ -185,18 +185,62 @@ const MainContentBox = styled.div`
 
   .main-bottom {
     margin: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     .page {
-      #pagination {
+      flex-grow: 1;
+      text-align: center;
+      .pagination {
         display: flex;
         justify-content: center;
         /* flex-direction: row; */
         /* text-align: center; */
+        list-style: none;
+        /* display: inline-block; */
+
+        a {
+          float: left;
+          display: block;
+          font-size: 14px;
+          text-decoration: none;
+          padding: 5px 12px;
+          color: #96a0ad;
+          line-height: 1.5;
+          
+        }
+        a:active{
+          cursor: default;
+          color: #ffffff;
+          outline: none;
+        }
+        #first:hover, #last:hover, #arrow-left:hover, #arrow-right:hover{
+          color: #2e9cdf;
+        }
+
+        #num {
+          /* margin-left: 3px; */
+          -moz-border-radius: 100%;
+          -webkit-border-radius: 100%;
+          border-radius: 100%;
+        }
+        #num:hover {
+          background-color: #2e9cdf;
+          color: #ffffff;
+        }
+        #num.active{
+          background-color: #2e9cdf;
+          cursor: pointer;
+        }
+          
+        }
       }
     }
 
     #write-btn {
-      display: flex;
-      justify-content: end;
+      /* display: flex;
+      justify-content: end; */
       button {
         font-weight: bold;
         color: #3a98b9;
@@ -775,7 +819,7 @@ const Media = () => {
           {/* 페이지 넘기는 바 만들기
          <div id="paging"></div> */}
           <div className="page">
-            <ul id="pagination">
+            <ul className="pagination">
               <li>
                 <a href="#" id="first">
                   처음 페이지
