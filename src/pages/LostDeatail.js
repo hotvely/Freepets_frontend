@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faEye, faComments, faArrowUpFromBracket, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import testImg from "../resources/image.jpg";
 import banner from "../resources/bannerTest.png";
+
 const StyledMain = styled.main`
     display: flex;
     flex-direction:column;
@@ -248,14 +249,14 @@ const StyledMain = styled.main`
     }
     }
 
-  
-    
-   
-   
 `;
 
 
+
 const LostDeatail = () => {
+
+  
+
        return (
           
 
@@ -354,7 +355,9 @@ const LostDeatail = () => {
                   </div>
                   
                   <div  className="commentBox2-button">
-                    <button>댓글 쓰기</button>
+                    <button >댓글 쓰기</button>
+                    
+                    
                   </div>
                   <hr style={{width :"100%", border:"0px",borderTop: "1px solid #7BCFE1"}}/>
               </li>

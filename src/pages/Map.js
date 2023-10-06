@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapLocationDot, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import map from "../resources/map.png";
 
+
 const StyledMain = styled.main`
      display: flex;
     flex-direction:column;
@@ -11,9 +12,11 @@ const StyledMain = styled.main`
    
     height: 100vw;
     align-items: center;
+    
 
     .venner{
       width: 90%;
+      //overflow: hidden;
       img{
         width: 100%;
         height: 150px;
@@ -42,8 +45,8 @@ const StyledMain = styled.main`
 
            .full-line-right{
               border: 1px solid hsla(220,9%,46%,.3);;   
-              width: 92.7%;
-              margin-left: 103px;
+              width: 91.2%;
+              margin-left: 107px;
            }
         }
         .vennerText{
@@ -116,12 +119,31 @@ const StyledMain = styled.main`
     .footer{
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;
+        justify-content: center;
         width: 60%;
         .footerDesc{
+          width: 100%;
            p{
             margin: 10px 0px;
            }
+        }
+        .hospitalList{
+          border: 5px solid #DEDEDE;
+          border-radius: 5px;
+          margin: 10px 0px;
+          padding: 10px;
+        }
+        .hospitalList:hover{
+          background-color: #F9F9F9;
+        }
+        .hospitalList2{
+          border: 5px solid #DEDEDE;
+          border-radius: 5px;
+          margin: 10px 0px;
+          padding: 10px;
+        }
+        .hospitalList2:hover{
+          background-color: #F9F9F9;
         }
         
     }
@@ -169,8 +191,10 @@ const Map = () => {
             <div className="search">
                 
                  <input type="text" id="text" name="text"style={{borderRadius:"10px"}}/>
-                 <div>
+                 <div className="button">
+                  <button>
                    <FontAwesomeIcon icon={faMagnifyingGlass} id="search" style={{fontSize:"25px"}}/>
+                   </button>
                  </div>
                  
             </div>
@@ -179,6 +203,15 @@ const Map = () => {
                 <ul className="footerDesc">
                   <li>
                      <div className="hospitalList">
+                        <p>oo병원 이태원점</p>
+                        <p>서울 용산구 녹사평대로 136</p>
+                        <p>지번 : 서울 용산구 이태원동 34-14</p>
+                        <p>02-790-7300</p>
+                     </div>
+                  </li>
+
+                  <li>
+                     <div className="hospitalList2">
                         <p>oo병원 이태원점</p>
                         <p>서울 용산구 녹사평대로 136</p>
                         <p>지번 : 서울 용산구 이태원동 34-14</p>
