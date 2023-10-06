@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
+import { registerAPI } from "../../api/auth";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = styled.div`
   width: 100vw;
@@ -175,7 +177,7 @@ const Register = () => {
   const today = new Date();
   const [date, setDate] = useState(today.toISOString().split("T")[0]);
   const [btnClick, setBtnClick] = useState(false);
-
+  const navigate = useNavigate();
   //-------------useState
 
   const checkGender = () => {
@@ -226,18 +228,20 @@ const Register = () => {
       address: e.target.userAddr.value,
       nickname: e.target.userNickname.value,
     };
-    if (isValidFormData(formData)) return true;
-    else return false;
-  };
 
-  const isValidFormData = (formData) => {
-    console.log("한번 데이터 맞게 들어왔는지 비어있지 않은지 체크하자");
+    console.log(formData);
+    if (registerAPI(formData)) {
+      console.log("데이터 전송 성공..");
+      alert("회원가입성공!");
+      // 회원 가입 성공하면 마이페이지로 이동시키기.
+      navigate("/auth/login");
+      return true;
+    } else return false;
   };
 
   return (
     <>
       <RegisterPage>
-        {/* {console.log(date.getTime)} */}
         <div className="homeLink">
           <a href="/main">Freepets</a>
         </div>

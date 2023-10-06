@@ -2,6 +2,9 @@ import styled from "styled-components";
 import image from "../../resources/image.jpg";
 import border from "../../resources/borderImg.png";
 import banner from "../../resources/bannerTest.png";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { checkToken, fetchToken } from "../../api/auth";
 
 const MyPageMain = styled.main`
   margin: 0;
@@ -246,6 +249,15 @@ const MyPageMain = styled.main`
 `;
 
 const MyPage = () => {
+  const userToken = localStorage.getItem("userToken");
+  // console.log(userToken);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userToken == null) navigate("/");
+  }, [userToken]);
+
+  fetchToken();
   return (
     <>
       <MyPageMain>

@@ -12,22 +12,17 @@ import LostDetail from "./pages/LostDeatail";
 import EventCalendar from "./pages/EventCalendar";
 import Login from "./pages/member/Login";
 import Register from "./pages/member/Register";
+import Header from "./components/Header";
+import Logout from "./pages/member/Logout";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
-    index: true,
   },
   {
     path: "/main",
-    element: <BLayout />,
-    children: [
-      {
-        index: true,
-        element: <MyPage />,
-      },
-    ],
+    element: <Home />,
   },
   {
     path: "/mypage",
@@ -69,13 +64,23 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
+    path: "/auth",
+    children: [
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "logout",
+        element: <Logout />,
+      },
+    ],
   },
 ]);
 

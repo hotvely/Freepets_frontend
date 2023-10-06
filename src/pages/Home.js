@@ -40,8 +40,7 @@ const StyledHeader = styled.header`
     }
   }
 `;
-
-const StylredMain = styled.main`
+const StyledMain = styled.main`
   background-color: #3a98b9;
   height: 40vh;
   width: 100%;
@@ -147,6 +146,8 @@ const StylredMain = styled.main`
 `;
 
 const Home = () => {
+  const userToken = localStorage.getItem("userToken");
+  console.log(userToken);
   return (
     <div>
       <StyledHeader>
@@ -160,14 +161,23 @@ const Home = () => {
           <a href="#">정보나눔</a>
           <a href="#">고객센터</a>
           <div className="rightNav">
-            <a href="/login">로그인</a>
-            <p>|</p>
-            <a href="/register">회원가입</a>
+            {userToken == null ? (
+              <>
+                <a href="/auth/login">로그인</a> <p>|</p>
+                <a href="/auth/register">회원가입</a>
+              </>
+            ) : (
+              <>
+                <a href="/mypage">마이페이지</a>
+                <p>|</p>
+                <a href="/auth/logout">로그아웃</a>
+              </>
+            )}
           </div>
         </nav>
       </StyledHeader>
       <img src={Banner} style={{ width: "100%", height: "59vh" }} />
-      <StylredMain>
+      <StyledMain>
         <div className="leftNav">
           <p>MAIN</p>
           <p>OUR STORY</p>
@@ -208,7 +218,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </StylredMain>
+      </StyledMain>
     </div>
   );
 };

@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { checkToken, loginAPI, saveTokenAPI } from "../../api/auth";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = styled.div`
   width: 100vw;
@@ -107,6 +109,38 @@ const LoginPage = styled.div`
 
 const Login = () => {
   const [btnClick, setBtnClick] = useState(false);
+  const navigate = useNavigate();
+
+  const login = (e) => {
+    e.preventDefault();
+
+    if (localStorage.getItem("userToken")) {
+      alert("이미 로그인 되어 있음!");
+      navigate("/main");
+      return false;
+    }
+
+    const formData = {
+      id: e.target.userId.value,
+      password: e.target.userPwd.value,
+    };
+
+    console.log("로그인 페이지 입력받은 데이터");
+    console.log(formData);
+
+    loginAPI(formData).then((response) => {
+      if (response.data == "") {
+        console.log("비어있어...ㅅㅂ");
+        return false;
+      } else {
+        console.log("데이터 들어있는듯?");
+        saveTokenAPI(response.data.token);
+        // console.log(response.data.token);
+        navigate("/main");
+        return true;
+      }
+    });
+  };
 
   return (
     <>
@@ -115,16 +149,17 @@ const Login = () => {
           <a href="/main">Freepets</a>
         </div>
         <div className="loginContent">
-          <form className="loginForm">
+          <form className="loginForm" onSubmit={login}>
             <div className="loginId">
               <span>😄</span>
-              <input type="text" placeholder="아이디"></input>
+              <input type="text" name="userId" placeholder="아이디"></input>
             </div>
             <div className="loginPwd">
               <span>😄</span>
-              <input type="text" placeholder="비밀번호"></input>
+              <input type="text" name="userPwd" placeholder="비밀번호"></input>
             </div>
             <button
+              type="submit"
               className={`${btnClick ? "loginBtnClicked" : "loginBtn"}`}
               onMouseDown={() => setBtnClick(true)}
               onMouseUp={() => setBtnClick(false)}
