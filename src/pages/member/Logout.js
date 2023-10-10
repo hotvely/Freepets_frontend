@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { logoutAPI } from "../../api/auth";
 import { useEffect } from "react";
 import { userLogout } from "../../components/store/userSlice";
 import { useDispatch } from "react-redux";

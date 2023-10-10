@@ -3,9 +3,11 @@ import image from "../../resources/image.jpg";
 import border from "../../resources/borderImg.png";
 import banner from "../../resources/bannerTest.png";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userSave } from "../../components/store/userSlice";
+import ReactModal from "react-modal";
+import memberUpdate from "./memberUpdate";
 
 const MyPageMain = styled.main`
   margin: 0;
@@ -254,6 +256,8 @@ const MyPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const user = useSelector((state) => {
     return state.user;
   });
@@ -296,6 +300,13 @@ const MyPage = () => {
         date.getDate();
       return result;
     }
+  };
+
+  const openModalHandler = (e) => {
+    setIsOpen(!isOpen);
+  };
+  const sendData = (formData) => {
+    return null;
   };
 
   return (
@@ -355,7 +366,9 @@ const MyPage = () => {
         </div>
 
         <div className="profile_btn">
-          <button>회원 정보수정</button>
+          <button onClick={openModalHandler}>회원 정보수정</button>
+          {memberUpdate(isOpen, setIsOpen)}
+          {/* {isOpen ?  : null} */}
           <button style={{ backgroundColor: "pink" }}>회원 탈퇴</button>
         </div>
 
