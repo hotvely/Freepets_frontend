@@ -2,11 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import BLayout from "./components/BLayout";
 import MyPage from "./pages/member/MyPage";
-import ProductReview from "./pages/information/ProductReview";
 import HospitalReview from "./pages/information/HospitalReview";
-import Videoinfo from "./pages/information/Videoinfo";
-import Lost from "./pages/Lost";
-import LostDetail from "./pages/LostDeatail";
+import Media from "./pages/community/Media";
+import Sitter from "./pages/sitter/Sitter";
+import SitterView from "./pages/sitter/SitterView";
+import SitterCreate from "./pages/sitter/SitterCreate";
 
 const router = createBrowserRouter([
   {
