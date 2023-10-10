@@ -3,27 +3,31 @@ import Home from "./pages/Home";
 import BLayout from "./components/BLayout";
 import MyPage from "./pages/member/MyPage";
 import HospitalReview from "./pages/information/HospitalReview";
+
 import HospitalReviewCreate from "./pages/information/HospitalReviewCreate";
-import Media from "./pages/community/Media";
+
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
 import SitterCreate from "./pages/sitter/SitterCreate";
+import Media from "./pages/community/Media";
+import Videoinfo from "./pages/information/Videoinfo";
+import Lost from "./pages/Lost";
+import LostDetail from "./pages/LostDeatail";
+import EventCalendar from "./pages/EventCalendar";
+import Login from "./pages/member/Login";
+import Register from "./pages/member/Register";
+import Header from "./components/Header";
+import Logout from "./pages/member/Logout";
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
-    index: true,
   },
   {
     path: "/main",
-    element: <BLayout />,
-    children: [
-      {
-        index: true,
-        element: <MyPage />,
-      },
-    ],
+    element: <Home />,
   },
   {
     path: "/mypage",
@@ -63,9 +67,9 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
     path: "/sitter",
+   
     element: <BLayout />,
     children: [
       {
@@ -79,6 +83,34 @@ const router = createBrowserRouter([
       {
         path: "create",
         element: <SitterCreate />,
+      },
+    ],
+  },
+  {
+   
+    path: "/event",
+    element: <BLayout />,
+    children: [ 
+      {
+        element: <EventCalendar />,
+      },
+    ],
+  },
+
+  {
+    path: "/auth",
+    children: [
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "logout",
+        element: <Logout />,
       },
     ],
   },
