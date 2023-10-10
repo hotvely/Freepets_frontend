@@ -10,15 +10,13 @@ import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
 import SitterCreate from "./pages/sitter/SitterCreate";
 import Media from "./pages/community/Media";
-import Videoinfo from "./pages/information/Videoinfo";
-import Lost from "./pages/Lost";
-import LostDetail from "./pages/LostDeatail";
+import Lost from "./pages/community/Lost";
+// import LostDetail from "./pages/LostDeatail";
 import EventCalendar from "./pages/EventCalendar";
 import Login from "./pages/member/Login";
 import Register from "./pages/member/Register";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import Logout from "./pages/member/Logout";
-
 
 const router = createBrowserRouter([
   {
@@ -39,6 +37,17 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/lost",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <Lost />,
+      },
+    ],
+  },
+
   {
     path: "/information",
     element: <BLayout />,
@@ -69,7 +78,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/sitter",
-   
+
     element: <BLayout />,
     children: [
       {
@@ -87,10 +96,9 @@ const router = createBrowserRouter([
     ],
   },
   {
-   
     path: "/event",
     element: <BLayout />,
-    children: [ 
+    children: [
       {
         element: <EventCalendar />,
       },
