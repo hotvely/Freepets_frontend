@@ -50,19 +50,17 @@ const LSide = () => {
       <StyledLSide>
         <div className="Laside">
           <div className="lMenu">
+            <label>공지사항</label>
+            <a href="#">공지사항</a>
+            <a href="#">이벤트 및 행사</a>
+            <hr />
             <label>커뮤니티</label>
             <a href="#">자유게시판</a>
-            <a href="#">펫시터</a>
-            <hr />
-            <label>플리마켓</label>
-            <a href="#">자유게시판</a>
-            <a href="#">자유게시판</a>
-            <hr />
+            <a href="#">분실물</a>
+            <hr />           
             <label>정보나눔</label>
-            <a href="#">자유게시판</a>
-            <a href="#">자유게시판</a>
-            <a href="#">자유게시판</a>
-            <hr />
+            <a href="#">시터</a>
+            <a href="#">병원 정보</a>
           </div>
         </div>
       </StyledLSide>
