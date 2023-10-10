@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import banner from "../resources/bannerTest.png";
-import pebble from "../resources/pebble.jpg";
-import chestnut from "../resources/hamster.test.jpg";
+import banner from "../../resources/bannerTest.png";
+import pebble from "../../resources/pebble.jpg";
+import chestnut from "../../resources/hamster.test.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
 

@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import BLayout from "./components/BLayout";
 import MyPage from "./pages/member/MyPage";
 import HospitalReview from "./pages/information/HospitalReview";
+import HospitalReviewCreate from "./pages/information/HospitalReviewCreate";
 import Media from "./pages/community/Media";
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
