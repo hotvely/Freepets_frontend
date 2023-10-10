@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import Logo from "../assets/Logo.svg";
 import { Link, Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { userLogout, userSave } from "./store/userSlice";
 
 const StyledHeader = styled.header`
   background-color: white;
@@ -41,7 +44,18 @@ const StyledHeader = styled.header`
 `;
 
 const Header = () => {
-  const userToken = localStorage.getItem("userToken");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
+  useEffect(() => {
+    const saveuser = localStorage.getItem("user");
+    if (Object.keys(user).length === 0 && saveuser !== null) {
+      dispatch(userSave(JSON.parse(saveuser)));
+    }
+  }, []);
+
   return (
     <>
       <StyledHeader>
@@ -55,16 +69,16 @@ const Header = () => {
           <a href="#">정보나눔</a>
           <a href="#">고객센터</a>
           <div className="rightNav">
-            {userToken == null ? (
+            {Object.keys(user).length === 0 ? (
               <>
-                <a href="/auth/login">로그인</a> <p>|</p>
-                <a href="/auth/register">회원가입</a>
+                <Link to="/auth/login">로그인</Link> <p>|</p>
+                <Link to="/auth/register">회원가입</Link>
               </>
             ) : (
               <>
-                <a href="/mypage">마이페이지</a>
+                <Link to="/mypage">마이페이지</Link>
                 <p>|</p>
-                <a href="/auth/logout">로그아웃</a>
+                <Link to="/auth/logout">로그아웃</Link>
               </>
             )}
           </div>

@@ -1,9 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Banner from "../assets/image.png";
 import findMe from "../assets/findMe.png";
 import styled from "styled-components";
 import loupe from "../assets/loupe.png";
 import Logo from "../assets/Logo.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { userSave } from "../components/store/userSlice";
 const StyledHeader = styled.header`
   position: fixed;
   width: 100%;
@@ -146,8 +149,20 @@ const StyledMain = styled.main`
 `;
 
 const Home = () => {
-  const userToken = localStorage.getItem("userToken");
-  console.log(userToken);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
+  useEffect(() => {
+    const saveuser = localStorage.getItem("user");
+    //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
+    if (Object.keys(user).length === 0 && saveuser !== null) {
+      dispatch(userSave(JSON.parse(saveuser)));
+    }
+  }, []);
+
   return (
     <div>
       <StyledHeader>
@@ -161,16 +176,16 @@ const Home = () => {
           <a href="#">정보나눔</a>
           <a href="#">고객센터</a>
           <div className="rightNav">
-            {userToken == null ? (
+            {Object.keys(user).length === 0 ? (
               <>
-                <a href="/auth/login">로그인</a> <p>|</p>
-                <a href="/auth/register">회원가입</a>
+                <Link to="/auth/login">로그인</Link> <p>|</p>
+                <Link to="/auth/register">회원가입</Link>
               </>
             ) : (
               <>
-                <a href="/mypage">마이페이지</a>
+                <Link to="/mypage">마이페이지</Link>
                 <p>|</p>
-                <a href="/auth/logout">로그아웃</a>
+                <Link to="/auth/logout">로그아웃</Link>
               </>
             )}
           </div>

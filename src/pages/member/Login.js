@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { checkToken, loginAPI, saveTokenAPI } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { asyncLogin } from "../../components/store/userSlice";
 
 const LoginPage = styled.div`
   width: 100vw;
@@ -110,11 +112,12 @@ const LoginPage = styled.div`
 const Login = () => {
   const [btnClick, setBtnClick] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const login = (e) => {
     e.preventDefault();
 
-    if (localStorage.getItem("userToken")) {
+    if (localStorage.getItem("token")) {
       alert("이미 로그인 되어 있음!");
       navigate("/main");
       return false;
@@ -125,21 +128,9 @@ const Login = () => {
       password: e.target.userPwd.value,
     };
 
-    console.log("로그인 페이지 입력받은 데이터");
-    console.log(formData);
-
-    loginAPI(formData).then((response) => {
-      if (response.data == "") {
-        console.log("비어있어...ㅅㅂ");
-        return false;
-      } else {
-        console.log("데이터 들어있는듯?");
-        saveTokenAPI(response.data.token);
-        // console.log(response.data.token);
-        navigate("/main");
-        return true;
-      }
-    });
+    dispatch(asyncLogin(formData));
+    navigate("/main");
+    return true;
   };
 
   return (
@@ -176,7 +167,7 @@ const Login = () => {
               아이디 찾기
             </a>
             <span>|</span>
-            <a className="fALink" href="/register">
+            <a className="fALink" href="/auth/register">
               회원가입
             </a>
           </div>
