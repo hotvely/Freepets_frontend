@@ -100,6 +100,7 @@ const router = createBrowserRouter([
     element: <BLayout />,
     children: [
       {
+        index: true,
         element: <EventCalendar />,
       },
     ],
