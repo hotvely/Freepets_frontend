@@ -2,7 +2,9 @@ import styled from "styled-components";
 import Img from "../../resources/kero.jpeg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getBoardView } from "../../api/sitter";
+import { useLocation } from "react-router-dom";
 
 const Main = styled.div`
     display: flex;
@@ -238,11 +240,22 @@ const ReviewContent = styled.div`
 
 const SitterView = () => {
     const [star, setStar] = useState("");
+    const location = useLocation();
+    const [boardView, setBoardView] = useState();
 
     const onRatings = (event) => {
         const color = event.target.style.color;
         console.log(color);
     }
+
+    const boardViewAPI = async () => {
+        const boardViewResult = await getBoardView(location.state);
+        setBoardView(boardViewResult.data);
+    }
+
+    useEffect(() => {
+        boardViewAPI();
+    }, [])
 
     return (
         <Main>
@@ -251,18 +264,18 @@ const SitterView = () => {
                 <MainContent>
                     <div className="main-header">
                         <div className="main-header_start">
-                            <p id="sitterTitle">저는 동물 훈련사 자격증이 있습니다. 믿고 맡겨 주세요!</p>
+                            <p id="sitterTitle"></p>
                         </div>
                         <div className="main-header_end">
                             <div className="main-header_end-user">
                                 <img src={Img} style={{width : "100px", height: "100px", objectFit: "cover"}}/>
                                 <div className="main-header_end-user_info">
                                     <div className="main-header_end-user_info-name">
-                                        <p id="nickname">케로</p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span>4.5</span></p>
+                                        <p id="nickname"></p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span></span></p>
                                     </div>
                                     <div className="main-header_end-user_info_loc">
-                                        <p>서울시 강남구</p>
+                                        <p></p>
                                     </div>
                                 </div>                               
                             </div>
@@ -270,7 +283,7 @@ const SitterView = () => {
                         </div>
                     </div>
                     <div className="main-content">
-                        <p id="sitterDesc">제목을 읽으셨으면 아시겠지만 저는 동물 훈련사 자격증이 있습니다! 저에게 믿고 맡기시면 걱정할 일을 만들지 않습니다!제목을 읽으셨으면 아시겠지만 저는 동물 훈련사 자격증이 있습니다! 저에게 믿고 맡기시면 걱정할 일을 만들지 않습니다!제목을 읽으셨으면 아시겠지만 저는 동물 훈련사 자격증이 있습니다! 저에게 믿고 맡기시면 걱정할 일을 만들지 않습니다!제목을 읽으셨으면 아시겠지만 저는 동물 훈련사 자격증이 있습니다! 저에게 믿고 맡기시면 걱정할 일을 만들지 않습니다!
+                        <p id="sitterDesc">
                         </p>
                     </div>
                 </MainContent>

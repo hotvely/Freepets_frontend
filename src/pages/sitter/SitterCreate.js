@@ -1,6 +1,7 @@
 import { faFile, faImage, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { addBoard } from "../../api/sitter";
 import styled from "styled-components";
 
 const Main = styled.div`
@@ -110,13 +111,13 @@ const MainBox = styled.main`
     }
 `
 
-const ContentButton = () => {
-    
-}
-
 const SitterCreate = () => {
     const [fileInput, setFileInput] = useState("hidden");
+    const [price, setPrice] = useState(0);
+    const [loc, setLoc] = useState();
+    const [title, setTitle] = useState();
     const [desc, setDesc] = useState("");
+    const [img, setImg] = useState(null);
 
     const InputHandler = (e) => {
         setDesc(e.currentTarget.innerText);
@@ -126,17 +127,41 @@ const SitterCreate = () => {
         setFileInput("file");
     }
 
+    const selectChange = (e) => {
+        let value = e.target.value;
+    }
+
+    const enrollButton = () => {
+
+        const formData = new FormData();
+        formData.append("price", price);
+        formData.append("title", title);
+        formData.append("desc", desc);
+        formData.append("loc", loc);
+        formData.append("img", img);
+
+        addBoard(formData);
+    }
+
+    const resetButton = () => {
+
+    }
+
+    const Button = () => {
+
+    }
+
     return (
         <Main>
             <div style={{width : "100%", height : "100px", backgroundColor: "black", marginBottom : "50px", padding: "0px 10px"}}></div>
             <MainBox>
                 <div className="header-content">
-                    <select className="select select-category">
+                    <select className="select select-category" onChange={selectChange}>
                         <option>게시판을 선택해 주세요.</option>
-                        <optgroup label="플리마켓">
-                            <option value="1">펫시터</option>
-                            <option value="2">중고마켓</option>
-                        </optgroup>
+                        <option value="1">커뮤니티</option>
+                        <option value="2">분실</option>
+                        <option value="3">시터</option>
+                        <option value="3">병원정보</option>
                     </select>
                     <div className="input-sitter">
                         <input type="text" name="sitterPrice" id="sitterPrice" placeholder="시터 비용을 입력해 주세요."/>
@@ -148,15 +173,15 @@ const SitterCreate = () => {
                 </div>
                 <div className="main-content">
                     <div>
-                    <button className="btn btn-font btn-font-emph" style={{backgroundColor: "yellow"}} onClick={ContentButton}>강조</button>
-                        <button className="btn btn-font btn-font-common" onClick={ContentButton}>기본</button>
-                        <button className="btn btn-font btn-font-bold" style={{fontWeight : "bold"}} onClick={ContentButton}>굵게</button>
-                        <button className="btn btn-font btn-font-italic" style={{fontStyle: "italic"}} onClick={ContentButton}>기울게</button>
-                        <button className="btn btn-font btn-font-line" style={{textDecoration : "underline"}} onClick={ContentButton}>밑줄</button>
-                        <button className="btn btn-font btn-font-cancel" style={{textDecoration : "line-through"}} onClick={ContentButton}>취소선</button>
-                        <button className="btn btn-font btn-font-left" onClick={ContentButton}>왼쪽</button>
-                        <button className="btn btn-font btn-font-center" onClick={ContentButton}>가운데</button>
-                        <button className="btn btn-font btn-font-right" onClick={ContentButton}>오른쪽</button>
+                    <button className="btn btn-font btn-font-emph" style={{backgroundColor: "yellow"}} onClick={Button}>강조</button>
+                        <button className="btn btn-font btn-font-common" onClick={Button}>기본</button>
+                        <button className="btn btn-font btn-font-bold" style={{fontWeight : "bold"}} onClick={Button}>굵게</button>
+                        <button className="btn btn-font btn-font-italic" style={{fontStyle: "italic"}} onClick={Button}>기울게</button>
+                        <button className="btn btn-font btn-font-line" style={{textDecoration : "underline"}} onClick={Button}>밑줄</button>
+                        <button className="btn btn-font btn-font-cancel" style={{textDecoration : "line-through"}} onClick={Button}>취소선</button>
+                        <button className="btn btn-font btn-font-left" onClick={Button}>왼쪽</button>
+                        <button className="btn btn-font btn-font-center" onClick={Button}>가운데</button>
+                        <button className="btn btn-font btn-font-right" onClick={Button}>오른쪽</button>
                         <button className="btn btn-font btn-file-image" onClick={FileClick}><FontAwesomeIcon icon={faImage}/></button>
                         <button className="btn btn-font btn-file-video" onClick={FileClick}><FontAwesomeIcon icon={faVideo}/></button>
                         <button className="btn btn-font btn-file" onClick={FileClick}><FontAwesomeIcon icon={faFile}/></button>
@@ -168,8 +193,8 @@ const SitterCreate = () => {
                     <div contentEditable="true" className="input-desc" onInput={InputHandler} suppressContentEditableWarning="true"></div>                   
                 </div>
                 <div className="footer-content">
-                    <button onClick={ContentButton} className="btn btn-footer btn-reset">초기화</button>
-                    <button onClick={ContentButton} className="btn btn-footer btn-submit">등록</button>
+                    <button onClick={resetButton} className="btn btn-footer btn-reset">초기화</button>
+                    <button onClick={enrollButton} className="btn btn-footer btn-submit">등록</button>
                 </div>
             </MainBox>
         </Main>
