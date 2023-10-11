@@ -2,12 +2,13 @@ import styled from "styled-components";
 import image from "../../resources/image.jpg";
 import border from "../../resources/borderImg.png";
 import banner from "../../resources/bannerTest.png";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userSave } from "../../components/store/userSlice";
+import { asyncDelete, userSave } from "../../components/store/userSlice";
 import ReactModal from "react-modal";
 import memberUpdate from "./memberUpdate";
+import Logout from "./Logout";
 
 const MyPageMain = styled.main`
   margin: 0;
@@ -264,6 +265,7 @@ const MyPage = () => {
 
   useEffect(() => {
     const saveuser = localStorage.getItem("user");
+
     //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
     if (Object.keys(user).length === 0 && saveuser !== null) {
       dispatch(userSave(JSON.parse(saveuser)));
@@ -271,6 +273,12 @@ const MyPage = () => {
       navigate("/");
     }
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      navigate("/main");
+    }
+  }, [user]);
 
   const phoneFormatter = (data) => {
     if (data) {
@@ -305,8 +313,9 @@ const MyPage = () => {
   const openModalHandler = (e) => {
     setIsOpen(!isOpen);
   };
-  const sendData = (formData) => {
-    return null;
+
+  const deleteUser = () => {
+    dispatch(asyncDelete({ token: user.token }));
   };
 
   return (
@@ -367,9 +376,11 @@ const MyPage = () => {
 
         <div className="profile_btn">
           <button onClick={openModalHandler}>회원 정보수정</button>
-          {memberUpdate(isOpen, setIsOpen)}
-          {/* {isOpen ?  : null} */}
-          <button style={{ backgroundColor: "pink" }}>회원 탈퇴</button>
+          {memberUpdate(isOpen, setIsOpen, user, dispatch)}
+
+          <button onClick={deleteUser} style={{ backgroundColor: "pink" }}>
+            회원 탈퇴
+          </button>
         </div>
 
         <div className="profile-alram">

@@ -1,7 +1,12 @@
+import { wait } from "@testing-library/user-event/dist/utils";
 import { useEffect, useRef } from "react";
 import Modal from "react-modal";
+import { useParams } from "react-router-dom";
 import { outside } from "semver";
 import styled from "styled-components";
+import { updateAPI } from "../../api/auth";
+import { useDispatch } from "react-redux";
+import { asyncUpdate } from "../../components/store/userSlice";
 
 const FormInput = styled.div`
   .inputForm_title {
@@ -63,7 +68,7 @@ const FormInput = styled.div`
   }
 `;
 
-const memberUpdate = (isOpen, setIsOpen) => {
+const memberUpdate = (isOpen, setIsOpen, user, dispatch) => {
   const customModalStyled = {
     overlay: {
       backgroundColor: " rgba(0, 0, 0, 0.4)",
@@ -95,6 +100,32 @@ const memberUpdate = (isOpen, setIsOpen) => {
     setIsOpen(!isOpen);
   };
 
+  const formDataHandler = (e) => {
+    e.preventDefault();
+
+    const formData = {
+      token: user.token,
+      nickname: e.target.nickname.value,
+      email: e.target.email.value,
+      phone: e.target.phone.value,
+      address: e.target.address.value,
+      memberInfo: e.target.userInfo.value,
+    };
+
+    for (let key in formData) {
+      if (key != "token" && formData[key].length > 0) {
+        dispatch(asyncUpdate(formData));
+
+        console.log("데이터 전송 후 수정 완료");
+        alert("정보 수정 완료!");
+        setIsOpen(!isOpen);
+        return true;
+      }
+    }
+    alert("모든 입력값이 비어 있습니다.");
+    return false;
+  };
+
   return (
     <>
       {console.log(isOpen)}
@@ -106,7 +137,7 @@ const memberUpdate = (isOpen, setIsOpen) => {
       >
         <Modal isOpen={isOpen} style={customModalStyled} ariaHideApp={false}>
           <FormInput>
-            <form className="form">
+            <form className="form" onSubmit={formDataHandler}>
               <div className="inputForm_title">정보 수정</div>
               <div className="inputForm">
                 변경할 닉네임 <input type="text" name="nickname"></input>
@@ -126,11 +157,11 @@ const memberUpdate = (isOpen, setIsOpen) => {
               <div className="inputForm">
                 자기소개 <textarea name="userInfo"></textarea>
               </div>
+              <div className="btn">
+                <button type="submit">submit</button>
+                <button onClick={openModalHandler}>exit</button>
+              </div>
             </form>
-            <div className="btn">
-              <button onClick={null}>submit</button>
-              <button onClick={openModalHandler}>exit</button>
-            </div>
           </FormInput>
         </Modal>
       </div>
