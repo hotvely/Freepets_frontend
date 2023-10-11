@@ -262,7 +262,7 @@ const Sitter = () => {
                                     <p><span id="sitterPrice">80000</span>₩</p>
                                     <div onClick={handleModalClick}>
                                         <button onClick={chattingClick}>1:1 대화</button>
-                                        <Modal isOpen={modalCheck}  ariaHideApp={false} onRequestClose={handleModalClose} style={ModalStyle}>                                           
+                                        <Modal isOpen={modalCheck} ariaHideApp={false} onRequestClose={handleModalClose} style={ModalStyle}>                                           
                                             <Chatting/>
                                         </Modal>
                                     </div>
