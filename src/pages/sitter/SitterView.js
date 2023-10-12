@@ -267,13 +267,12 @@ const SitterView = () => {
     }
 
     const getReviews = async () => {
-        const reviewsResult = await getReviews(boardView?.member.id);
+        const reviewsResult = await getReviews();
         setReviews([...reviews, ...reviewsResult.data])
     }
 
     useEffect(() => {
         boardViewAPI();
-        getReviews();
         const data = JSON.parse(localStorage.getItem('user'));
         console.log(data.id);
         
@@ -348,14 +347,16 @@ const SitterView = () => {
                                     <div className="review-content_start-user_name">
                                         <p id="nickname">{items.member.nickname}</p>
                                     </div>
-                                    
+                                    <div className="review-content_start-user_ratings">
+                                        {items.sitterReviewRatings == 5 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="orange" />) : items.sitterReviewRatings == 4 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="#aaa"/>) : items.sitterReviewRatings == 3 ? (<Star />) : sitterReviewRatings == 2 ? (<Star />) : (<Star />)}                                       
+                                    </div>
                                 </div>
                                 <div className="review-content_main">
                                     <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
                                 </div>
                             </div>
                         </div>
-                        ))}
+                        ))}                       
                     </div>
                 </ReviewContent>
             </MainBox>
