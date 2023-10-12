@@ -57,7 +57,6 @@ const Header = () => {
   }, []);
 
   return (
-
     <>
       <StyledHeader>
         <nav>

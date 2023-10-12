@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { registerAPI } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { asyncRegister, userReset } from "../../components/store/userSlice";
 
 const RegisterPage = styled.div`
   width: 100vw;
@@ -177,8 +179,28 @@ const Register = () => {
   const today = new Date();
   const [date, setDate] = useState(today.toISOString().split("T")[0]);
   const [btnClick, setBtnClick] = useState(false);
-  const navigate = useNavigate();
+
   //-------------useState
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
+  useEffect(() => {
+    console.log(user);
+    if (user !== null && Object.keys(user).length !== 0) {
+      console.log("가입성공");
+      navigate("/main");
+    } else {
+      if (user === null) {
+        console.log("이미 가입된 회원");
+        alert("가입 되어 있음");
+        dispatch(userReset());
+      }
+      navigate("/auth/register");
+    }
+  }, [user]);
 
   const checkGender = () => {
     const result = [];
@@ -229,14 +251,7 @@ const Register = () => {
       nickname: e.target.userNickname.value,
     };
 
-    console.log(formData);
-    if (registerAPI(formData)) {
-      console.log("데이터 전송 성공..");
-      alert("회원가입성공!");
-      // 회원 가입 성공하면 마이페이지로 이동시키기.
-      navigate("/auth/login");
-      return true;
-    } else return false;
+    dispatch(asyncRegister(formData));
   };
 
   return (

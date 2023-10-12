@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { checkToken, loginAPI, saveTokenAPI } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { asyncLogin } from "../../components/store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { asyncLogin, userReset } from "../../components/store/userSlice";
 
 const LoginPage = styled.div`
   width: 100vw;
@@ -114,6 +114,10 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
   const login = (e) => {
     e.preventDefault();
 
@@ -127,11 +131,29 @@ const Login = () => {
       id: e.target.userId.value,
       password: e.target.userPwd.value,
     };
-
+    console.log("로그인 데이터 넘겼음");
     dispatch(asyncLogin(formData));
-    navigate("/main");
-    return true;
   };
+
+  useEffect(() => {
+    console.log(user);
+
+    if (user === null && !localStorage.getItem("user")) {
+      alert("존재하지 않는 유저입니다.");
+      dispatch(userReset());
+      return navigate("/auth/login");
+    }
+    if (user !== null && Object.keys(user).length !== 0) {
+      if (user.deleteAccountYN === "Y" && !localStorage.getItem("user")) {
+        alert("이미 탈퇴한 회원");
+        return navigate("/auth/login");
+      }
+      if (user.deleteAccountYN === "N" && localStorage.getItem("user")) {
+        alert("로그인 성공!");
+        return navigate("/main");
+      }
+    }
+  }, [user]);
 
   return (
     <>

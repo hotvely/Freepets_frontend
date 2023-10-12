@@ -158,7 +158,7 @@ const Home = () => {
   useEffect(() => {
     const saveuser = localStorage.getItem("user");
     //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
-    if (Object.keys(user).length === 0 && saveuser !== null) {
+    if (user !== null && Object.keys(user).length === 0 && saveuser !== null) {
       dispatch(userSave(JSON.parse(saveuser)));
     }
   }, []);
@@ -178,7 +178,9 @@ const Home = () => {
           <a href="/information">정보나눔</a>
           <a href="#">고객센터</a>
           <div className="rightNav">
-            {Object.keys(user).length === 0 ? (
+            {user === null ||
+            Object.keys(user).length === 0 ||
+            !localStorage.getItem("token") ? (
               <>
                 <Link to="/auth/login">로그인</Link> <p>|</p>
                 <Link to="/auth/register">회원가입</Link>
