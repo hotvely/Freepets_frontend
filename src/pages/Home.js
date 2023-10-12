@@ -1,9 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Banner from "../assets/image.png";
 import findMe from "../assets/findMe.png";
 import styled from "styled-components";
 import loupe from "../assets/loupe.png";
 import Logo from "../assets/Logo.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { userSave } from "../components/store/userSlice";
 const StyledHeader = styled.header`
   position: fixed;
   width: 100%;
@@ -40,8 +43,7 @@ const StyledHeader = styled.header`
     }
   }
 `;
-
-const StylredMain = styled.main`
+const StyledMain = styled.main`
   background-color: #3a98b9;
   height: 40vh;
   width: 100%;
@@ -147,6 +149,20 @@ const StylredMain = styled.main`
 `;
 
 const Home = () => {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
+  useEffect(() => {
+    const saveuser = localStorage.getItem("user");
+    //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
+    if (user !== null && Object.keys(user).length === 0 && saveuser !== null) {
+      dispatch(userSave(JSON.parse(saveuser)));
+    }
+  }, []);
+
   return (
     <div>
       <StyledHeader>
@@ -154,20 +170,33 @@ const Home = () => {
           <a href="#">
             <img src={Logo}></img>
           </a>
-          <a href="#">공지사항</a>
+
+          <a href="/event">공지사항</a>
           <a href="/sitter">플리마켓</a>
+
           <a href="#">커뮤니티</a>
           <a href="/information">정보나눔</a>
           <a href="#">고객센터</a>
           <div className="rightNav">
-            <a href="#">로그인</a>
-            <p>|</p>
-            <a href="#">회원가입</a>
+            {user === null ||
+            Object.keys(user).length === 0 ||
+            !localStorage.getItem("token") ? (
+              <>
+                <Link to="/auth/login">로그인</Link> <p>|</p>
+                <Link to="/auth/register">회원가입</Link>
+              </>
+            ) : (
+              <>
+                <Link to="/mypage">마이페이지</Link>
+                <p>|</p>
+                <Link to="/auth/logout">로그아웃</Link>
+              </>
+            )}
           </div>
         </nav>
       </StyledHeader>
       <img src={Banner} style={{ width: "100%", height: "59vh" }} />
-      <StylredMain>
+      <StyledMain>
         <div className="leftNav">
           <p>MAIN</p>
           <p>OUR STORY</p>
@@ -208,7 +237,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </StylredMain>
+      </StyledMain>
     </div>
   );
 };

@@ -2,6 +2,13 @@ import styled from "styled-components";
 import image from "../../resources/image.jpg";
 import border from "../../resources/borderImg.png";
 import banner from "../../resources/bannerTest.png";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { asyncDelete, userSave } from "../../components/store/userSlice";
+import ReactModal from "react-modal";
+import memberUpdate from "./memberUpdate";
+import Logout from "./Logout";
 
 const MyPageMain = styled.main`
   margin: 0;
@@ -246,6 +253,71 @@ const MyPageMain = styled.main`
 `;
 
 const MyPage = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
+  useEffect(() => {
+    const saveuser = localStorage.getItem("user");
+
+    //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
+    if (Object.keys(user).length === 0 && saveuser !== null) {
+      dispatch(userSave(JSON.parse(saveuser)));
+    } else if (Object.keys(user).length === 0 && saveuser === null) {
+      navigate("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      navigate("/main");
+    }
+  }, [user]);
+
+  const phoneFormatter = (data) => {
+    if (data) {
+      const phoneNumber = `${data}`;
+      const result =
+        phoneNumber.slice(0, 3) +
+        "-" +
+        phoneNumber.slice(3, 7) +
+        "-" +
+        phoneNumber.slice(7, 11);
+
+      return result;
+    }
+  };
+
+  const dateFormatter = (data) => {
+    if (data) {
+      const date = new Date(`${data}`);
+
+      const result =
+        date.getFullYear() +
+        "-" +
+        (date.getMonth() > 8
+          ? date.getMonth() + 1
+          : "0" + (date.getMonth() + 1)) +
+        "-" +
+        date.getDate();
+      return result;
+    }
+  };
+
+  const openModalHandler = (e) => {
+    setIsOpen(!isOpen);
+  };
+
+  const deleteUser = () => {
+    dispatch(asyncDelete({ token: user.token }));
+  };
+
   return (
     <>
       <MyPageMain>
@@ -257,50 +329,58 @@ const MyPage = () => {
           <div className="profile-photo">
             <div>
               <img src={border} className="profileBorder"></img>
-              <img src={image} className="profileImg"></img>
+              <img
+                src={user.memberImg == null ? image : user.memberImg}
+                className="profileImg"
+              ></img>
             </div>
-            <label>NICKNAME</label>
+            <label>{user.nickname}</label>
           </div>
           <div className="profileInfo">
             <div>
               <p>Id</p>
-              <div>hotvely</div>
+              <div>{user.id}</div>
             </div>
             <div>
               <p>E-mail</p>
-              <div>MAIL@naver.com</div>
+              <div>{user.email}</div>
             </div>
             <div>
               <p>Phone</p>
-              <div>010-0000-0000</div>
+              <div>{phoneFormatter(user.phone)}</div>
             </div>
             <div>
               <p>Address</p>
-              <div>서울시 양천구 한강변 판자집</div>
+              <div>{user.address}</div>
+            </div>
+            <div>
+              <p>생일</p>
+              <div>{dateFormatter(user.birth)}</div>
             </div>
             <div>
               <p>가입일</p>
-              <div>2023-12-19</div>
+              <div>{dateFormatter(user.createAccountDate)}</div>
             </div>
             <div>
               <p>Grade</p>
-              <div>ADMIN</div>
+              <div>{user.authority}</div>
             </div>
             <div>
               <p>Info</p>
               <div>
-                hi i am hotvely. this page admin. hellohellohello
-                hellohelloasddddddddddddddddddddd hellohellohello hellohellohell
-                ohel zlohellohelldasdddddddddd ohellohellohello nice to meet
-                you!! Ty!
+                {user.memberInfo == null ? "유저의 정보 입력" : user.memberInfo}
               </div>
             </div>
           </div>
         </div>
 
         <div className="profile_btn">
-          <button>회원 정보수정</button>
-          <button style={{ backgroundColor: "pink" }}>회원 탈퇴</button>
+          <button onClick={openModalHandler}>회원 정보수정</button>
+          {memberUpdate(isOpen, setIsOpen, user, dispatch)}
+
+          <button onClick={deleteUser} style={{ backgroundColor: "pink" }}>
+            회원 탈퇴
+          </button>
         </div>
 
         <div className="profile-alram">
