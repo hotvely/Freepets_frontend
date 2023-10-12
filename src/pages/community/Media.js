@@ -260,7 +260,7 @@ const Media = () => {
   };
 
   const onClickListBoard = () => {
-    window.location.href = "#";
+    window.location.href = "/lost";
     // 게시글 타입 변경
   };
 
@@ -888,7 +888,7 @@ const Media = () => {
             </ul>
           </div>
           <div id="write-btn">
-            <a href="#">
+            <a href="information/hospital/create">
               <button>글쓰기</button>
             </a>
           </div>
