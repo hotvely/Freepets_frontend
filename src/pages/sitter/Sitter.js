@@ -188,13 +188,19 @@ const MainContent = styled.main`
 const Sitter = () => {
     const [boards, setBoards] = useState([]);
     const navigator = useNavigate();
-    const [page, setPage] = useState(1);
-    const [boardView, setBoardView] = useState([]);    
+    const [page, setPage] = useState(1);   
     const [modalCheck, setModalCheck] = useState(false);
 
     const NaviView = (e) => {
         e.preventDefault();
-        navigator("view", {state: e.currentTarget.id});
+        console.log(e.currentTarget.querySelector(".main-content_start-desc-name").id);
+        navigator("view", {
+            state: 
+            {
+               code: e.currentTarget.id,
+               id: e.currentTarget.querySelector(".main-content_start-desc-name").id
+            }
+        });
     };
 
     const handleModalClick = (e) => {
@@ -272,7 +278,7 @@ const Sitter = () => {
                                                 <p id="sitterTitle">{items.sitterTitle}</p>
                                                 <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/> <span>{items.sitterRatings}</span></p>
                                             </div>
-                                            <div className="main-content_start-desc-name">
+                                            <div className="main-content_start-desc-name" id={items.member.id}>
                                                 <p id="nickname">{items.member.nickname}</p>
                                             </div>
                                         </div>

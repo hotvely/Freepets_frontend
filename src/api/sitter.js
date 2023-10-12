@@ -14,11 +14,11 @@ export const getBoardView = async (id) => {
     return await instance.get(url);
 }
 
-export const addBoard = async (data) => {
-    return await instance.post("sitter", data);
-}
-
 export const getReviews = async (id) => {
     let url = `sitter/${id}/review`;
     return await instance.get(url);
+}
+
+export const addBoard = async (data) => {
+    return await instance.post("sitter", data);
 }

@@ -3,7 +3,7 @@ import Img from "../../resources/kero.jpeg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { getBoardView, getReviews } from "../../api/sitter";
+import { getReviews, getBoardView } from "../../api/sitter";
 import { useLocation } from "react-router-dom";
 
 const Main = styled.div`
@@ -32,7 +32,6 @@ const MainContent = styled.div`
         flex-direction: column;
 
         .main-header_start {
-            margin-left: 10px;
             margin-bottom: 25px;
 
             #sitterTitle {
@@ -45,12 +44,14 @@ const MainContent = styled.div`
         .main-header_end {
             display: flex;
             justify-content: space-between;
+            margin-left: 10px;
+            margin-bottom: 20px;
 
             .main-header_end-user {
                 display: flex;
 
                 .main-header_end-user_info {
-                    margin-left: 10px;
+                    margin-left: 20px;
 
                     .main-header_end-user_info-name {
                         display: flex;
@@ -65,10 +66,14 @@ const MainContent = styled.div`
                             }
                         }
 
+                        #ratings {
+                            margin-top: 3px;
+                        }
+
                         #nickname {
                             border: 1px solid #DEDEDE;
                             border-radius: 5px;
-                            padding: 3px;
+                            padding: 5px;
                             font-size: 0.9rem;
                         }
                     }
@@ -78,7 +83,7 @@ const MainContent = styled.div`
                     font-size: 0.9rem;
                     background-color: #999;
                     color: #FFF;
-                    padding: 3px;
+                    padding: 5px;
                     border-radius: 5px;
                 }               
             }
@@ -237,16 +242,19 @@ const ReviewContent = styled.div`
     }
 
 `
+const StarArray = styled.div`
+        display: flex;
+    `
 
 const Star = ({color1, color2, color3, color4, color5}) => {
     return (
-        <div>
+        <StarArray>
             <p><FontAwesomeIcon icon={faStar} style={{color: color1}}/></p>
             <p><FontAwesomeIcon icon={faStar} style={{color: color2}}/></p>
             <p><FontAwesomeIcon icon={faStar} style={{color: color3}}/></p>
             <p><FontAwesomeIcon icon={faStar} style={{color: color4}}/></p>
             <p><FontAwesomeIcon icon={faStar} style={{color: color5}}/></p>
-        </div>
+        </StarArray>
     )
 }
 
@@ -262,20 +270,20 @@ const SitterView = () => {
     }
 
     const boardViewAPI = async () => {
-        const boardViewResult = await getBoardView(location.state);
+        const boardViewResult = await getBoardView(location.state.code);
         setBoardView(boardViewResult.data);
     }
 
-    const getReviews = async () => {
-        const reviewsResult = await getReviews();
-        setReviews([...reviews, ...reviewsResult.data])
+    const getReviewsAPI = async () => {
+        const reviewsResult = await getReviews(location.state.id);
+        setReviews([...reviews, ...reviewsResult.data]);
     }
 
     useEffect(() => {
         boardViewAPI();
-        const data = JSON.parse(localStorage.getItem('user'));
-        console.log(data.id);
-        
+        getReviewsAPI();
+        // const data = JSON.parse(localStorage.getItem('user'));
+        // console.log(data.id);
     }, []);
 
     return (
@@ -293,7 +301,7 @@ const SitterView = () => {
                                 <div className="main-header_end-user_info">
                                     <div className="main-header_end-user_info-name">
                                         <p id="nickname">{boardView?.member.nickname}</p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span>{boardView?.sitterRatings}</span></p>
+                                        <p id="ratings"><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span>{boardView?.sitterRatings}</span></p>
                                     </div>
                                     <div className="main-header_end-user_info_loc">
                                         <p>{boardView?.sitterLoc}</p>
@@ -340,19 +348,23 @@ const SitterView = () => {
                             <p>시터 후기</p>
                         </div>
                         {reviews.map((items) => (
-                        <div className="review-content">
+                        <div className="review-content" key={items?.sitterReviewCode}>
                             <div className="review-content_start">
                                 <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
                                 <div className="review-content_start-user">
                                     <div className="review-content_start-user_name">
-                                        <p id="nickname">{items.member.nickname}</p>
+                                        <p id="nickname">{items?.member.nickname}</p>
                                     </div>
                                     <div className="review-content_start-user_ratings">
-                                        {items.sitterReviewRatings == 5 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="orange" />) : items.sitterReviewRatings == 4 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="#aaa"/>) : items.sitterReviewRatings == 3 ? (<Star />) : sitterReviewRatings == 2 ? (<Star />) : (<Star />)}                                       
+                                       {items.sitterReviewRatings == 5 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="orange" />) 
+                                       : items.sitterReviewRatings == 4 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="#aaa"/>) 
+                                       : items.sitterReviewRatings == 3 ? (<Star color1="orange" color2="orange" color3="orange" color4="#aaa" color5="#aaa"/>) 
+                                       : items.sitterReviewRatings == 2 ? (<Star color1="orange" color2="orange" color3="#aaa" color4="#aaa" color5="#aaa"/>) 
+                                       : (<Star color1="orange" color2="#aaa" color3="#aaa" color4="#aaa" color5="#aaa"/>)}                           
                                     </div>
                                 </div>
                                 <div className="review-content_main">
-                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
+                                    <p id="sitterReviewDesc">{items?.sitterReviewDesc}</p>
                                 </div>
                             </div>
                         </div>
