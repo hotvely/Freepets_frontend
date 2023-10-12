@@ -3,7 +3,7 @@ import Img from "../../resources/kero.jpeg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { getBoardView } from "../../api/sitter";
+import { getBoardView, getReviews } from "../../api/sitter";
 import { useLocation } from "react-router-dom";
 
 const Main = styled.div`
@@ -241,7 +241,8 @@ const ReviewContent = styled.div`
 const SitterView = () => {
     const [star, setStar] = useState("");
     const location = useLocation();
-    const [boardView, setBoardView] = useState();
+    const [boardView, setBoardView] = useState(null);
+    const [reviews, setReviews] = useState([]);
 
     const onRatings = (event) => {
         const color = event.target.style.color;
@@ -253,29 +254,34 @@ const SitterView = () => {
         setBoardView(boardViewResult.data);
     }
 
+    const getReviews = async () => {
+        const reviewsResult = await getReviews();
+        setReviews([...reviews, ...reviewsResult.data])
+    }
+
     useEffect(() => {
         boardViewAPI();
-    }, [])
+    }, []);
 
     return (
         <Main>
             <div style={{width : "100%", height : "100px", backgroundColor: "black", marginBottom : "50px", padding: "0px 10px"}}></div>
             <MainBox>
                 <MainContent>
-                    <div className="main-header">
+                    <div className="main-header" key={boardView?.sitterCode}>
                         <div className="main-header_start">
-                            <p id="sitterTitle"></p>
+                            <p id="sitterTitle">{boardView?.sitterTitle}</p>
                         </div>
                         <div className="main-header_end">
                             <div className="main-header_end-user">
                                 <img src={Img} style={{width : "100px", height: "100px", objectFit: "cover"}}/>
                                 <div className="main-header_end-user_info">
                                     <div className="main-header_end-user_info-name">
-                                        <p id="nickname"></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span></span></p>
+                                        <p id="nickname">{boardView?.member.nickname}</p>
+                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span>{boardView?.sitterRatings}</span></p>
                                     </div>
                                     <div className="main-header_end-user_info_loc">
-                                        <p></p>
+                                        <p>{boardView?.sitterLoc}</p>
                                     </div>
                                 </div>                               
                             </div>
@@ -283,7 +289,7 @@ const SitterView = () => {
                         </div>
                     </div>
                     <div className="main-content">
-                        <p id="sitterDesc">
+                        <p id="sitterDesc">{boardView?.sitterDesc}
                         </p>
                     </div>
                 </MainContent>
@@ -318,12 +324,13 @@ const SitterView = () => {
                         <div className="review-header">
                             <p>시터 후기</p>
                         </div>
+                        {reviews.map((items) => (
                         <div className="review-content">
                             <div className="review-content_start">
                                 <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
                                 <div className="review-content_start-user">
                                     <div className="review-content_start-user_name">
-                                        <p id="nickname">베로</p>
+                                        <p id="nickname">{items.member.nickname}</p>
                                     </div>
                                     <div className="review-content_start-user_ratings">
                                         <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
@@ -338,6 +345,8 @@ const SitterView = () => {
                                 </div>
                             </div>
                         </div>
+                        ))}
+                        
                         <div className="review-content">
                             <div className="review-content_start">
                                 <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>

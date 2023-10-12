@@ -17,6 +17,7 @@ import Login from "./pages/member/Login";
 import Register from "./pages/member/Register";
 // import Header from "./components/Header";
 import Logout from "./pages/member/Logout";
+import Post from "./components/Post";
 
 const router = createBrowserRouter([
   {
@@ -123,6 +124,15 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/test",
+    children: [
+      {
+        index: true,
+        element: <Post/>
+      }
+    ]
+  }
 ]);
 
 export default router;
