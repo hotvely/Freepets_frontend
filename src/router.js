@@ -17,6 +17,8 @@ import Login from "./pages/member/Login";
 import Register from "./pages/member/Register";
 // import Header from "./components/Header";
 import Logout from "./pages/member/Logout";
+import MemberFindId from "./pages/member/MemberFindId";
+import MemberFindPwd from "./pages/member/MemberFindPwd";
 
 const router = createBrowserRouter([
   {
@@ -120,6 +122,14 @@ const router = createBrowserRouter([
       {
         path: "logout",
         element: <Logout />,
+      },
+      {
+        path: "findId",
+        element: <MemberFindId />,
+      },
+      {
+        path: "findPwd",
+        element: <MemberFindPwd />,
       },
     ],
   },

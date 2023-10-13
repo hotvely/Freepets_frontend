@@ -68,7 +68,7 @@ const FormInput = styled.div`
   }
 `;
 
-const memberUpdate = (isOpen, setIsOpen, user, dispatch) => {
+const MemberUpdate = (isOpen, setIsOpen, user, dispatch) => {
   const customModalStyled = {
     overlay: {
       backgroundColor: " rgba(0, 0, 0, 0.4)",
@@ -105,6 +105,7 @@ const memberUpdate = (isOpen, setIsOpen, user, dispatch) => {
 
     const formData = {
       token: user.token,
+      password: e.target.password.value,
       nickname: e.target.nickname.value,
       email: e.target.email.value,
       phone: e.target.phone.value,
@@ -140,10 +141,13 @@ const memberUpdate = (isOpen, setIsOpen, user, dispatch) => {
             <form className="form" onSubmit={formDataHandler}>
               <div className="inputForm_title">정보 수정</div>
               <div className="inputForm">
+                변경할 비밀번호 <input type="text" name="password"></input>
+              </div>
+              <div className="inputForm">
                 변경할 닉네임 <input type="text" name="nickname"></input>
               </div>
               <div className="inputForm">
-                변경할 E-mail <input type="text" name="email"></input>{" "}
+                변경할 E-mail <input type="text" name="email"></input>
               </div>
               <div className="inputForm">
                 변경할 전화번호 <input type="text" name="phone"></input>
@@ -152,7 +156,7 @@ const memberUpdate = (isOpen, setIsOpen, user, dispatch) => {
                 하이픈('-')을 제외한 숫자만 입력하세요.
               </div>
               <div className="inputForm">
-                변경할 주소 <input type="text" name="address"></input>{" "}
+                변경할 주소 <input type="text" name="address"></input>
               </div>
               <div className="inputForm">
                 자기소개 <textarea name="userInfo"></textarea>
@@ -169,4 +173,4 @@ const memberUpdate = (isOpen, setIsOpen, user, dispatch) => {
   );
 };
 
-export default memberUpdate;
+export default MemberUpdate;
