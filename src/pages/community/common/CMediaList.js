@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import banner from "../../resources/bannerTest.png";
 import pebble from "../../resources/pebble.jpg";
 import chestnut from "../../resources/hamster.test.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
+import { getMediaList } from "../../../api/media";
 
 const MainStlye = styled.div`
   padding: 20px;
@@ -253,7 +254,10 @@ const MainContentBox = styled.div`
   }
 `;
 
-const Media = () => {
+const CMediaList = () => {
+  const [mediae, setMediae] = useState([]);
+  const [page, setPage] = useState(1);
+
   const onClickCheckBoard = () => {
     window.location.href = "#";
     // 게시글 타입 변경
@@ -263,6 +267,17 @@ const Media = () => {
     window.location.href = "/lost";
     // 게시글 타입 변경
   };
+
+  const MediaListAPI = async () => {
+    // 게시글 목록 데이터
+    const result = await getMediaList(page);
+    console.log(result.data);
+    setMediae([...mediae, ...mediae.data]);
+  };
+
+  useEffect(() => {
+    MediaListAPI(); // 게시글 목록 조회 호출
+  }, []);
 
   return (
     <MainStlye>
@@ -331,198 +346,42 @@ const Media = () => {
 
         <div className="main-content">
           <div className="media-colum">
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={pebble} alt="미디어썸네일" />
-                </a>
-              </div>
+            {/* {mediae.map((media) => (
+              <Link>
+                to={"/"}
+                <div className="media-content">
+                  <div id="media-thumbnail">
+                    <a href="#">
+                      <img src={pebble} alt="미디어썸네일" />
+                    </a>
+                  </div>
 
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>나를 봐 돌맹</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
+                  <div className="media-info">
+                    <div id="media-info-title">
+                      <a href="#">
+                        <h3>나를 봐 돌맹</h3>
+                      </a>
+                      <a href="#">
+                        <p>
+                          [<span>7</span>]
+                        </p>
+                      </a>
+                    </div>
+
+                    <div id="media-info-writer">
+                      <p>쭈여니</p>
+                    </div>
+
+                    <div id="media-info-detail">
+                      <p>
+                        <span>2023.09.22</span>ㆍ조회수
+                        <span id="viewCount">22</span>회
+                      </p>
+                    </div>
+                  </div>
                 </div>
-
-                <div id="media-info-writer">
-                  <p>쭈여니</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={chestnut} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>노릇노릇 군밤이</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>알밤이</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={pebble} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>나를 봐 돌맹</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>쭈여니</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={chestnut} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>노릇노릇 군밤이</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>알밤이</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={pebble} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>나를 봐 돌맹</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>쭈여니</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="media-colum">
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={pebble} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>나를 봐 돌맹</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>쭈여니</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
+              </Link>
+            ))} */}
 
             <div className="media-content">
               <div id="media-thumbnail">
@@ -624,167 +483,6 @@ const Media = () => {
               <div id="media-thumbnail">
                 <a href="#">
                   <img src={pebble} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>나를 봐 돌맹</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>쭈여니</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="media-colum">
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={pebble} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>나를 봐 돌맹</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>쭈여니</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={chestnut} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>노릇노릇 군밤이</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>알밤이</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={null} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>나를 봐 돌맹</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>쭈여니</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={null} alt="미디어썸네일" />
-                </a>
-              </div>
-
-              <div className="media-info">
-                <div id="media-info-title">
-                  <a href="#">
-                    <h3>노릇노릇 군밤이</h3>
-                  </a>
-                  <a href="#">
-                    <p>
-                      [<span>7</span>]
-                    </p>
-                  </a>
-                </div>
-
-                <div id="media-info-writer">
-                  <p>알밤이</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>2023.09.22</span>ㆍ조회수
-                    <span id="viewCount">22</span>회
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="media-content">
-              <div id="media-thumbnail">
-                <a href="#">
-                  <img src={null} alt="미디어썸네일" />
                 </a>
               </div>
 
@@ -898,4 +596,4 @@ const Media = () => {
   );
 };
 
-export default Media;
+export default CMediaList;

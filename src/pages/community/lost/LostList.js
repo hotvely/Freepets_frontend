@@ -358,4 +358,4 @@ const Lost = () => {
     </MainStyle>
   );
 };
-export default Lost;
+export default LostList;

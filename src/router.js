@@ -9,14 +9,21 @@ import HospitalReviewCreate from "./pages/information/HospitalReviewCreate";
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
 import SitterCreate from "./pages/sitter/SitterCreate";
-import Media from "./pages/community/Media";
-import Lost from "./pages/community/Lost";
 // import LostDetail from "./pages/LostDeatail";
 import EventCalendar from "./pages/EventCalendar";
 import Login from "./pages/member/Login";
 import Register from "./pages/member/Register";
 // import Header from "./components/Header";
 import Logout from "./pages/member/Logout";
+
+import CMediaList from "./pages/community/common/CMediaList";
+import CommonCreate from "./pages/community/common/CommonCreate";
+import CommonList from "./pages/community/common/CommonList";
+import CommonView from "./pages/community/common/CommonView";
+import LMediaList from "./pages/community/lost/LMediaList";
+import LostCreate from "./pages/community/lost/LostCreate";
+import LostList from "./pages/community/lost/LostList";
+import LostView from "./pages/community/lost/LostView";
 
 const router = createBrowserRouter([
   {
@@ -67,12 +74,54 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/media",
+    path: "/community/common",
     element: <BLayout />,
     children: [
       {
         index: true,
-        element: <Media />,
+        element: <CMediaList />,
+      },
+      {
+        path: "cmedialist",
+        element: <CMediaList />,
+      },
+      {
+        path: "commonlist",
+        element: <CommonList />,
+      },
+      {
+        path: "commonview/:id",
+        element: <CommonView />,
+      },
+      {
+        path: "commoncreate",
+        element: <CommonCreate />,
+      },
+    ],
+  },
+  {
+    path: "/community/lost",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <LMediaList />,
+      },
+      {
+        path: "lmedialist",
+        element: <LMediaList />,
+      },
+      {
+        path: "lostList",
+        element: <LostList />,
+      },
+      {
+        path: "lostview/:id",
+        element: <LostView />,
+      },
+      {
+        path: "lostcreate",
+        element: <LostCreate />,
       },
     ],
   },
