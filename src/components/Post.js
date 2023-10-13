@@ -123,16 +123,11 @@ const MainBox = styled.main`
 `
 
 const Post = () => {
-    const [fileInput, setFileInput] = useState("hidden");
     const [desc, setDesc] = useState("");
     const [select, setSelect] = useState(null);
     const [rank1, setRank1] = useState();
     const [rank2, setRank2] = useState();
     const [rank3, setRank3] = useState();
-
-    const fileClick = () => {
-        setFileInput("file");
-    }
 
     const onClick = () => {
         console.log(rank1);
@@ -142,6 +137,9 @@ const Post = () => {
         if(rank1 == null || rank2 == null || rank3 == null) {
             alert('입력하지 않은 항목이 있습니다.')
         }
+
+        const formData = new FormData();
+        formData.append();
     }
 
     const InputDescHandler = (e) => {
