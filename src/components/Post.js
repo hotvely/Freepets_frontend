@@ -1,7 +1,12 @@
 import { faFile, faImage, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import ReactQuill from "react-quill";
 import styled from "styled-components";
+import SitterPost from "./SitterPost";
+import CommunityPost from "./CommunityPost";
+import LostPost from "./LostPost";
+import HospitalPost from "./HospitalPost";
 
 const Main = styled.div`
     margin: 0px 40px;
@@ -33,40 +38,46 @@ const MainBox = styled.main`
         border: solid 1px #eee;
         }
 
-        .input-center {
+        .input-rank {
             width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
 
-            #blank1 {
-                width: 40%;
-                height: 20px;
-                padding: 5px;
-                border: 1px solid #eee;
-                margin-right: 13px;
+            .input-center {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                margin-bottom: 10px;
+
+                #rank1 {
+                    width: 39%;
+                    height: 20px;
+                    padding: 5px;
+                    border: 1px solid #eee;
+                    margin-right: 13px;
+                }
+
+                #rank2 {
+                    width: 39%;
+                    padding: 5px;
+                    border: 1px solid #eee;
+                }
             }
 
-            #blank2 {
-                width: 39%;
-                padding: 5px;
-                border: 1px solid #eee;
+            .input-end {
+                width: 100%;
+                margin-bottom: 10px;
+                display: flex;
+                justify-content: center;
+
+                #rank3 {
+                    width: 80%;
+                    padding: 5px;
+                    height: 20px;
+                    border: 1px solid #eee;
+                }
             }
         }
 
-        .input-end {
-            width: 100%;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: center;
-
-            #blank3 {
-                width: 80%;
-                padding: 5px;
-                height: 20px;
-                border: 1px solid #eee;
-            }
-        }       
+               
     }
 
     .main-content {
@@ -95,6 +106,7 @@ const MainBox = styled.main`
     }
 
     .footer-content {
+        margin-top: 20px;
 
         .btn-footer {
             width: 100px;
@@ -110,61 +122,80 @@ const MainBox = styled.main`
     }
 `
 
-const Post = ({name1, name2, name3, text1, text2, text3}) => {
+const Post = () => {
     const [fileInput, setFileInput] = useState("hidden");
     const [desc, setDesc] = useState("");
+    const [select, setSelect] = useState(null);
+    const [rank1, setRank1] = useState();
+    const [rank2, setRank2] = useState();
+    const [rank3, setRank3] = useState();
 
     const fileClick = () => {
         setFileInput("file");
     }
 
     const onClick = () => {
+        console.log(rank1);
+        console.log(rank2);
+        console.log(rank3);
 
+        if(rank1 == null || rank2 == null || rank3 == null) {
+            alert('입력하지 않은 항목이 있습니다.')
+        }
     }
 
-    const InputHandler = (e) => {
-        setDesc(e.currentTarget.innerText);
+    const InputDescHandler = (e) => {
+        console.log(e);
+        setDesc(e);
     }
+
+    const selectChange = (e) => {
+        setSelect(e.currentTarget.value);
+    }
+
+    const modules = useMemo(() => ({
+        toolbar: {
+            container: [
+                ["bold", "italic", "underline", "strike", "blockquote"],
+                [{size: ["small", "false", "large", "huge"]}, {color: ["black", "red", "blue"]}],
+                [
+                    {list: "ordered"},
+                    {list: "bullet"},
+                    { indent: "-1" },
+                    { indent: "+1"},
+                    { align: [] },
+                ],
+                ["image", "video"]
+            ]
+        }
+    }), []);
+
     return (
         <Main>
             <div style={{width : "100%", height : "100px", backgroundColor: "black", marginBottom : "50px", padding: "0px 10px"}}></div>
             <MainBox>
                 <div className="header-content">
-                    <select className="select select-category" onChange={onClick}>
+                    <select className="select select-category" onChange={selectChange}>
                         <option>게시판을 선택해 주세요.</option>
                         <option value="1">커뮤니티</option>
                         <option value="2">분실</option>
                         <option value="3">시터</option>
-                        <option value="3">병원정보</option>
+                        <option value="4">병원 정보</option>
                     </select>
-                    <div className="input-center">
-                        <input type="text" name={name1} id="blank1" placeholder={text1}/>
-                        <input type="text" name={name2} id="blank2" placeholder={text2}/>
-                    </div>
-                    <div className="input-end">
-                        <input type="text" name={name3} id="blank3" placeholder={text3}/>
-                    </div>
+                    {select == null ? <div></div> 
+                    : select == 1 ? <CommunityPost rank3={setRank3()}/> 
+                    : select == 2 ? <LostPost rank3={setRank3}/> 
+                    : select == 3 ? <SitterPost setRank1={setRank1} setRank2={setRank2} setRank3={setRank3} />
+                    : <HospitalPost rank1={setRank1} rank2={setRank2} rank3={setRank3}/>}               
                 </div>
                 <div className="main-content">
-                    <div>
-                    <button className="btn btn-font btn-font-emph" style={{backgroundColor: "yellow"}} onClick={onClick}>강조</button>
-                        <button className="btn btn-font btn-font-common" onClick={onClick}>기본</button>
-                        <button className="btn btn-font btn-font-bold" style={{fontWeight : "bold"}} onClick={onClick}>굵게</button>
-                        <button className="btn btn-font btn-font-italic" style={{fontStyle: "italic"}} onClick={onClick}>기울게</button>
-                        <button className="btn btn-font btn-font-line" style={{textDecoration : "underline"}} onClick={onClick}>밑줄</button>
-                        <button className="btn btn-font btn-font-cancel" style={{textDecoration : "line-through"}} onClick={onClick}>취소선</button>
-                        <button className="btn btn-font btn-font-left" onClick={onClick}>왼쪽</button>
-                        <button className="btn btn-font btn-font-center" onClick={onClick}>가운데</button>
-                        <button className="btn btn-font btn-font-right" onClick={onClick}>오른쪽</button>
-                        <button className="btn btn-font btn-file-image" onClick={fileClick}><FontAwesomeIcon icon={faImage}/></button>
-                        <button className="btn btn-font btn-file-video" onClick={fileClick}><FontAwesomeIcon icon={faVideo}/></button>
-                        <button className="btn btn-font btn-file" onClick={fileClick}><FontAwesomeIcon icon={faFile}/></button>
-                        <div>
-                            <input type={fileInput} name="file" id="file"></input>
-                        </div>
-                        
-                    </div>
-                    <div contentEditable="true" className="input-desc" onInput={InputHandler} suppressContentEditableWarning="true"></div>                   
+                    <ReactQuill 
+                    style={{"width" : "100%", "height" : "500px"}} 
+                    modules={modules} 
+                    theme="snow"
+                    onChange={InputDescHandler}
+                    placeholder="내용을 입력해 주세요."/>
+                            
                 </div>
                 <div className="footer-content">
                     <button onClick={onClick} className="btn btn-footer btn-reset">초기화</button>

@@ -3,9 +3,7 @@ import Home from "./pages/Home";
 import BLayout from "./components/BLayout";
 import MyPage from "./pages/member/MyPage";
 import HospitalReview from "./pages/information/HospitalReview";
-
 import HospitalReviewCreate from "./pages/information/HospitalReviewCreate";
-
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
 import SitterCreate from "./pages/sitter/SitterCreate";
@@ -63,7 +61,7 @@ const router = createBrowserRouter([
       },
       {
         path: "hospital/create",
-        element: <HospitalReviewCreate />,
+        element: <Post />,
       },
     ],
   },
@@ -92,7 +90,7 @@ const router = createBrowserRouter([
       },
       {
         path: "create",
-        element: <SitterCreate />,
+        element: <Post />,
       },
     ],
   },
