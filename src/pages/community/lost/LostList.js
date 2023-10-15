@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-import banner from "../../resources/bannerTest.png";
-import testImg from "../../resources/image.jpg";
+import banner from "../../../resources/bannerTest.png";
+import testImg from "../../../resources/image.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -174,7 +174,7 @@ const PagingStyle = styled.div`
   }
 `;
 
-const Lost = () => {
+const LostList = () => {
   return (
     <MainStyle>
       <div className="venner">

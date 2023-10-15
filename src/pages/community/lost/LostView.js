@@ -7,8 +7,8 @@ import {
   faArrowUpFromBracket,
   faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
-import testImg from "../resources/image.jpg";
-import banner from "../resources/bannerTest.png";
+import testImg from "../../../resources/image.jpg";
+import banner from "../../../resources/bannerTest.png";
 
 const StyledMain = styled.main`
   display: flex;
@@ -239,7 +239,7 @@ const StyledMain = styled.main`
   }
 `;
 
-const LostDeatail = () => {
+const LostView = () => {
   return (
     <StyledMain>
       <div className="venner">

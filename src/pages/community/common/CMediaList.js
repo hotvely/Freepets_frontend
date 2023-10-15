@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import banner from "../../resources/bannerTest.png";
-import pebble from "../../resources/pebble.jpg";
-import chestnut from "../../resources/hamster.test.jpg";
+import banner from "../../../resources/bannerTest.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
 import { getMediaList } from "../../../api/media";
+import { Link, useNavigate } from "react-router-dom";
 
 const MainStlye = styled.div`
   padding: 20px;
@@ -135,7 +134,7 @@ const MainContentBox = styled.div`
         background-color: #eeee;
         height: 300px;
 
-        #media-thumbnail {
+        .media-thumbnail {
           height: 240px;
 
           img {
@@ -149,7 +148,7 @@ const MainContentBox = styled.div`
           width: 250px;
           height: 70px;
 
-          #media-info-title {
+          .media-info-first-line {
             display: flex;
             align-items: center;
             height: 25px;
@@ -257,6 +256,7 @@ const MainContentBox = styled.div`
 const CMediaList = () => {
   const [mediae, setMediae] = useState([]);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
   const onClickCheckBoard = () => {
     window.location.href = "#";
@@ -266,6 +266,19 @@ const CMediaList = () => {
   const onClickListBoard = () => {
     window.location.href = "/lost";
     // 게시글 타입 변경
+  };
+
+  const NaviViewComment = (commonCode) => {
+    // commonView페이지의 댓글란으로 넘어가기
+    navigate(`/commonview/${commonCode}`);
+  };
+
+  const activateComments = (commonCode) => {
+    NaviViewComment(commonCode);
+    const mainCommentElement = document.querySelector(".main-comment");
+    if (mainCommentElement) {
+      mainCommentElement.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const MediaListAPI = async () => {
@@ -346,44 +359,54 @@ const CMediaList = () => {
 
         <div className="main-content">
           <div className="media-colum">
-            {/* {mediae.map((media) => (
-              <Link>
-                to={"/"}
-                <div className="media-content">
-                  <div id="media-thumbnail">
-                    <a href="#">
-                      <img src={pebble} alt="미디어썸네일" />
-                    </a>
-                  </div>
+            {mediae.map((media) => (
+              // <Link to={"/commonview/" + media.commonCode}>
+              <div className="media-content" key={media.commonCode}>
+                <Link
+                  to={"/commonview/" + media.commonCode}
+                  className="media-thumbnail"
+                >
+                  <img
+                    src={"/upload/" + media.commonAddFileUrl}
+                    alt="미디어썸네일"
+                  />
+                </Link>
 
-                  <div className="media-info">
-                    <div id="media-info-title">
-                      <a href="#">
-                        <h3>나를 봐 돌맹</h3>
-                      </a>
-                      <a href="#">
-                        <p>
-                          [<span>7</span>]
-                        </p>
-                      </a>
-                    </div>
-
-                    <div id="media-info-writer">
-                      <p>쭈여니</p>
-                    </div>
-
-                    <div id="media-info-detail">
+                <div className="media-info">
+                  <div className="media-info-first-line">
+                    <Link
+                      to={"/commonview/" + media.commonCode}
+                      id="media-info-title"
+                    >
+                      <h3>{media.commonTitle}</h3>
+                    </Link>
+                    <div
+                      id="media-info-comment"
+                      onClick={() => {
+                        activateComments(media.commonCode);
+                      }}
+                    >
                       <p>
-                        <span>2023.09.22</span>ㆍ조회수
-                        <span id="viewCount">22</span>회
+                        [<span>{media.commonCommentCount}</span>]
                       </p>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))} */}
 
-            <div className="media-content">
+                  <div id="media-info-writer">
+                    <p>{media.member.nickname}</p>
+                  </div>
+
+                  <div id="media-info-detail">
+                    <p>
+                      <span>{media.commonDate}</span>ㆍ조회수
+                      <span id="viewCount">{media.commonViewCount}</span>회
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            ;
+            {/* <div className="media-content">
               <div id="media-thumbnail">
                 <a href="#">
                   <img src={chestnut} alt="미디어썸네일" />
@@ -509,7 +532,7 @@ const CMediaList = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div>*/}
           </div>
         </div>
 

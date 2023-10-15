@@ -44,16 +44,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "/lost",
-    element: <BLayout />,
-    children: [
-      {
-        index: true,
-        element: <Lost />,
-      },
-    ],
-  },
 
   {
     path: "/information",
@@ -74,7 +64,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/community/common",
+    path: "/community",
     element: <BLayout />,
     children: [
       {
@@ -82,46 +72,52 @@ const router = createBrowserRouter([
         element: <CMediaList />,
       },
       {
-        path: "cmedialist",
-        element: <CMediaList />,
+        path: "common",
+        element: <BLayout />, // Common의 레이아웃
+        children: [
+          {
+            path: "cmedialist",
+            element: <CMediaList />,
+          },
+          {
+            path: "commonlist",
+            element: <CommonList />,
+          },
+          {
+            path: "commonview/:id",
+            element: <CommonView />,
+          },
+          {
+            path: "commoncreate",
+            element: <CommonCreate />,
+          },
+        ],
       },
       {
-        path: "commonlist",
-        element: <CommonList />,
-      },
-      {
-        path: "commonview/:id",
-        element: <CommonView />,
-      },
-      {
-        path: "commoncreate",
-        element: <CommonCreate />,
-      },
-    ],
-  },
-  {
-    path: "/community/lost",
-    element: <BLayout />,
-    children: [
-      {
-        index: true,
-        element: <LMediaList />,
-      },
-      {
-        path: "lmedialist",
-        element: <LMediaList />,
-      },
-      {
-        path: "lostList",
-        element: <LostList />,
-      },
-      {
-        path: "lostview/:id",
-        element: <LostView />,
-      },
-      {
-        path: "lostcreate",
-        element: <LostCreate />,
+        path: "lost",
+        element: <BLayout />, // Lost의 레이아웃
+        children: [
+          {
+            index: true,
+            element: <LMediaList />,
+          },
+          {
+            path: "lmedialist",
+            element: <LMediaList />,
+          },
+          {
+            path: "lostList",
+            element: <LostList />,
+          },
+          {
+            path: "lostview/:id",
+            element: <LostView />,
+          },
+          {
+            path: "lostcreate",
+            element: <LostCreate />,
+          },
+        ],
       },
     ],
   },
