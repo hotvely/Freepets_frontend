@@ -23,14 +23,60 @@ const MainBox = styled.div`
 
     .chatting-message {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         width: 100%;
+
+        .chatting-message_list {
+            display: flex;
+            flex-direction: column;
+
+            .chatting-message_list-sender {
+                display: flex;
+                justify-content: flex-end;
+                margin: 10px;
+                margin-right: 20px;
+
+                .chatting-message_list-sender_info {
+                    display: flex;
+
+                    img {
+                        margin-right: 10px;
+                    }
+
+                    div {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;                       
+                    }
+                }
+            }
+
+            .chatting-message_list-receiver {
+                display: flex;
+                margin-left: 20px;
+                margin-bottom: 50px;
+
+                .chatting-message_list-receiver_info {
+                    display: flex;
+
+                    img {
+                        margin-right: 10px;
+                    }
+
+                    div {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;                       
+                    }
+                }
+            }
+        }
 
         .chatting-message_wrtie {      
             display: flex;
             justify-content: center;
             height: 40px;        
-            width: 80%;
+            width: 100%;
             margin-bottom: 20px;
     
             #message {
@@ -64,11 +110,42 @@ const Chatting = () => {
                     <div className="chatting-start">
                         <p><span id="nickname">베로</span> 님과 1:1 대화입니다.</p>
                     </div>
-                    <div>
-                        <img src={kero} style={{width: "80px", height:"80px", objectFit: "cover", borderRadius: "50px"}}/>
-                    </div>
-                </div>
+                    
+                </div>              
                 <div className="chatting-message">
+                    <div className="chatting-message_list">
+                        <div className="chatting-message_list-sender">
+                            <div className="chatting-message_list-sender_info">
+                                <img src={kero} style={{width: "50px", height:"50px", objectFit: "cover", borderRadius: "50px"}}/>
+                                <div>
+                                    <p id="sender">베로</p>
+                                    <p>시터 비용 네고 가능할까요?</p>
+                                </div>
+                            </div>                        
+                        </div>
+                        <div className="chatting-message_list-sender">
+                            <div className="chatting-message_list-sender_info">
+                                <img src={kero} style={{width: "50px", height:"50px", objectFit: "cover", borderRadius: "50px"}}/>
+                                <div>
+                                    <p id="sender">베로</p>                                 
+                                    <p>ㅠㅠ</p>                               
+                                </div>
+                            </div>                        
+                        </div>
+                        <div className="chatting-message_list-receiver">
+                            <div className="chatting-message_list-receiver_info">
+                                <img src={kero} style={{width: "50px", height:"50px", objectFit: "cover", borderRadius: "50px"}}/>
+                                <div>
+                                    <div className="receiver-nickname">
+                                        <p id="receiver">케로</p>
+                                    </div>                                   
+                                    <div className="receiver-desc">
+                                        <p>안 돼요...</p>
+                                    </div>                                    
+                                </div>
+                            </div>                           
+                        </div>
+                    </div>
                     <div className="chatting-message_wrtie">
                         <div contentEditable="true" id="message"></div>
                         <button className="chatting-message_write-btn">보내기</button>

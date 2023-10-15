@@ -193,7 +193,6 @@ const Sitter = () => {
 
     const NaviView = (e) => {
         e.preventDefault();
-        console.log(e.currentTarget.querySelector(".main-content_start-desc-name").id);
         navigator("view", {
             state: 
             {
@@ -224,7 +223,7 @@ const Sitter = () => {
 
     const ModalStyle = {
         content: {
-            top: '15vh',
+            top: '20vh',
             left: '15vw',
             bottom: '15vh',
             right: '15vw',

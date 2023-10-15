@@ -1,12 +1,13 @@
-import { faFile, faImage, faVideo } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import styled from "styled-components";
+import { addSitterBoard, addImg } from "../api/sitter";
 import SitterPost from "./SitterPost";
 import CommunityPost from "./CommunityPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
+import { useNavigate } from "react-router-dom";
+import { addHospitalBoard } from "../api/info";
 
 const Main = styled.div`
     margin: 0px 40px;
@@ -123,6 +124,8 @@ const MainBox = styled.main`
 `
 
 const Post = () => {
+    const navigate = useNavigate();
+    const quillRef = useRef();
     const [desc, setDesc] = useState("");
     const [select, setSelect] = useState(null);
     const [rank1, setRank1] = useState();
@@ -130,25 +133,63 @@ const Post = () => {
     const [rank3, setRank3] = useState();
 
     const onClick = () => {
-        console.log(rank1);
-        console.log(rank2);
-        console.log(rank3);
-
-        if(rank1 == null || rank2 == null || rank3 == null) {
-            alert('입력하지 않은 항목이 있습니다.')
-        }
+        const data = JSON.parse(localStorage.getItem('user'));
+        console.log(data.id);
 
         const formData = new FormData();
-        formData.append();
+        formData.append("title", rank3);
+        formData.append("desc", desc);
+        formData.append("memberDTO.id", data.id);
+        
+        if(select == 1) {
+
+        } else if (select == 2) {
+
+        } else if(select == 3) {
+            formData.append("sitterPrice", rank1);
+            formData.append("sitterLoc", rank2);
+            addSitterBoard(formData);
+        } else if(select == 4) {
+            formData.append("hospitalName", rank1);
+            formData.append("hospitalAddress", rank2);
+            addHospitalBoard(formData);
+        }
+        
+        navigate("../");
     }
 
     const InputDescHandler = (e) => {
-        console.log(e);
         setDesc(e);
     }
 
     const selectChange = (e) => {
         setSelect(e.currentTarget.value);
+    }
+
+    const imageHandler = () => {
+        console.log("이미지 버튼 누를 때 작동되는 핸들러임");
+
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.addEventListener('change', async () => {
+            console.log("파일 바뀌는 이벤트");
+            const file = input.files[0];
+            console.log(file);
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const imageUrl = await addImg(formData);
+            console.log(imageUrl.data);
+            const url = "/upload/" + imageUrl.data;
+            const editor = quillRef.current.getEditor();
+            const range = editor.getSelection();
+            editor.insertEmbed(range.index, 'image', url);
+        })
+
     }
 
     const modules = useMemo(() => ({
@@ -164,8 +205,11 @@ const Post = () => {
                     { align: [] },
                 ],
                 ["image", "video"]
-            ]
-        }
+            ],
+            handlers: {
+                image: imageHandler,
+            },
+        },
     }), []);
 
     return (
@@ -181,22 +225,21 @@ const Post = () => {
                         <option value="4">병원 정보</option>
                     </select>
                     {select == null ? <div></div> 
-                    : select == 1 ? <CommunityPost rank3={setRank3()}/> 
+                    : select == 1 ? <CommunityPost rank3={setRank3}/> 
                     : select == 2 ? <LostPost rank3={setRank3}/> 
                     : select == 3 ? <SitterPost setRank1={setRank1} setRank2={setRank2} setRank3={setRank3} />
                     : <HospitalPost rank1={setRank1} rank2={setRank2} rank3={setRank3}/>}               
                 </div>
                 <div className="main-content">
-                    <ReactQuill 
+                    <ReactQuill
+                    ref={quillRef}
                     style={{"width" : "100%", "height" : "500px"}} 
                     modules={modules} 
                     theme="snow"
                     onChange={InputDescHandler}
                     placeholder="내용을 입력해 주세요."/>
-                            
                 </div>
                 <div className="footer-content">
-                    <button onClick={onClick} className="btn btn-footer btn-reset">초기화</button>
                     <button onClick={onClick} className="btn btn-footer btn-submit">등록</button>
                 </div>
             </MainBox>

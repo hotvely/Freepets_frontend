@@ -6,7 +6,6 @@ import HospitalReview from "./pages/information/HospitalReview";
 import HospitalReviewCreate from "./pages/information/HospitalReviewCreate";
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
-import SitterCreate from "./pages/sitter/SitterCreate";
 import Media from "./pages/community/Media";
 import Lost from "./pages/community/Lost";
 // import LostDetail from "./pages/LostDeatail";

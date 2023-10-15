@@ -100,6 +100,35 @@ const MainContent = styled.div`
             line-height: 20px;
         }
     }
+
+    .main-button {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        width: 100%;
+
+        .update {
+            cursor: pointer;
+            margin-right: 10px;
+            width: 80px;
+            height: 30px;
+            background-color: #86AEA0;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .delete {
+            cursor: pointer;
+            background-color: #86A2AE;
+            border: none;
+            border-radius: 5px;
+            width: 80px;
+            height: 30px;
+            color: white;
+            margin-right: 10px;
+        }
+    }
 `
 const ReviewContent = styled.div`
 
@@ -263,6 +292,7 @@ const SitterView = () => {
     const location = useLocation();
     const [boardView, setBoardView] = useState(null);
     const [reviews, setReviews] = useState([]);
+    const data = JSON.parse(localStorage.getItem('user'));
 
     const onRatings = (event) => {
         const color = event.target.style.color;
@@ -282,8 +312,6 @@ const SitterView = () => {
     useEffect(() => {
         boardViewAPI();
         getReviewsAPI();
-        // const data = JSON.parse(localStorage.getItem('user'));
-        // console.log(data.id);
     }, []);
 
     return (
@@ -312,9 +340,14 @@ const SitterView = () => {
                         </div>
                     </div>
                     <div className="main-content">
-                        <p id="sitterDesc">{boardView?.sitterDesc}
-                        </p>
+                        <div id="sitterDesc" dangerouslySetInnerHTML={{__html: String(boardView?.sitterDesc)}} />
                     </div>
+                    {boardView?.member.id == data.id ? 
+                        <div className="main-button">
+                            <button className="update">수정</button>
+                            <button className="delete">삭제</button>
+                        </div> : <div></div>
+                    }                    
                 </MainContent>
                 <ReviewContent>
                     <div className="write">

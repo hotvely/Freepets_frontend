@@ -19,6 +19,10 @@ export const getReviews = async (id) => {
     return await instance.get(url);
 }
 
-export const addBoard = async (data) => {
+export const addSitterBoard = async (data) => {
     return await instance.post("sitter", data);
+}
+
+export const addImg = async (data) => {
+    return await instance.post("img", data);
 }
