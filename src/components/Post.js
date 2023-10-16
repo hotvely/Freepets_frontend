@@ -141,7 +141,9 @@ const Post = () => {
         const formData = new FormData();
         formData.append("title", rank3);
         formData.append("desc", desc);
-        formData.append("file", img);
+        if(img!=null) {
+            formData.append("file", img);
+        }    
         formData.append("memberDTO.id", data.id);
         
         if(select == 1) {
@@ -165,11 +167,14 @@ const Post = () => {
 
     const InputDescHandler = (e) => {
         setDesc(e);
+        console.log(e);
     }
 
     const selectChange = (e) => {
         setSelect(e.currentTarget.value);
     }
+
+    /*
 
     const imageHandler = () => {
         console.log("이미지 버튼 누를 때 작동되는 핸들러임");
@@ -184,18 +189,19 @@ const Post = () => {
             const file = input.files[0];
             console.log(images);
 
-            // const formData = new FormData();
-            // formData.append('file', file);
+            const formData = new FormData();
+            formData.append('file', file);
 
-            // const imageUrl = await addImg(formData);
-            // console.log(imageUrl.data);
-            // const url = "/upload/" + imageUrl.data;
-            // const editor = quillRef.current.getEditor();
-            // const range = editor.getSelection();
-            // editor.insertEmbed(range.index, 'image', url);
+            const imageUrl = await addImg(formData);
+            console.log(imageUrl.data);
+            const url = "/upload/" + imageUrl.data;
+            const editor = quillRef.current.getEditor();
+            const range = editor.getSelection();
+            editor.insertEmbed(range.index, 'image', url);
         })
-
     }
+
+    */
 
     const modules = useMemo(() => ({
         toolbar: {
@@ -219,7 +225,7 @@ const Post = () => {
             upload: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
-                    formData.append("file", file);
+                    formData.append("image", file);
 
                     fetch(
                         "https://api.imgbb.com/1/upload?key=334ecea9ec1213784db5cb9a14dac265",
@@ -230,11 +236,9 @@ const Post = () => {
                     )
                     .then((response) => response.json())
                     .then((result) => {
-                        console.log(file);
                         images.push(file);
-                        console.log(images);
                         setImg(images);
-                        console.log(result.data);
+                        console.log(images);
                         resolve(result.data.url)
                     })
                     .catch((error) => {
