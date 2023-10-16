@@ -11,6 +11,7 @@ const asyncRegister = createAsyncThunk(
 
 const asyncLogin = createAsyncThunk("userSlice/asyncLogin", async (data) => {
   const response = await loginAPI(data);
+
   return response.data;
 });
 
