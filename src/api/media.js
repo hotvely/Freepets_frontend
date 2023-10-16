@@ -13,3 +13,7 @@ export const getMedia = async (id) => {
   let url = `community/${id}`;
   return await instance.get(url);
 };
+
+export const addMedia = async (data) => {
+  return await instance.post("community", data);
+};
