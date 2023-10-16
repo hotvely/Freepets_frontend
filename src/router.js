@@ -3,14 +3,10 @@ import Home from "./pages/Home";
 import BLayout from "./components/BLayout";
 import MyPage from "./pages/member/MyPage";
 import HospitalReview from "./pages/information/HospitalReview";
-
 import HospitalReviewCreate from "./pages/information/HospitalReviewCreate";
-
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
 import SitterCreate from "./pages/sitter/SitterCreate";
-import Media from "./pages/community/Media";
-import Lost from "./pages/community/Lost";
 // import LostDetail from "./pages/LostDeatail";
 import EventCalendar from "./pages/EventCalendar";
 import Login from "./pages/member/Login";
@@ -19,6 +15,16 @@ import Register from "./pages/member/Register";
 import Logout from "./pages/member/Logout";
 import MemberFindId from "./pages/member/MemberFindId";
 import MemberFindPwd from "./pages/member/MemberFindPwd";
+import Post from "./components/Post";
+
+import CMediaList from "./pages/community/common/CMediaList";
+import CommonCreate from "./pages/community/common/CommonCreate";
+import CommonList from "./pages/community/common/CommonList";
+import CommonView from "./pages/community/common/CommonView";
+import LMediaList from "./pages/community/lost/LMediaList";
+import LostCreate from "./pages/community/lost/LostCreate";
+import LostList from "./pages/community/lost/LostList";
+import LostView from "./pages/community/lost/LostView";
 
 const router = createBrowserRouter([
   {
@@ -39,16 +45,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "/lost",
-    element: <BLayout />,
-    children: [
-      {
-        index: true,
-        element: <Lost />,
-      },
-    ],
-  },
 
   {
     path: "/information",
@@ -64,17 +60,65 @@ const router = createBrowserRouter([
       },
       {
         path: "hospital/create",
-        element: <HospitalReviewCreate />,
+        element: <Post />,
       },
     ],
   },
   {
-    path: "/media",
+    path: "/community",
     element: <BLayout />,
     children: [
       {
         index: true,
-        element: <Media />,
+        element: <CMediaList />,
+      },
+      {
+        path: "common",
+        element: <BLayout />, // Common의 레이아웃
+        children: [
+          {
+            path: "cmedialist",
+            element: <CMediaList />,
+          },
+          {
+            path: "commonlist",
+            element: <CommonList />,
+          },
+          {
+            path: "commonview/:id",
+            element: <CommonView />,
+          },
+          {
+            path: "commoncreate",
+            element: <CommonCreate />,
+          },
+        ],
+      },
+      {
+        path: "lost",
+        element: <BLayout />, // Lost의 레이아웃
+        children: [
+          {
+            index: true,
+            element: <LMediaList />,
+          },
+          {
+            path: "lmedialist",
+            element: <LMediaList />,
+          },
+          {
+            path: "lostList",
+            element: <LostList />,
+          },
+          {
+            path: "lostview/:id",
+            element: <LostView />,
+          },
+          {
+            path: "lostcreate",
+            element: <LostCreate />,
+          },
+        ],
       },
     ],
   },
@@ -93,7 +137,7 @@ const router = createBrowserRouter([
       },
       {
         path: "create",
-        element: <SitterCreate />,
+        element: <Post />,
       },
     ],
   },
@@ -130,6 +174,15 @@ const router = createBrowserRouter([
       {
         path: "findPwd",
         element: <MemberFindPwd />,
+      },
+    ],
+  },
+  {
+    path: "/test",
+    children: [
+      {
+        index: true,
+        element: <Post />,
       },
     ],
   },

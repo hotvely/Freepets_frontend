@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import banner from "../../resources/bannerTest.png";
 import { faMagnifyingGlass, faCaretDown, faStar, faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "react-modal";
 import Img from "../../resources/kero.jpeg";
 import Chatting from "../Chatting";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getBoardsBasic } from "../../api/sitter";
 
 
 const Main = styled.div`
@@ -184,11 +186,20 @@ const MainContent = styled.main`
 `
 
 const Sitter = () => {
+    const [boards, setBoards] = useState([]);
     const navigator = useNavigate();
+    const [page, setPage] = useState(1);   
     const [modalCheck, setModalCheck] = useState(false);
 
-    const NaviView = () => {
-        navigator("view");
+    const NaviView = (e) => {
+        e.preventDefault();
+        navigator("view", {
+            state: 
+            {
+               code: e.currentTarget.id,
+               id: e.currentTarget.querySelector(".main-content_start-desc-name").id
+            }
+        });
     };
 
     const handleModalClick = (e) => {
@@ -212,12 +223,25 @@ const Sitter = () => {
 
     const ModalStyle = {
         content: {
-            top: '15vh',
+            top: '20vh',
             left: '15vw',
             bottom: '15vh',
             right: '15vw',
         }
+    };
+
+    const selectChange = (e) => {
+        let selectValue = e.target.value;
     }
+
+    const boardAPI = async () => {
+        const boardResult = await getBoardsBasic(page);
+        setBoards([...boards, ...boardResult.data]);
+    }
+
+    useEffect(() => {
+        boardAPI();
+    }, [])
 
     return (
         <Main>
@@ -225,7 +249,7 @@ const Sitter = () => {
             <MainBox>
                 <MainHeader>
                     <div className="header-start">
-                        <select>
+                        <select onChange={selectChange}>
                             <option value="1">추천순</option>
                             <option value="2">리뷰순</option>
                             <option value="3">낮은 비용</option>
@@ -242,32 +266,34 @@ const Sitter = () => {
                     </div>                                      
                 </MainHeader>
                 <MainContent>
-                    <section>                      
-                        <div className="main-content">
-                            <div onClick={NaviView} className="main-content-view">
-                                <div className="main-content_start">
-                                    <img src={Img} style={{width: "100px", height: "100px", objectFit: "cover"}}></img>
-                                    <div className="main-content_start-desc">
-                                        <div>
-                                            <p id="sitterTitle">저는 동물 훈련사 자격증이 있습니다 믿고 맡겨 주세요!</p>
-                                            <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/> <span>4.5</span></p>
+                    <section>
+                    {boards.map((items) => (
+                            <div className="main-content" key={items.sitterCode}>
+                                <div className="main-content-view" onClick={NaviView} id={items.sitterCode}>
+                                    <div className="main-content_start">
+                                        <img src={Img} style={{width: "100px", height: "100px", objectFit: "cover"}}></img>
+                                        <div className="main-content_start-desc">
+                                            <div>
+                                                <p id="sitterTitle">{items.sitterTitle}</p>
+                                                <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/> <span>{items.sitterRatings}</span></p>
+                                            </div>
+                                            <div className="main-content_start-desc-name" id={items.member.id}>
+                                                <p id="nickname">{items.member.nickname}</p>
+                                            </div>
                                         </div>
-                                        <div className="main-content_start-desc-name">
-                                            <p id="nickname">케로</p>
-                                        </div>
-                                    </div>
-                                </div>                               
-                                <div className="main-content_end">
-                                    <p><span id="sitterPrice">80000</span>₩</p>
-                                    <div onClick={handleModalClick}>
+                                    </div>                               
+                                    <div className="main-content_end">
+                                        <p><span id="sitterPrice">{items.sitterPrice}</span>₩</p>
+                                        <div onClick={handleModalClick}>
                                         <button onClick={chattingClick}>1:1 대화</button>
                                         <Modal isOpen={modalCheck}  ariaHideApp={false} onRequestClose={handleModalClose} style={ModalStyle}>                                           
-                                            <Chatting/>
+                                        <Chatting/>
                                         </Modal>
                                     </div>
                                 </div>
                             </div>
-                        </div>                      
+                        </div>
+                    ))}                      
                     </section>
                 </MainContent>
             </MainBox>

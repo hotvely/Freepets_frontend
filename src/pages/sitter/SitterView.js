@@ -2,7 +2,9 @@ import styled from "styled-components";
 import Img from "../../resources/kero.jpeg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getReviews, getBoardView } from "../../api/sitter";
+import { useLocation } from "react-router-dom";
 
 const Main = styled.div`
     display: flex;
@@ -30,7 +32,6 @@ const MainContent = styled.div`
         flex-direction: column;
 
         .main-header_start {
-            margin-left: 10px;
             margin-bottom: 25px;
 
             #sitterTitle {
@@ -43,12 +44,14 @@ const MainContent = styled.div`
         .main-header_end {
             display: flex;
             justify-content: space-between;
+            margin-left: 10px;
+            margin-bottom: 20px;
 
             .main-header_end-user {
                 display: flex;
 
                 .main-header_end-user_info {
-                    margin-left: 10px;
+                    margin-left: 20px;
 
                     .main-header_end-user_info-name {
                         display: flex;
@@ -63,10 +66,14 @@ const MainContent = styled.div`
                             }
                         }
 
+                        #ratings {
+                            margin-top: 3px;
+                        }
+
                         #nickname {
                             border: 1px solid #DEDEDE;
                             border-radius: 5px;
-                            padding: 3px;
+                            padding: 5px;
                             font-size: 0.9rem;
                         }
                     }
@@ -76,7 +83,7 @@ const MainContent = styled.div`
                     font-size: 0.9rem;
                     background-color: #999;
                     color: #FFF;
-                    padding: 3px;
+                    padding: 5px;
                     border-radius: 5px;
                 }               
             }
@@ -91,6 +98,35 @@ const MainContent = styled.div`
 
         #sitterDesc {
             line-height: 20px;
+        }
+    }
+
+    .main-button {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        width: 100%;
+
+        .update {
+            cursor: pointer;
+            margin-right: 10px;
+            width: 80px;
+            height: 30px;
+            background-color: #86AEA0;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .delete {
+            cursor: pointer;
+            background-color: #86A2AE;
+            border: none;
+            border-radius: 5px;
+            width: 80px;
+            height: 30px;
+            color: white;
+            margin-right: 10px;
         }
     }
 `
@@ -235,34 +271,68 @@ const ReviewContent = styled.div`
     }
 
 `
+const StarArray = styled.div`
+        display: flex;
+    `
+
+const Star = ({color1, color2, color3, color4, color5}) => {
+    return (
+        <StarArray>
+            <p><FontAwesomeIcon icon={faStar} style={{color: color1}}/></p>
+            <p><FontAwesomeIcon icon={faStar} style={{color: color2}}/></p>
+            <p><FontAwesomeIcon icon={faStar} style={{color: color3}}/></p>
+            <p><FontAwesomeIcon icon={faStar} style={{color: color4}}/></p>
+            <p><FontAwesomeIcon icon={faStar} style={{color: color5}}/></p>
+        </StarArray>
+    )
+}
 
 const SitterView = () => {
     const [star, setStar] = useState("");
+    const location = useLocation();
+    const [boardView, setBoardView] = useState(null);
+    const [reviews, setReviews] = useState([]);
+    const data = JSON.parse(localStorage.getItem('user'));
 
     const onRatings = (event) => {
         const color = event.target.style.color;
         console.log(color);
     }
 
+    const boardViewAPI = async () => {
+        const boardViewResult = await getBoardView(location.state.code);
+        setBoardView(boardViewResult.data);
+    }
+
+    const getReviewsAPI = async () => {
+        const reviewsResult = await getReviews(location.state.id);
+        setReviews([...reviews, ...reviewsResult.data]);
+    }
+
+    useEffect(() => {
+        boardViewAPI();
+        getReviewsAPI();
+    }, []);
+
     return (
         <Main>
             <div style={{width : "100%", height : "100px", backgroundColor: "black", marginBottom : "50px", padding: "0px 10px"}}></div>
             <MainBox>
                 <MainContent>
-                    <div className="main-header">
+                    <div className="main-header" key={boardView?.sitterCode}>
                         <div className="main-header_start">
-                            <p id="sitterTitle">저는 동물 훈련사 자격증이 있습니다. 믿고 맡겨 주세요!</p>
+                            <p id="sitterTitle">{boardView?.sitterTitle}</p>
                         </div>
                         <div className="main-header_end">
                             <div className="main-header_end-user">
                                 <img src={Img} style={{width : "100px", height: "100px", objectFit: "cover"}}/>
                                 <div className="main-header_end-user_info">
                                     <div className="main-header_end-user_info-name">
-                                        <p id="nickname">케로</p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span>4.5</span></p>
+                                        <p id="nickname">{boardView?.member.nickname}</p>
+                                        <p id="ratings"><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span>{boardView?.sitterRatings}</span></p>
                                     </div>
                                     <div className="main-header_end-user_info_loc">
-                                        <p>서울시 강남구</p>
+                                        <p>{boardView?.sitterLoc}</p>
                                     </div>
                                 </div>                               
                             </div>
@@ -270,9 +340,14 @@ const SitterView = () => {
                         </div>
                     </div>
                     <div className="main-content">
-                        <p id="sitterDesc">제목을 읽으셨으면 아시겠지만 저는 동물 훈련사 자격증이 있습니다! 저에게 믿고 맡기시면 걱정할 일을 만들지 않습니다!제목을 읽으셨으면 아시겠지만 저는 동물 훈련사 자격증이 있습니다! 저에게 믿고 맡기시면 걱정할 일을 만들지 않습니다!제목을 읽으셨으면 아시겠지만 저는 동물 훈련사 자격증이 있습니다! 저에게 믿고 맡기시면 걱정할 일을 만들지 않습니다!제목을 읽으셨으면 아시겠지만 저는 동물 훈련사 자격증이 있습니다! 저에게 믿고 맡기시면 걱정할 일을 만들지 않습니다!
-                        </p>
+                        <div id="sitterDesc" dangerouslySetInnerHTML={{__html: String(boardView?.sitterDesc)}} />
                     </div>
+                    {boardView?.member.id == data.id ? 
+                        <div className="main-button">
+                            <button className="update">수정</button>
+                            <button className="delete">삭제</button>
+                        </div> : <div></div>
+                    }                    
                 </MainContent>
                 <ReviewContent>
                     <div className="write">
@@ -286,7 +361,7 @@ const SitterView = () => {
                                     <div className="write-content_header-start_name">
                                         <p id="nickname">베로</p>
                                     </div>
-                                    <div className="write-content_header-start_ratings">
+                                    <div className="write-content_header-start_ratings">                                       
                                         <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></button>
                                         <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
                                         <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
@@ -305,86 +380,28 @@ const SitterView = () => {
                         <div className="review-header">
                             <p>시터 후기</p>
                         </div>
-                        <div className="review-content">
+                        {reviews.map((items) => (
+                        <div className="review-content" key={items?.sitterReviewCode}>
                             <div className="review-content_start">
                                 <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
                                 <div className="review-content_start-user">
                                     <div className="review-content_start-user_name">
-                                        <p id="nickname">베로</p>
+                                        <p id="nickname">{items?.member.nickname}</p>
                                     </div>
                                     <div className="review-content_start-user_ratings">
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
+                                       {items.sitterReviewRatings == 5 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="orange" />) 
+                                       : items.sitterReviewRatings == 4 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="#aaa"/>) 
+                                       : items.sitterReviewRatings == 3 ? (<Star color1="orange" color2="orange" color3="orange" color4="#aaa" color5="#aaa"/>) 
+                                       : items.sitterReviewRatings == 2 ? (<Star color1="orange" color2="orange" color3="#aaa" color4="#aaa" color5="#aaa"/>) 
+                                       : (<Star color1="orange" color2="#aaa" color3="#aaa" color4="#aaa" color5="#aaa"/>)}                           
                                     </div>
                                 </div>
                                 <div className="review-content_main">
-                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
+                                    <p id="sitterReviewDesc">{items?.sitterReviewDesc}</p>
                                 </div>
                             </div>
                         </div>
-                        <div className="review-content">
-                            <div className="review-content_start">
-                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
-                                <div className="review-content_start-user">
-                                    <div className="review-content_start-user_name">
-                                        <p id="nickname">베로</p>
-                                    </div>
-                                    <div className="review-content_start-user_ratings">
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                    </div>
-                                </div>
-                                <div className="review-content_main">
-                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="review-content">
-                            <div className="review-content_start">
-                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
-                                <div className="review-content_start-user">
-                                    <div className="review-content_start-user_name">
-                                        <p id="nickname">베로</p>
-                                    </div>
-                                    <div className="review-content_start-user_ratings">
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                    </div>
-                                </div>
-                                <div className="review-content_main">
-                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="review-content">
-                            <div className="review-content_start">
-                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
-                                <div className="review-content_start-user">
-                                    <div className="review-content_start-user_name">
-                                        <p id="nickname">베로</p>
-                                    </div>
-                                    <div className="review-content_start-user_ratings">
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                        <p><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></p>
-                                    </div>
-                                </div>
-                                <div className="review-content_main">
-                                    <p id="sitterReviewDesc">이분 만나고 강아지 사람 됐습니다 강추합니다</p>
-                                </div>
-                            </div>
-                        </div>
+                        ))}                       
                     </div>
                 </ReviewContent>
             </MainBox>
