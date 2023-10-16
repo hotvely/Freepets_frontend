@@ -153,6 +153,8 @@ const Post = () => {
             formData.append("hospitalName", rank1);
             formData.append("hospitalAddress", rank2);
             addHospitalBoard(formData);
+        } else if(select == 5) {
+
         }
         
         navigate("../");
@@ -196,7 +198,7 @@ const Post = () => {
         toolbar: {
             container: [
                 ["bold", "italic", "underline", "strike", "blockquote"],
-                [{size: ["small", "false", "large", "huge"]}, {color: ["black", "red", "blue"]}],
+                [{size: ["small", "false", "large", "huge"]}, {color: [], background: []}],
                 [
                     {list: "ordered"},
                     {list: "bullet"},
@@ -223,6 +225,8 @@ const Post = () => {
                         <option value="2">분실</option>
                         <option value="3">시터</option>
                         <option value="4">병원 정보</option>
+                        <option> ------------ </option>
+                        <option value="5">공지사항</option>
                     </select>
                     {select == null ? <div></div> 
                     : select == 1 ? <CommunityPost rank3={setRank3}/> 
