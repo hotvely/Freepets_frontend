@@ -284,7 +284,6 @@ const CMediaList = () => {
   const MediaListAPI = async () => {
     // 게시글 목록 데이터
     const result = await getMediaList(page);
-    console.log(result.data);
     setMediae([...mediae, ...result.data]);
   };
 
@@ -363,7 +362,10 @@ const CMediaList = () => {
                 >
                   <p>
                     <img
-                      src={"/upload/" + media.commonAddFileUrl}
+                      src={media.commonDesc.substring(
+                        media.commonDesc.indexOf('<img src="') + 10,
+                        media.commonDesc.indexOf('">')
+                      )}
                       alt="미디어썸네일"
                     />
                   </p>
@@ -390,10 +392,7 @@ const CMediaList = () => {
                   </div>
 
                   <div id="media-info-writer">
-                    <p>
-                      {media.member.nickname}
-                      {console.log(media.member.nickname)}
-                    </p>
+                    <p>{media.member.nickname}</p>
                   </div>
 
                   <div id="media-info-detail">

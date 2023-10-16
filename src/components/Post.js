@@ -240,9 +240,9 @@ const Post = () => {
           {select == null ? (
             <div></div>
           ) : select == 1 ? (
-            <CommunityPost rank3={setRank3} />
+            <CommunityPost setRank3={setRank3} />
           ) : select == 2 ? (
-            <LostPost rank3={setRank3} />
+            <LostPost setRank3={setRank3} />
           ) : select == 3 ? (
             <SitterPost
               setRank1={setRank1}
