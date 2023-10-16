@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
+import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
 import { addSitterBoard, addImg } from "../api/sitter";
 import SitterPost from "./SitterPost";
@@ -122,23 +123,25 @@ const MainBox = styled.main`
         }
     }
 `
-
+Quill.register("modules/imageUploader", ImageUploader);
 const Post = () => {
     const navigate = useNavigate();
-    const quillRef = useRef();
+    const quillRef = useRef(null);
     const [desc, setDesc] = useState("");
     const [select, setSelect] = useState(null);
+    const [img, setImg] = useState([]);
+    const images = [];
     const [rank1, setRank1] = useState();
     const [rank2, setRank2] = useState();
     const [rank3, setRank3] = useState();
 
     const onClick = () => {
         const data = JSON.parse(localStorage.getItem('user'));
-        console.log(data.id);
 
         const formData = new FormData();
         formData.append("title", rank3);
         formData.append("desc", desc);
+        formData.append("file", img);
         formData.append("memberDTO.id", data.id);
         
         if(select == 1) {
@@ -179,17 +182,17 @@ const Post = () => {
         input.addEventListener('change', async () => {
             console.log("파일 바뀌는 이벤트");
             const file = input.files[0];
-            console.log(file);
+            console.log(images);
 
-            const formData = new FormData();
-            formData.append('file', file);
+            // const formData = new FormData();
+            // formData.append('file', file);
 
-            const imageUrl = await addImg(formData);
-            console.log(imageUrl.data);
-            const url = "/upload/" + imageUrl.data;
-            const editor = quillRef.current.getEditor();
-            const range = editor.getSelection();
-            editor.insertEmbed(range.index, 'image', url);
+            // const imageUrl = await addImg(formData);
+            // console.log(imageUrl.data);
+            // const url = "/upload/" + imageUrl.data;
+            // const editor = quillRef.current.getEditor();
+            // const range = editor.getSelection();
+            // editor.insertEmbed(range.index, 'image', url);
         })
 
     }
@@ -208,8 +211,37 @@ const Post = () => {
                 ],
                 ["image", "video"]
             ],
-            handlers: {
-                image: imageHandler,
+        },
+        clipboard: {
+            matchVisual: false,
+        },
+        imageUploader: {
+            upload: (file) => {
+                return new Promise((resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append("file", file);
+
+                    fetch(
+                        "https://api.imgbb.com/1/upload?key=334ecea9ec1213784db5cb9a14dac265",
+                        {
+                            method: "POST",
+                            body: formData,
+                        }
+                    )
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log(file);
+                        images.push(file);
+                        console.log(images);
+                        setImg(images);
+                        console.log(result.data);
+                        resolve(result.data.url)
+                    })
+                    .catch((error) => {
+                        reject("Upload 실패");
+                        console.log("Error : " + error);
+                    });
+                });
             },
         },
     }), []);
