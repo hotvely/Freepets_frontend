@@ -16,11 +16,9 @@ import MemberFindPwd from "./pages/member/MemberFindPwd";
 import Post from "./components/Post";
 
 import CMediaList from "./pages/community/common/CMediaList";
-import CommonCreate from "./pages/community/common/CommonCreate";
 import CommonList from "./pages/community/common/CommonList";
 import CommonView from "./pages/community/common/CommonView";
 import LMediaList from "./pages/community/lost/LMediaList";
-import LostCreate from "./pages/community/lost/LostCreate";
 import LostList from "./pages/community/lost/LostList";
 import LostView from "./pages/community/lost/LostView";
 
@@ -87,8 +85,8 @@ const router = createBrowserRouter([
             element: <CommonView />,
           },
           {
-            path: "commoncreate",
-            element: <CommonCreate />,
+            path: "community/create",
+            element: <Post />,
           },
         ],
       },
@@ -113,8 +111,8 @@ const router = createBrowserRouter([
             element: <LostView />,
           },
           {
-            path: "lostcreate",
-            element: <LostCreate />,
+            path: "community/create",
+            element: <Post />,
           },
         ],
       },
