@@ -3,8 +3,8 @@ import Img from "../../resources/kero.jpeg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { getReviews, getBoardView, deleteSitterBoard } from "../../api/sitter";
-import { useLocation } from "react-router-dom";
+import { getReviews, getBoardView, addReview, deleteSitterBoard } from "../../api/sitter";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Main = styled.div`
     display: flex;
@@ -288,6 +288,7 @@ const Star = ({color1, color2, color3, color4, color5}) => {
 }
 
 const SitterView = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const [boardView, setBoardView] = useState(null);
     const [reviews, setReviews] = useState([]);
@@ -352,17 +353,6 @@ const SitterView = () => {
         }
     }
 
-    const onReviewEnroll = () => {
-        if(boardView?.memberDTO.id != data.id) {
-            const formData = new FormData();
-            formData.append("member.id", data.id);
-            formData.append("sitterReviewRatings", star);
-            formData.append("sitterReviewDesc", reviewDesc);
-        } else {
-            window.alert('자신의 글에는 리뷰를 등록할 수 없습니다.');
-        }
-    }
-
     const boardViewAPI = async () => {
         const boardViewResult = await getBoardView(location.state.code);
         setBoardView(boardViewResult.data);
@@ -373,11 +363,25 @@ const SitterView = () => {
         setReviews([...reviews, ...reviewsResult.data]);
     }
 
+    const onReviewEnroll = () => {
+        if(boardView?.memberDTO.id != data.id) {
+            const formData = new FormData();
+            formData.append("member.id", data.id);
+            formData.append("sitterReviewRatings", star);
+            formData.append("sitterReviewDesc", reviewDesc);
+            formData.append("sitter.sitterCode", location.state.code);
+            addReview(formData);
+        } else {
+            window.alert('자신의 글에는 리뷰를 등록할 수 없습니다.');
+        }
+    }
+
     const onDeleteBoard = async () => {
         const response = window.confirm('정말로 삭제하시겠습니까?');
         if(response) {
            await deleteSitterBoard(location.state.code);
            alert('삭제되었습니다.');
+           navigate('/sitter');
         }
     }
 

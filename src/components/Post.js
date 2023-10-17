@@ -58,43 +58,10 @@ const MainBox = styled.main`
           margin-right: 13px;
         }
 
-        .input-rank {
-            width: 100%;
-
-            .input-center {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                margin-bottom: 10px;
-
-                #rank1 {
-                    width: 39%;
-                    height: 20px;
-                    padding: 5px;
-                    border: 1px solid #eee;
-                    margin-right: 5px;
-                }
-
-                #rank2 {
-                    width: 39%;
-                    padding: 5px;
-                    border: 1px solid #eee;
-                }
-            }
-
-            .input-end {
-                width: 100%;
-                margin-bottom: 10px;
-                display: flex;
-                justify-content: center;
-
-                #title {
-                    width: 80%;
-                    padding: 5px;
-                    height: 20px;
-                    border: 1px solid #eee;
-                }
-            }
+        #rank2 {
+          width: 39%;
+          padding: 5px;
+          border: 1px solid #eee;
         }
       }
 
@@ -104,7 +71,7 @@ const MainBox = styled.main`
         display: flex;
         justify-content: center;
 
-        #rank3 {
+        #title {
           width: 80%;
           padding: 5px;
           height: 20px;
@@ -137,7 +104,24 @@ const MainBox = styled.main`
       font-size: 0.8rem;
       line-height: 20px;
     }
-`
+  }
+
+  .footer-content {
+    margin-top: 20px;
+
+    .btn-footer {
+      width: 100px;
+      height: 30px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      color: #237a8e;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+`;
+
 Quill.register("modules/imageUploader", ImageUploader);
 const Post = () => {
     const navigate = useNavigate();
@@ -150,7 +134,7 @@ const Post = () => {
     const [rank2, setRank2] = useState();
     const [title, setTitle] = useState();
 
-    const onClick = () => {
+    const onClick = async () => {
         const data = JSON.parse(localStorage.getItem('user'));
 
         const formData = new FormData();
@@ -167,15 +151,15 @@ const Post = () => {
         } else if (select == 3) {
             formData.append("sitterPrice", rank1);
             formData.append("sitterLoc", rank2);
-            addSitterBoard(formData);
+            await addSitterBoard(formData);
+            
         } else if (select == 4) {
             formData.append("hospitalName", rank1);
             formData.append("hospitalAddress", rank2);
             addHospitalBoard(formData);
         } else if (select == 5) {
         }
-
-    navigate("../");
+        navigate('../');
   };
 
   const InputDescHandler = (e) => {
