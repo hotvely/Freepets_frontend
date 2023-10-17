@@ -1,6 +1,6 @@
-const LostPost = ({ setRank3 }) => {
-  const onChangeRank3 = (e) => {
-    setRank3(e.target.value);
+const NoticePost = ({ setTitle }) => {
+  const onChangeTitle = (e) => {
+    setTitle(e.target.value);
   };
 
   return (
@@ -11,11 +11,11 @@ const LostPost = ({ setRank3 }) => {
           name="rank3"
           id="rank3"
           placeholder="제목을 입력해 주세요."
-          onChange={onChangeRank3}
+          onChange={onChangeTitle}
         />
       </div>
     </div>
   );
 };
 
-export default LostPost;
+export default NoticePost;

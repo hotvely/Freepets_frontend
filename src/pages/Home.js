@@ -171,25 +171,25 @@ const Home = () => {
             <img src={Logo}></img>
           </a>
 
-          <a href="/event">공지사항</a>
-          <a href="/sitter">플리마켓</a>
+          <a href="/notice">Notice</a>
+          <a href="/sitter">Sitter</a>
 
-          <a href="/community">커뮤니티</a>
-          <a href="/information">정보나눔</a>
-          <a href="#">고객센터</a>
+          <a href="/community">Community</a>
+          <a href="/information">Information</a>
+          <a href="#">CS</a>
           <div className="rightNav">
             {user === null ||
             Object.keys(user).length === 0 ||
             !localStorage.getItem("token") ? (
               <>
-                <Link to="/auth/login">로그인</Link> <p>|</p>
-                <Link to="/auth/register">회원가입</Link>
+                <Link to="/auth/login">Sign in</Link> <p>|</p>
+                <Link to="/auth/register">Sign up</Link>
               </>
             ) : (
               <>
-                <Link to="/mypage">마이페이지</Link>
+                <Link to="/mypage">MyPage</Link>
                 <p>|</p>
-                <Link to="/auth/logout">로그아웃</Link>
+                <Link to="/auth/logout">Logout</Link>
               </>
             )}
           </div>

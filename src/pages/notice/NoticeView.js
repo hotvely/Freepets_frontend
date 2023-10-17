@@ -7,8 +7,18 @@ import {
   faArrowUpFromBracket,
   faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
-import testImg from "../../../resources/image.jpg";
-import banner from "../../../resources/bannerTest.png";
+import testImg from "../../../src/resources/image.jpg";
+import banner from "../../../src/resources/bannerTest.png";
+import { useLocation, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import {
+  addNoticePostComment,
+  boardViewAPI,
+  getBoardView,
+  getComments,
+  getReviews,
+} from "../../api/notice";
+import { async } from "q";
 
 const StyledMain = styled.main`
   display: flex;
@@ -140,6 +150,7 @@ const StyledMain = styled.main`
   .commentBox {
     display: flex;
     flex-direction: row;
+    align-items: center;
     width: 90%;
     height: 70px;
     margin-top: 30px;
@@ -148,31 +159,32 @@ const StyledMain = styled.main`
       flex-direction: column;
       justify-content: center;
     }
-    .commentDesc {
-      width: 100%;
+    form {
+      width: 80%;
+      height: 80px;
       display: flex;
-      margin-left: 25px;
-
-      input {
-        width: 100%;
-        border-radius: 5px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      .commentDesc {
+        margin-left: 30px;
+        width: 80%;
+        input {
+          padding: 15px;
+          border-radius: 10px;
+          width: 90%;
+          height: 15px;
+        }
       }
-    }
-  }
-  .submit {
-    width: 90%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    margin-top: 15px;
-    input {
-      background-color: #1cc0e4;
-      height: 40px;
-      width: 100px;
-      font-size: large;
-      border: #dedede;
-      border-radius: 5px;
-      color: white;
+      .submitBtn {
+        input {
+          border-radius: 10px;
+          height: 50px;
+          background-color: skyblue;
+          color: white;
+          border: 0;
+        }
+      }
     }
   }
 
@@ -239,13 +251,53 @@ const StyledMain = styled.main`
   }
 `;
 
-const LostView = () => {
+const NoticeView = () => {
+  const { code } = useParams();
+  const [postData, setPostData] = useState(null);
+  const [comments, setComments] = useState([]);
+  const location = useLocation();
+
+  const boardViewAPI = async () => {
+    const boardViewReusult = await getBoardView(code);
+    console.log(boardViewReusult.data);
+    setPostData(boardViewReusult.data);
+  };
+  const reviewsAPI = async () => {
+    console.log(code);
+    const commentsResult = await getComments(code);
+    setComments(commentsResult.data);
+    console.log(commentsResult.data);
+  };
+
+  const commentHandler = (e) => {
+    e.preventDefault();
+    const formData = {
+      token: localStorage.getItem("token"),
+      boardName: "notice",
+      postCode: code,
+      commentDesc: e.target.commentDesc.value,
+    };
+    console.log(formData);
+
+    addNoticePostComment(formData);
+  };
+
+  useEffect(() => {
+    boardViewAPI();
+    reviewsAPI();
+  }, []);
+
+  // 코멘트 추가 하면 갱신.
+  useEffect(() => {
+    reviewsAPI();
+    console.log(comments);
+  }, [comments]);
+
   return (
     <StyledMain>
       <div className="venner">
         <img src={banner} />
       </div>
-
       <div className="vennerBottom">
         <div className="full">
           <div className="full-line-left"></div>
@@ -265,7 +317,6 @@ const LostView = () => {
           <div className="full-line-right"></div>
         </div>
       </div>
-
       <div className="contentHeader">
         <div className="userProfile">
           <div className="profile">
@@ -275,17 +326,17 @@ const LostView = () => {
           <div className="user">
             <div className="usertTitle">
               <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                흰둥이를 찾자
+                {postData?.member.nickname}
               </p>
             </div>
 
             <div className="viewicon">
               <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#1FB1D1" }} />
-              <span id="like">50</span>{" "}
+              <span id="like">{postData?.noticeLike}</span>{" "}
               <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
-              <span id="views">150</span>
+              <span id="views">{postData?.noticeViews}</span>
               <FontAwesomeIcon icon={faComments} style={{ color: "#1FB1D1" }} />
-              <span id="comment">30</span>
+              <span id="comment">{postData?.noticeCommentCount}</span>
             </div>
           </div>
         </div>
@@ -293,42 +344,84 @@ const LostView = () => {
         <div className="icon">
           <FontAwesomeIcon
             icon={faArrowUpFromBracket}
-            style={{ color: "#C9C9C9", margin: "0px 5px", fontSize: "20px" }}
+            style={{
+              color: "#C9C9C9",
+              margin: "0px 5px",
+              fontSize: "20px",
+            }}
           />
           <FontAwesomeIcon
             icon={faBookmark}
-            style={{ color: "#C9C9C9", margin: "0px 5px", fontSize: "20px" }}
+            style={{
+              color: "#C9C9C9",
+              margin: "0px 5px",
+              fontSize: "20px",
+            }}
           />
         </div>
       </div>
-
       <div className="descHeader">
-        <h1>우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</h1>
+        <h1>{postData?.noticeTitle}</h1>
       </div>
       <div className="desc">
-        <div>
-          제가 문을 살짝 열어놓고 방 청소를 하고 왔는데 집에 있던 흰둥이가
-          사라졌어요 ㅠㅠㅠ 나이는 3살, 털은 흰색, 종류는 치와와입니다. 저희
-          흰둥이를 보시게 된다면 채팅 및 010-1234-5678로 연락주세요!!
-        </div>
+        <div>{postData?.noticeDesc}</div>
       </div>
-
       <div className="commentBox">
         <div className="commentProfile">
           <img src={testImg}></img>
         </div>
-        <div className="commentDesc">
-          <input type="text" placeholder="작성하려면 로그인이 필요합니다." />
-        </div>
-      </div>
-
-      <div className="submit">
-        <input type="submit" value="댓글 쓰기" />
+        <form onSubmit={commentHandler}>
+          <div className="commentDesc">
+            <input
+              type="text"
+              placeholder="댓글 입력창..."
+              name="commentDesc"
+            ></input>
+          </div>
+          <div className="submitBtn">
+            <input type="submit" value="댓글 쓰기" />
+          </div>
+        </form>
       </div>
 
       <section className="commentBox2">
         <ul className="comment">
-          <li className="userProfile">
+          {comments.map((comment) => {
+            console.log(comment);
+            <li className="userProfile">
+              <div className="useruser">
+                <div className="profile">
+                  <img src={testImg} alt="작성자 프로필" />
+                </div>
+
+                <div className="user">
+                  <p style={{ fontSize: "18px", fontWeight: "border" }}>
+                    최강 우주 귀요미
+                  </p>
+                </div>
+              </div>
+
+              <div className="comment-desc">
+                <p>
+                  아 진짜 지금 엄청 마음 졸이고 있겠써요,,,,, 흰둥이 어디갔니
+                  얼른 돌아와 돌아와 돌아와 어디갔써 흰둥이 어디갓니 어디로 갔니
+                  ㅠㅠㅠ 얼른 찾길 바랄께요 ㅠㅠㅠ
+                </p>
+              </div>
+
+              <div className="commentBox2-button">
+                <button>댓글 쓰기</button>
+              </div>
+              <hr
+                style={{
+                  width: "100%",
+                  border: "0px",
+                  borderTop: "1px solid #7BCFE1",
+                }}
+              />
+            </li>;
+          })}
+          {/* <li className="userProfile">
             <div className="useruser">
               <div className="profile">
                 <img src={testImg} alt="작성자 프로필" />
@@ -425,10 +518,10 @@ const LostView = () => {
                 borderTop: "1px solid #7BCFE1",
               }}
             />
-          </li>
+          </li> */}
         </ul>
       </section>
     </StyledMain>
   );
 };
-export default LostView;
+export default NoticeView;

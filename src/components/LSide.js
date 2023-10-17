@@ -54,17 +54,19 @@ const LSide = () => {
       <StyledLSide>
         <div className="Laside">
           <div className="lMenu">
-            <label>공지사항</label>
-            <a href="#">공지사항</a>
-            <a href="#">이벤트 및 행사</a>
+            <label>NOITCE</label>
+            <a href="/notice">Notice</a>
+            <a href="/notice/event">Event Info</a>
             <hr />
-            <label>커뮤니티</label>
-            <a href="#">자유게시판</a>
-            <a href="#">분실물</a>
-            <hr />           
-            <label>정보나눔</label>
-            <a href="#">시터</a>
-            <a href="#">병원 정보</a>
+            <label>Community</label>
+            <a href="/community">CommonBoard</a>
+            <a href="/community/lost/lostList">LostBoard</a>
+            <hr />
+            <label>Information</label>
+            <a href="#">Hospital Info</a>
+            <hr />
+            <label>Sitter</label>
+            <a href="/Sitter">Sitter</a>
           </div>
         </div>
       </StyledLSide>

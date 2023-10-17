@@ -19,10 +19,8 @@ import CMediaList from "./pages/community/common/CMediaList";
 import CommonCreate from "./pages/community/common/CommonCreate";
 import CommonList from "./pages/community/common/CommonList";
 import CommonView from "./pages/community/common/CommonView";
-import LMediaList from "./pages/community/lost/LMediaList";
-import LostCreate from "./pages/community/lost/LostCreate";
-import LostList from "./pages/community/lost/LostList";
-import LostView from "./pages/community/lost/LostView";
+import Notice from "./pages/notice/Notice";
+import NoticeView from "./pages/notice/NoticeView";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +41,28 @@ const router = createBrowserRouter([
       },
     ],
   },
-
+  {
+    path: "/notice",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <Notice />,
+      },
+      {
+        path: "create",
+        element: <Post />,
+      },
+      {
+        path: "noticeView/:code",
+        element: <NoticeView />,
+      },
+      {
+        path: "event",
+        element: <EventCalendar />,
+      },
+    ],
+  },
   {
     path: "/information",
     element: <BLayout />,
@@ -72,7 +91,7 @@ const router = createBrowserRouter([
       },
       {
         path: "common",
-        element: <BLayout />, // Common의 레이아웃
+
         children: [
           {
             path: "cmedialist",
@@ -89,32 +108,6 @@ const router = createBrowserRouter([
           {
             path: "commoncreate",
             element: <CommonCreate />,
-          },
-        ],
-      },
-      {
-        path: "lost",
-        element: <BLayout />, // Lost의 레이아웃
-        children: [
-          {
-            index: true,
-            element: <LMediaList />,
-          },
-          {
-            path: "lmedialist",
-            element: <LMediaList />,
-          },
-          {
-            path: "lostList",
-            element: <LostList />,
-          },
-          {
-            path: "lostview/:id",
-            element: <LostView />,
-          },
-          {
-            path: "lostcreate",
-            element: <LostCreate />,
           },
         ],
       },
@@ -136,16 +129,6 @@ const router = createBrowserRouter([
       {
         path: "create",
         element: <Post />,
-      },
-    ],
-  },
-  {
-    path: "/event",
-    element: <BLayout />,
-    children: [
-      {
-        index: true,
-        element: <EventCalendar />,
       },
     ],
   },
