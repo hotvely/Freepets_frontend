@@ -7,8 +7,8 @@ const CommunityPost = ({ setRank3 }) => {
       <div className="input-end">
         <input
           type="text"
-          name="rank3"
-          id="rank3"
+          name="title"
+          id="title"
           placeholder="제목을 입력해 주세요."
           onChange={onChange}
         />

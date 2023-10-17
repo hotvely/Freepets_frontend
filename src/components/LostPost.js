@@ -1,8 +1,8 @@
-const LostPost = (rank3) => {
+const LostPost = (setTitle) => {
     return (
         <div className="input-rank">
             <div className="input-end">
-                <input type="text" name="rank3" id="rank3" placeholder="제목을 입력해 주세요."/>
+                <input type="text" name="title" id="title" placeholder="제목을 입력해 주세요."/>
             </div>
         </div>
     )

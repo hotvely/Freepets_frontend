@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
+import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
 import { addSitterBoard, addImg } from "../api/sitter";
 import { addCommunity } from "../api/community";
@@ -57,10 +58,43 @@ const MainBox = styled.main`
           margin-right: 13px;
         }
 
-        #rank2 {
-          width: 39%;
-          padding: 5px;
-          border: 1px solid #eee;
+        .input-rank {
+            width: 100%;
+
+            .input-center {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                margin-bottom: 10px;
+
+                #rank1 {
+                    width: 39%;
+                    height: 20px;
+                    padding: 5px;
+                    border: 1px solid #eee;
+                    margin-right: 5px;
+                }
+
+                #rank2 {
+                    width: 39%;
+                    padding: 5px;
+                    border: 1px solid #eee;
+                }
+            }
+
+            .input-end {
+                width: 100%;
+                margin-bottom: 10px;
+                display: flex;
+                justify-content: center;
+
+                #title {
+                    width: 80%;
+                    padding: 5px;
+                    height: 20px;
+                    border: 1px solid #eee;
+                }
+            }
         }
       }
 
@@ -103,44 +137,32 @@ const MainBox = styled.main`
       font-size: 0.8rem;
       line-height: 20px;
     }
-  }
-
-  .footer-content {
-    margin-top: 20px;
-
-    .btn-footer {
-      width: 100px;
-      height: 30px;
-      margin: 5px;
-      border: none;
-      border-radius: 5px;
-      color: #237a8e;
-      font-weight: bold;
-      cursor: pointer;
-    }
-  }
 `;
-
+Quill.register("modules/imageUploader", ImageUploader);
 const Post = () => {
   const navigate = useNavigate();
-  const quillRef = useRef();
+  const quillRef = useRef(null);
   const [desc, setDesc] = useState("");
   const [select, setSelect] = useState(null);
+  const [img, setImg] = useState([]);
+  const images = [];
   const [rank1, setRank1] = useState();
   const [rank2, setRank2] = useState();
-  const [rank3, setRank3] = useState();
+  const [title, setTitle] = useState();
 
   const onClick = () => {
     const data = JSON.parse(localStorage.getItem("user"));
-    console.log(data.id);
 
     const formData = new FormData();
-    formData.append("title", rank3);
+    formData.append("title", title);
     formData.append("desc", desc);
+    if (img != null) {
+      formData.append("uploadfileUrl", img);
+    }
     formData.append("memberDTO.id", data.id);
 
     if (select == 1) {
-      addCommunity(formData);
+      addMedia(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
@@ -163,6 +185,7 @@ const Post = () => {
   const selectChange = (e) => {
     setSelect(e.currentTarget.value);
   };
+  /*
 
   const imageHandler = () => {
     console.log("이미지 버튼 누를 때 작동되는 핸들러임");
@@ -177,17 +200,16 @@ const Post = () => {
       const file = input.files[0];
       console.log(file);
 
-      const formData = new FormData();
-      formData.append("file", file);
+            const imageUrl = await addImg(formData);
+            console.log(imageUrl.data);
+            const url = "/upload/" + imageUrl.data;
+            const editor = quillRef.current.getEditor();
+            const range = editor.getSelection();
+            editor.insertEmbed(range.index, 'image', url);
+        })
+    }
 
-      const imageUrl = await addImg(formData);
-      console.log(imageUrl.data);
-      const url = "/upload/" + imageUrl.data;
-      const editor = quillRef.current.getEditor();
-      const range = editor.getSelection();
-      editor.insertEmbed(range.index, "image", url);
-    });
-  };
+    */
 
   const modules = useMemo(
     () => ({
@@ -207,8 +229,33 @@ const Post = () => {
           ],
           ["image", "video"],
         ],
-        handlers: {
-          image: imageHandler,
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+      imageUploader: {
+        upload: (file) => {
+          return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("http://localhost:8080/api/img", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => response.json())
+              .then((result) => {
+                console.log(result);
+                images.push(file);
+                setImg(images);
+                console.log(images);
+                resolve(result.url);
+              })
+              .catch((error) => {
+                reject("Upload 실패");
+                console.log("Error : " + error);
+              });
+          });
         },
       },
     }),
@@ -240,17 +287,21 @@ const Post = () => {
           {select == null ? (
             <div></div>
           ) : select == 1 ? (
-            <CommunityPost setRank3={setRank3} />
+            <CommunityPost setTitle={setTitle} />
           ) : select == 2 ? (
-            <LostPost setRank3={setRank3} />
+            <LostPost setTitle={setTitle} />
           ) : select == 3 ? (
             <SitterPost
               setRank1={setRank1}
               setRank2={setRank2}
-              setRank3={setRank3}
+              setTitle={setTitle}
             />
           ) : (
-            <HospitalPost rank1={setRank1} rank2={setRank2} rank3={setRank3} />
+            <HospitalPost
+              rank1={setRank1}
+              rank2={setRank2}
+              setTitle={setTitle}
+            />
           )}
         </div>
         <div className="main-content">

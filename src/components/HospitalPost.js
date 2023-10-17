@@ -1,4 +1,4 @@
-const HospitalPost = (rank1, rank2, rank3) => {
+const HospitalPost = (setRank1, setRank2, setTitle) => {
     return (
         <div className="input-rank">
             <div className="input-center">
@@ -6,7 +6,7 @@ const HospitalPost = (rank1, rank2, rank3) => {
                 <input type="text" name="rank2" id="rank2" placeholder="병원 주소를 입력해 주세요."/>
             </div>
             <div className="input-end">
-                <input type="text" name="rank3" id="rank3" placeholder="제목을 입력해 주세요."/>
+                <input type="text" name="title" id="title" placeholder="제목을 입력해 주세요."/>
             </div>
         </div>
     )
