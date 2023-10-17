@@ -291,6 +291,7 @@ const SitterView = () => {
     const location = useLocation();
     const [boardView, setBoardView] = useState(null);
     const [reviews, setReviews] = useState([]);
+    const [reviewDesc, setReviewDesc] = useState();
     const [star, setStar] = useState(0);
     const styleGray = {
         color: "#aaa"
@@ -352,7 +353,11 @@ const SitterView = () => {
     }
 
     const onReviewEnroll = () => {
+        if(boardView?.memberDTO.id != data.id) {
 
+        } else {
+            window.alert('자신의 글에는 리뷰를 등록할 수 없습니다.');
+        }
     }
 
     const boardViewAPI = async () => {
