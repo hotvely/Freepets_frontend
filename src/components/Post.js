@@ -3,6 +3,7 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
 import { addSitterBoard, addImg } from "../api/sitter";
+import { addMedia } from "../api/media";
 import SitterPost from "./SitterPost";
 import CommunityPost from "./CommunityPost";
 import LostPost from "./LostPost";
@@ -11,33 +12,50 @@ import { useNavigate } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
 
 const Main = styled.div`
-    margin: 0px 40px;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    flex-direction: column;
-`
+  margin: 0px 40px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
+`;
 const MainBox = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px;
+  width: 100%;
+  border: 1px solid #b1deec;
+
+  .header-content {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 10px;
-    width : 100%;
-    border : 1px solid #B1DEEC;
+    margin-bottom: 30px;
 
-    .header-content {
+    .select-category {
+      width: 81%;
+      height: 30px;
+      margin-bottom: 10px;
+      border: solid 1px #eee;
+    }
+
+    .input-rank {
+      width: 100%;
+
+      .input-center {
         width: 100%;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 30px;
-
-        .select-category {
-        width: 81%;
-        height: 30px;
+        justify-content: center;
         margin-bottom: 10px;
-        border: solid 1px #eee;
+
+        #rank1 {
+          width: 39%;
+          height: 20px;
+          padding: 5px;
+          border: 1px solid #eee;
+          margin-right: 13px;
         }
 
         .input-rank {
@@ -78,49 +96,46 @@ const MainBox = styled.main`
                 }
             }
         }
+      }
 
-               
-    }
-
-    .main-content {
+      .input-end {
+        width: 100%;
+        margin-bottom: 10px;
         display: flex;
-        width: 80%;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 30px;
+        justify-content: center;
 
-        .btn-font {
-            background-color: white;
-            border: none;
-            width: 55px;
-            margin-bottom: 10px;
-            cursor: pointer;
+        #rank3 {
+          width: 80%;
+          padding: 5px;
+          height: 20px;
+          border: 1px solid #eee;
         }
+      }
+    }
+  }
 
-        .input-desc {
-            width: 100%;
-            height: 500px;
-            padding: 10px;
-            border: 1px solid #eee;
-            font-size: 0.8rem;
-            line-height: 20px;
-        }
+  .main-content {
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+
+    .btn-font {
+      background-color: white;
+      border: none;
+      width: 55px;
+      margin-bottom: 10px;
+      cursor: pointer;
     }
 
-    .footer-content {
-        margin-top: 20px;
-
-        .btn-footer {
-            width: 100px;
-            height: 30px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            color: #237A8E;
-            font-weight: bold;
-            cursor: pointer;
-            
-        }
+    .input-desc {
+      width: 100%;
+      height: 500px;
+      padding: 10px;
+      border: 1px solid #eee;
+      font-size: 0.8rem;
+      line-height: 20px;
     }
 `
 Quill.register("modules/imageUploader", ImageUploader);
@@ -145,52 +160,45 @@ const Post = () => {
             formData.append("uploadfileUrl", img);
         }    
         formData.append("memberDTO.id", data.id);
-        
-        if(select == 1) {
 
+        if (select == 1) {
+            addMedia(formData);
         } else if (select == 2) {
-
-        } else if(select == 3) {
+        } else if (select == 3) {
             formData.append("sitterPrice", rank1);
             formData.append("sitterLoc", rank2);
             addSitterBoard(formData);
-        } else if(select == 4) {
+        } else if (select == 4) {
             formData.append("hospitalName", rank1);
             formData.append("hospitalAddress", rank2);
             addHospitalBoard(formData);
-        } else if(select == 5) {
-
+        } else if (select == 5) {
         }
-        
-        navigate("../");
-    }
 
-    const InputDescHandler = (e) => {
-        setDesc(e);
-        console.log(e);
-    }
+    navigate("../");
+  };
 
-    const selectChange = (e) => {
-        setSelect(e.currentTarget.value);
-    }
+  const InputDescHandler = (e) => {
+    setDesc(e);
+  };
 
-    /*
+  const selectChange = (e) => {
+    setSelect(e.currentTarget.value);
+  };
+  /*
 
-    const imageHandler = () => {
-        console.log("이미지 버튼 누를 때 작동되는 핸들러임");
+  const imageHandler = () => {
+    console.log("이미지 버튼 누를 때 작동되는 핸들러임");
 
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
 
-        input.addEventListener('change', async () => {
-            console.log("파일 바뀌는 이벤트");
-            const file = input.files[0];
-            console.log(images);
-
-            const formData = new FormData();
-            formData.append('file', file);
+    input.addEventListener("change", async () => {
+      console.log("파일 바뀌는 이벤트");
+      const file = input.files[0];
+      console.log(file);
 
             const imageUrl = await addImg(formData);
             console.log(imageUrl.data);
@@ -249,7 +257,9 @@ const Post = () => {
                 });
             },
         },
-    }), []);
+      }),
+    []
+  );
 
     return (
         <Main>

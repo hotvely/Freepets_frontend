@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { checkToken, loginAPI, saveTokenAPI } from "../../api/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncLogin, userReset } from "../../components/store/userSlice";
 
@@ -181,11 +180,11 @@ const Login = () => {
             </button>
           </form>
           <div className="loginFooter">
-            <a className="fALink" href="#">
+            <a className="fALink" href="/auth/findPwd">
               비밀번호 찾기
             </a>
             <span>|</span>
-            <a className="fALink" href="#">
+            <a className="fALink" href="/auth/findId">
               아이디 찾기
             </a>
             <span>|</span>

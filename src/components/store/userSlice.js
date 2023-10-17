@@ -1,5 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { deleteAPI, loginAPI, registerAPI, updateAPI } from "../../api/auth";
+import {
+  deleteAPI,
+  findIdAPI,
+  findPwdAPI,
+  loginAPI,
+  registerAPI,
+  updateAPI,
+} from "../../api/auth";
 
 const asyncRegister = createAsyncThunk(
   "userSlice/asyncRegister",
@@ -11,8 +18,23 @@ const asyncRegister = createAsyncThunk(
 
 const asyncLogin = createAsyncThunk("userSlice/asyncLogin", async (data) => {
   const response = await loginAPI(data);
+
   return response.data;
 });
+
+const asyncFindId = createAsyncThunk("userSlice/asyncFindId", async (data) => {
+  const response = await findIdAPI(data);
+  console.log(response);
+  return response.data;
+});
+
+const asyncFindPwd = createAsyncThunk(
+  "userSlice/asyncFindPwd",
+  async (data) => {
+    const response = await findPwdAPI(data);
+    return response.data;
+  }
+);
 
 const asyncUpdate = createAsyncThunk("userSlice/asyncUpdate", async (data) => {
   const result = await updateAPI(data);
@@ -67,6 +89,14 @@ const userSlice = createSlice({
         return action.payload;
       });
 
+    builder.addCase(asyncFindId.fulfilled, (state, action) => {
+      return action.payload;
+    });
+
+    builder.addCase(asyncFindPwd.fulfilled, (state, action) => {
+      return action.payload;
+    });
+
     builder.addCase(asyncUpdate.fulfilled, (state, action) => {
       if (action.payload.token !== "undefined") {
         localStorage.setItem("token", action.payload.token);
@@ -84,5 +114,12 @@ const userSlice = createSlice({
 });
 
 export default userSlice;
-export { asyncRegister, asyncLogin, asyncUpdate, asyncDelete };
+export {
+  asyncRegister,
+  asyncLogin,
+  asyncFindId,
+  asyncUpdate,
+  asyncDelete,
+  asyncFindPwd,
+};
 export const { userSave, userLogout, userReset } = userSlice.actions;

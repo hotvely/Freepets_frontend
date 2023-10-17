@@ -11,20 +11,16 @@ export const registerAPI = async (data) => {
 export const loginAPI = async (data) => {
   console.log("로그인 axios call!!");
   return await instance.post("login", data);
+};
 
-  // API쪽에서 처리하니까.. 위쪽인 redux에서 처리가 안됨;;
-  // await instance
-  //   .post("login", data)
-  //   .then((response) => {
-  //     console.log(response);
-  //     return response.data;
-  //     // return response.data;
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //     console.log("에러발생 ㅅㅂ");
-  //     throw error;
-  //   });
+export const findIdAPI = async (data) => {
+  console.log("아이디 찾기 axios call");
+  return await instance.post("findId", data);
+};
+
+export const findPwdAPI = async (data) => {
+  console.log("비밀번호 찾기 axios call");
+  return await instance.post("findPwd", data);
 };
 
 export const updateAPI = async (data) => {

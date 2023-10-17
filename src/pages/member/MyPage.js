@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncDelete, userSave } from "../../components/store/userSlice";
 import ReactModal from "react-modal";
-import memberUpdate from "./memberUpdate";
+import MemberUpdate from "./memberUpdate";
 import Logout from "./Logout";
 
 const MyPageMain = styled.main`
@@ -376,7 +376,7 @@ const MyPage = () => {
 
         <div className="profile_btn">
           <button onClick={openModalHandler}>회원 정보수정</button>
-          {memberUpdate(isOpen, setIsOpen, user, dispatch)}
+          {MemberUpdate(isOpen, setIsOpen, user, dispatch)}
 
           <button onClick={deleteUser} style={{ backgroundColor: "pink" }}>
             회원 탈퇴
