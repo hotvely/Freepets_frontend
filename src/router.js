@@ -69,8 +69,7 @@ const router = createBrowserRouter([
         element: <CMediaList />,
       },
       {
-        path: "common",
-        element: <BLayout />, // Common의 레이아웃
+        path: "common", // Common의 레이아웃
         children: [
           {
             path: "cmedialist",
@@ -81,11 +80,11 @@ const router = createBrowserRouter([
             element: <CommonList />,
           },
           {
-            path: "commonview/:id",
+            path: "cmedialist/commonview",
             element: <CommonView />,
           },
           {
-            path: "community/create",
+            path: "cmedialist/create",
             element: <Post />,
           },
         ],

@@ -264,7 +264,7 @@ const CMediaList = () => {
   };
 
   const onClickListBoard = () => {
-    window.location.href = "/lost";
+    window.location.href = "/community/common/commonlist";
     // 게시글 타입 변경
   };
 
@@ -608,7 +608,7 @@ const CMediaList = () => {
             </ul>
           </div>
           <div id="write-btn">
-            <a href="information/hospital/create">
+            <a href="/community/common/cmedialist/create">
               <button>글쓰기</button>
             </a>
           </div>
