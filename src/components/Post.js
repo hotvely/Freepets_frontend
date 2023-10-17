@@ -54,7 +54,7 @@ const MainBox = styled.main`
                     height: 20px;
                     padding: 5px;
                     border: 1px solid #eee;
-                    margin-right: 13px;
+                    margin-right: 5px;
                 }
 
                 #rank2 {

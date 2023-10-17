@@ -273,7 +273,7 @@ const ReviewContent = styled.div`
 `
 const StarArray = styled.div`
         display: flex;
-    `
+`
 
 const Star = ({color1, color2, color3, color4, color5}) => {
     return (
@@ -354,7 +354,10 @@ const SitterView = () => {
 
     const onReviewEnroll = () => {
         if(boardView?.memberDTO.id != data.id) {
-
+            const formData = new FormData();
+            formData.append("member.id", data.id);
+            formData.append("sitterReviewRatings", star);
+            formData.append("sitterReviewDesc", reviewDesc);
         } else {
             window.alert('자신의 글에는 리뷰를 등록할 수 없습니다.');
         }
