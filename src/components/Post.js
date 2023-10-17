@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import styled from "styled-components";
 import { addSitterBoard, addImg } from "../api/sitter";
-import { addMedia } from "../api/media";
+import { addCommunity } from "../api/community";
 import SitterPost from "./SitterPost";
 import CommunityPost from "./CommunityPost";
 import LostPost from "./LostPost";
@@ -140,7 +140,7 @@ const Post = () => {
     formData.append("memberDTO.id", data.id);
 
     if (select == 1) {
-      addMedia(formData);
+      addCommunity(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);

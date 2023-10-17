@@ -3,7 +3,7 @@ import styled from "styled-components";
 import banner from "../../../resources/bannerTest.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
-import { getMediaList } from "../../../api/media";
+import { getCommunityList } from "../../../api/community";
 import { Link, useNavigate } from "react-router-dom";
 
 const MainStlye = styled.div`
@@ -283,7 +283,7 @@ const CMediaList = () => {
 
   const MediaListAPI = async () => {
     // 게시글 목록 데이터
-    const result = await getMediaList(page);
+    const result = await getCommunityList(page);
     setMediae([...mediae, ...result.data]);
   };
 
