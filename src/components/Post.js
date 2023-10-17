@@ -70,7 +70,7 @@ const MainBox = styled.main`
                 display: flex;
                 justify-content: center;
 
-                #rank3 {
+                #title {
                     width: 80%;
                     padding: 5px;
                     height: 20px;
@@ -133,16 +133,16 @@ const Post = () => {
     const images = [];
     const [rank1, setRank1] = useState();
     const [rank2, setRank2] = useState();
-    const [rank3, setRank3] = useState();
+    const [title, setTitle] = useState();
 
     const onClick = () => {
         const data = JSON.parse(localStorage.getItem('user'));
 
         const formData = new FormData();
-        formData.append("title", rank3);
+        formData.append("title", title);
         formData.append("desc", desc);
         if(img!=null) {
-            formData.append("file", img);
+            formData.append("uploadfileUrl", img);
         }    
         formData.append("memberDTO.id", data.id);
         
@@ -225,10 +225,10 @@ const Post = () => {
             upload: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
-                    formData.append("image", file);
+                    formData.append("file", file);
 
                     fetch(
-                        "https://api.imgbb.com/1/upload?key=334ecea9ec1213784db5cb9a14dac265",
+                        "http://localhost:8080/api/img",
                         {
                             method: "POST",
                             body: formData,
@@ -236,10 +236,11 @@ const Post = () => {
                     )
                     .then((response) => response.json())
                     .then((result) => {
+                        console.log(result);
                         images.push(file);
                         setImg(images);
                         console.log(images);
-                        resolve(result.data.url)
+                        resolve(result.url);
                     })
                     .catch((error) => {
                         reject("Upload 실패");
@@ -265,10 +266,10 @@ const Post = () => {
                         <option value="5">공지사항</option>
                     </select>
                     {select == null ? <div></div> 
-                    : select == 1 ? <CommunityPost rank3={setRank3}/> 
-                    : select == 2 ? <LostPost rank3={setRank3}/> 
-                    : select == 3 ? <SitterPost setRank1={setRank1} setRank2={setRank2} setRank3={setRank3} />
-                    : <HospitalPost rank1={setRank1} rank2={setRank2} rank3={setRank3}/>}               
+                    : select == 1 ? <CommunityPost setTitle={setTitle}/> 
+                    : select == 2 ? <LostPost setTitle={setTitle}/> 
+                    : select == 3 ? <SitterPost setRank1={setRank1} setRank2={setRank2} setTitle={setTitle} />
+                    : <HospitalPost rank1={setRank1} rank2={setRank2} setTitle={setTitle}/>}               
                 </div>
                 <div className="main-content">
                     <ReactQuill

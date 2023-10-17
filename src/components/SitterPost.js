@@ -1,5 +1,5 @@
 
-const SitterPost = ({setRank1, setRank2, setRank3}) => {
+const SitterPost = ({setRank1, setRank2, setTitle}) => {
     
     const onChangeRank1 = (e) => {
         setRank1(e.target.value);
@@ -10,7 +10,7 @@ const SitterPost = ({setRank1, setRank2, setRank3}) => {
     }
 
     const onChangeRank3 = (e) => {
-        setRank3(e.target.value);
+        setTitle(e.target.value);
     }
 
     return (
@@ -20,7 +20,7 @@ const SitterPost = ({setRank1, setRank2, setRank3}) => {
                 <input type="text" name="rank2" id="rank2" placeholder="시터 활동 가능 지역을 입력해 주세요" onChange={onChangeRank2}/>
             </div>
             <div className="input-end">
-                <input type="text" name="rank3" id="rank3" placeholder="제목을 입력해 주세요." onChange={onChangeRank3}/>
+                <input type="text" name="title" id="title" placeholder="제목을 입력해 주세요." onChange={onChangeRank3}/>
             </div>
         </div>
     )
