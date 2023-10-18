@@ -128,6 +128,15 @@ const ContentStyle = styled.div`
   }
 `;
 
+// const TableStyle = styled.div`
+//   display: flex;
+//   justify-content: space-around;
+//   th {
+//     display: row;
+//     text-align: center;
+//   }
+// `;
+
 const onClickCheckBoard = () => {
   window.location.href = "/community/common/cmedialist";
   // 게시글 타입 변경
@@ -281,12 +290,71 @@ const onClickListBoard = () => {
 // `;
 
 const PagingStyle = styled.div`
+  margin: 20px;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  margin: 20px 0;
-  a {
-    padding: 5px;
+  align-items: center;
+
+  .page {
+    flex-grow: 1;
+    text-align: center;
+    .pagination {
+      display: flex;
+      justify-content: center;
+      /* flex-direction: row; */
+      /* text-align: center; */
+      list-style: none;
+      /* display: inline-block; */
+
+      a {
+        float: left;
+        display: block;
+        font-size: 14px;
+        text-decoration: none;
+        padding: 5px 12px;
+        color: #96a0ad;
+        line-height: 1.5;
+      }
+      a:active {
+        cursor: default;
+        color: #ffffff;
+        outline: none;
+      }
+      #first:hover,
+      #last:hover,
+      #arrow-left:hover,
+      #arrow-right:hover {
+        color: #2e9cdf;
+      }
+
+      #num {
+        /* margin-left: 3px; */
+        -moz-border-radius: 100%;
+        -webkit-border-radius: 100%;
+        border-radius: 100%;
+      }
+      #num:hover {
+        background-color: #2e9cdf;
+        color: #ffffff;
+      }
+      #num.active {
+        background-color: #2e9cdf;
+        cursor: pointer;
+      }
+    }
+  }
+
+  #write-btn {
+    /* display: flex;
+      justify-content: end; */
+    button {
+      font-weight: bold;
+      color: #3a98b9;
+      width: 80px;
+      height: 40px;
+      border: none;
+      border-radius: 10px;
+    }
   }
 `;
 
@@ -378,20 +446,93 @@ const CommunityList = () => {
         </div>
 
         <ContentStyle>
+          {/* <TableStyle> */}
           <CommunityTableForList columns={columns} data={data} />;
           {/* <div className="postBtn">
               <button style={{ backgroundColor: "lightyellow" }}>수정</button>
               <button style={{ backgroundColor: "pink" }}>삭제</button>
             </div> */}
+          {/* </TableStyle> */}
         </ContentStyle>
+        <PagingStyle>
+          {/* 페이지 넘기는 바 만들기
+         <div id="paging"></div> */}
+          <div className="page">
+            <ul className="pagination">
+              <li>
+                <a href="#" id="first">
+                  처음 페이지
+                </a>
+              </li>
+              <li>
+                <a href="#" id="arrow-left">
+                  ◀
+                </a>
+              </li>
+              <li>
+                <a href="#" id="active-num">
+                  1
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  2
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  3
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  4
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  5
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  6
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  7
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  8
+                </a>
+              </li>
+              <li>
+                <a href="#" id="num">
+                  9
+                </a>
+              </li>
+              <li>
+                <a href="#" id="arrow-right">
+                  ▶
+                </a>
+              </li>
+              <li>
+                <a href="#" id="last">
+                  마지막 페이지
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div id="write-btn">
+            <a href="/community/common/commonList/create">
+              <button>글쓰기</button>
+            </a>
+          </div>
+        </PagingStyle>
       </MainContentBox>
-      <PagingStyle>
-        <div>
-          <a href="#"> Prev</a>
-          <a href="#">Num</a>
-          <a href="#">Next</a>
-        </div>
-      </PagingStyle>
     </MainStyle>
   );
 };

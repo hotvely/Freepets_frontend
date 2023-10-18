@@ -87,6 +87,10 @@ const router = createBrowserRouter([
             path: "cmedialist/create",
             element: <Post />,
           },
+          {
+            path: "commonlist/create",
+            element: <Post />,
+          },
         ],
       },
       {
