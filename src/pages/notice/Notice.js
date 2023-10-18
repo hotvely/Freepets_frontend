@@ -89,6 +89,7 @@ const ContentStyle = styled.div`
 
     button {
       background-color: black;
+      width: 150px;
       color: white;
     }
   }
@@ -194,7 +195,7 @@ const Notice = () => {
     return state.user;
   });
 
-  const updatePageAPI = async () => {
+  const getBoardHandler = async () => {
     const response = await getBoardsBasic(page);
 
     setBoards([...boards, ...response.data]);
@@ -204,7 +205,7 @@ const Notice = () => {
   // setBoards([...boards, ...boardResult.data]);
 
   useEffect(() => {
-    updatePageAPI();
+    getBoardHandler();
   }, []);
 
   if (!boards) {
@@ -244,7 +245,7 @@ const Notice = () => {
                   <img src={testImg}></img>
                 </div>
                 <div className="postInfo">
-                  <Link to={`../notice/${items.noticeCode}`}>
+                  <Link to={`../notice/noticeView/${items.noticeCode}`}>
                     <div className="userInfo">
                       <div id="nickName">{items.member.nickname}</div>
                       <div id="date">7일 전</div>
@@ -290,7 +291,7 @@ const Notice = () => {
               } else alert("로그인이 되어 있지 않습니다.");
             }}
           >
-            {/* <Link to={"/notice/create"}>d?</Link> */}
+            글쓰기
           </button>
         </section>
       </ContentStyle>

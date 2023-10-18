@@ -6,19 +6,22 @@ const instance = axios.create({
 
 export const getBoardsBasic = async (page) => {
   console.log("get page 로 게시글들 받아옴");
-  let url = `notice?page=1`;
+  let url = `notice?page=${page}`;
 
   return await instance.get(url);
 };
 
-export const getBoardView = async (id) => {
-  let url = `notice/post/${id}`;
-
-  return await instance.get(url);
+export const getBoardViewAPI = async (code) => {
+  return await instance.get(`notice/${code}`);
 };
 
-export const getComments = async (code) => {
+export const getCommentsAPI = async (code) => {
   let url = `notice/${code}/comment`;
+  return await instance.get(url);
+};
+
+export const getReCommentsAPI = async (pCode) => {
+  let url = `notice/comment/${pCode}`;
   return await instance.get(url);
 };
 
@@ -28,7 +31,7 @@ export const addNoticeBoard = async (data) => {
   return await instance.post("notice", data);
 };
 
-export const addNoticePostComment = async (data) => {
+export const addCommentAPI = async (data) => {
   return await instance.post("notice/comment", data);
 };
 

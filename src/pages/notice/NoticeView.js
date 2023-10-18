@@ -6,19 +6,26 @@ import {
   faComments,
   faArrowUpFromBracket,
   faBookmark,
+  faL,
 } from "@fortawesome/free-solid-svg-icons";
 import testImg from "../../../src/resources/image.jpg";
 import banner from "../../../src/resources/bannerTest.png";
 import { useLocation, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
+  addCommentAPI,
   addNoticePostComment,
   boardViewAPI,
   getBoardView,
+  getBoardViewAPI,
   getComments,
+  getCommentsAPI,
+  getReCommentsAPI,
   getReviews,
 } from "../../api/notice";
 import { async } from "q";
+import CommentComponent from "./CommentComponent";
+import ReCommentComponent from "./ReCommentComponent";
 
 const StyledMain = styled.main`
   display: flex;
@@ -155,11 +162,12 @@ const StyledMain = styled.main`
     height: 70px;
     margin-top: 30px;
     .commentProfile {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      margin-right: 20px;
+      width: 50px;
+      flex: none;
     }
-    form {
+
+    /* form {
       width: 80%;
       height: 80px;
       display: flex;
@@ -177,7 +185,7 @@ const StyledMain = styled.main`
         }
       }
       .submitBtn {
-        input {
+        button {
           border-radius: 10px;
           height: 50px;
           background-color: skyblue;
@@ -185,7 +193,7 @@ const StyledMain = styled.main`
           border: 0;
         }
       }
-    }
+    } */
   }
 
   .commentBox2 {
@@ -237,13 +245,23 @@ const StyledMain = styled.main`
           margin-top: 10px;
         }
 
-        .commentBox2-button {
+        .reCommentContent {
           padding: 20px;
-          button {
-            background-color: white;
-            border: 1px solid #dedede;
+          .commentView_btn {
+            height: 40px;
+            background-color: #437b92;
+            border: 0;
             border-radius: 5px;
-            color: #acacac;
+            color: white;
+            margin: 10px 0;
+          }
+
+          ul {
+            margin-top: 10px;
+          }
+
+          li {
+            padding-top: 20px;
           }
         }
       }
@@ -253,45 +271,67 @@ const StyledMain = styled.main`
 
 const NoticeView = () => {
   const { code } = useParams();
-  const [postData, setPostData] = useState(null);
+  const [postData, setPostData] = useState();
   const [comments, setComments] = useState([]);
-  const location = useLocation();
+  const [selected_Comment, setSelected_Comment] = useState(0);
 
-  const boardViewAPI = async () => {
-    const boardViewReusult = await getBoardView(code);
-    console.log(boardViewReusult.data);
-    setPostData(boardViewReusult.data);
-  };
-  const reviewsAPI = async () => {
-    console.log(code);
-    const commentsResult = await getComments(code);
-    setComments(commentsResult.data);
-    console.log(commentsResult.data);
+  const getPostHandler = async () => {
+    const post = await getBoardViewAPI(code);
+    if (post) {
+      return post.data;
+    }
   };
 
-  const commentHandler = (e) => {
+  const getCommentHandler = async () => {
+    const comments = await getCommentsAPI(code);
+
+    if (comments) {
+      return comments.data;
+    }
+  };
+
+  const addCommentHandler = async (e) => {
     e.preventDefault();
+    console.log(e.target.commentDesc.id);
+    const parentCode = e.target.commentDesc.id;
     const formData = {
       token: localStorage.getItem("token"),
       boardName: "notice",
       postCode: code,
+      parentCommentCode: parentCode, //부모 댓글의 코드를 백으로 넘기는 법
       commentDesc: e.target.commentDesc.value,
     };
-    console.log(formData);
 
-    addNoticePostComment(formData);
+    console.log(formData);
+    if (formData.commentDesc) {
+      await addCommentAPI(formData);
+      const updatedComment = await getCommentsAPI(code);
+      if (updatedComment) {
+        setComments(updatedComment.data);
+        e.target.commentDesc.value = null;
+      }
+    } else {
+      alert("댓글 작성후 등록하세요");
+    }
   };
 
-  useEffect(() => {
-    boardViewAPI();
-    reviewsAPI();
-  }, []);
+  const selected_Comment_handler = () => {
+    // 대댓글 작성을 하지 않기 위해 아예 부모 값 전달을 하지 않아버리면 됨
+    setSelected_Comment(0);
+  };
+  console.log("선택된 부모 댓글 코드 리셋 : " + selected_Comment);
 
-  // 코멘트 추가 하면 갱신.
   useEffect(() => {
-    reviewsAPI();
-    console.log(comments);
-  }, [comments]);
+    const asyncHandler = async () => {
+      const pData = await getPostHandler(code);
+      setPostData(pData);
+
+      const cData = await getCommentHandler(code);
+      setComments(cData);
+    };
+
+    asyncHandler();
+  }, []);
 
   return (
     <StyledMain>
@@ -370,157 +410,107 @@ const NoticeView = () => {
         <div className="commentProfile">
           <img src={testImg}></img>
         </div>
-        <form onSubmit={commentHandler}>
-          <div className="commentDesc">
-            <input
-              type="text"
-              placeholder="댓글 입력창..."
-              name="commentDesc"
-            ></input>
-          </div>
-          <div className="submitBtn">
-            <input type="submit" value="댓글 쓰기" />
-          </div>
-        </form>
+
+        <CommentComponent props={0} ref={addCommentHandler} />
       </div>
-
-      <section className="commentBox2">
+      <div className="commentBox2">
         <ul className="comment">
-          {comments.map((comment) => {
-            console.log(comment);
-            <li className="userProfile">
-              <div className="useruser">
-                <div className="profile">
-                  <img src={testImg} alt="작성자 프로필" />
+          {comments?.map((comment) =>
+            comment.noticeCommentCodeSuper > 0 ? null : (
+              <li className="userProfile" key={comment.noticeCommentCode}>
+                <div>
+                  {
+                    // 유저 정보
+                  }
+                  <div className="useruser">
+                    <div className="profile">
+                      <img src={testImg} alt="작성자 프로필" />
+                    </div>
+
+                    <div className="user">
+                      <p style={{ fontSize: "18px", fontWeight: "border" }}>
+                        {comment?.member?.nickname}
+                      </p>
+                    </div>
+                  </div>
+
+                  {
+                    // 댓글 정보
+                  }
+                  <div className="comment-desc">
+                    <p>{comment?.noticeCommentDesc}</p>
+                  </div>
+
+                  <div className="reCommentContent">
+                    {
+                      // 대댓글 보기, 대댓글 작성 코드
+
+                      // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
+                      selected_Comment == comment.noticeCommentCode ? (
+                        <div>
+                          {
+                            // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
+                            console.log(selected_Comment)
+                          }
+                          {console.log(comments)}
+                          <button
+                            className="commentView_btn"
+                            onClick={selected_Comment_handler}
+                          >
+                            댓글 보기 닫기
+                          </button>
+                          {/* 대댓글 호출 로직 */}
+                          <ul>
+                            {comments.map((comment) =>
+                              comment.noticeCommentCodeSuper <
+                              0 ? null : comment.noticeCommentCodeSuper !==
+                                selected_Comment ? null : (
+                                <li key={comment.noticeCommentCode}>
+                                  <ReCommentComponent props={comment} />
+                                </li>
+                              )
+                            )}
+                          </ul>
+
+                          <CommentComponent
+                            // props={{ num1: currClickComment, num2: 10, num3: 100 }}    //<- 여러개 던질때
+                            props={selected_Comment}
+                            ref={addCommentHandler}
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          {
+                            //id에 상위 댓글의 코드 값을 넣어서 버튼 id부여함.
+                            // 부여한 이유는... 댓글 작성의 경우에 CommentComponent를 호출해서 재사용 하기 위함
+                          }
+                          <button
+                            className="commentView_btn"
+                            id={`${comment.noticeCommentCode}`}
+                            onClick={(e) => {
+                              setSelected_Comment(comment.noticeCommentCode);
+                            }}
+                          >
+                            댓글 보기
+                          </button>
+                        </div>
+                      )
+                    }
+                  </div>
                 </div>
 
-                <div className="user">
-                  <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                    최강 우주 귀요미
-                  </p>
-                </div>
-              </div>
-
-              <div className="comment-desc">
-                <p>
-                  아 진짜 지금 엄청 마음 졸이고 있겠써요,,,,, 흰둥이 어디갔니
-                  얼른 돌아와 돌아와 돌아와 어디갔써 흰둥이 어디갓니 어디로 갔니
-                  ㅠㅠㅠ 얼른 찾길 바랄께요 ㅠㅠㅠ
-                </p>
-              </div>
-
-              <div className="commentBox2-button">
-                <button>댓글 쓰기</button>
-              </div>
-              <hr
-                style={{
-                  width: "100%",
-                  border: "0px",
-                  borderTop: "1px solid #7BCFE1",
-                }}
-              />
-            </li>;
-          })}
-          {/* <li className="userProfile">
-            <div className="useruser">
-              <div className="profile">
-                <img src={testImg} alt="작성자 프로필" />
-              </div>
-
-              <div className="user">
-                <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                  최강 우주 귀요미
-                </p>
-              </div>
-            </div>
-
-            <div className="comment-desc">
-              <p>
-                아 진짜 지금 엄청 마음 졸이고 있겠써요,,,,, 흰둥이 어디갔니 얼른
-                돌아와 돌아와 돌아와 어디갔써 흰둥이 어디갓니 어디로 갔니 ㅠㅠㅠ
-                얼른 찾길 바랄께요 ㅠㅠㅠ
-              </p>
-            </div>
-
-            <div className="commentBox2-button">
-              <button>댓글 쓰기</button>
-            </div>
-            <hr
-              style={{
-                width: "100%",
-                border: "0px",
-                borderTop: "1px solid #7BCFE1",
-              }}
-            />
-          </li>
-
-          <li className="userProfile">
-            <div className="useruser">
-              <div className="profile">
-                <img src={testImg} alt="작성자 프로필" />
-              </div>
-
-              <div className="user">
-                <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                  최강 우주 귀요미
-                </p>
-              </div>
-            </div>
-
-            <div className="comment-desc">
-              <p>
-                아 진짜 지금 엄청 마음 졸이고 있겠써요,,,,, 흰둥이 어디갔니 얼른
-                돌아와 돌아와 돌아와 어디갔써 흰둥이 어디갓니 어디로 갔니 ㅠㅠㅠ
-                얼른 찾길 바랄께요 ㅠㅠㅠ
-              </p>
-            </div>
-
-            <div className="commentBox2-button">
-              <button>댓글 쓰기</button>
-            </div>
-            <hr
-              style={{
-                width: "100%",
-                border: "0px",
-                borderTop: "1px solid #7BCFE1",
-              }}
-            />
-          </li>
-
-          <li className="userProfile">
-            <div className="useruser">
-              <div className="profile">
-                <img src={testImg} alt="작성자 프로필" />
-              </div>
-
-              <div className="user">
-                <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                  최강 우주 귀요미
-                </p>
-              </div>
-            </div>
-
-            <div className="comment-desc">
-              <p>
-                아 진짜 지금 엄청 마음 졸이고 있겠써요,,,,, 흰둥이 어디갔니 얼른
-                돌아와 돌아와 돌아와 어디갔써 흰둥이 어디갓니 어디로 갔니 ㅠㅠㅠ
-                얼른 찾길 바랄께요 ㅠㅠㅠ
-              </p>
-            </div>
-
-            <div className="commentBox2-button">
-              <button>댓글 쓰기</button>
-            </div>
-            <hr
-              style={{
-                width: "100%",
-                border: "0px",
-                borderTop: "1px solid #7BCFE1",
-              }}
-            />
-          </li> */}
+                <hr
+                  style={{
+                    width: "100%",
+                    border: "0px",
+                    borderTop: "1px solid #7BCFE1",
+                  }}
+                />
+              </li>
+            )
+          )}
         </ul>
-      </section>
+      </div>
     </StyledMain>
   );
 };
