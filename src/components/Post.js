@@ -136,7 +136,6 @@ const Post = () => {
 
     const onClick = async () => {
         const data = JSON.parse(localStorage.getItem('user'));
-
         const formData = new FormData();
         formData.append("title", title);
         formData.append("desc", desc);
@@ -146,7 +145,7 @@ const Post = () => {
         formData.append("memberDTO.id", data.id);
 
         if (select == 1) {
-            addMedia(formData);
+            await addMedia(formData);
         } else if (select == 2) {
         } else if (select == 3) {
             formData.append("sitterPrice", rank1);
@@ -156,7 +155,7 @@ const Post = () => {
         } else if (select == 4) {
             formData.append("hospitalName", rank1);
             formData.append("hospitalAddress", rank2);
-            addHospitalBoard(formData);
+            await addHospitalBoard(formData);
         } else if (select == 5) {
         }
         navigate('../');
@@ -240,10 +239,10 @@ const Post = () => {
                     });
                 });
             },
-        },
-      }),
-    []
-  );
+         },
+       }),
+     []
+   );
 
     return (
         <Main>

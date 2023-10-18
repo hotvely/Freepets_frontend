@@ -3,7 +3,7 @@ import Img from "../../resources/kero.jpeg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { getReviews, getBoardView, addReview, deleteSitterBoard } from "../../api/sitter";
+import { getReviews, getBoardView, addReview, deleteReview, deleteSitterBoard } from "../../api/sitter";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Main = styled.div`
@@ -85,7 +85,7 @@ const MainContent = styled.div`
                     color: #FFF;
                     padding: 5px;
                     border-radius: 5px;
-                }               
+                }  
             }
         }
     }
@@ -127,6 +127,15 @@ const MainContent = styled.div`
             height: 30px;
             color: white;
             margin-right: 10px;
+        }
+
+        .hide {
+            cursor: pointer;
+            background-color: #ddd;
+            border: none;
+            border-radius: 5px;
+            height: 30px;
+            color: white;
         }
     }
 `
@@ -249,6 +258,14 @@ const ReviewContent = styled.div`
                             border: 1px solid #000;
                             border-radius: 5px;
                             padding: 3px;
+                            margin-right: 5px;
+                        }
+
+                        .review-content_start-delete {
+                            border: none;
+                            background-color: #F5F5F5;
+                            color: #999;
+                            cursor: pointer;
                         }
                     }
                     
@@ -363,21 +380,39 @@ const SitterView = () => {
         setReviews([...reviews, ...reviewsResult.data]);
     }
 
-    const onReviewEnroll = () => {
+    const reviewDescChange = (e) => {
+        setReviewDesc(e.currentTarget.innerHTML);    
+    }
+
+    const onReviewEnroll = async () => {
         if(boardView?.memberDTO.id != data.id) {
             const formData = new FormData();
             formData.append("member.id", data.id);
             formData.append("sitterReviewRatings", star);
             formData.append("sitterReviewDesc", reviewDesc);
             formData.append("sitter.sitterCode", location.state.code);
-            addReview(formData);
+            const result = await addReview(formData);
+            console.log(result.data);
+            setReviews([, result.data, ...reviews]);
         } else {
             window.alert('자신의 글에는 리뷰를 등록할 수 없습니다.');
         }
     }
 
-    const onDeleteBoard = async () => {
+    const onDeleteReview = async (e) => {
         const response = window.confirm('정말로 삭제하시겠습니까?');
+        if(response) {
+            const id = e.currentTarget.value;
+            await deleteReview(id);
+            alert('삭제되었습니다.');
+            const newList = reviews.filter((item) => item.sitterReviewCode != id);
+            setReviews(newList);
+        }
+        
+    }
+
+    const onDeleteBoard = async () => {
+        const response = window.confirm('정말로 삭제하시겠습니까? 해당 글에 작성된 리뷰가 있다면 함께 삭제됩니다.');
         if(response) {
            await deleteSitterBoard(location.state.code);
            alert('삭제되었습니다.');
@@ -409,7 +444,7 @@ const SitterView = () => {
                                     </div>
                                     <div className="main-header_end-user_info_loc">
                                         <p>{boardView?.sitterLoc}</p>
-                                    </div>
+                                    </div>                                                                        
                                 </div>                               
                             </div>
                             <FontAwesomeIcon icon={faBookmark} style={{fontSize: "2rem", color: "#ddd", marginRight: "10px"}} />
@@ -422,6 +457,7 @@ const SitterView = () => {
                         <div className="main-button">
                             <button className="update">수정</button>
                             <button className="delete" onClick={onDeleteBoard}>삭제</button>
+                            <button className="hide">게시글 숨기기</button>
                         </div> : <div></div>
                     }                    
                 </MainContent>
@@ -446,7 +482,7 @@ const SitterView = () => {
                                     </div>
                                 </div>                               
                             </div>                
-                            <div contentEditable="true" id="sitterReviewDesc"></div>
+                            <div contentEditable="true" id="sitterReviewDesc" onInput={reviewDescChange}></div>
                             <div className="write-content_center-button">
                                 <button onClick={onReviewEnroll}>등록</button>
                             </div>                       
@@ -463,6 +499,10 @@ const SitterView = () => {
                                 <div className="review-content_start-user">
                                     <div className="review-content_start-user_name">
                                         <p id="nickname">{items?.member.nickname}</p>
+                                        {items?.member.id == data.id ? 
+                                        <button className="review-content_start-delete" onClick={onDeleteReview} value={items?.sitterReviewCode}>삭제</button> :
+                                        <div></div>
+                                    }                           
                                     </div>
                                     <div className="review-content_start-user_ratings">
                                        {items.sitterReviewRatings == 5 ? (<Star color1="orange" color2="orange" color3="orange" color4="orange" color5="orange" />) 

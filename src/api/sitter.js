@@ -18,6 +18,10 @@ export const addReview = async (data) => {
     return await instance.post("sitterReview", data)
 }
 
+export const deleteReview = async (id) => {
+    let url = `sitterReview/${id}`;
+    return await instance.delete(url);
+}
 export const getReviews = async (id) => {
     let url = `sitter/${id}/review`;
     return await instance.get(url);
@@ -30,4 +34,14 @@ export const addSitterBoard = async (data) => {
 export const deleteSitterBoard = async (id) => {
     let url = `sitter/${id}`;
     return await instance.delete(url);
+}
+
+export const getSitterSearch = async (page, keyword) => {
+    let url = `sitter/search?keyword=${keyword}&page=${page}`;
+    return await instance.get(url);
+}
+
+export const getSitterPriceOrder = async (order) => {
+    let url = `sitter/price/${order}`;
+    return await instance.get(url);
 }
