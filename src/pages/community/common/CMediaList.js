@@ -311,13 +311,13 @@ const CMediaList = () => {
               </select>
             </div>
 
-            <div className="media-sort-category">
+            {/* <div className="media-sort-category">
               <select className="category">
                 <option value="1">모든펫츠</option>
                 <option value="2">반려펫츠</option>
                 <option value="3">스트릿펫츠</option>
               </select>
-            </div>
+            </div> */}
 
             <div className="view-board">
               <div className="view-check-board">

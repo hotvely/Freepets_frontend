@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { addSitterBoard, addImg } from "../api/sitter";
 import { addCommunity } from "../api/community";
 import SitterPost from "./SitterPost";
-import CommunityPost from "./CommunityPost";
+import CommunityPost from "./Community/CommunityPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
 import { useNavigate } from "react-router-dom";
