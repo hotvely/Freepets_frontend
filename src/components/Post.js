@@ -59,42 +59,42 @@ const MainBox = styled.main`
         }
 
         .input-rank {
+          width: 100%;
+
+          .input-center {
             width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
 
-            .input-center {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                margin-bottom: 10px;
-
-                #rank1 {
-                    width: 39%;
-                    height: 20px;
-                    padding: 5px;
-                    border: 1px solid #eee;
-                    margin-right: 5px;
-                }
-
-                #rank2 {
-                    width: 39%;
-                    padding: 5px;
-                    border: 1px solid #eee;
-                }
+            #rank1 {
+              width: 39%;
+              height: 20px;
+              padding: 5px;
+              border: 1px solid #eee;
+              margin-right: 5px;
             }
 
-            .input-end {
-                width: 100%;
-                margin-bottom: 10px;
-                display: flex;
-                justify-content: center;
-
-                #title {
-                    width: 80%;
-                    padding: 5px;
-                    height: 20px;
-                    border: 1px solid #eee;
-                }
+            #rank2 {
+              width: 39%;
+              padding: 5px;
+              border: 1px solid #eee;
             }
+          }
+
+          .input-end {
+            width: 100%;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+
+            #title {
+              width: 80%;
+              padding: 5px;
+              height: 20px;
+              border: 1px solid #eee;
+            }
+          }
         }
       }
 
@@ -137,7 +137,9 @@ const MainBox = styled.main`
       font-size: 0.8rem;
       line-height: 20px;
     }
+  }
 `;
+
 Quill.register("modules/imageUploader", ImageUploader);
 const Post = () => {
   const navigate = useNavigate();
@@ -162,7 +164,7 @@ const Post = () => {
     formData.append("memberDTO.id", data.id);
 
     if (select == 1) {
-      addMedia(formData);
+      addCommunity(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);

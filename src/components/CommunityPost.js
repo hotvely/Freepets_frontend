@@ -1,6 +1,6 @@
-const CommunityPost = ({ setRank3 }) => {
+const CommunityPost = ({ setTitle }) => {
   const onChange = (e) => {
-    setRank3(e.target.value);
+    setTitle(e.target.value);
   };
   return (
     <div className="input-rank">
