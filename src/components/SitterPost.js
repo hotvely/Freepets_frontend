@@ -1,4 +1,3 @@
-
 const SitterPost = ({setRank1, setRank2, setTitle}) => {
     
     const onChangeRank1 = (e) => {

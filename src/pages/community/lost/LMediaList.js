@@ -3,7 +3,6 @@ import styled from "styled-components";
 import banner from "../../../resources/bannerTest.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
-// import { getMediaList } from "../../../api/media";
 import { Link, useNavigate } from "react-router-dom";
 
 const MainStlye = styled.div`

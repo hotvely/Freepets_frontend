@@ -2,15 +2,13 @@ import { useMemo, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
-import { addSitterBoard } from "../api/sitter";
-// import { addMedia } from "../api/media";
+import { addSitterBoard, addImg } from "../api/sitter";
 import SitterPost from "./SitterPost";
-import CommunityPost from "../components/Community/CommunityPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
 import { useNavigate } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
-
+import CommunityPost from "./Community/CommunityPost";
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
@@ -26,30 +24,25 @@ const MainBox = styled.main`
   padding: 20px 10px;
   width: 100%;
   border: 1px solid #b1deec;
-
   .header-content {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 30px;
-
     .select-category {
       width: 81%;
       height: 30px;
       margin-bottom: 10px;
       border: solid 1px #eee;
     }
-
     .input-rank {
       width: 100%;
-
       .input-center {
         width: 100%;
         display: flex;
         justify-content: center;
         margin-bottom: 10px;
-
         #rank1 {
           width: 39%;
           height: 20px;
@@ -57,54 +50,18 @@ const MainBox = styled.main`
           border: 1px solid #eee;
           margin-right: 13px;
         }
-
-        .input-rank {
-          width: 100%;
-
-          .input-center {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-
-            #rank1 {
-              width: 39%;
-              height: 20px;
-              padding: 5px;
-              border: 1px solid #eee;
-              margin-right: 5px;
-            }
-
-            #rank2 {
-              width: 39%;
-              padding: 5px;
-              border: 1px solid #eee;
-            }
-          }
-
-          .input-end {
-            width: 100%;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: center;
-
-            #title {
-              width: 80%;
-              padding: 5px;
-              height: 20px;
-              border: 1px solid #eee;
-            }
-          }
+        #rank2 {
+          width: 39%;
+          padding: 5px;
+          border: 1px solid #eee;
         }
       }
-
       .input-end {
         width: 100%;
         margin-bottom: 10px;
         display: flex;
         justify-content: center;
-
-        #rank3 {
+        #title {
           width: 80%;
           padding: 5px;
           height: 20px;
@@ -113,14 +70,12 @@ const MainBox = styled.main`
       }
     }
   }
-
   .main-content {
     display: flex;
     width: 80%;
     flex-direction: column;
     align-items: center;
     margin-bottom: 30px;
-
     .btn-font {
       background-color: white;
       border: none;
@@ -128,7 +83,6 @@ const MainBox = styled.main`
       margin-bottom: 10px;
       cursor: pointer;
     }
-
     .input-desc {
       width: 100%;
       height: 500px;
@@ -136,6 +90,19 @@ const MainBox = styled.main`
       border: 1px solid #eee;
       font-size: 0.8rem;
       line-height: 20px;
+    }
+  }
+  .footer-content {
+    margin-top: 20px;
+    .btn-footer {
+      width: 100px;
+      height: 30px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      color: #237a8e;
+      font-weight: bold;
+      cursor: pointer;
     }
   }
 `;
@@ -150,10 +117,8 @@ const Post = () => {
   const [rank1, setRank1] = useState();
   const [rank2, setRank2] = useState();
   const [title, setTitle] = useState();
-
-  const onClick = () => {
+  const onClick = async () => {
     const data = JSON.parse(localStorage.getItem("user"));
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("desc", desc);
@@ -161,46 +126,37 @@ const Post = () => {
       formData.append("uploadfileUrl", img);
     }
     formData.append("memberDTO.id", data.id);
-
     if (select == 1) {
-      // addMedia(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
       formData.append("sitterLoc", rank2);
-      addSitterBoard(formData);
+      await addSitterBoard(formData);
     } else if (select == 4) {
       formData.append("hospitalName", rank1);
       formData.append("hospitalAddress", rank2);
-      addHospitalBoard(formData);
+      await addHospitalBoard(formData);
     } else if (select == 5) {
     }
-
     navigate("../");
   };
-
   const InputDescHandler = (e) => {
     setDesc(e);
   };
-
   const selectChange = (e) => {
     setSelect(e.currentTarget.value);
   };
   /*
-
   const imageHandler = () => {
     console.log("이미지 버튼 누를 때 작동되는 핸들러임");
-
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
     input.click();
-
     input.addEventListener("change", async () => {
       console.log("파일 바뀌는 이벤트");
       const file = input.files[0];
       console.log(file);
-
             const imageUrl = await addImg(formData);
             console.log(imageUrl.data);
             const url = "/upload/" + imageUrl.data;
@@ -209,9 +165,7 @@ const Post = () => {
             editor.insertEmbed(range.index, 'image', url);
         })
     }
-
     */
-
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -239,7 +193,6 @@ const Post = () => {
           return new Promise((resolve, reject) => {
             const formData = new FormData();
             formData.append("file", file);
-
             fetch("http://localhost:8080/api/img", {
               method: "POST",
               body: formData,
@@ -262,7 +215,6 @@ const Post = () => {
     }),
     []
   );
-
   return (
     <Main>
       <div
@@ -299,8 +251,8 @@ const Post = () => {
             />
           ) : (
             <HospitalPost
-              rank1={setRank1}
-              rank2={setRank2}
+              setRank1={setRank1}
+              setRank2={setRank2}
               setTitle={setTitle}
             />
           )}
@@ -324,5 +276,4 @@ const Post = () => {
     </Main>
   );
 };
-
 export default Post;
