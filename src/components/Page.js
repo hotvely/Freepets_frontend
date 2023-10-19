@@ -1,9 +1,10 @@
-import '../css/page.css'
+import '../css/page.css';
 
-const Page = () => {
+const Page = ({page, totalPage, setPage}) => {
+  
     return (
-          <div className="page">
-            <ul className="pagination">
+          <div className="paging">
+            <ul className="paging-number">
               <li>
                 <a href="#" id="first">
                   처음 페이지
@@ -15,52 +16,57 @@ const Page = () => {
                 </a>
               </li>
               <li>
-                <a href="#" id="active-num">
+                <a href={'?page='+page} className="num">
                   1
                 </a>
               </li>
               <li>
-                <a href="#" id="num">
+                <a href="#" className="num">
                   2
                 </a>
               </li>
               <li>
-                <a href="#" id="num">
+                <a href="#" className="num">
                   3
                 </a>
               </li>
               <li>
-                <a href="#" id="num">
+                <a href="#" className="num">
                   4
                 </a>
               </li>
               <li>
-                <a href="#" id="num">
+                <a href="#" className="num">
                   5
                 </a>
               </li>
               <li>
-                <a href="#" id="num">
+                <a href="#" className="num">
                   6
                 </a>
               </li>
               <li>
-                <a href="#" id="num">
+                <a href="#" className="num">
                   7
                 </a>
               </li>
               <li>
-                <a href="#" id="num">
+                <a href="#" className="num">
                   8
                 </a>
               </li>
               <li>
-                <a href="#" id="num">
+                <a href="#" className="num">
                   9
                 </a>
               </li>
               <li>
-                <a href="#" id="arrow-right">
+                <a href="#" className="num">
+                  10
+                </a>
+              </li>
+              <li>
+                <a href="#" className="arrow-right">
                   ▶
                 </a>
               </li>

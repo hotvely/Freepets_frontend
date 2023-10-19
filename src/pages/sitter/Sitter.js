@@ -216,6 +216,8 @@ const Sitter = () => {
     e.preventDefault();
     e.stopPropagation();
     setModalCheck(true);
+    console.log(e.currentTarget);
+    console.log(e.currentTarget.id);
   };
 
   const handleModalClose = () => {
@@ -236,7 +238,16 @@ const Sitter = () => {
   };
 
   const ModalStyle = {
+    overlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.05)'
+    },
     content: {
+      position: 'absolute',
       top: "20vh",
       left: "15vw",
       bottom: "15vh",
@@ -357,7 +368,7 @@ const Sitter = () => {
                       <span id="sitterPrice">{items.sitterPrice}</span>₩
                     </p>
                     <div onClick={handleModalClick}>
-                      <button onClick={chattingClick}>1:1 대화</button>
+                      <button onClick={chattingClick} id={items.member.id}>1:1 대화</button>
                       <Modal
                         isOpen={modalCheck}
                         ariaHideApp={false}
