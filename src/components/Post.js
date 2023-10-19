@@ -3,7 +3,6 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
 import { addSitterBoard, addImg } from "../api/sitter";
-import { addMedia } from "../api/media";
 import SitterPost from "./SitterPost";
 import CommunityPost from "./CommunityPost";
 import LostPost from "./LostPost";
@@ -145,7 +144,6 @@ const Post = () => {
         formData.append("memberDTO.id", data.id);
 
         if (select == 1) {
-            await addMedia(formData);
         } else if (select == 2) {
         } else if (select == 3) {
             formData.append("sitterPrice", rank1);
