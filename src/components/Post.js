@@ -9,6 +9,7 @@ import HospitalPost from "./HospitalPost";
 import { useNavigate } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
 import CommunityPost from "./Community/CommunityPost";
+import Notice from "../pages/notice/Notice";
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
@@ -249,13 +250,15 @@ const Post = () => {
               setRank2={setRank2}
               setTitle={setTitle}
             />
-          ) : (
+          ) : select == 4 ? (
             <HospitalPost
               setRank1={setRank1}
               setRank2={setRank2}
               setTitle={setTitle}
             />
-          )}
+          ) : select == 5 ? (
+            <Notice setTitle={setTitle} />
+          ) : null}
         </div>
         <div className="main-content">
           <ReactQuill
