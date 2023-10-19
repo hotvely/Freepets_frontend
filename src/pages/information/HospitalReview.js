@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { getHospitalBoard } from "../../api/info";
 import banner from "../../resources/bannerTest.png";
 import testImg from "../../resources/image.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +11,7 @@ import {
   faComments,
   faCaretDown
 } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
 
 const MainStyle = styled.main`
   display: flex;
@@ -257,16 +259,26 @@ const PagingStyle = styled.div`
 
 const HospitalReview = () => {
   const navigator = useNavigate();
+  const [boards, setBoard] = useState([]);
   const NavWrite = () => {
     navigator("hospital/create");
   }
+
+  const getHospitalBoardAPI = async () => {
+    const result = await getHospitalBoard(1);
+    setBoard([...boards, ...result.data]);
+  }
+
+  useEffect(() => {
+    getHospitalBoardAPI();
+  }, []);
 
 
   return (
     <MainStyle>
         <div className="venner">
           <img src={banner}></img>
-        </div>
+        </div>   
         <MainHeader>
         <div className="header-start">
           <select>
@@ -274,8 +286,9 @@ const HospitalReview = () => {
             <option value="2">리뷰순</option>
             <option value="3">낮은 비용</option>
           </select>
+          {}
           <button className="button-write" onClick={NavWrite}>글쓰기</button>
-        </div>                 
+        </div>
         <div className="header-end">
           <div className="header-end-label">
             <label htmlFor="search">시터 조회</label>

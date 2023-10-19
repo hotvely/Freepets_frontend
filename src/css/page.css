@@ -1,0 +1,8 @@
+body {
+    background-color: aliceblue;
+}
+
+.page {
+    display: flex;
+    flex-direction: rows;
+}

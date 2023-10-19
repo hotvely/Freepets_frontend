@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import banner from "../../resources/bannerTest.png";
 import { faMagnifyingGlass, faCaretDown, faStar, faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "react-modal";
 import Img from "../../resources/kero.jpeg";
 import Chatting from "../Chatting";
 import { useEffect, useState } from "react";
+import Page from '../../components/Page';
 import { getBoardsBasic, getSitterSearch, getSitterPriceOrder } from "../../api/sitter";
 
 
@@ -320,17 +320,7 @@ const Sitter = () => {
                     </section>
                 </MainContent>
             </MainBox>
-            <div className="page">
-                <FontAwesomeIcon icon={faCaretLeft} style={{fontSize: "2.5rem", color: "#aaa"}}/>
-                <div className="page-btn">
-                    <button>5</button>
-                    <button>6</button>
-                    <button>7</button>
-                    <button>8</button>
-                    <button>9</button>
-                </div>
-                <FontAwesomeIcon icon={faCaretRight} style={{fontSize: "2.5rem", color: "#aaa"}}/>
-            </div>
+            <Page />
         </Main>
     )
 }

@@ -150,8 +150,7 @@ const Post = () => {
         } else if (select == 3) {
             formData.append("sitterPrice", rank1);
             formData.append("sitterLoc", rank2);
-            await addSitterBoard(formData);
-            
+            await addSitterBoard(formData);            
         } else if (select == 4) {
             formData.append("hospitalName", rank1);
             formData.append("hospitalAddress", rank2);
@@ -262,7 +261,7 @@ const Post = () => {
                     : select == 1 ? <CommunityPost setTitle={setTitle}/> 
                     : select == 2 ? <LostPost setTitle={setTitle}/> 
                     : select == 3 ? <SitterPost setRank1={setRank1} setRank2={setRank2} setTitle={setTitle} />
-                    : <HospitalPost rank1={setRank1} rank2={setRank2} setTitle={setTitle}/>}               
+                    : <HospitalPost setRank1={setRank1} setRank2={setRank2} setTitle={setTitle}/>}               
                 </div>
                 <div className="main-content">
                     <ReactQuill
