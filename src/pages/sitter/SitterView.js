@@ -3,7 +3,7 @@ import Img from "../../resources/kero.jpeg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { getReviews, getBoardView } from "../../api/sitter";
+import { getReviews, getBoardView, deleteSitterBoard } from "../../api/sitter";
 import { useLocation } from "react-router-dom";
 
 const Main = styled.div`
@@ -273,7 +273,7 @@ const ReviewContent = styled.div`
 `
 const StarArray = styled.div`
         display: flex;
-    `
+`
 
 const Star = ({color1, color2, color3, color4, color5}) => {
     return (
@@ -288,15 +288,79 @@ const Star = ({color1, color2, color3, color4, color5}) => {
 }
 
 const SitterView = () => {
-    const [star, setStar] = useState("");
     const location = useLocation();
     const [boardView, setBoardView] = useState(null);
     const [reviews, setReviews] = useState([]);
+    const [reviewDesc, setReviewDesc] = useState();
+    const [star, setStar] = useState(0);
+    const styleGray = {
+        color: "#aaa"
+    };
+    const styleOrange = {
+        color: "orange"
+    }
+    const [style1, setStyle1] = useState(styleGray);
+    const [style2, setStyle2] = useState(styleGray);
+    const [style3, setStyle3] = useState(styleGray);
+    const [style4, setStyle4] = useState(styleGray);
+    const [style5, setStyle5] = useState(styleGray);
+
     const data = JSON.parse(localStorage.getItem('user'));
 
     const onRatings = (event) => {
-        const color = event.target.style.color;
-        console.log(color);
+        switch(eval(event.currentTarget.value)) {
+            case 1:
+                setStyle1(styleOrange);
+                setStyle2(styleGray);
+                setStyle3(styleGray);
+                setStyle4(styleGray);
+                setStyle5(styleGray);
+                setStar(1);
+                break;
+            case 2:
+                setStyle1(styleOrange);
+                setStyle2(styleOrange);
+                setStyle3(styleGray);
+                setStyle4(styleGray);
+                setStyle5(styleGray);
+                setStar(2);
+                break;
+            case 3:
+                setStyle1(styleOrange);
+                setStyle2(styleOrange);
+                setStyle3(styleOrange);
+                setStyle4(styleGray);
+                setStyle5(styleGray);
+                setStar(3);
+                break;
+            case 4:
+                setStyle1(styleOrange);
+                setStyle2(styleOrange);
+                setStyle3(styleOrange);
+                setStyle4(styleOrange);
+                setStyle5(styleGray);
+                setStar(4);
+                break;
+            case 5:
+                setStyle1(styleOrange);
+                setStyle2(styleOrange);
+                setStyle3(styleOrange);
+                setStyle4(styleOrange);
+                setStyle5(styleOrange);
+                setStar(5);
+                break;
+        }
+    }
+
+    const onReviewEnroll = () => {
+        if(boardView?.memberDTO.id != data.id) {
+            const formData = new FormData();
+            formData.append("member.id", data.id);
+            formData.append("sitterReviewRatings", star);
+            formData.append("sitterReviewDesc", reviewDesc);
+        } else {
+            window.alert('자신의 글에는 리뷰를 등록할 수 없습니다.');
+        }
     }
 
     const boardViewAPI = async () => {
@@ -309,6 +373,14 @@ const SitterView = () => {
         setReviews([...reviews, ...reviewsResult.data]);
     }
 
+    const onDeleteBoard = async () => {
+        const response = window.confirm('정말로 삭제하시겠습니까?');
+        if(response) {
+           await deleteSitterBoard(location.state.code);
+           alert('삭제되었습니다.');
+        }
+    }
+
     useEffect(() => {
         boardViewAPI();
         getReviewsAPI();
@@ -319,16 +391,16 @@ const SitterView = () => {
             <div style={{width : "100%", height : "100px", backgroundColor: "black", marginBottom : "50px", padding: "0px 10px"}}></div>
             <MainBox>
                 <MainContent>
-                    <div className="main-header" key={boardView?.sitterCode}>
+                    <div className="main-header" key={boardView?.boardCode}>
                         <div className="main-header_start">
-                            <p id="sitterTitle">{boardView?.sitterTitle}</p>
+                            <p id="sitterTitle">{boardView?.title}</p>
                         </div>
                         <div className="main-header_end">
                             <div className="main-header_end-user">
                                 <img src={Img} style={{width : "100px", height: "100px", objectFit: "cover"}}/>
                                 <div className="main-header_end-user_info">
                                     <div className="main-header_end-user_info-name">
-                                        <p id="nickname">{boardView?.member.nickname}</p>
+                                        <p id="nickname">{boardView?.memberDTO.nickname}</p>
                                         <p id="ratings"><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/><span>{boardView?.sitterRatings}</span></p>
                                     </div>
                                     <div className="main-header_end-user_info_loc">
@@ -340,12 +412,12 @@ const SitterView = () => {
                         </div>
                     </div>
                     <div className="main-content">
-                        <div id="sitterDesc" dangerouslySetInnerHTML={{__html: String(boardView?.sitterDesc)}} />
+                        <div id="sitterDesc" dangerouslySetInnerHTML={{__html: String(boardView?.desc)}} />
                     </div>
-                    {boardView?.member.id == data.id ? 
+                    {boardView?.memberDTO.id == data.id ? 
                         <div className="main-button">
                             <button className="update">수정</button>
-                            <button className="delete">삭제</button>
+                            <button className="delete" onClick={onDeleteBoard}>삭제</button>
                         </div> : <div></div>
                     }                    
                 </MainContent>
@@ -359,20 +431,20 @@ const SitterView = () => {
                                 <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
                                 <div className="write-content_header-start">
                                     <div className="write-content_header-start_name">
-                                        <p id="nickname">베로</p>
+                                        <p id="nickname">{data.nickname}</p>
                                     </div>
                                     <div className="write-content_header-start_ratings">                                       
-                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "orange"}}/></button>
-                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
-                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
-                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
-                                        <button onClick={onRatings}><FontAwesomeIcon icon={faStar} style={{color: "#aaa"}}/></button>
+                                        <button onClick={onRatings} value="1"><FontAwesomeIcon icon={faStar} style={style1}/></button>
+                                        <button onClick={onRatings} value="2"><FontAwesomeIcon icon={faStar} style={style2}/></button>
+                                        <button onClick={onRatings} value="3"><FontAwesomeIcon icon={faStar} style={style3}/></button>
+                                        <button onClick={onRatings} value="4"><FontAwesomeIcon icon={faStar} style={style4}/></button>
+                                        <button onClick={onRatings} value="5"><FontAwesomeIcon icon={faStar} style={style5}/></button>
                                     </div>
                                 </div>                               
                             </div>                
                             <div contentEditable="true" id="sitterReviewDesc"></div>
                             <div className="write-content_center-button">
-                                <button>등록</button>
+                                <button onClick={onReviewEnroll}>등록</button>
                             </div>                       
                         </div>
                     </div>

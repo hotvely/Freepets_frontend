@@ -284,8 +284,7 @@ const CMediaList = () => {
   const MediaListAPI = async () => {
     // 게시글 목록 데이터
     const result = await getMediaList(page);
-    console.log(result.data);
-    setMediae([...mediae, ...mediae.data]);
+    setMediae([...mediae, ...result.data]);
   };
 
   useEffect(() => {
@@ -305,9 +304,7 @@ const CMediaList = () => {
           <div className="media-sort">
             <div className="media-sort-like">
               <select>
-                <option value="1" selected>
-                  최신순
-                </option>
+                <option value="1">최신순</option>
                 <option value="2">추천순</option>
                 <option value="3">댓글순</option>
                 <option value="4">조회순</option>
@@ -316,12 +313,9 @@ const CMediaList = () => {
 
             <div className="media-sort-category">
               <select className="category">
-                <option value="1" selected>
-                  모든펫츠
-                </option>
+                <option value="1">모든펫츠</option>
                 <option value="2">반려펫츠</option>
                 <option value="3">스트릿펫츠</option>
-                <option value="4">찾아줘요펫츠</option>
               </select>
             </div>
 
@@ -366,10 +360,15 @@ const CMediaList = () => {
                   to={"/commonview/" + media.commonCode}
                   className="media-thumbnail"
                 >
-                  <img
-                    src={"/upload/" + media.commonAddFileUrl}
-                    alt="미디어썸네일"
-                  />
+                  <p>
+                    <img
+                      src={media.commonDesc.substring(
+                        media.commonDesc.indexOf('<img src="') + 10,
+                        media.commonDesc.indexOf('">')
+                      )}
+                      alt="미디어썸네일"
+                    />
+                  </p>
                 </Link>
 
                 <div className="media-info">

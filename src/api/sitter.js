@@ -14,6 +14,10 @@ export const getBoardView = async (id) => {
   return await instance.get(url);
 };
 
+export const addReview = async (data) => {
+  return await instance.post("sitterReview", data);
+};
+
 export const getReviews = async (id) => {
   let url = `sitter/${id}/review`;
   return await instance.get(url);
@@ -25,4 +29,8 @@ export const addSitterBoard = async (data) => {
 
 export const addImg = async (data) => {
   return await instance.post("img", data);
+};
+export const deleteSitterBoard = async (id) => {
+  let url = `sitter/${id}`;
+  return await instance.delete(url);
 };

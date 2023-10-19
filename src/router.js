@@ -16,11 +16,13 @@ import MemberFindPwd from "./pages/member/MemberFindPwd";
 import Post from "./components/Post";
 
 import CMediaList from "./pages/community/common/CMediaList";
-import CommonCreate from "./pages/community/common/CommonCreate";
 import CommonList from "./pages/community/common/CommonList";
 import CommonView from "./pages/community/common/CommonView";
 import Notice from "./pages/notice/Notice";
 import NoticeView from "./pages/notice/NoticeView";
+import LMediaList from "./pages/community/lost/LMediaList";
+import LostList from "./pages/community/lost/LostList";
+import LostView from "./pages/community/lost/LostView";
 
 const router = createBrowserRouter([
   {
@@ -106,8 +108,34 @@ const router = createBrowserRouter([
             element: <CommonView />,
           },
           {
-            path: "commoncreate",
-            element: <CommonCreate />,
+            path: "community/create",
+            element: <Post />,
+          },
+        ],
+      },
+      {
+        path: "lost",
+        element: <BLayout />, // Lost의 레이아웃
+        children: [
+          {
+            index: true,
+            element: <LMediaList />,
+          },
+          {
+            path: "lmedialist",
+            element: <LMediaList />,
+          },
+          {
+            path: "lostList",
+            element: <LostList />,
+          },
+          {
+            path: "lostview/:id",
+            element: <LostView />,
+          },
+          {
+            path: "community/create",
+            element: <Post />,
           },
         ],
       },
