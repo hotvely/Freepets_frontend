@@ -10,7 +10,6 @@ import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
 import { useNavigate } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
-
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
@@ -26,30 +25,25 @@ const MainBox = styled.main`
   padding: 20px 10px;
   width: 100%;
   border: 1px solid #b1deec;
-
   .header-content {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 30px;
-
     .select-category {
       width: 81%;
       height: 30px;
       margin-bottom: 10px;
       border: solid 1px #eee;
     }
-
     .input-rank {
       width: 100%;
-
       .input-center {
         width: 100%;
         display: flex;
         justify-content: center;
         margin-bottom: 10px;
-
         #rank1 {
           width: 39%;
           height: 20px;
@@ -57,20 +51,17 @@ const MainBox = styled.main`
           border: 1px solid #eee;
           margin-right: 13px;
         }
-
         #rank2 {
           width: 39%;
           padding: 5px;
           border: 1px solid #eee;
         }
       }
-
       .input-end {
         width: 100%;
         margin-bottom: 10px;
         display: flex;
         justify-content: center;
-
         #title {
           width: 80%;
           padding: 5px;
@@ -80,14 +71,12 @@ const MainBox = styled.main`
       }
     }
   }
-
   .main-content {
     display: flex;
     width: 80%;
     flex-direction: column;
     align-items: center;
     margin-bottom: 30px;
-
     .btn-font {
       background-color: white;
       border: none;
@@ -95,7 +84,6 @@ const MainBox = styled.main`
       margin-bottom: 10px;
       cursor: pointer;
     }
-
     .input-desc {
       width: 100%;
       height: 500px;
@@ -103,6 +91,19 @@ const MainBox = styled.main`
       border: 1px solid #eee;
       font-size: 0.8rem;
       line-height: 20px;
+    }
+  }
+  .footer-content {
+    margin-top: 20px;
+    .btn-footer {
+      width: 100px;
+      height: 30px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      color: #237a8e;
+      font-weight: bold;
+      cursor: pointer;
     }
   }
 `;
