@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncDelete, userSave } from "../../components/store/userSlice";
 import ReactModal from "react-modal";
-import MemberUpdate from "./memberUpdate";
+import MemberUpdate from "./MemberUpdate";
 import Logout from "./Logout";
 
 const MyPageMain = styled.main`
