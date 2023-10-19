@@ -409,7 +409,7 @@ const CMediaList = () => {
             <button>검색</button>
           </div>
         </div>
-        {ListBtn == 1 ? boardTypeForMedia() : <CommunityList />}
+        {ListBtn == 1 ? boardTypeForMedia() : <CommunityList mediae={mediae} />}
         <div className="main-bottom">
           {/* 페이지 넘기는 바 만들기
          <div id="paging"></div> */}

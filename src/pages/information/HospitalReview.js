@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getHospitalBoard } from "../../api/info";
+import { getHospitalBoard } from "../../../src/api/info";
 import banner from "../../resources/bannerTest.png";
 import testImg from "../../resources/image.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,7 @@ import {
   faThumbsUp,
   faEye,
   faComments,
-  faCaretDown
+  faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
@@ -46,7 +46,7 @@ const MainStyle = styled.main`
         font-size: 0.8rem;
         font-weight: bold;
         text-align: center;
-        background-color: #EDEDED;
+        background-color: #ededed;
         color: #3a98b9;
         border: none;
       }
@@ -57,7 +57,7 @@ const MainStyle = styled.main`
         border: none;
         color: #3a98b9;
         font-weight: bold;
-        background-color: #EDEDED;
+        background-color: #ededed;
       }
     }
     .search {
@@ -87,70 +87,69 @@ const MainStyle = styled.main`
 `;
 
 const MainHeader = styled.header`
-    width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 20px;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  .header-end {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+    background-color: #ededed;
+    align-items: center;
+    border-radius: 10px;
+    height: 30px;
 
-    .header-end {       
-        display: flex;
-        background-color: #EDEDED;
-        align-items: center;
-        border-radius: 10px;
-        height: 30px;
+    .header-end-label {
+      margin-right: 5px;
+      padding-left: 10px;
 
-        .header-end-label {
-            margin-right: 5px;
-            padding-left: 10px;
-
-            label {
-                font-size: 0.8rem;
-                font-weight: bold;
-                color: #3a98b9;
-                margin-right: 5px;
-            }
-        }
-        
-        #search {
-            background-color: #EDEDED;
-            border: none;
-        }
-
-        button {
-            border: none;
-            cursor: pointer;
-        }
-    }
-
-    select {
-        width: 90px;
-        height: 30px;
-        text-align: center;
-        border: none;
-        border-radius: 10px;
-        color: #3a98b9;
+      label {
         font-size: 0.8rem;
         font-weight: bold;
-        background-color: #EDEDED;
+        color: #3a98b9;
+        margin-right: 5px;
+      }
     }
 
-    .button-write {
-        width: 90px;
-        height: 30px;
-        border: none;
-        margin-left: 10px;
-        border-radius: 10px;
-        color: #3a98b9;
-        font-size: 0.8rem;
-        font-weight: bold;
-        background-color: #EDEDED;
-        cursor: pointer;
+    #search {
+      background-color: #ededed;
+      border: none;
     }
-    
-`
+
+    button {
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  select {
+    width: 90px;
+    height: 30px;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    color: #3a98b9;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: #ededed;
+  }
+
+  .button-write {
+    width: 90px;
+    height: 30px;
+    border: none;
+    margin-left: 10px;
+    border-radius: 10px;
+    color: #3a98b9;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: #ededed;
+    cursor: pointer;
+  }
+`;
 
 const ContentStyle = styled.div`
   width: 100%;
@@ -262,24 +261,23 @@ const HospitalReview = () => {
   const [boards, setBoard] = useState([]);
   const NavWrite = () => {
     navigator("hospital/create");
-  }
+  };
 
   const getHospitalBoardAPI = async () => {
     const result = await getHospitalBoard(1);
     setBoard([...boards, ...result.data]);
-  }
+  };
 
   useEffect(() => {
     getHospitalBoardAPI();
   }, []);
 
-
   return (
     <MainStyle>
-        <div className="venner">
-          <img src={banner}></img>
-        </div>   
-        <MainHeader>
+      <div className="venner">
+        <img src={banner}></img>
+      </div>
+      <MainHeader>
         <div className="header-start">
           <select>
             <option value="1">추천순</option>
@@ -287,16 +285,23 @@ const HospitalReview = () => {
             <option value="3">낮은 비용</option>
           </select>
           {}
-          <button className="button-write" onClick={NavWrite}>글쓰기</button>
+          <button className="button-write" onClick={NavWrite}>
+            글쓰기
+          </button>
         </div>
         <div className="header-end">
           <div className="header-end-label">
             <label htmlFor="search">시터 조회</label>
-            <FontAwesomeIcon icon={faCaretDown} style={{color: "#3a98b9"}}/>
+            <FontAwesomeIcon icon={faCaretDown} style={{ color: "#3a98b9" }} />
           </div>
-          <input type="search" id="search" name="search"/>
-          <button><FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#3a98b9"}}/></button>                       
-        </div>                                      
+          <input type="search" id="search" name="search" />
+          <button>
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              style={{ color: "#3a98b9" }}
+            />
+          </button>
+        </div>
       </MainHeader>
       <ContentStyle>
         <section>
@@ -343,4 +348,3 @@ const HospitalReview = () => {
   );
 };
 export default HospitalReview;
-
