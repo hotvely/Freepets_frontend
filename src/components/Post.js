@@ -2,16 +2,14 @@ import { useMemo, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
-import { addSitterBoard, addImg } from "../api/sitter";
-import { addMedia } from "../api/media";
+import { addSitterBoard } from "../api/sitter";
+// import { addMedia } from "../api/media";
 import SitterPost from "./SitterPost";
-import CommunityPost from "./CommunityPost";
+import CommunityPost from "../components/Community/CommunityPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
-import NoticePost from "./NoticePost";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
-import { addNoticeBoard } from "../api/notice";
 
 const Main = styled.div`
   margin: 0px 40px;
@@ -165,7 +163,7 @@ const Post = () => {
     formData.append("memberDTO.id", data.id);
 
     if (select == 1) {
-      addMedia(formData);
+      // addMedia(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);

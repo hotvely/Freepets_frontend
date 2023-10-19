@@ -4,7 +4,7 @@ const instance = axios.create({
   baseURL: "http://localhost:8080/api/",
 });
 
-export const getBoardsBasic = async (page) => {
+export const getBoardsByPage = async (page) => {
   console.log("get page 로 게시글들 받아옴");
   let url = `notice?page=${page}`;
 

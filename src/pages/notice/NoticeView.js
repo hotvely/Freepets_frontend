@@ -6,26 +6,20 @@ import {
   faComments,
   faArrowUpFromBracket,
   faBookmark,
-  faL,
 } from "@fortawesome/free-solid-svg-icons";
 import testImg from "../../../src/resources/image.jpg";
 import banner from "../../../src/resources/bannerTest.png";
-import { useLocation, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
   addCommentAPI,
-  addNoticePostComment,
-  boardViewAPI,
-  getBoardView,
   getBoardViewAPI,
-  getComments,
   getCommentsAPI,
-  getReCommentsAPI,
-  getReviews,
 } from "../../api/notice";
-import { async } from "q";
 import CommentComponent from "./CommentComponent";
 import ReCommentComponent from "./ReCommentComponent";
+import { addBookmarkAPI } from "../../api/bookmark";
+import { useSelector } from "react-redux";
 
 const StyledMain = styled.main`
   display: flex;
@@ -275,6 +269,10 @@ const NoticeView = () => {
   const [comments, setComments] = useState([]);
   const [selected_Comment, setSelected_Comment] = useState(0);
 
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
   const getPostHandler = async () => {
     const post = await getBoardViewAPI(code);
     if (post) {
@@ -295,7 +293,7 @@ const NoticeView = () => {
     console.log(e.target.commentDesc.id);
     const parentCode = e.target.commentDesc.id;
     const formData = {
-      token: localStorage.getItem("token"),
+      token: user.token,
       boardName: "notice",
       postCode: code,
       parentCommentCode: parentCode, //부모 댓글의 코드를 백으로 넘기는 법
@@ -312,6 +310,19 @@ const NoticeView = () => {
       }
     } else {
       alert("댓글 작성후 등록하세요");
+    }
+  };
+
+  const addBookmarkHandler = async () => {
+    if (postData.noticeCode) {
+      const formData = {
+        boardName: "notice",
+        postCode: postData.noticeCode,
+        token: user.token,
+      };
+      console.log(formData);
+
+      addBookmarkAPI(formData);
     }
   };
 
@@ -397,6 +408,7 @@ const NoticeView = () => {
               margin: "0px 5px",
               fontSize: "20px",
             }}
+            onClick={addBookmarkHandler}
           />
         </div>
       </div>

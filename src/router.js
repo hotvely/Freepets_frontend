@@ -114,30 +114,30 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "lost",
-        element: <BLayout />, // Lost의 레이아웃
-        children: [
-          {
-            index: true,
-            element: <LMediaList />,
-          },
-          {
-            path: "lmedialist",
-            element: <LMediaList />,
-          },
-          {
-            path: "lostList",
-            element: <LostList />,
-          },
-          {
-            path: "lostview/:id",
-            element: <LostView />,
-          },
-          {
-            path: "community/create",
-            element: <Post />,
-          },
-        ],
+        // path: "lost",
+        // element: <BLayout />, // Lost의 레이아웃
+        // children: [
+        //   {
+        //     index: true,
+        //     element: <LMediaList />,
+        //   },
+        //   {
+        //     path: "lmedialist",
+        //     element: <LMediaList />,
+        //   },
+        //   {
+        //     path: "lostList",
+        //     element: <LostList />,
+        //   },
+        //   {
+        //     path: "lostview/:id",
+        //     element: <LostView />,
+        //   },
+        //   {
+        //     path: "community/create",
+        //     element: <Post />,
+        //   },
+        // ],
       },
     ],
   },

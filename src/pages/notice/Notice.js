@@ -12,7 +12,12 @@ import {
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { addNoticeBoard, boardAPI, getBoardsBasic } from "../../api/notice";
+import {
+  addNoticeBoard,
+  boardAPI,
+  getBoardsBasic,
+  getBoardsByPage,
+} from "../../api/notice";
 import { Link } from "react-router-dom";
 import Post from "../../components/Post";
 
@@ -189,6 +194,7 @@ const PagingStyle = styled.div`
 const Notice = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+  const [maxpage, setMaxPage] = useState();
   const [boards, setBoards] = useState([]);
 
   const user = useSelector((state) => {
@@ -196,13 +202,20 @@ const Notice = () => {
   });
 
   const getBoardHandler = async () => {
-    const response = await getBoardsBasic(page);
+    const response = await getBoardsByPage(page);
 
     setBoards([...boards, ...response.data]);
   };
-  // console.log("보드 API 실행해서 DB에서 값 가져오는중..");
-  // console.log(boardResult);
-  // setBoards([...boards, ...boardResult.data]);
+
+  const pagingHandler = (startPage) => {
+    const container_HTML = document.getElementById("paging-num");
+    for (let idx = startPage; idx < startPage + 10; idx++) {
+      const button = document.createElement("button"); // li 요소 생성
+      button.textContent = idx;
+
+      container_HTML.appendChild(button);
+    }
+  };
 
   useEffect(() => {
     getBoardHandler();
@@ -295,13 +308,7 @@ const Notice = () => {
           </button>
         </section>
       </ContentStyle>
-      <PagingStyle>
-        <div>
-          <a href="#"> Prev</a>
-          <a href="#">Num</a>
-          <a href="#">Next</a>
-        </div>
-      </PagingStyle>
+      <PagingStyle>페이지 네비게이션 도경쓰 컴포넌트 붙이기</PagingStyle>
     </MainStyle>
   );
 };
