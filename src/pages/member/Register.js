@@ -186,9 +186,12 @@ const Register = () => {
   const user = useSelector((state) => {
     return state.user;
   });
+  console.log(user);
 
   useEffect(() => {
-    console.log(user);
+    console.log("useEffect");
+    // console.log(user);
+    // console.log(Object.keys(user).length);
     if (user !== null && Object.keys(user).length !== 0) {
       console.log("가입성공");
       navigate("/main");
@@ -201,6 +204,7 @@ const Register = () => {
       navigate("/auth/register");
     }
   }, [user]);
+  // console.log(user);
 
   const checkGender = () => {
     const result = [];
@@ -250,7 +254,7 @@ const Register = () => {
       address: e.target.userAddr.value,
       nickname: e.target.userNickname.value,
     };
-
+    console.log(formData);
     dispatch(asyncRegister(formData));
   };
 
