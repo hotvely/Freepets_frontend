@@ -3,7 +3,7 @@ import styled from "styled-components";
 import banner from "../../../resources/bannerTest.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
-import { getMediaList } from "../../../api/media";
+import { getCommunityList } from "../../../api/community";
 import { Link, useNavigate } from "react-router-dom";
 
 const MainStlye = styled.div`
@@ -264,7 +264,7 @@ const CMediaList = () => {
   };
 
   const onClickListBoard = () => {
-    window.location.href = "/lost";
+    window.location.href = "/community/common/commonlist";
     // 게시글 타입 변경
   };
 
@@ -283,7 +283,7 @@ const CMediaList = () => {
 
   const MediaListAPI = async () => {
     // 게시글 목록 데이터
-    const result = await getMediaList(page);
+    const result = await getCommunityList(page);
     setMediae([...mediae, ...result.data]);
   };
 
@@ -311,13 +311,13 @@ const CMediaList = () => {
               </select>
             </div>
 
-            <div className="media-sort-category">
+            {/* <div className="media-sort-category">
               <select className="category">
                 <option value="1">모든펫츠</option>
                 <option value="2">반려펫츠</option>
                 <option value="3">스트릿펫츠</option>
               </select>
-            </div>
+            </div> */}
 
             <div className="view-board">
               <div className="view-check-board">
@@ -608,7 +608,7 @@ const CMediaList = () => {
             </ul>
           </div>
           <div id="write-btn">
-            <a href="information/hospital/create">
+            <a href="/community/common/cmedialist/create">
               <button>글쓰기</button>
             </a>
           </div>
