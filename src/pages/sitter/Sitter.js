@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import banner from "../../resources/bannerTest.png";
 import { faMagnifyingGlass, faCaretDown, faStar, faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "react-modal";
 import Img from "../../resources/kero.jpeg";
 import Chatting from "../Chatting";
 import { useEffect, useState } from "react";
-import { getBoardsBasic } from "../../api/sitter";
+import Page from '../../components/Page';
+import { getBoardsBasic, getSitterSearch, getSitterPriceOrder } from "../../api/sitter";
 
 
 const Main = styled.div`
@@ -187,6 +187,7 @@ const MainContent = styled.main`
 
 const Sitter = () => {
     const [boards, setBoards] = useState([]);
+    const [search, setSearch] = useState();
     const navigator = useNavigate();
     const [page, setPage] = useState(1);   
     const [modalCheck, setModalCheck] = useState(false);
@@ -221,6 +222,15 @@ const Sitter = () => {
         navigator("create");
     };
 
+    const userSearch = (e) => {
+        setSearch(e.target.value);
+    }
+
+    const userSearchClick = async () => {
+        const result = await getSitterSearch(1, search);
+        setBoards(result.data);
+    };
+
     const ModalStyle = {
         content: {
             top: '20vh',
@@ -230,13 +240,26 @@ const Sitter = () => {
         }
     };
 
-    const selectChange = (e) => {
+    const selectChange = async (e) => {
         let selectValue = e.target.value;
+        console.log(selectValue);
+        switch(eval(selectValue)) {
+            case 1:
+                boardAPI();
+                break;
+            case 2:
+                const resultDesc = await getSitterPriceOrder("desc");
+                setBoards(resultDesc.data);
+                break;
+            case 3:
+                const resultAsc = await getSitterPriceOrder("asc");
+                setBoards(resultAsc.data);
+        }
     }
 
     const boardAPI = async () => {
         const boardResult = await getBoardsBasic(page);
-        setBoards([...boards, ...boardResult.data]);
+        setBoards(boardResult.data);
     }
 
     useEffect(() => {
@@ -250,8 +273,8 @@ const Sitter = () => {
                 <MainHeader>
                     <div className="header-start">
                         <select onChange={selectChange}>
-                            <option value="1">추천순</option>
-                            <option value="2">리뷰순</option>
+                            <option value="1">최신순</option>
+                            <option value="2">높은 비용</option>
                             <option value="3">낮은 비용</option>
                         </select>
                         <button onClick={NavCreate} className="button-write">글쓰기</button>
@@ -261,8 +284,8 @@ const Sitter = () => {
                             <label htmlFor="search">시터 조회</label>
                             <FontAwesomeIcon icon={faCaretDown} style={{color: "#3a98b9"}}/>
                         </div>
-                        <input type="search" id="search" name="search"/>
-                        <button><FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#3a98b9"}}/></button>                       
+                        <input type="text" id="search" name="search"onChange={userSearch}/>
+                        <button onClick={userSearchClick}><FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#3a98b9"}}/></button>                       
                     </div>                                      
                 </MainHeader>
                 <MainContent>
@@ -297,17 +320,7 @@ const Sitter = () => {
                     </section>
                 </MainContent>
             </MainBox>
-            <div className="page">
-                <FontAwesomeIcon icon={faCaretLeft} style={{fontSize: "2.5rem", color: "#aaa"}}/>
-                <div className="page-btn">
-                    <button>5</button>
-                    <button>6</button>
-                    <button>7</button>
-                    <button>8</button>
-                    <button>9</button>
-                </div>
-                <FontAwesomeIcon icon={faCaretRight} style={{fontSize: "2.5rem", color: "#aaa"}}/>
-            </div>
+            <Page />
         </Main>
     )
 }

@@ -3,7 +3,6 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
 import { addSitterBoard, addImg } from "../api/sitter";
-import { addMedia } from "../api/media";
 import SitterPost from "./SitterPost";
 import CommunityPost from "./CommunityPost";
 import LostPost from "./LostPost";
@@ -153,31 +152,21 @@ const Post = () => {
   const [rank2, setRank2] = useState();
   const [title, setTitle] = useState();
 
-  const onClick = () => {
+  const onClick = async () => {
     const data = JSON.parse(localStorage.getItem("user"));
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("desc", desc);
-    if (img != null) {
-      formData.append("uploadfileUrl", img);
-    }
-    formData.append("memberDTO.id", data.id);
-
     if (select == 1) {
-      addMedia(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
       formData.append("sitterLoc", rank2);
-      addSitterBoard(formData);
+      await addSitterBoard(formData);
     } else if (select == 4) {
       formData.append("hospitalName", rank1);
       formData.append("hospitalAddress", rank2);
-      addHospitalBoard(formData);
+      await addHospitalBoard(formData);
     } else if (select == 5) {
     }
-
     navigate("../");
   };
 
@@ -301,8 +290,8 @@ const Post = () => {
             />
           ) : (
             <HospitalPost
-              rank1={setRank1}
-              rank2={setRank2}
+              setRank1={setRank1}
+              setRank2={setRank2}
               setTitle={setTitle}
             />
           )}
