@@ -18,6 +18,8 @@ import Post from "./components/Post";
 import CMediaList from "./pages/community/common/CMediaList";
 import CommonList from "./pages/community/common/CommonList";
 import CommonView from "./pages/community/common/CommonView";
+import Notice from "./pages/notice/Notice";
+import NoticeView from "./pages/notice/NoticeView";
 import LMediaList from "./pages/community/lost/LMediaList";
 import LostList from "./pages/community/lost/LostList";
 import LostView from "./pages/community/lost/LostView";
@@ -41,7 +43,28 @@ const router = createBrowserRouter([
       },
     ],
   },
-
+  {
+    path: "/notice",
+    element: <BLayout />,
+    children: [
+      {
+        index: true,
+        element: <Notice />,
+      },
+      {
+        path: "create",
+        element: <Post />,
+      },
+      {
+        path: "noticeView/:code",
+        element: <NoticeView />,
+      },
+      {
+        path: "event",
+        element: <EventCalendar />,
+      },
+    ],
+  },
   {
     path: "/information",
     element: <BLayout />,
@@ -69,7 +92,8 @@ const router = createBrowserRouter([
         element: <CMediaList />,
       },
       {
-        path: "common", // Common의 레이아웃
+        path: "common",
+
         children: [
           {
             path: "cmedialist",
@@ -80,15 +104,11 @@ const router = createBrowserRouter([
             element: <CommonList />,
           },
           {
-            path: "cmedialist/commonview",
+            path: "commonview/:id",
             element: <CommonView />,
           },
           {
-            path: "cmedialist/create",
-            element: <Post />,
-          },
-          {
-            path: "commonlist/create",
+            path: "community/create",
             element: <Post />,
           },
         ],
@@ -137,16 +157,6 @@ const router = createBrowserRouter([
       {
         path: "create",
         element: <Post />,
-      },
-    ],
-  },
-  {
-    path: "/event",
-    element: <BLayout />,
-    children: [
-      {
-        index: true,
-        element: <EventCalendar />,
       },
     ],
   },

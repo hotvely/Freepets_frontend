@@ -3,13 +3,16 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
 import { addSitterBoard, addImg } from "../api/sitter";
-import { addCommunity } from "../api/community";
+import { addMedia } from "../api/media";
 import SitterPost from "./SitterPost";
-import CommunityPost from "./Community/CommunityPost";
+import CommunityPost from "./CommunityPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
-import { useNavigate } from "react-router-dom";
+import NoticePost from "./NoticePost";
+import { Link, useNavigate } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
+import { addNoticeBoard } from "../api/notice";
+
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
@@ -25,25 +28,30 @@ const MainBox = styled.main`
   padding: 20px 10px;
   width: 100%;
   border: 1px solid #b1deec;
+
   .header-content {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 30px;
+
     .select-category {
       width: 81%;
       height: 30px;
       margin-bottom: 10px;
       border: solid 1px #eee;
     }
+
     .input-rank {
       width: 100%;
+
       .input-center {
         width: 100%;
         display: flex;
         justify-content: center;
         margin-bottom: 10px;
+
         #rank1 {
           width: 39%;
           height: 20px;
@@ -51,18 +59,54 @@ const MainBox = styled.main`
           border: 1px solid #eee;
           margin-right: 13px;
         }
-        #rank2 {
-          width: 39%;
-          padding: 5px;
-          border: 1px solid #eee;
+
+        .input-rank {
+          width: 100%;
+
+          .input-center {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+
+            #rank1 {
+              width: 39%;
+              height: 20px;
+              padding: 5px;
+              border: 1px solid #eee;
+              margin-right: 5px;
+            }
+
+            #rank2 {
+              width: 39%;
+              padding: 5px;
+              border: 1px solid #eee;
+            }
+          }
+
+          .input-end {
+            width: 100%;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+
+            #title {
+              width: 80%;
+              padding: 5px;
+              height: 20px;
+              border: 1px solid #eee;
+            }
+          }
         }
       }
+
       .input-end {
         width: 100%;
         margin-bottom: 10px;
         display: flex;
         justify-content: center;
-        #title {
+
+        #rank3 {
           width: 80%;
           padding: 5px;
           height: 20px;
@@ -71,12 +115,14 @@ const MainBox = styled.main`
       }
     }
   }
+
   .main-content {
     display: flex;
     width: 80%;
     flex-direction: column;
     align-items: center;
     margin-bottom: 30px;
+
     .btn-font {
       background-color: white;
       border: none;
@@ -84,6 +130,7 @@ const MainBox = styled.main`
       margin-bottom: 10px;
       cursor: pointer;
     }
+
     .input-desc {
       width: 100%;
       height: 500px;
@@ -93,21 +140,7 @@ const MainBox = styled.main`
       line-height: 20px;
     }
   }
-  .footer-content {
-    margin-top: 20px;
-    .btn-footer {
-      width: 100px;
-      height: 30px;
-      margin: 5px;
-      border: none;
-      border-radius: 5px;
-      color: #237a8e;
-      font-weight: bold;
-      cursor: pointer;
-    }
-  }
 `;
-
 Quill.register("modules/imageUploader", ImageUploader);
 const Post = () => {
   const navigate = useNavigate();
@@ -120,8 +153,9 @@ const Post = () => {
   const [rank2, setRank2] = useState();
   const [title, setTitle] = useState();
 
-  const onClick = async () => {
+  const onClick = () => {
     const data = JSON.parse(localStorage.getItem("user"));
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("desc", desc);
@@ -131,18 +165,19 @@ const Post = () => {
     formData.append("memberDTO.id", data.id);
 
     if (select == 1) {
-      await addCommunity(formData);
+      addMedia(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
       formData.append("sitterLoc", rank2);
-      await addSitterBoard(formData);
+      addSitterBoard(formData);
     } else if (select == 4) {
       formData.append("hospitalName", rank1);
       formData.append("hospitalAddress", rank2);
-      await addHospitalBoard(formData);
+      addHospitalBoard(formData);
     } else if (select == 5) {
     }
+
     navigate("../");
   };
 
