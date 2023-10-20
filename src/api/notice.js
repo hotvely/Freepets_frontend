@@ -15,18 +15,19 @@ export const getBoardViewAPI = async (code) => {
   return await instance.get(`notice/${code}`);
 };
 
-export const getSearchAPI = async (keyword, page) => {
-  console.log(keyword);
-  return await instance.get(`notice/search/${encodeURI(keyword)}?page=${page}`);
+export const getSearchAPI = async (keyword) => {
+
+  let url = `notice/search/${keyword}`;
+  return await instance.get(url);
 };
 
 export const getCommentsAPI = async (postCode) => {
-  let url = `notice/${postCode}/comment`;
+  let url = `notice / ${postCode} / comment`;
   return await instance.get(url);
 };
 
 export const getReCommentsAPI = async (pCode) => {
-  let url = `notice/comment/${pCode}`;
+  let url = `notice / comment / ${pCode}`;
   return await instance.get(url);
 };
 
@@ -46,7 +47,7 @@ export const addImg = async (data) => {
 
 export const deleteNoticeAPI = async (code) => {
   console.log("삭제 비동 API@@@;");
-  return await instance.delete(`notice/${code}`);
+  return await instance.delete(`notice / ${code}`);
 };
 
 export const updateNoticeAPI = async (data) => {
@@ -60,5 +61,5 @@ export const updateCommentAPI = async (data) => {
 
 export const deleteCommentAPI = async (code) => {
   console.log(code);
-  return await instance.delete(`notice/comment/${code}`);
+  return await instance.delete(`notice / comment / ${code}`);
 };

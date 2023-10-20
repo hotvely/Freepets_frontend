@@ -218,9 +218,14 @@ const Notice = () => {
 
   const getSearchBoardHandler = async () => {
     // 검색기능..
-    const response = await getSearchAPI(keyword, page);
-    console.log(response);
-    setBoards([...response.data]);
+    const response = await getSearchAPI(keyword);
+    console.log(response.data);
+    if (response.data.length > 0) {
+      setBoards([...response.data]);
+    }
+    else {
+      await getBoardHandler(page);
+    }
   };
 
   const updateHandler = (e, id) => {
@@ -246,7 +251,6 @@ const Notice = () => {
     getBoardHandler();
   }, []);
 
-  console.log(boards);
   return (
     <MainStyle>
       <div className="venner">
@@ -282,7 +286,6 @@ const Notice = () => {
         <section>
           {boards?.map((items) => (
             <div key={items?.noticeCode}>
-              {console.log(items)}
               <PostStyle>
                 <div className="memberPhoto">
                   <img src={testImg}></img>
