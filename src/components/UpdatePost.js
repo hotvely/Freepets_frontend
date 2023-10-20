@@ -6,12 +6,12 @@ import { addSitterBoard, addImg } from "../api/sitter";
 import SitterPost from "./SitterPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
 import CommunityPost from "./Community/CommunityPost";
 import Notice from "../pages/notice/Notice";
 import NoticePost from "./NoticePost";
-import { addNoticeBoard } from "../api/notice";
+import { addNoticeBoard, updateNoticeAPI } from "../api/notice";
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
@@ -110,11 +110,13 @@ const MainBox = styled.main`
   }
 `;
 Quill.register("modules/imageUploader", ImageUploader);
-const Post = () => {
+const UpdatePost = () => {
+  const { boardCode, postCode } = useParams();
+
   const navigate = useNavigate();
   const quillRef = useRef(null);
   const [desc, setDesc] = useState("");
-  const [select, setSelect] = useState(null);
+  const [select, setSelect] = useState(boardCode);
   const [img, setImg] = useState([]);
   const images = [];
   const [rank1, setRank1] = useState();
@@ -122,56 +124,32 @@ const Post = () => {
   const [title, setTitle] = useState();
   const onClick = async () => {
     const data = JSON.parse(localStorage.getItem("user"));
-    const formData = new FormData();
+    const formData = {
+      title: title,
+      desc: desc,
+      token: data.token,
+      boardCode: postCode,
+      code: boardCode,
+    };
 
-    formData.append("title", title);
-    formData.append("desc", desc);
-    formData.append("token", data.token);
+    //formData객체에 데이터 추가 하는법
+    //formData.서버쪽데이터이름 = 보내는데이터;
+    console.log(formData);
 
-    if (img != null) {
-      formData.append("uploadfileUrl", img);
-    }
     if (select == 1) {
     } else if (select == 2) {
     } else if (select == 3) {
-      formData.append("sitterPrice", rank1);
-      formData.append("sitterLoc", rank2);
-      await addSitterBoard(formData);
     } else if (select == 4) {
-      formData.append("hospitalName", rank1);
-      formData.append("hospitalAddress", rank2);
-      await addHospitalBoard(formData);
     } else if (select == 5) {
-      await addNoticeBoard(formData);
+      await updateNoticeAPI(formData);
     }
     navigate("../");
   };
+
   const InputDescHandler = (e) => {
     setDesc(e);
   };
-  const selectChange = (e) => {
-    setSelect(e.currentTarget.value);
-  };
-  /*
-  const imageHandler = () => {
-    console.log("이미지 버튼 누를 때 작동되는 핸들러임");
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
-    input.addEventListener("change", async () => {
-      console.log("파일 바뀌는 이벤트");
-      const file = input.files[0];
-      console.log(file);
-            const imageUrl = await addImg(formData);
-            console.log(imageUrl.data);
-            const url = "/upload/" + imageUrl.data;
-            const editor = quillRef.current.getEditor();
-            const range = editor.getSelection();
-            editor.insertEmbed(range.index, 'image', url);
-        })
-    }
-    */
+
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -234,15 +212,6 @@ const Post = () => {
       ></div>
       <MainBox>
         <div className="header-content">
-          <select className="select select-category" onChange={selectChange}>
-            <option>게시판을 선택해 주세요.</option>
-            <option value="1">커뮤니티</option>
-            <option value="2">분실</option>
-            <option value="3">시터</option>
-            <option value="4">병원 정보</option>
-            <option> ------------ </option>
-            <option value="5">공지사항</option>
-          </select>
           {select == null ? (
             <div></div>
           ) : select == 1 ? (
@@ -284,4 +253,4 @@ const Post = () => {
     </Main>
   );
 };
-export default Post;
+export default UpdatePost;
