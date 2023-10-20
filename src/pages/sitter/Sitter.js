@@ -385,7 +385,12 @@ const Sitter = () => {
           </section>
         </MainContent>
       </MainBox>
-      <Page />
+      <Page
+        total={boards.length}
+        limit={10}
+        page={page}
+        setPage={setPage}
+      />
     </Main>
   );
 };

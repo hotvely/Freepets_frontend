@@ -17,6 +17,11 @@
     font-size: 0.9rem;
 }
 
-.paging-number li a{
+.paging-number li button{
+    display: flex;
+    cursor: pointer;
     color: #999;
+    border: none;
+    align-items: center;
+    background: none;
 }

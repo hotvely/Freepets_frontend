@@ -1,79 +1,45 @@
 import '../css/page.css';
 
-const Page = ({page, totalPage, setPage}) => {
+const Page = ({ total, limit, page, setPage }) => {
+
+  
+
+  const sumPage = Math.ceil(total / limit);
+
+  const pageClickHandler = (e) => {
+    setPage(e.target.innerHTML);
+    console.log(total);
+    console.log(limit);
+    console.log(page);
+  }
   
     return (
           <div className="paging">
             <ul className="paging-number">
               <li>
-                <a href="#" id="first">
+                <button>
                   처음 페이지
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" id="arrow-left">
+                <button>
                   ◀
-                </a>
+                </button>
               </li>
+              {Array(sumPage).fill().map((_, i) => (
+                <button key={i+1} onClick={pageClickHandler}>
+                  {i+1}
+                </button>
+              ))}
               <li>
-                <a href={'?page='+page} className="num">
-                  1
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  2
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  3
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  4
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  5
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  6
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  7
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  8
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  9
-                </a>
-              </li>
-              <li>
-                <a href="#" className="num">
-                  10
-                </a>
-              </li>
-              <li>
-                <a href="#" className="arrow-right">
+                <button>
                   ▶
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" id="last">
+                <button>
                   마지막 페이지
-                </a>
+                </button>
               </li>
             </ul>
           </div>
