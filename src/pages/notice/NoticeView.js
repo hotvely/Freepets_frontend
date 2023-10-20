@@ -13,6 +13,7 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
   addCommentAPI,
+  deleteCommentAPI,
   getBoardViewAPI,
   getCommentsAPI,
 } from "../../api/notice";
@@ -20,6 +21,7 @@ import CommentComponent from "./CommentComponent";
 import ReCommentComponent from "./ReCommentComponent";
 import { addBookmarkAPI } from "../../api/bookmark";
 import { useSelector } from "react-redux";
+import UpdateCommentComponent from "./UpdateCommentComponent";
 
 const StyledMain = styled.main`
   display: flex;
@@ -235,8 +237,23 @@ const StyledMain = styled.main`
           }
         }
         .comment-desc {
+          width: 70%;
           padding: 20px;
           margin-top: 10px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          .comment-btn {
+            button {
+              border: 0;
+              padding: 5px;
+              border-radius: 5px;
+              background-color: #437b92;
+              color: white;
+              margin: 0 5px;
+            }
+          }
         }
 
         .reCommentContent {
@@ -263,34 +280,68 @@ const StyledMain = styled.main`
   }
 `;
 
+const CommentBtnComponent = (props) => {
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
+  const writer = props.writer;
+
+  return (
+    <>
+      <div className="comment-btn">
+        <button
+          id={props.code}
+          onClick={() => {
+            props.updateCommentHandler(props.code);
+          }}
+          className={props.className}
+        >
+          수정
+        </button>
+        <button
+          onClick={() => {
+            if (user.id == writer) {
+              props.deleteCommentHandler(props.code);
+            }
+            console.log("사용자와 작성자가 달라서 삭제 불가");
+          }}
+        >
+          삭제
+        </button>
+      </div>
+    </>
+  );
+};
+
 const NoticeView = () => {
   const { code } = useParams();
   const [postData, setPostData] = useState();
   const [comments, setComments] = useState([]);
+
+  const [currClickBtn, setCurrClickBtn] = useState(-1);
+  // const [isClickBtn, setIsClickBtn] = useState(-1);
+  // const [commentUpdateBtn, setCommentUpdateBtn] = useState(false);
+  // const [reCommentUpdateBtn, setReCommentUpdateBtn] = useState(false);
+  const [succUpdate, setSuccUpdate] = useState(false);
   const [selected_Comment, setSelected_Comment] = useState(0);
 
   const user = useSelector((state) => {
     return state.user;
   });
 
-  const getPostHandler = async () => {
-    const post = await getBoardViewAPI(code);
-    if (post) {
-      return post.data;
-    }
+  const getPostHandler = async (code) => {
+    const result = await getBoardViewAPI(code);
+    setPostData(result.data);
   };
 
-  const getCommentHandler = async () => {
-    const comments = await getCommentsAPI(code);
-
-    if (comments) {
-      return comments.data;
-    }
+  const getCommentHandler = async (code) => {
+    const result = await getCommentsAPI(code);
+    setComments([...result.data]);
   };
 
   const addCommentHandler = async (e) => {
     e.preventDefault();
-    console.log(e.target.commentDesc.id);
     const parentCode = e.target.commentDesc.id;
     const formData = {
       token: user.token,
@@ -299,8 +350,8 @@ const NoticeView = () => {
       parentCommentCode: parentCode, //부모 댓글의 코드를 백으로 넘기는 법
       commentDesc: e.target.commentDesc.value,
     };
-
     console.log(formData);
+
     if (formData.commentDesc) {
       await addCommentAPI(formData);
       const updatedComment = await getCommentsAPI(code);
@@ -320,29 +371,51 @@ const NoticeView = () => {
         postCode: postData.noticeCode,
         token: user.token,
       };
-      console.log(formData);
 
       addBookmarkAPI(formData);
     }
+  };
+
+  const updateCommentHandler = async (code) => {
+    if (code == currClickBtn) {
+      code = -1;
+    }
+
+    setCurrClickBtn(code);
+  };
+
+  const updateSuccHandler = () => {
+    setSuccUpdate(true);
+  };
+
+  const deleteCommentHandler = async (commentCode) => {
+    // 댓글 삭제 해주는...코..드...
+
+    await deleteCommentAPI(commentCode);
+    await getCommentHandler(code);
   };
 
   const selected_Comment_handler = () => {
     // 대댓글 작성을 하지 않기 위해 아예 부모 값 전달을 하지 않아버리면 됨
     setSelected_Comment(0);
   };
-  console.log("선택된 부모 댓글 코드 리셋 : " + selected_Comment);
 
   useEffect(() => {
     const asyncHandler = async () => {
-      const pData = await getPostHandler(code);
-      setPostData(pData);
-
-      const cData = await getCommentHandler(code);
-      setComments(cData);
+      getPostHandler(code);
+      getCommentHandler(code);
     };
 
     asyncHandler();
   }, []);
+
+  useEffect(() => {
+    if (succUpdate) {
+      setSuccUpdate(false);
+      setCurrClickBtn(-1);
+      getCommentHandler(code);
+    }
+  }, [succUpdate]);
 
   return (
     <StyledMain>
@@ -377,7 +450,7 @@ const NoticeView = () => {
           <div className="user">
             <div className="usertTitle">
               <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                {postData?.member.nickname}
+                {postData?.member?.nickname}
               </p>
             </div>
 
@@ -434,25 +507,45 @@ const NoticeView = () => {
                   {
                     // 유저 정보
                   }
-                  <div className="useruser">
-                    <div className="profile">
-                      <img src={testImg} alt="작성자 프로필" />
+                  <div>
+                    <div className="useruser">
+                      <div className="profile">
+                        <img src={testImg} alt="작성자 프로필" />
+                      </div>
+
+                      <div className="user">
+                        <p style={{ fontSize: "18px", fontWeight: "border" }}>
+                          {comment?.member?.nickname}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="user">
-                      <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                        {comment?.member?.nickname}
-                      </p>
+                    {
+                      // 댓글 정보
+                    }
+                    <div className="comment-desc">
+                      <div className="commentTextBox">
+                        {comment?.noticeCommentDesc}
+                      </div>
+                      <div>{comment?.noticeCommentDate}</div>
+
+                      <CommentBtnComponent
+                        code={comment?.noticeCommentCode}
+                        writer={comment?.member.id}
+                        updateCommentHandler={updateCommentHandler}
+                        deleteCommentHandler={deleteCommentHandler}
+                      />
                     </div>
+                    {currClickBtn === comment.noticeCommentCode ? (
+                      comment?.member.id === user.id ? (
+                        <UpdateCommentComponent
+                          code={comment?.noticeCommentCode}
+                          updateCommentHandler={updateCommentHandler}
+                          updateSuccHandler={updateSuccHandler}
+                        />
+                      ) : null
+                    ) : null}
                   </div>
-
-                  {
-                    // 댓글 정보
-                  }
-                  <div className="comment-desc">
-                    <p>{comment?.noticeCommentDesc}</p>
-                  </div>
-
                   <div className="reCommentContent">
                     {
                       // 대댓글 보기, 대댓글 작성 코드
@@ -462,9 +555,8 @@ const NoticeView = () => {
                         <div>
                           {
                             // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
-                            console.log(selected_Comment)
                           }
-                          {console.log(comments)}
+
                           <button
                             className="commentView_btn"
                             onClick={selected_Comment_handler}
@@ -473,12 +565,32 @@ const NoticeView = () => {
                           </button>
                           {/* 대댓글 호출 로직 */}
                           <ul>
-                            {comments.map((comment) =>
+                            {comments?.map((comment) =>
                               comment.noticeCommentCodeSuper <
                               0 ? null : comment.noticeCommentCodeSuper !==
                                 selected_Comment ? null : (
-                                <li key={comment.noticeCommentCode}>
+                                <li
+                                  key={comment.noticeCommentCode}
+                                  className="comment-desc"
+                                >
                                   <ReCommentComponent props={comment} />
+                                  <CommentBtnComponent
+                                    code={comment?.noticeCommentCode}
+                                    writer={comment?.member.id}
+                                    updateCommentHandler={updateCommentHandler}
+                                    deleteCommentHandler={deleteCommentHandler}
+                                  />
+                                  {currClickBtn == comment.noticeCommentCode ? (
+                                    comment?.member.id === user.id ? (
+                                      <UpdateCommentComponent
+                                        code={comment?.noticeCommentCode}
+                                        updateCommentHandler={
+                                          updateCommentHandler
+                                        }
+                                        updateSuccHandler={updateSuccHandler}
+                                      />
+                                    ) : null
+                                  ) : null}
                                 </li>
                               )
                             )}
