@@ -38,3 +38,12 @@ export const addCommentAPI = async (data) => {
 export const addImg = async (data) => {
   return await instance.post("img", data);
 };
+
+export const deleteNoticeAPI = async (code) => {
+  console.log("삭제 비동 API@@@;");
+  return await instance.delete(`notice/${code}`);
+};
+
+export const updateNoticeAPI = async (data) => {
+  return await instance.put("notice", data);
+};

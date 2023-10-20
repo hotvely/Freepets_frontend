@@ -23,6 +23,7 @@ import NoticeView from "./pages/notice/NoticeView";
 import LMediaList from "./pages/community/lost/LMediaList";
 import LostList from "./pages/community/lost/LostList";
 import LostView from "./pages/community/lost/LostView";
+import UpdatePost from "./components/UpdatePost";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "create",
         element: <Post />,
+      },
+      {
+        path: "update/:boardCode/:postCode",
+        element: <UpdatePost />,
       },
       {
         path: "noticeView/:code",

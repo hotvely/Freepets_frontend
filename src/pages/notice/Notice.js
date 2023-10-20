@@ -10,16 +10,11 @@ import {
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  addNoticeBoard,
-  boardAPI,
-  getBoardsBasic,
-  getBoardsByPage,
-} from "../../api/notice";
+import { deleteNoticeAPI, getBoardsByPage } from "../../api/notice";
 import { Link } from "react-router-dom";
-import Post from "../../components/Post";
+import NoticePost from "../../components/NoticePost";
 
 const MainStyle = styled.main`
   display: flex;
@@ -196,35 +191,42 @@ const Notice = () => {
   const [page, setPage] = useState(1);
   const [maxpage, setMaxPage] = useState();
   const [boards, setBoards] = useState([]);
+  const [isDelete, setIsDelete] = useState(false);
 
   const user = useSelector((state) => {
     return state.user;
   });
 
   const getBoardHandler = async () => {
-    const response = await getBoardsByPage(page);
+    console.log("getBoardHandler들어는 오냐???????????????????");
 
-    setBoards([...boards, ...response.data]);
+    const response = await getBoardsByPage(page);
+    setBoards([...response.data]);
   };
 
-  const pagingHandler = (startPage) => {
-    const container_HTML = document.getElementById("paging-num");
-    for (let idx = startPage; idx < startPage + 10; idx++) {
-      const button = document.createElement("button"); // li 요소 생성
-      button.textContent = idx;
+  const updateHandler = (e) => {
+    navigate(`/notice/update/5/${e.target.id}`);
+  };
 
-      container_HTML.appendChild(button);
+  const deleteHandler = async (e) => {
+    try {
+      setBoards([]);
+      await deleteNoticeAPI(e.target.id);
+
+      const response = await getBoardsByPage(page);
+
+      setBoards([...response.data]);
+    } catch (e) {
+      console.log(e);
     }
   };
 
   useEffect(() => {
+    console.log("화면 첨 실행될떄..");
     getBoardHandler();
   }, []);
 
-  if (!boards) {
-    return <div>Loading...</div>;
-  }
-
+  console.log(boards);
   return (
     <MainStyle>
       <div className="venner">
@@ -251,45 +253,56 @@ const Notice = () => {
 
       <ContentStyle>
         <section>
-          {boards.map((items) => (
-            <div key={items.noticeCode}>
+          {boards?.map((items) => (
+            <div key={items?.noticeCode}>
+              {console.log(items)}
               <PostStyle>
                 <div className="memberPhoto">
                   <img src={testImg}></img>
                 </div>
                 <div className="postInfo">
-                  <Link to={`../notice/noticeView/${items.noticeCode}`}>
+                  <Link to={`../notice/noticeView/${items?.noticeCode}`}>
                     <div className="userInfo">
-                      <div id="nickName">{items.member.nickname}</div>
+                      <div id="nickName">{items?.member.nickname}</div>
                       <div id="date">7일 전</div>
                     </div>
                     <div className="postTitle">
-                      <div className="title">{items.noticeTitle}</div>
+                      <div className="title">{items?.noticeTitle}</div>
                     </div>
                     <div className="postIcons">
                       <FontAwesomeIcon
                         icon={faThumbsUp}
                         style={{ color: "#1FB1D1" }}
                       />
-                      <div id="like">{items.noticeLike}</div>
+                      <div id="like">{items?.noticeLike}</div>
                       <FontAwesomeIcon
                         icon={faEye}
                         style={{ color: "#1FB1D1" }}
                       />
-                      <div id="views">{items.noticeViews}</div>
+                      <div id="views">{items?.noticeViews}</div>
                       <FontAwesomeIcon
                         icon={faComments}
                         style={{ color: "#1FB1D1" }}
                       />
-                      <div id="comment">{items.noticeCommentCount}</div>
+                      <div id="comment">{items?.noticeCommentCount}</div>
                     </div>
                   </Link>
                 </div>
                 <div className="postBtn">
-                  <button style={{ backgroundColor: "lightyellow" }}>
+                  <button
+                    id={items?.noticeCode}
+                    style={{ backgroundColor: "lightyellow" }}
+                    onClick={updateHandler}
+                  >
                     수정
                   </button>
-                  <button style={{ backgroundColor: "pink" }}>삭제</button>
+                  <button
+                    id={items?.noticeCode}
+                    style={{ backgroundColor: "pink" }}
+                    onClick={deleteHandler}
+                  >
+                    삭제
+                  </button>
                 </div>
               </PostStyle>
               <hr className="hr-dotted" />
