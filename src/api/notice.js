@@ -12,7 +12,8 @@ export const getBoardsByPage = async (page) => {
 };
 
 export const getBoardViewAPI = async (code) => {
-  return await instance.get(`notice/${code}`);
+  let url = `notice/${code}`;
+  return await instance.get(url);
 };
 
 export const getSearchAPI = async (keyword) => {
@@ -22,7 +23,7 @@ export const getSearchAPI = async (keyword) => {
 };
 
 export const getCommentsAPI = async (postCode) => {
-  let url = `notice / ${postCode} / comment`;
+  let url = `notice/${postCode}/comment`;
   return await instance.get(url);
 };
 
