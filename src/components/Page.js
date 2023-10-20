@@ -2,15 +2,14 @@ import '../css/page.css';
 
 const Page = ({ total, limit, page, setPage }) => {
 
-  
-
   const sumPage = Math.ceil(total / limit);
 
   const pageClickHandler = (e) => {
     setPage(e.target.innerHTML);
-    console.log(total);
-    console.log(limit);
-    console.log(page);
+    // console.log(total);
+    // console.log(sumPage);
+    // console.log(limit);
+    // console.log(page);
   }
   
     return (
@@ -26,10 +25,12 @@ const Page = ({ total, limit, page, setPage }) => {
                   ◀
                 </button>
               </li>
-              {Array(sumPage).fill().map((_, i) => (
-                <button key={i+1} onClick={pageClickHandler}>
-                  {i+1}
-                </button>
+              {Array(sumPage).fill().map((a, i) => (
+                <li key={i+1}>
+                  <button onClick={pageClickHandler}>
+                    {i+1}
+                  </button>
+                </li>
               ))}
               <li>
                 <button>

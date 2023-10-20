@@ -122,36 +122,38 @@ const Post = () => {
   const [title, setTitle] = useState();
   const onClick = async () => {
     const data = JSON.parse(localStorage.getItem("user"));
-    const formData = new FormData();
 
+    const formData = new FormData();
+    
     formData.append("title", title);
     formData.append("desc", desc);
     formData.append("token", data.token);
 
-    if (img != null) {
-      formData.append("uploadfileUrl", img);
-    }
     if (select == 1) {
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
       formData.append("sitterLoc", rank2);
+      console.log(formData);
       await addSitterBoard(formData);
     } else if (select == 4) {
-      formData.append("hospitalName", rank1);
-      formData.append("hospitalAddress", rank2);
+      // formData.append("hospitalName", rank1);
+      // formData.append("hospitalAddress", rank2);
       await addHospitalBoard(formData);
     } else if (select == 5) {
       await addNoticeBoard(formData);
     }
     navigate("../");
   };
+
   const InputDescHandler = (e) => {
     setDesc(e);
   };
+
   const selectChange = (e) => {
     setSelect(e.currentTarget.value);
   };
+  
   /*
   const imageHandler = () => {
     console.log("이미지 버튼 누를 때 작동되는 핸들러임");
