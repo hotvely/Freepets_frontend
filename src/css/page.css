@@ -13,8 +13,13 @@
 }
 
 .paging-number li {
-    margin: 10px;
+    padding: 10px;
+    border-radius: 50px;
     font-size: 0.9rem;
+}
+
+.paging-number li:hover {
+    text-decoration: underline;
 }
 
 .paging-number li button{
@@ -24,4 +29,8 @@
     border: none;
     align-items: center;
     background: none;
+}
+
+.active {
+    background-color: #eee;
 }

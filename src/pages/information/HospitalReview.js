@@ -13,20 +13,29 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
-const MainStyle = styled.main`
+const MainStyle = styled.div`
+  margin: 0px 40px;
   display: flex;
-  flex-direction: column;
   width: 100%;
-  margin: 0 50px;
-  /* height: 100vw; */
-  align-items: center;
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
 
   .venner {
+    padding: 0px 10px;
     width: 100%;
     img {
       width: 100%;
     }
   }
+  
+`;
+const MainBox = styled.div`
+  padding: 20px 10px;
+  width: 100%;
+  border: 1px solid #b1deec;
+  margin-top: 30px;
+
   .select {
     width: 100%;
     display: flex;
@@ -85,15 +94,12 @@ const MainStyle = styled.main`
     }
   }
 `;
-
 const MainHeader = styled.header`
-  width: 100%;
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 20px;
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
 
   .header-end {
     display: flex;
@@ -150,109 +156,78 @@ const MainHeader = styled.header`
     cursor: pointer;
   }
 `;
-
-const ContentStyle = styled.div`
+const MainContent = styled.main`
   width: 100%;
-  //border: 5px solid black; //#C1F1FC;
 
   section {
-    margin: 20px 20px;
-
-    hr {
-      border: 0px;
-      border-top: 4px dotted lightblue;
-    }
+    margin: 10px;
   }
-`;
 
-const PostStyle = styled.div`
-  width: 100%;
-  height: 100px;
-  display: flex;
-  /* align-items: center; */
-  margin: 20px 0;
+  .main-content {
+    padding: 20px 10px;
+    border-bottom: 1px solid #ededed;
 
-  flex-direction: row;
-  .memberPhoto {
-    flex: 0 1 10%;
-    margin: 0 15px;
-
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-  }
-  .postInfo {
-    flex: 0 1 75%;
-
-    .userInfo {
+    .main-content-view {
       display: flex;
-      flex-direction: row;
       justify-content: space-between;
-      align-items: center;
 
-      #nickName {
-        line-height: 200%;
-        padding: 0 10px;
-        background-color: black;
-        color: white;
-        border-radius: 15px;
-        font-size: 1.2rem;
-        font-weight: bold;
-      }
-      #date {
-        margin-right: 20px;
-        font-size: 1.2rem;
-      }
-    }
-    .postTitle {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin: 8px 0;
-      title {
-      }
-    }
-    .postIcons {
-      display: flex;
-      flex-direction: row;
-      margin-top: 10px;
-      font-size: 1.1rem;
-      div {
-        margin-right: 15px;
-      }
-    }
-  }
-  .postBtn {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    align-items: center;
-    flex: 0 0 15%;
+      .main-content_start {
+        display: flex;
 
-    button {
-      width: 50px;
-      height: 50px;
-      background-color: skyblue;
-      color: black;
-      font-size: 1rem;
-      border: 2px solid darkgray;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 15px;
-      margin-right: 5px;
-      outline: none;
-    }
-  }
-`;
+        .main-content_start-desc {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          margin-left: 20px;
 
-const PagingStyle = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 20px 0;
-  a {
-    padding: 5px;
+          div {
+            #sitterTitle {
+              font-weight: bold;
+              margin-bottom: 10px;
+            }
+          }
+
+          .main-content_start-desc-name {
+            display: flex;
+
+            #nickname {
+              padding: 5px;
+              border: 1px solid #dedede;
+              border-radius: 5px;
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+
+      .main-content_end {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-right: 5px;
+
+        p {
+          font-size: 1.5rem;
+          color: orange;
+          -webkit-text-stroke: 1px orange;
+
+          #sitterPrice {
+            margin-right: 5px;
+          }
+        }
+
+        button {
+          width: 100px;
+          padding: 5px;
+          border: 1px solid #3a98b9;
+          border-radius: 5px;
+          background-color: white;
+          color: #3a98b9;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+    }
   }
 `;
 
@@ -277,73 +252,85 @@ const HospitalReview = () => {
       <div className="venner">
         <img src={banner}></img>
       </div>
+      <MainBox>
       <MainHeader>
-        <div className="header-start">
-          <select>
-            <option value="1">추천순</option>
-            <option value="2">리뷰순</option>
-            <option value="3">낮은 비용</option>
-          </select>
-          {}
-          <button className="button-write" onClick={NavWrite}>
-            글쓰기
-          </button>
-        </div>
-        <div className="header-end">
-          <div className="header-end-label">
-            <label htmlFor="search">시터 조회</label>
-            <FontAwesomeIcon icon={faCaretDown} style={{ color: "#3a98b9" }} />
+          <div className="header-start">
+            <select>
+              <option value="1">최신순</option>
+              <option value="2">추천순</option>
+              <option value="3">조회수</option>
+            </select>
+            <button className="button-write">
+              글쓰기
+            </button>
           </div>
-          <input type="search" id="search" name="search" />
-          <button>
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              style={{ color: "#3a98b9" }}
+          <div className="header-end">
+            <div className="header-end-label">
+              <label htmlFor="search">병원 조회</label>
+              <FontAwesomeIcon
+                icon={faCaretDown}
+                style={{ color: "#3a98b9" }}
+              />
+            </div>
+            <input
+              type="text"
+              id="search"
+              name="search"
             />
-          </button>
-        </div>
-      </MainHeader>
-      <ContentStyle>
-        <section>
-          <PostStyle>
-            <div className="memberPhoto">
-              <img src={testImg}></img>
-            </div>
-            <div className="postInfo">
-              <a href="#">
-                <div className="userInfo">
-                  <div id="nickName">hotvely</div>
-                  <div id="date">7일 전</div>
+            <button>
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                style={{ color: "#3a98b9" }}
+              />
+            </button>
+          </div>
+        </MainHeader>
+      <MainContent>
+      <section>
+      <div className="main-content">
+                <div
+                  className="main-content-view"
+                >
+                  <div className="main-content_start">
+                    <img
+                      src={testImg}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                      }}
+                    ></img>
+                    <div className="main-content_start-desc">
+                      <div>
+                        <p id="sitterTitle">제목</p>
+                      </div>
+                      <div
+                        className="main-content_start-desc-name"
+                        
+                      >
+                        <p id="nickname">닉네임</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="main-content_end">
+                    <p>
+                      <span id="sitterPrice">2023-10-22</span>
+                    </p>
+                    <div className="viewicon">
+                      <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#1FB1D1" }} />
+                      <span id="like">50</span>{" "}
+                      <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
+                      <span id="views">150</span>
+                      <FontAwesomeIcon icon={faComments} style={{ color: "#1FB1D1" }} />
+                      <span id="comment">30</span>
+                  </div>
+                  </div>
                 </div>
-                <div className="postTitle">
-                  <div className="title">우리집 흰둥이를 찾아주세요~ㅠㅠㅠ</div>
-                </div>
-                <div className="postIcons">
-                  <FontAwesomeIcon
-                    icon={faThumbsUp}
-                    style={{ color: "#1FB1D1" }}
-                  />
-                  <div id="like">50</div>
-                  <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
-                  <div id="views">150</div>
-                  <FontAwesomeIcon
-                    icon={faComments}
-                    style={{ color: "#1FB1D1" }}
-                  />
-                  <div id="comment">30</div>
-                </div>
-              </a>
-            </div>
-          </PostStyle>
-        </section>
-      </ContentStyle>
-      <PagingStyle>
-        <div>
-          <a href="#"> Prev</a>
-          <a href="#">Num</a>
-          <a href="#">Next</a>
-        </div>
-      </PagingStyle>
+              </div>
+              </section>
+      </MainContent>
+      </MainBox>
+      {/* <Page /> */}
     </MainStyle>
   );
 };

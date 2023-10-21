@@ -24,6 +24,7 @@ import LMediaList from "./pages/community/lost/LMediaList";
 import LostList from "./pages/community/lost/LostList";
 import LostView from "./pages/community/lost/LostView";
 import UpdatePost from "./components/UpdatePost";
+import HospitalReviewView from "./pages/information/HospitalReviewView";
 
 const router = createBrowserRouter([
   {
@@ -85,6 +86,14 @@ const router = createBrowserRouter([
       {
         path: "hospital/create",
         element: <Post />,
+      },
+      {
+        path: "hospital/:code",
+        element: <HospitalReviewView />,
+      },
+      {
+        path: "hospital/:postCode/update/:boardCode",
+        element: <UpdatePost/>
       },
     ],
   },
@@ -148,7 +157,6 @@ const router = createBrowserRouter([
   },
   {
     path: "/sitter",
-
     element: <BLayout />,
     children: [
       {
@@ -156,8 +164,16 @@ const router = createBrowserRouter([
         element: <Sitter />,
       },
       {
-        path: "view",
+        path: "?page=:page",
+        element: <Sitter />,
+      },
+      {
+        path: "view/:code",
         element: <SitterView />,
+      },
+      {
+        path: ":postCode/update/:boardCode",
+        element: <UpdatePost/>,
       },
       {
         path: "create",
@@ -165,7 +181,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
     path: "/auth",
     children: [

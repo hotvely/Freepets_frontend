@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   faMagnifyingGlass,
   faCaretDown,
@@ -191,15 +191,20 @@ const MainContent = styled.main`
 `;
 
 const Sitter = () => {
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get('page');
   const [boards, setBoards] = useState([]);
   const [search, setSearch] = useState();
   const navigator = useNavigate();
-  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [select, setSelect] = useState(1);
   const [modalCheck, setModalCheck] = useState(false);
+
+  const page = searchPage != null ? searchPage : 1;
 
   const NaviView = (e) => {
     e.preventDefault();
-    navigator("view", {
+    navigator(`view/${e.currentTarget.id}`, {
       state: {
         code: e.currentTarget.id,
         id: e.currentTarget.querySelector(".main-content_start-desc-name").id,
@@ -233,8 +238,9 @@ const Sitter = () => {
   };
 
   const userSearchClick = async () => {
-    const result = await getSitterSearch(1, search);
-    setBoards(result.data);
+    const result = await getSitterSearch(page, search);
+    setBoards(result.data.sitterList);
+    setTotalPages(result.data.totalPages);
   };
 
   const ModalStyle = {
@@ -255,31 +261,39 @@ const Sitter = () => {
     },
   };
 
-  const selectChange = async (e) => {
+  const selectChange = (e) => {
     let selectValue = e.target.value;
     console.log(selectValue);
-    switch (eval(selectValue)) {
-      case 1:
-        boardAPI();
-        break;
-      case 2:
-        const resultDesc = await getSitterPriceOrder("desc");
-        setBoards(resultDesc.data);
-        break;
-      case 3:
-        const resultAsc = await getSitterPriceOrder("asc");
-        setBoards(resultAsc.data);
-    }
+    setSelect(selectValue);
   };
 
   const boardAPI = async () => {
     const boardResult = await getBoardsBasic(page);
-    setBoards(boardResult.data);
+    setBoards(boardResult.data.sitterList);
+    setTotalPages(boardResult.data.totalPages);
   };
 
+  const selectType = async () => {
+    switch (eval(select)) {
+      case 1:
+        boardAPI();
+        break;
+      case 2:
+        const resultDesc = await getSitterPriceOrder("desc", page);
+        setBoards(resultDesc.data.sitterList);
+        setTotalPages(resultDesc.data.totalPages);
+        break;
+      case 3:
+        const resultAsc = await getSitterPriceOrder("asc", page);
+        setBoards(resultAsc.data.sitterList);
+        setTotalPages(resultAsc.data.totalPages);
+    }
+  }
+  
   useEffect(() => {
-    boardAPI();
-  }, []);
+    window.scrollTo(0, 0);
+    selectType();
+  }, [page, select, search]);
 
   return (
     <Main>
@@ -386,10 +400,8 @@ const Sitter = () => {
         </MainContent>
       </MainBox>
       <Page
-        total={boards.length}
-        limit={10}
+        totalPages={totalPages}
         page={page}
-        setPage={setPage}
       />
     </Main>
   );

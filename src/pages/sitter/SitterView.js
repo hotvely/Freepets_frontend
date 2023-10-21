@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { getReviews, getBoardView, deleteSitterBoard, deleteReview, addReview } from "../../api/sitter";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Main = styled.div`
     display: flex;
@@ -127,15 +127,6 @@ const MainContent = styled.div`
             height: 30px;
             color: white;
             margin-right: 10px;
-        }
-
-        .hide {
-            cursor: pointer;
-            background-color: #ddd;
-            border: none;
-            border-radius: 5px;
-            height: 30px;
-            color: white;
         }
     }
 `
@@ -305,6 +296,7 @@ const Star = ({color1, color2, color3, color4, color5}) => {
 
 const SitterView = () => {
     const location = useLocation();
+    const navigator = useNavigate();
     const [boardView, setBoardView] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [reviewDesc, setReviewDesc] = useState();
@@ -394,6 +386,11 @@ const SitterView = () => {
         setReviews([...reviews, ...reviewsResult.data]);
     }
 
+    const onUpdateBoard = () => {
+        const code = location.state.code;
+        navigator(`../${code}/update/3`);
+    }
+
     const onDeleteBoard = async () => {
         const response = window.confirm('정말로 삭제하시겠습니까?');
         if(response) {
@@ -453,9 +450,8 @@ const SitterView = () => {
                     </div>
                     {boardView?.memberDTO.id == data.id ? 
                         <div className="main-button">
-                            <button className="update">수정</button>
+                            <button className="update" onClick={onUpdateBoard}>수정</button>
                             <button className="delete" onClick={onDeleteBoard}>삭제</button>
-                            <button className="hide">게시글 숨기기</button>
                         </div> : <div></div>
                     }                    
                 </MainContent>
