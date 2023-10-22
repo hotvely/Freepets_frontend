@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
 import { getCommunityList } from "../../../api/community";
 import { Link, useNavigate } from "react-router-dom";
-import CommunityTableForList from "../../../components/Community/CommunityTableForList";
 import CommunityList from "./CommonList";
 
 const MainStlye = styled.div`
@@ -267,13 +266,22 @@ const CMediaList = () => {
     setListBtn(e.currentTarget.id);
   };
 
-  const NaviViewComment = (commonCode) => {
+  // const navRowClick = (row) => {
+  //   //ViewPage로 이동
+  //   navigate(`/community/common/commonview/${row.original.commonCode}`);
+  // };
+
+  const navWrite = () => {
+    navigate("/community/common/create");
+  };
+
+  const naviViewComment = (commonCode) => {
     // commonView페이지의 댓글란으로 넘어가기
     navigate(`/commonview/${commonCode}`);
   };
 
   const activateComments = (commonCode) => {
-    NaviViewComment(commonCode);
+    naviViewComment(commonCode);
     const mainCommentElement = document.querySelector(".main-comment");
     if (mainCommentElement) {
       mainCommentElement.scrollIntoView({ behavior: "smooth" });
@@ -297,21 +305,19 @@ const CMediaList = () => {
           {mediae.map((media) => (
             // <Link to={"/commonview/" + media.commonCode}>
             <div className="media-content" key={media.commonCode}>
-              <Link
-                to={"/commonview/" + media.commonCode}
-                className="media-thumbnail"
-              >
-                <p>
-                  <img
-                    src={media.commonDesc.substring(
-                      media.commonDesc.indexOf('<img src="') + 10,
-                      media.commonDesc.indexOf('">')
-                    )}
-                    alt="미디어썸네일"
-                  />
-                </p>
-              </Link>
-
+              <div className="media-thumbnail">
+                <Link to={`/community/common/commonview/${media.commonCode}`}>
+                  <p>
+                    <img
+                      src={media.commonDesc.substring(
+                        media.commonDesc.indexOf('<img src="') + 10,
+                        media.commonDesc.indexOf('">')
+                      )}
+                      alt="미디어썸네일"
+                    />
+                  </p>
+                </Link>
+              </div>
               <div className="media-info">
                 <div className="media-info-first-line">
                   <Link
@@ -370,14 +376,6 @@ const CMediaList = () => {
               </select>
             </div>
 
-            {/* <div className="media-sort-category">
-              <select className="category">
-                <option value="1">모든펫츠</option>
-                <option value="2">반려펫츠</option>
-                <option value="3">스트릿펫츠</option>
-              </select>
-            </div> */}
-
             <div className="view-board">
               <div className="view-check-board">
                 <button onClick={onClickList} id="1">
@@ -409,7 +407,7 @@ const CMediaList = () => {
             <button>검색</button>
           </div>
         </div>
-        {ListBtn == 1 ? boardTypeForMedia() : <CommunityList mediae={mediae} />}
+        {ListBtn == 1 ? boardTypeForMedia() : <CommunityList />}
         <div className="main-bottom">
           {/* 페이지 넘기는 바 만들기
          <div id="paging"></div> */}
@@ -483,9 +481,7 @@ const CMediaList = () => {
             </ul>
           </div>
           <div id="write-btn">
-            <a href="/community/common/cmedialist/create">
-              <button>글쓰기</button>
-            </a>
+            <button onClick={navWrite}>글쓰기</button>
           </div>
         </div>
       </MainContentBox>

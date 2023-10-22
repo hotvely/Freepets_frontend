@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useMemo } from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getCommunityList } from "../../../api/community";
 import CommunityTableForList from "../../../components/Community/CommunityTableForList";
 
@@ -18,6 +19,13 @@ const ContentStyle = styled.div`
 const CommunityList = () => {
   const [commonPost, setcommonPosts] = useState([]);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+
+  const handleRowClick = (row) => {
+    //ViewPage로 이동
+    navigate(`/community/common/commonview/${row.original.commonCode}`);
+  };
+
   const CommunityListAPI = async () => {
     // 게시글 목록 데이터
     const result = await getCommunityList(page);
@@ -53,7 +61,12 @@ const CommunityList = () => {
   );
   return (
     <ContentStyle>
-      <CommunityTableForList columns={columns} data={data} />
+      <CommunityTableForList
+        columns={columns}
+        data={data}
+        onRowClick={handleRowClick}
+      />
+      {console.log(data)}
     </ContentStyle>
   );
 };

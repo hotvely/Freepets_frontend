@@ -9,7 +9,7 @@ import {
   faEye,
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { deleteNoticeAPI, getBoardsByPage } from "../../api/notice";
