@@ -33,3 +33,17 @@ export const deleteAPI = async (data) => {
   console.log(data);
   return await instance.put("delete", data);
 };
+
+
+export const getNotificationAPI = async (token) => {
+  const url = `noti/${token}`;
+  return await instance.get(url);
+}
+
+export const addNotificationAPI = async (data) => {
+  return await instance.post("noti/register", data);
+}
+
+export const deleteNotificationAPI = async (code) => {
+  return await instance.delete(`noti/${code}`)
+}

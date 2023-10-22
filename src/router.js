@@ -6,7 +6,6 @@ import HospitalReview from "./pages/information/HospitalReview";
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
 // import LostDetail from "./pages/LostDeatail";
-import EventCalendar from "./pages/EventCalendar";
 import Login from "./pages/member/Login";
 import Register from "./pages/member/Register";
 // import Header from "./components/Header";
@@ -24,6 +23,7 @@ import LMediaList from "./pages/community/lost/LMediaList";
 import LostList from "./pages/community/lost/LostList";
 import LostView from "./pages/community/lost/LostView";
 import UpdatePost from "./components/UpdatePost";
+import EventCalendar from "./pages/notice/EventCalendar";
 
 const router = createBrowserRouter([
   {

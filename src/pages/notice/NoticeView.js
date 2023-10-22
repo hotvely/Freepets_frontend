@@ -22,6 +22,7 @@ import ReCommentComponent from "./ReCommentComponent";
 import { addBookmarkAPI } from "../../api/bookmark";
 import { useSelector } from "react-redux";
 import UpdateCommentComponent from "./UpdateCommentComponent";
+import { addNoticeNotification, addNotification } from "../../components/Notification";
 
 const StyledMain = styled.main`
   display: flex;
@@ -351,9 +352,28 @@ const NoticeView = () => {
       commentDesc: e.target.commentDesc.value,
     };
     console.log(formData);
+    console.log("선택된 댓글 번호?");
+    console.log(selected_Comment);
+
 
     if (formData.commentDesc) {
-      await addCommentAPI(formData);
+      const addCommentResult = await addCommentAPI(formData);
+
+
+      console.log(addCommentResult.data)
+      // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
+      const notiData = {
+        token: user.token,
+
+        postCode: formData.postCode,
+        pCommentCode: addCommentResult.data.noticeCommentCodeSuper
+        ,
+        cCommentCode: addCommentResult.data.noticeCommentCode,
+        url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
+      }
+
+      await addNoticeNotification(notiData);
+
       const updatedComment = await getCommentsAPI(code);
       if (updatedComment) {
         setComments(updatedComment.data);
@@ -567,8 +587,8 @@ const NoticeView = () => {
                           <ul>
                             {comments?.map((comment) =>
                               comment.noticeCommentCodeSuper <
-                              0 ? null : comment.noticeCommentCodeSuper !==
-                                selected_Comment ? null : (
+                                0 ? null : comment.noticeCommentCodeSuper !==
+                                  selected_Comment ? null : (
                                 <li
                                   key={comment.noticeCommentCode}
                                   className="comment-desc"

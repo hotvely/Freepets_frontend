@@ -44,6 +44,7 @@ const Styled = styled.div`
 const CommentComponent = forwardRef((props, ref) => {
   return (
     <Styled>
+
       <form onSubmit={ref}>
         <div className="commentDesc">
           <input
@@ -54,7 +55,7 @@ const CommentComponent = forwardRef((props, ref) => {
           ></input>
         </div>
         <div className="submitBtn">
-          <button type="submit">댓글작성</button>
+          <button type="submit" >댓글작성</button>
         </div>
       </form>
     </Styled>
