@@ -367,7 +367,6 @@ const SitterView = () => {
             formData.append("sitterReviewRatings", star);
             formData.append("sitterReviewDesc", reviewDesc);
             formData.append("sitter.sitterCode", location.state.code);
-            addReview(formData);
             const result = await addReview(formData);
             console.log(result.data);
             setReviews([, result.data, ...reviews]);

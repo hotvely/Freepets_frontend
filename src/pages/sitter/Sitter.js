@@ -233,10 +233,6 @@ const Sitter = () => {
     navigator("create");
   };
 
-  const userSearch = (e) => {
-    setSearch(e.target.value);
-  };
-
   const userSearchClick = async () => {
     const result = await getSitterSearch(page, search);
     setBoards(result.data.sitterList);
@@ -292,7 +288,11 @@ const Sitter = () => {
   
   useEffect(() => {
     window.scrollTo(0, 0);
-    selectType();
+    if(search != null) {
+      userSearchClick();
+    } else {
+      selectType();
+    }
   }, [page, select, search]);
 
   return (
@@ -330,7 +330,7 @@ const Sitter = () => {
               type="text"
               id="search"
               name="search"
-              onChange={userSearch}
+              onChange={(e) => setSearch(e.target.value)}
             />
             <button onClick={userSearchClick}>
               <FontAwesomeIcon
