@@ -12,8 +12,6 @@ import {
   deleteCommunity,
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
 import CommentComponent from "../../notice/CommentComponent";
 
 const MainStlye = styled.div`
@@ -93,18 +91,9 @@ const MainContentBox = styled.div`
           button {
             border: none;
             background-color: white;
-            cursor: pointer;
           }
           button:hover {
             color: #3a98b9;
-          }
-          .bookmark-btn {
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-          }
-          .bookmark-btn.active {
-            color: #ff5733;
           }
         }
       }
@@ -114,20 +103,6 @@ const MainContentBox = styled.div`
         min-height: 300px;
         margin-bottom: 20px;
       }
-      .like-btn {
-        /* background-color: slateblue; */
-        display: flex;
-        justify-content: center;
-        padding-bottom: 10px;
-        button {
-          border: none;
-          background-color: white;
-        }
-        button:hover {
-          color: #3a98b9;
-          cursor: pointer;
-        }
-      }
       .comment-box {
         border-top: 1px solid #3a98b9;
       }
@@ -136,29 +111,11 @@ const MainContentBox = styled.div`
   .article-bottom-btn {
     display: flex;
     justify-content: space-between;
-    .update-btn {
-      margin-right: 10px;
-    }
-
-    .top-btn {
-      margin-left: 10px;
-    }
-
-    button {
-      border: none;
-      border-radius: 5px;
-      height: 25px;
-    }
-    button:hover {
-      cursor: pointer;
-      background-color: #8ecddd;
-    }
   }
 `;
 
 const CommonView = () => {
   const [post, setPost] = useState();
-  const [isIconActive, setIsIconActive] = useState(false);
   const { code } = useParams();
   const navigate = useNavigate();
 
@@ -195,19 +152,6 @@ const CommonView = () => {
     window.scrollTo(0, 0);
   };
 
-  const BookMarkBtn = () => {
-    //나중에 북마크 경로로
-    window.scrollTo(0, 0);
-    setIsIconActive(!isIconActive);
-    if (isIconActive) {
-      alert("북마크가 해제되었습니다.");
-    } else {
-      alert("북마크 되었습니다.");
-    }
-  };
-
-  const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
-
   return (
     <MainStlye>
       <MainBanner>
@@ -242,16 +186,7 @@ const CommonView = () => {
                 <button className="comment-count-btn">
                   [ <span>{post?.commonCommentCount}</span> ]
                 </button>
-                <button className={"bookmark-btn"} onClick={BookMarkBtn}>
-                  <FontAwesomeIcon
-                    icon={faBookmark}
-                    style={{
-                      fontSize: "1rem",
-                      color: iconColor,
-                      marginRight: "10px",
-                    }}
-                  />
-                </button>
+                <button className="url-copy-btn">URL복사</button>
               </div>
             </div>
           </div>
@@ -260,29 +195,14 @@ const CommonView = () => {
               className="article-viewer"
               dangerouslySetInnerHTML={{ __html: String(post?.commonDesc) }}
             />
-            <div className="like-btn">
-              <button>
-                <FontAwesomeIcon icon={faHeart} style={{ color: "#FF6969" }} />
-                {" 추천 "}
-                {post?.commonLikeCount}
-              </button>
-            </div>
             <div className="comment-box">
               <CommentComponent />
             </div>
           </div>
         </div>
         <div className="article-bottom-btn">
-          <div className="left-btn">
-            <button className="list-btn">
-              <Link to={`/community`}>목록</Link>
-            </button>
-            <button className="top-btn" onClick={ScrollToTopBtn}>
-              △위로
-            </button>
-          </div>
           <div
-            className="right-btn"
+            className="left-btn"
             style={{ display: viewBtn ? "block" : "none" }}
           >
             <button
@@ -298,6 +218,14 @@ const CommonView = () => {
               value={post?.commonCode}
             >
               삭제
+            </button>
+          </div>
+          <div className="right-btn">
+            <button className="list-btn">
+              <Link to={`/community`}>목록</Link>
+            </button>
+            <button className="top-btn" onClick={ScrollToTopBtn}>
+              △위로
             </button>
           </div>
         </div>

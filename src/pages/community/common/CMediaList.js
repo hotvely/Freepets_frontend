@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
 import { getCommunityList } from "../../../api/community";
 import { Link, useNavigate } from "react-router-dom";
-import { dateFormatDefault } from "../../../api/utils";
 import CommunityList from "./CommonList";
 
 const MainStlye = styled.div`
@@ -345,7 +344,7 @@ const CMediaList = () => {
 
                 <div id="media-info-detail">
                   <p>
-                    <span>{dateFormatDefault(media?.commonDate)}</span>ㆍ조회수
+                    <span>{media?.commonDate}</span>ㆍ조회수
                     <span id="viewCount">{media?.commonViewCount}</span>회
                   </p>
                 </div>
