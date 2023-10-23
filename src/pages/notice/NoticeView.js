@@ -16,13 +16,18 @@ import {
   deleteCommentAPI,
   getBoardViewAPI,
   getCommentsAPI,
+  updateNoticeAPI,
 } from "../../api/notice";
 import CommentComponent from "./CommentComponent";
 import ReCommentComponent from "./ReCommentComponent";
 import { addBookmarkAPI } from "../../api/bookmark";
 import { useSelector } from "react-redux";
 import UpdateCommentComponent from "./UpdateCommentComponent";
-import { addNoticeNotification, addNotification } from "../../components/Notification";
+import {
+  addNoticeNotification,
+  addNotification,
+} from "../../components/Notification";
+import CommentBtnComponent from "./CommentBtnComponent";
 
 const StyledMain = styled.main`
   display: flex;
@@ -281,49 +286,12 @@ const StyledMain = styled.main`
   }
 `;
 
-const CommentBtnComponent = (props) => {
-  const user = useSelector((state) => {
-    return state.user;
-  });
-
-  const writer = props.writer;
-
-  return (
-    <>
-      <div className="comment-btn">
-        <button
-          id={props.code}
-          onClick={() => {
-            props.updateCommentHandler(props.code);
-          }}
-          className={props.className}
-        >
-          수정
-        </button>
-        <button
-          onClick={() => {
-            if (user.id == writer) {
-              props.deleteCommentHandler(props.code);
-            }
-            console.log("사용자와 작성자가 달라서 삭제 불가");
-          }}
-        >
-          삭제
-        </button>
-      </div>
-    </>
-  );
-};
-
 const NoticeView = () => {
   const { code } = useParams();
   const [postData, setPostData] = useState();
   const [comments, setComments] = useState([]);
 
   const [currClickBtn, setCurrClickBtn] = useState(-1);
-  // const [isClickBtn, setIsClickBtn] = useState(-1);
-  // const [commentUpdateBtn, setCommentUpdateBtn] = useState(false);
-  // const [reCommentUpdateBtn, setReCommentUpdateBtn] = useState(false);
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selected_Comment, setSelected_Comment] = useState(0);
 
@@ -343,44 +311,45 @@ const NoticeView = () => {
 
   const addCommentHandler = async (e) => {
     e.preventDefault();
-    const parentCode = e.target.commentDesc.id;
-    const formData = {
-      token: user.token,
-      boardName: "notice",
-      postCode: code,
-      parentCommentCode: parentCode, //부모 댓글의 코드를 백으로 넘기는 법
-      commentDesc: e.target.commentDesc.value,
-    };
-    console.log(formData);
-    console.log("선택된 댓글 번호?");
-    console.log(selected_Comment);
-
-
-    if (formData.commentDesc) {
-      const addCommentResult = await addCommentAPI(formData);
-
-
-      console.log(addCommentResult.data)
-      // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
-      const notiData = {
+    console.log(user);
+    if (user?.token) {
+      const parentCode = e.target.commentDesc.id;
+      const formData = {
         token: user.token,
+        boardName: "notice",
+        postCode: code,
+        parentCommentCode: parentCode, //부모 댓글의 코드를 백으로 넘기는 법
+        commentDesc: e.target.commentDesc.value,
+      };
+      console.log(formData);
+      console.log("선택된 댓글 번호?");
+      console.log(selected_Comment);
 
-        postCode: formData.postCode,
-        pCommentCode: addCommentResult.data.noticeCommentCodeSuper
-        ,
-        cCommentCode: addCommentResult.data.noticeCommentCode,
-        url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
-      }
+      if (formData.commentDesc) {
+        const addCommentResult = await addCommentAPI(formData);
 
-      await addNoticeNotification(notiData);
+        console.log(addCommentResult.data);
+        // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
+        const notiData = {
+          token: user.token,
 
-      const updatedComment = await getCommentsAPI(code);
-      if (updatedComment) {
-        setComments(updatedComment.data);
+          postCode: formData.postCode,
+          pCommentCode: addCommentResult.data.noticeCommentCodeSuper,
+          cCommentCode: addCommentResult.data.noticeCommentCode,
+          url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
+        };
+        await addNoticeNotification(notiData);
+
+        // const postData = {};
+        // await updateNoticeAPI(postData);
+
+        await getCommentHandler(code);
         e.target.commentDesc.value = null;
+      } else {
+        alert("댓글 작성후 등록하세요");
       }
     } else {
-      alert("댓글 작성후 등록하세요");
+      alert("로그인이 필요합니다");
     }
   };
 
@@ -511,13 +480,14 @@ const NoticeView = () => {
       <div className="desc">
         <div>{postData?.noticeDesc}</div>
       </div>
+
       <div className="commentBox">
         <div className="commentProfile">
           <img src={testImg}></img>
         </div>
-
         <CommentComponent props={0} ref={addCommentHandler} />
       </div>
+
       <div className="commentBox2">
         <ul className="comment">
           {comments?.map((comment) =>
@@ -587,8 +557,8 @@ const NoticeView = () => {
                           <ul>
                             {comments?.map((comment) =>
                               comment.noticeCommentCodeSuper <
-                                0 ? null : comment.noticeCommentCodeSuper !==
-                                  selected_Comment ? null : (
+                              0 ? null : comment.noticeCommentCodeSuper !==
+                                selected_Comment ? null : (
                                 <li
                                   key={comment.noticeCommentCode}
                                   className="comment-desc"
