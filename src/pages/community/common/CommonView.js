@@ -186,7 +186,9 @@ const CommonView = () => {
   const DeleteCommunityAPI = async (event) => {
     const id = event.target.value;
     console.log(id);
+    alert("게시물이 삭제되었습니다.");
     await deleteCommunity(id);
+    navigate("../../");
   };
   const user = useSelector((state) => state.user);
   const viewBtn = post && post.member && post.member.id === user.id;
@@ -206,6 +208,11 @@ const CommonView = () => {
   };
 
   const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
+
+  const NavListPage = () => {
+    navigate("../../");
+    window.scrollTo(0, 0);
+  };
 
   return (
     <MainStlye>
@@ -266,6 +273,7 @@ const CommonView = () => {
                 {" 추천 "}
                 {post?.commonLikeCount}
               </button>
+              {console.log(post?.commonLikeCount)}
             </div>
             <div className="comment-box">
               <CommentComponent />
@@ -274,8 +282,8 @@ const CommonView = () => {
         </div>
         <div className="article-bottom-btn">
           <div className="left-btn">
-            <button className="list-btn">
-              <Link to={`/community`}>목록</Link>
+            <button className="list-btn" onClick={NavListPage}>
+              목록
             </button>
             <button className="top-btn" onClick={ScrollToTopBtn}>
               △위로
