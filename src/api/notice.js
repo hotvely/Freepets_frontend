@@ -12,11 +12,18 @@ export const getBoardsByPage = async (page) => {
 };
 
 export const getBoardViewAPI = async (code) => {
-  return await instance.get(`notice/${code}`);
+  let url = `notice/${code}`;
+  return await instance.get(url);
 };
 
-export const getCommentsAPI = async (code) => {
-  let url = `notice/${code}/comment`;
+export const getSearchAPI = async (keyword) => {
+
+  let url = `notice/search/${keyword}`;
+  return await instance.get(url);
+};
+
+export const getCommentsAPI = async (postCode) => {
+  let url = `notice/${postCode}/comment`;
   return await instance.get(url);
 };
 
@@ -46,4 +53,14 @@ export const deleteNoticeAPI = async (code) => {
 
 export const updateNoticeAPI = async (data) => {
   return await instance.put("notice", data);
+};
+
+export const updateCommentAPI = async (data) => {
+  console.log("UpdateCommentAPI 시작");
+  return await instance.put("notice/comment", data);
+};
+
+export const deleteCommentAPI = async (code) => {
+  console.log(code);
+  return await instance.delete(`notice/comment/${code}`);
 };

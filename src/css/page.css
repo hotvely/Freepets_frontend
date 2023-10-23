@@ -1,4 +1,36 @@
-.page {
+.paging {
+    width: 100%;
+    margin-top: 10px;
     display: flex;
     flex-direction: rows;
+    justify-content: center;
+}
+
+.paging-number {
+   display: flex;
+   width: 100%;
+   justify-content: center;
+}
+
+.paging-number li {
+    padding: 10px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+}
+
+.paging-number li:hover {
+    text-decoration: underline;
+}
+
+.paging-number li button{
+    display: flex;
+    cursor: pointer;
+    color: #999;
+    border: none;
+    align-items: center;
+    background: none;
+}
+
+.active {
+    background-color: #eee;
 }

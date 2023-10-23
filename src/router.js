@@ -5,16 +5,12 @@ import MyPage from "./pages/member/MyPage";
 import HospitalReview from "./pages/information/HospitalReview";
 import Sitter from "./pages/sitter/Sitter";
 import SitterView from "./pages/sitter/SitterView";
-// import LostDetail from "./pages/LostDeatail";
-import EventCalendar from "./pages/EventCalendar";
 import Login from "./pages/member/Login";
 import Register from "./pages/member/Register";
-// import Header from "./components/Header";
 import Logout from "./pages/member/Logout";
 import MemberFindId from "./pages/member/MemberFindId";
 import MemberFindPwd from "./pages/member/MemberFindPwd";
 import Post from "./components/Post";
-
 import CMediaList from "./pages/community/common/CMediaList";
 import CommonList from "./pages/community/common/CommonList";
 import CommonView from "./pages/community/common/CommonView";
@@ -24,6 +20,8 @@ import LMediaList from "./pages/community/lost/LMediaList";
 import LostList from "./pages/community/lost/LostList";
 import LostView from "./pages/community/lost/LostView";
 import UpdatePost from "./components/UpdatePost";
+import HospitalReviewView from "./pages/information/HospitalReviewView";
+import EventCalendar from "./pages/notice/EventCalendar";
 
 const router = createBrowserRouter([
   {
@@ -85,6 +83,14 @@ const router = createBrowserRouter([
       {
         path: "hospital/create",
         element: <Post />,
+      },
+      {
+        path: "hospital/:code",
+        element: <HospitalReviewView />,
+      },
+      {
+        path: "hospital/:postCode/update/:boardCode",
+        element: <UpdatePost/>
       },
     ],
   },
@@ -152,7 +158,6 @@ const router = createBrowserRouter([
   },
   {
     path: "/sitter",
-
     element: <BLayout />,
     children: [
       {
@@ -160,8 +165,16 @@ const router = createBrowserRouter([
         element: <Sitter />,
       },
       {
-        path: "view",
+        path: "?page=:page",
+        element: <Sitter />,
+      },
+      {
+        path: "view/:code",
         element: <SitterView />,
+      },
+      {
+        path: ":postCode/update/:boardCode",
+        element: <UpdatePost/>,
       },
       {
         path: "create",
@@ -169,7 +182,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
     path: "/auth",
     children: [

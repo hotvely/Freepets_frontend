@@ -123,8 +123,9 @@ const Post = () => {
   const [title, setTitle] = useState();
   const onClick = async () => {
     const data = JSON.parse(localStorage.getItem("user"));
-    const formData = new FormData();
 
+    const formData = new FormData();
+    
     formData.append("title", title);
     formData.append("desc", desc);
     formData.append("token", data.token);
@@ -137,42 +138,26 @@ const Post = () => {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
       formData.append("sitterLoc", rank2);
+      console.log(formData);
       await addSitterBoard(formData);
     } else if (select == 4) {
-      formData.append("hospitalName", rank1);
-      formData.append("hospitalAddress", rank2);
+      // formData.append("hospitalName", rank1);
+      // formData.append("hospitalAddress", rank2);
       await addHospitalBoard(formData);
     } else if (select == 5) {
       await addNoticeBoard(formData);
     }
     navigate("../");
   };
+
   const InputDescHandler = (e) => {
     setDesc(e);
   };
+
   const selectChange = (e) => {
     setSelect(e.currentTarget.value);
   };
-  /*
-  const imageHandler = () => {
-    console.log("이미지 버튼 누를 때 작동되는 핸들러임");
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
-    input.addEventListener("change", async () => {
-      console.log("파일 바뀌는 이벤트");
-      const file = input.files[0];
-      console.log(file);
-            const imageUrl = await addImg(formData);
-            console.log(imageUrl.data);
-            const url = "/upload/" + imageUrl.data;
-            const editor = quillRef.current.getEditor();
-            const range = editor.getSelection();
-            editor.insertEmbed(range.index, 'image', url);
-        })
-    }
-    */
+  
   const modules = useMemo(
     () => ({
       toolbar: {

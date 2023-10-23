@@ -32,7 +32,7 @@ export const getSitterSearch = async (page, keyword) => {
   let url = `sitter/search?keyword=${keyword}&page=${page}`;
   return await instance.get(url);
 };
-export const getSitterPriceOrder = async (order) => {
-  let url = `sitter/price/${order}`;
+export const getSitterPriceOrder = async (order, page) => {
+  let url = `sitter/price/${order}?page=${page}`;
   return await instance.get(url);
 };

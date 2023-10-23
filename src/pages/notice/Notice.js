@@ -12,9 +12,12 @@ import {
 import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { deleteNoticeAPI, getBoardsByPage } from "../../api/notice";
+import {
+  deleteNoticeAPI,
+  getBoardsByPage,
+  getSearchAPI,
+} from "../../api/notice";
 import { Link } from "react-router-dom";
-import NoticePost from "../../components/NoticePost";
 
 const MainStyle = styled.main`
   display: flex;
@@ -56,6 +59,7 @@ const MainStyle = styled.main`
       justify-content: end;
       flex: 0 1 40%;
       margin: 20px 30px;
+
       /* font-size: 1.2rem; */
       label {
         margin: 5px;
@@ -64,12 +68,17 @@ const MainStyle = styled.main`
         color: black;
       }
       input {
+        padding: 0 10px;
         margin: 5px;
-        width: 200px;
+        width: 170px;
         height: 30px;
         border: 0;
         border-radius: 25px;
         background-color: lightblue;
+      }
+      button {
+        border: 0;
+        background-color: white;
       }
     }
   }
@@ -189,9 +198,12 @@ const PagingStyle = styled.div`
 const Notice = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
-  const [maxpage, setMaxPage] = useState();
   const [boards, setBoards] = useState([]);
-  const [isDelete, setIsDelete] = useState(false);
+  const [keyword, setKeyword] = useState("");
+
+  const keywordHandler = (e) => {
+    setKeyword(e.target.value);
+  };
 
   const user = useSelector((state) => {
     return state.user;
@@ -204,20 +216,33 @@ const Notice = () => {
     setBoards([...response.data]);
   };
 
-  const updateHandler = (e) => {
-    navigate(`/notice/update/5/${e.target.id}`);
+  const getSearchBoardHandler = async () => {
+    // 검색기능..
+    const response = await getSearchAPI(keyword);
+    console.log(response.data);
+    if (response.data.length > 0) {
+      setBoards([...response.data]);
+    }
+    else {
+      await getBoardHandler(page);
+    }
   };
 
-  const deleteHandler = async (e) => {
-    try {
+  const updateHandler = (e, id) => {
+    if (user.id == id) navigate(`/notice/update/5/${e.target.id}`);
+    else console.log("작성자와 사용자가 다름");
+  };
+
+  const deleteHandler = async (e, id) => {
+    if (user.id == id) {
       setBoards([]);
       await deleteNoticeAPI(e.target.id);
 
       const response = await getBoardsByPage(page);
 
       setBoards([...response.data]);
-    } catch (e) {
-      console.log(e);
+    } else {
+      console.log("작성자와 사용자가 다름");
     }
   };
 
@@ -226,7 +251,6 @@ const Notice = () => {
     getBoardHandler();
   }, []);
 
-  console.log(boards);
   return (
     <MainStyle>
       <div className="venner">
@@ -243,11 +267,18 @@ const Notice = () => {
         </div>
         <div className="search">
           <label>검색</label>
-          <input type="text" id="search" name="search" />
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            style={{ color: "#138CA7", margin: "0px 5px" }}
+          <input
+            type="text"
+            id="search"
+            name="search"
+            onChange={keywordHandler}
           />
+          <button onClick={getSearchBoardHandler}>
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              style={{ color: "#138CA7", margin: "0px 5px" }}
+            />
+          </button>
         </div>
       </div>
 
@@ -255,7 +286,6 @@ const Notice = () => {
         <section>
           {boards?.map((items) => (
             <div key={items?.noticeCode}>
-              {console.log(items)}
               <PostStyle>
                 <div className="memberPhoto">
                   <img src={testImg}></img>
@@ -292,14 +322,18 @@ const Notice = () => {
                   <button
                     id={items?.noticeCode}
                     style={{ backgroundColor: "lightyellow" }}
-                    onClick={updateHandler}
+                    onClick={(e) => {
+                      updateHandler(e, items.member.id);
+                    }}
                   >
                     수정
                   </button>
                   <button
                     id={items?.noticeCode}
                     style={{ backgroundColor: "pink" }}
-                    onClick={deleteHandler}
+                    onClick={(e) => {
+                      deleteHandler(e, items.member.id);
+                    }}
                   >
                     삭제
                   </button>

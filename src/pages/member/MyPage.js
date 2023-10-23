@@ -9,6 +9,8 @@ import { asyncDelete, userSave } from "../../components/store/userSlice";
 import ReactModal from "react-modal";
 import MemberUpdate from "./MemberUpdate";
 import Logout from "./Logout";
+import { deleteNotificationAPI, getNotificationAPI } from "../../api/auth";
+import { deleteNoticeNotification, getNoticeNotification } from "../../components/Notification";
 
 const MyPageMain = styled.main`
   margin: 0;
@@ -258,6 +260,7 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   const user = useSelector((state) => {
     return state.user;
@@ -277,8 +280,13 @@ const MyPage = () => {
   useEffect(() => {
     if (Object.keys(user).length === 0) {
       navigate("/main");
+      setNotifications([]);
+    }
+    else {
+      getNotiHandler();
     }
   }, [user]);
+
 
   const phoneFormatter = (data) => {
     if (data) {
@@ -317,6 +325,24 @@ const MyPage = () => {
   const deleteUser = () => {
     dispatch(asyncDelete({ token: user.token }));
   };
+
+  const getNotiHandler = async () => {
+
+    const result = await getNoticeNotification(user.token);
+
+    console.log(result.data);
+    setNotifications([...result.data]);
+  }
+
+  const deleteNotiHandler = async (e) => {
+    e.preventDefault();
+    const code = e.target.closest('.check-Alarm').className.split('check-Alarm notification')[1]
+
+    const result = await deleteNoticeNotification(code);
+    console.log(result.data);
+
+    setNotifications([]);
+  }
 
   return (
     <>
@@ -387,157 +413,45 @@ const MyPage = () => {
           <header>
             <p>알림 확인하기</p>
             <div className="alarm">
-              <div>1</div>
+              <div>{notifications?.length}</div>
             </div>
           </header>
-          <div className="check-Alarm">
-            <img src={image}></img>
-            <a href="#">
-              <div className="check-Alarm-Content">
-                <div className="check_Alarm-info">
-                  XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
-                </div>
-                <div className="check_Alarm-info">
-                  <div>2시간전...</div>
-                  <div>hotvely</div>
-                </div>
+          {notifications?.map((noti) => (
+
+            <div className={`check-Alarm notification${noti.code}`} key={noti.code} onClick={deleteNotiHandler} >
+              <img src={image}></img>
+              <div >
+                <Link to={noti.url} >
+                  <div className="check-Alarm-Content">
+                    <div className="check_Alarm-info">
+                      {console.log(noti)}
+                      {noti.boardCode == 1 ? ("커뮤니티 게시판 ") :
+                        noti.boardCode == 2 ? ("분실 신고 게시판 ") :
+                          noti.boardCode == 3 ? ("시터 게시판 ") :
+                            noti.boardCode == 4 ? ("병원 정보 게시판 ") :
+                              noti.boardCode == 5 ? ("공지사항 게시판 ") : "게시판정보?"
+                      }
+                      {noti.childComment.parentCommentCode > 0 ?
+                        `'${noti.boardDTO.title}' 게시글에 작성한 '${noti.parentComment?.commentDesc}' 댓글에 대댓글이 달렸습니다. `
+                        : `'${noti.boardDTO.title}' 게시글에 댓글이 달렸습니다. `}
+                    </div>
+                    <div className="check_Alarm-info">
+                      <div>2시간전...</div>
+                      <div>hotvely</div>
+                    </div>
+                  </div>
+                </Link>
               </div>
-            </a>
-            <button>X</button>
-          </div>
-          <div className="check-Alarm">
-            <img src={image}></img>
-            <a href="#">
-              <div className="check-Alarm-Content">
-                <div className="check_Alarm-info">
-                  XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
-                </div>
-                <div className="check_Alarm-info">
-                  <div>2시간전...</div>
-                  <div>hotvely</div>
-                </div>
-              </div>
-            </a>
-            <button>X</button>
-          </div>
-          <div className="check-Alarm">
-            <img src={image}></img>
-            <a href="#">
-              <div className="check-Alarm-Content">
-                <div className="check_Alarm-info">
-                  XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
-                </div>
-                <div className="check_Alarm-info">
-                  <div>2시간전...</div>
-                  <div>hotvely</div>
-                </div>
-              </div>
-            </a>
-            <button>X</button>
-          </div>{" "}
-          <div className="check-Alarm">
-            <img src={image}></img>
-            <a href="#">
-              <div className="check-Alarm-Content">
-                <div className="check_Alarm-info">
-                  XXXXX게시판에 작성하신 XXXXXX... 글에 댓글이 달렸습니다.
-                </div>
-                <div className="check_Alarm-info">
-                  <div>2시간전...</div>
-                  <div>hotvely</div>
-                </div>
-              </div>
-            </a>
-            <button>X</button>
-          </div>
+
+            </div>))}
+
         </div>
+
+
 
         <div className="profile-Post">
           <header>
-            <p>내가 쓴 게시글 확인하기</p>
-          </header>
-          <div className="Post">
-            <img src={image}></img>
-            <div className="postInfo_basic">닉네임</div>
-            <div className="postInfo_boardname">게시판이름</div>
-            <div className="postInfo_title">
-              <a>
-                게시글 제as dasdasd모 dasdasd구람sadas das뉴ㅜdsfsdfㅎ마ㅓasds
-                ad규히ㅏ휴김하sadasdsad asfasfasf sfdadasdadㅓ
-              </a>
-            </div>
-            <div className="postInfo_date">2023-09-21</div>
-          </div>
-
-          <div className="Post">
-            <img src={image}></img>
-            <div className="postInfo_basic">닉네임</div>
-            <div className="postInfo_boardname">게시판이름</div>
-            <div className="postInfo_title">
-              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
-            </div>
-            <div className="postInfo_date">2023-09-21</div>
-          </div>
-          <div className="Post">
-            <img src={image}></img>
-            <div className="postInfo_basic">닉네임</div>
-            <div className="postInfo_boardname">게시판이름</div>
-            <div className="postInfo_title">
-              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
-            </div>
-            <div className="postInfo_date">2023-09-21</div>
-          </div>
-        </div>
-
-        <div className="profile-myReview">
-          <header>
-            <p>내가 쓴 댓글 확인하기</p>
-          </header>
-          <div className="myReview">
-            <div className="review_boardname">게시판이름</div>
-            <div className="review_title">
-              <a>게시글 제모오오옥as dasdasd모 da</a>
-            </div>
-            <div className="review_content">
-              리뷰내용....아아아아돌겠따 짜증난다 미치겠따 화가난다
-            </div>
-            <div className="review_date">2023-09-21</div>
-          </div>
-          <div className="myReview">
-            <div className="review_boardname">게시판이름</div>
-            <div className="review_title">
-              <a>게시글 제모오오옥as dasdasd모 da</a>
-            </div>
-            <div className="review_content">
-              리뷰내용....아아아아돌겠따 짜증난다 미치겠따 화가난다
-            </div>
-            <div className="review_date">2023-09-21</div>
-          </div>
-          <div className="myReview">
-            <div className="review_boardname">게시판이름</div>
-            <div className="review_title">
-              <a>게시글 제모오오옥as dasdasd모 da</a>
-            </div>
-            <div className="review_content">
-              리뷰내용....아아아아돌겠따 짜증난다 미치겠따 화가난다
-            </div>
-            <div className="review_date">2023-09-21</div>
-          </div>
-          <div className="myReview">
-            <div className="review_boardname">게시판이름</div>
-            <div className="review_title">
-              <a>게시글 제모오오옥as dasdasd모 da</a>
-            </div>
-            <div className="review_content">
-              리뷰내용....아아아아돌겠따 짜증난다 미치겠따 화가난다
-            </div>
-            <div className="review_date">2023-09-21</div>
-          </div>
-        </div>
-
-        <div className="profile-Post">
-          <header>
-            <p>내가 좋아요 한 게시글 확인하기</p>
+            <p>북마크 게시글</p>
           </header>
           <div className="Post">
             <img src={image}></img>
@@ -585,7 +499,7 @@ const MyPage = () => {
             <div className="postInfo_date">2023-09-21</div>
           </div>
         </div>
-      </MyPageMain>
+      </MyPageMain >
     </>
   );
 };
