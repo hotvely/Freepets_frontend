@@ -17,7 +17,7 @@ const ReCommentComponent = forwardRef((props, ref) => {
   `;
 
   return (
-    <Styled>
+    <Styled className="commentDesc">
       {console.log(data)}
       {/* 대댓글 + code :{`${comment.noticeCommentCode}`} */}
 
@@ -30,7 +30,7 @@ const ReCommentComponent = forwardRef((props, ref) => {
       ></img>
 
       <div> {data.member.nickname} : </div>
-      <div> {data.noticeCommentDesc} </div>
+      <div className="commentTextBox"> {data.noticeCommentDesc} </div>
       <div> {data.noticeCommentDate}</div>
     </Styled>
   );

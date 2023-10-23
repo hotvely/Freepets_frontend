@@ -154,26 +154,6 @@ const Post = () => {
     setSelect(e.currentTarget.value);
   };
   
-  /*
-  const imageHandler = () => {
-    console.log("이미지 버튼 누를 때 작동되는 핸들러임");
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
-    input.addEventListener("change", async () => {
-      console.log("파일 바뀌는 이벤트");
-      const file = input.files[0];
-      console.log(file);
-            const imageUrl = await addImg(formData);
-            console.log(imageUrl.data);
-            const url = "/upload/" + imageUrl.data;
-            const editor = quillRef.current.getEditor();
-            const range = editor.getSelection();
-            editor.insertEmbed(range.index, 'image', url);
-        })
-    }
-    */
   const modules = useMemo(
     () => ({
       toolbar: {

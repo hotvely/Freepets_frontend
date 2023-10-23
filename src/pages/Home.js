@@ -179,15 +179,15 @@ const Home = () => {
           <a href="#">CS</a>
           <div className="rightNav">
             {user === null ||
-            Object.keys(user).length === 0 ||
-            !localStorage.getItem("token") ? (
+              Object.keys(user).length === 0 ||
+              !localStorage.getItem("token") ? (
               <>
                 <Link to="/auth/login">Sign in</Link> <p>|</p>
                 <Link to="/auth/register">Sign up</Link>
               </>
             ) : (
               <>
-                <Link to="/mypage">MyPage</Link>
+                <Link to="/mypage">Mypage</Link>
                 <p>|</p>
                 <Link to="/auth/logout">Logout</Link>
               </>
