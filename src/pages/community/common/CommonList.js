@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCommunityList } from "../../../api/community";
+import { dateFormatTrans } from "../../../api/utils";
 import CommunityTableForList from "../../../components/Community/CommunityTableForList";
 
 const ContentStyle = styled.div`
@@ -53,7 +54,7 @@ const CommunityList = () => {
         commonCode: post.commonCode,
         commonTitle: post.commonTitle,
         nickName: post?.member?.nickname,
-        commonDate: post.commonDate,
+        commonDate: dateFormatTrans(post.commonDate),
         commonViewCount: post.commonViewCount,
         commonLikeCount: post.commonLikeCount,
       })),

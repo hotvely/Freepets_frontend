@@ -1,7 +1,6 @@
 import React from "react";
 import { useTable } from "react-table";
 import styled from "styled-components";
-
 const Styles = styled.div`
   table {
     width: 100%;
