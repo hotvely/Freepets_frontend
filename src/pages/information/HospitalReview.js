@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { getHospitalBoard } from "../../../src/api/info";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getHospitalBoard, getsearchSelect } from "../../../src/api/info";
 import banner from "../../resources/bannerTest.png";
-import testImg from "../../resources/image.jpg";
+import yaonge from "../../resources/yaonge.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -12,6 +12,9 @@ import {
   faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
+import Page from "../../components/Page";
+import { dateFormatTrans } from "../../api/utils";
+import { keyboard } from "@testing-library/user-event/dist/keyboard";
 
 const MainStyle = styled.div`
   margin: 0px 40px;
@@ -110,7 +113,6 @@ const MainHeader = styled.header`
 
     .header-end-label {
       margin-right: 5px;
-      padding-left: 10px;
 
       label {
         font-size: 0.8rem;
@@ -167,6 +169,10 @@ const MainContent = styled.main`
     padding: 20px 10px;
     border-bottom: 1px solid #ededed;
 
+    &:hover {
+      background-color: #EDF5FF;
+    }
+
     .main-content-view {
       display: flex;
       justify-content: space-between;
@@ -181,9 +187,21 @@ const MainContent = styled.main`
           margin-left: 20px;
 
           div {
-            #sitterTitle {
-              font-weight: bold;
+            #hrTitle {
               margin-bottom: 10px;
+              font-weight: bold;
+            }
+          }
+
+          .main-content_start-hospital {
+            display: flex;
+            margin-bottom: 20px;
+
+            #hospitalName {
+              background-color: #98DBF2;
+              padding: 5px;
+              border-radius: 5px;
+              font-size: 0.8rem;
             }
           }
 
@@ -204,27 +222,30 @@ const MainContent = styled.main`
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        margin-right: 5px;
 
         p {
-          font-size: 1.5rem;
-          color: orange;
-          -webkit-text-stroke: 1px orange;
-
-          #sitterPrice {
-            margin-right: 5px;
-          }
+          font-size: 1rem;
+          color: #B0B0B0;
+          margin-left: 60px;
         }
 
-        button {
-          width: 100px;
-          padding: 5px;
-          border: 1px solid #3a98b9;
-          border-radius: 5px;
-          background-color: white;
-          color: #3a98b9;
+        .viewicon {
+          color: black;
           font-weight: bold;
-          cursor: pointer;
+
+          #like {
+            margin-left: 5px;
+            margin-right: 5px;
+          }
+
+          #views {
+            margin-left: 5px;
+            margin-right: 5px;
+          }
+
+          #comment {
+            margin-left: 5px;
+          }
         }
       }
     }
@@ -233,18 +254,49 @@ const MainContent = styled.main`
 
 const HospitalReview = () => {
   const navigator = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get('page');
   const [boards, setBoard] = useState([]);
+  const [search, setSearch] = useState(null);
+  const [select1, setSelect1] = useState(1);
+  const [select2, setSelect2] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+
+  const page = searchPage != null ? searchPage : 1;
+
   const NavWrite = () => {
-    navigator("hospital/create");
+    navigator("create");
   };
 
   const getHospitalBoardAPI = async () => {
-    const result = await getHospitalBoard(1);
-    setBoard([...boards, ...result.data]);
+    const result = await getHospitalBoard(page);
+    console.log(result.data);
+    setBoard(result.data.hospitalReviewList);
+    setTotalPages(result.data.totalPages);
+  };
+  
+  const searchClickHandler = async () => {
+    let result = null;
+    if(select2 == 1) {
+      console.log(search);
+      result = await getsearchSelect(page, search, 1);
+    } else {
+      console.log(search);
+      result = await getsearchSelect(page, search, 2);
+    }
+    
+    setBoard(result.data.hospitalReviewList);
+    setTotalPages(result.data.totalPages);
   };
 
+
   useEffect(() => {
-    getHospitalBoardAPI();
+    // window.scrollTo(0, 0);
+    // if(search != null) {
+    //   searchClickHandler();
+    // } else {
+    //   getHospitalBoardAPI();
+    // }
   }, []);
 
   return (
@@ -255,82 +307,88 @@ const HospitalReview = () => {
       <MainBox>
       <MainHeader>
           <div className="header-start">
-            <select>
+            <select onChange={(e) => setSelect1(e.target.value)}>
               <option value="1">최신순</option>
               <option value="2">추천순</option>
               <option value="3">조회수</option>
             </select>
-            <button className="button-write">
+            <button className="button-write" onClick={NavWrite}>
               글쓰기
             </button>
           </div>
           <div className="header-end">
             <div className="header-end-label">
-              <label htmlFor="search">병원 조회</label>
-              <FontAwesomeIcon
-                icon={faCaretDown}
-                style={{ color: "#3a98b9" }}
-              />
+              <select onChange={(e) => setSelect2(e.target.value)}>
+                <option value="1">병원 조회</option>
+                <option value="2">지역 조회</option>
+              </select>
             </div>
             <input
               type="text"
               id="search"
               name="search"
+              onClick={(e) => setSearch(e.target.value)}
             />
             <button>
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
                 style={{ color: "#3a98b9" }}
+                onClick={searchClickHandler}
               />
             </button>
           </div>
-        </MainHeader>
+      </MainHeader>
       <MainContent>
-      <section>
-      <div className="main-content">
-                <div
-                  className="main-content-view"
-                >
-                  <div className="main-content_start">
-                    <img
-                      src={testImg}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                      }}
-                    ></img>
-                    <div className="main-content_start-desc">
-                      <div>
-                        <p id="sitterTitle">제목</p>
-                      </div>
-                      <div
-                        className="main-content_start-desc-name"
-                        
-                      >
-                        <p id="nickname">닉네임</p>
-                      </div>
+        <section>
+          {boards.map((item) => (
+            <div className="main-content" key={item.hospitalReviewCode}>
+            <div
+              className="main-content-view"
+              >
+                <div className="main-content_start">
+                  <img
+                    src={yaonge}
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      objectFit: "cover",
+                    }}
+                  ></img>
+                  <div className="main-content_start-desc">
+                    <div>
+                      <p id="hrTitle">{item.hospitalReviewTitle}</p>
+                    </div>
+                    <div className="main-content_start-hospital">
+                      <p id="hospitalName"># {item.hospitalName}</p>
+                    </div>
+                    <div className="main-content_start-desc-name">
+                      <p id="nickname">{item.member.nickname}</p>
                     </div>
                   </div>
-                  <div className="main-content_end">
-                    <p>
-                      <span id="sitterPrice">2023-10-22</span>
-                    </p>
-                    <div className="viewicon">
-                      <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#1FB1D1" }} />
-                      <span id="like">50</span>{" "}
-                      <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
-                      <span id="views">150</span>
-                      <FontAwesomeIcon icon={faComments} style={{ color: "#1FB1D1" }} />
-                      <span id="comment">30</span>
-                  </div>
-                  </div>
                 </div>
+                <div className="main-content_end">
+                  <p>
+                    <span id="hrDate">{dateFormatTrans(item.hospitalReviewDate)}</span>
+                  </p>
+                  <div className="viewicon">
+                    <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#98DBF2" }} />
+                    <span id="like">{item.hospitalReviewLike}</span>
+                    <FontAwesomeIcon icon={faEye} style={{ color: "#98DBF2" }} />
+                    <span id="views">{item.hospitalReviewViews}</span>
+                    <FontAwesomeIcon icon={faComments} style={{ color: "#98DBF2" }} />
+                    <span id="comment">{item.hospitalReviewCommentCount}</span>
+                  </div>
               </div>
-              </section>
+            </div>
+          </div>
+          ))}         
+          </section>
       </MainContent>
       </MainBox>
-      {/* <Page /> */}
+      <Page 
+        page={page}
+        totalPages={totalPages}
+      />
     </MainStyle>
   );
 };

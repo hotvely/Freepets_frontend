@@ -9,3 +9,8 @@ export const getHospitalBoard = async (page) => {
 export const addHospitalBoard = async (data) => {
   return await instance.post("hr", data);
 };
+
+export const getsearchSelect = async (page, keyword, select) => {
+  let url = `hr/search?page=${page}&keyword=${keyword}&select=${select}`
+  return await instance.get(url);
+}

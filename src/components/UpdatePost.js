@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
-import { addSitterBoard, addImg } from "../api/sitter";
+import { addSitterBoard, updateSitterBoard } from "../api/sitter";
 import SitterPost from "./SitterPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
@@ -139,6 +139,9 @@ const UpdatePost = () => {
     if (select == 1) {
     } else if (select == 2) {
     } else if (select == 3) {
+      formData.sitterPrice = rank1;
+      formData.sitterLoc = rank2;
+      await updateSitterBoard(formData);
     } else if (select == 4) {
     } else if (select == 5) {
       await updateNoticeAPI(formData);

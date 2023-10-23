@@ -126,8 +126,13 @@ const MainContent = styled.main`
     padding: 20px 10px;
     border-bottom: 1px solid #ededed;
 
+    &:hover {
+      background-color: #EDF5FF;
+    }
+
     .main-content-view {
       display: flex;
+      cursor: pointer;
       justify-content: space-between;
 
       .main-content_start {

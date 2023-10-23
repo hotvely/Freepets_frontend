@@ -69,7 +69,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/information",
+    path: "/hospital",
     element: <BLayout />,
     children: [
       {
@@ -77,19 +77,19 @@ const router = createBrowserRouter([
         element: <HospitalReview />,
       },
       {
-        path: "hospital",
+        path: '?page=:page',
         element: <HospitalReview />,
       },
       {
-        path: "hospital/create",
+        path: "create",
         element: <Post />,
       },
       {
-        path: "hospital/:code",
+        path: "view/:code",
         element: <HospitalReviewView />,
       },
       {
-        path: "hospital/:postCode/update/:boardCode",
+        path: ":postCode/update/:boardCode",
         element: <UpdatePost/>
       },
     ],

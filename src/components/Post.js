@@ -137,8 +137,8 @@ const Post = () => {
       console.log(formData);
       await addSitterBoard(formData);
     } else if (select == 4) {
-      // formData.append("hospitalName", rank1);
-      // formData.append("hospitalAddress", rank2);
+      formData.append("hospitalName", rank1);
+      formData.append("hospitalAddress", rank2);
       await addHospitalBoard(formData);
     } else if (select == 5) {
       await addNoticeBoard(formData);

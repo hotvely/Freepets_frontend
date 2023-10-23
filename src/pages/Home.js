@@ -175,7 +175,7 @@ const Home = () => {
           <a href="/sitter">Sitter</a>
 
           <a href="/community">Community</a>
-          <a href="/information">Information</a>
+          <a href="/hospital">Information</a>
           <a href="#">CS</a>
           <div className="rightNav">
             {user === null ||

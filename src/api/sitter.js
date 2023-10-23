@@ -24,6 +24,9 @@ export const getReviews = async (id) => {
 export const addSitterBoard = async (data) => {
   return await instance.post("sitter", data);
 };
+export const updateSitterBoard = async (data) => {
+  return await instance.put("sitter", data);
+};
 export const deleteSitterBoard = async (id) => {
   let url = `sitter/${id}`;
   return await instance.delete(url);

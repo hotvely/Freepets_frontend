@@ -67,7 +67,7 @@ const Header = () => {
           <a href="/notice">Notice</a>
           <a href="/sitter">Sitter</a>
           <a href="/community">Community</a>
-          <a href="/information">Information</a>
+          <a href="/hospital">Information</a>
           <a href="#">CS</a>
           <div className="rightNav">
             {Object.keys(user).length === 0 ? (
