@@ -116,6 +116,10 @@ const router = createBrowserRouter([
             path: "create",
             element: <Post />,
           },
+          {
+            path: ":postCode/update/:boardCode",
+            element: <UpdatePost />,
+          },
         ],
       },
       // {

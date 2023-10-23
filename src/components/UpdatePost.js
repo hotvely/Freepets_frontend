@@ -125,7 +125,9 @@ const UpdatePost = () => {
 
   const onClick = async () => {
     const data = JSON.parse(localStorage.getItem("user"));
-    const token = JSON.parse(localStorage.getItem("token"));
+    // const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
+    console.log(token);
     const formData = {
       title: title,
       desc: desc,

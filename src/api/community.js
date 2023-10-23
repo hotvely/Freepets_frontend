@@ -21,6 +21,10 @@ export const addCommunity = async (data) => {
   return await instance.post("community", data);
 };
 
+export const updateCommunity = async (data) => {
+  return await instance.put("community", data);
+};
+
 export const deleteCommunity = async (id) => {
   console.log("삭제 됐나?");
   return await instance.delete(`community/${id}`);

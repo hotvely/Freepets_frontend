@@ -52,7 +52,7 @@ const CommunityList = () => {
       commonPost.map((post) => ({
         commonCode: post.commonCode,
         commonTitle: post.commonTitle,
-        nickName: post.member.nickname,
+        nickName: post?.member?.nickname,
         commonDate: post.commonDate,
         commonViewCount: post.commonViewCount,
         commonLikeCount: post.commonLikeCount,

@@ -304,9 +304,9 @@ const CMediaList = () => {
         <div className="media-colum">
           {mediae.map((media) => (
             // <Link to={"/commonview/" + media.commonCode}>
-            <div className="media-content" key={media.commonCode}>
+            <div className="media-content" key={media?.commonCode}>
               <div className="media-thumbnail">
-                <Link to={`/community/common/commonview/${media.commonCode}`}>
+                <Link to={`/community/common/commonview/${media?.commonCode}`}>
                   <p>
                     <img
                       src={media.commonDesc.substring(
@@ -321,31 +321,31 @@ const CMediaList = () => {
               <div className="media-info">
                 <div className="media-info-first-line">
                   <Link
-                    to={"/commonview/" + media.commonCode}
+                    to={"/commonview/" + media?.commonCode}
                     id="media-info-title"
                   >
-                    <h3>{media.commonTitle}</h3>
+                    <h3>{media?.commonTitle}</h3>
                   </Link>
                   <div
                     id="media-info-comment"
                     onClick={() => {
-                      activateComments(media.commonCode);
+                      activateComments(media?.commonCode);
                     }}
                   >
                     <p>
-                      [<span>{media.commonCommentCount}</span>]
+                      [<span>{media?.commonCommentCount}</span>]
                     </p>
                   </div>
                 </div>
 
                 <div id="media-info-writer">
-                  <p>{media.member.nickname}</p>
+                  <p>{media?.member?.nickname}</p>
                 </div>
 
                 <div id="media-info-detail">
                   <p>
-                    <span>{media.commonDate}</span>ㆍ조회수
-                    <span id="viewCount">{media.commonViewCount}</span>회
+                    <span>{media?.commonDate}</span>ㆍ조회수
+                    <span id="viewCount">{media?.commonViewCount}</span>회
                   </p>
                 </div>
               </div>
