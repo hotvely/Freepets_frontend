@@ -59,6 +59,10 @@ export const updateCommentAPI = async (data) => {
   return await instance.put("notice/comment", data);
 };
 
+export const updateLikeNoticeAPI = async (data) => {
+  return await instance.post("notice/like", data);
+};
+
 export const deleteCommentAPI = async (code) => {
   console.log(code);
   return await instance.delete(`notice/comment/${code}`);

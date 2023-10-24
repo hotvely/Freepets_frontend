@@ -16,6 +16,7 @@ import {
   deleteCommentAPI,
   getBoardViewAPI,
   getCommentsAPI,
+  updateLikeNoticeAPI,
   updateNoticeAPI,
 } from "../../api/notice";
 import CommentComponent from "./CommentComponent";
@@ -28,268 +29,14 @@ import {
   addNotification,
 } from "../../components/Notification";
 import CommentBtnComponent from "./CommentBtnComponent";
-
-const StyledMain = styled.main`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  height: 100vw;
-  align-items: center;
-
-  .venner {
-    width: 90%;
-    img {
-      width: 100%;
-      height: 150px;
-    }
-  }
-
-  .vennerBottom {
-    display: flex;
-    align-items: center;
-    width: 90%;
-    margin-top: 1.75rem;
-    margin-bottom: 1.75rem;
-    position: relative;
-
-    .full {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      width: 100%;
-
-      .full-line-left {
-        border: 1px solid hsla(220, 9%, 46%, 0.3);
-        width: 1%;
-      }
-
-      .full-line-right {
-        border: 1px solid hsla(220, 9%, 46%, 0.3);
-        width: 92.7%;
-        margin-left: 103px;
-      }
-    }
-    .vennerText {
-      .text-box {
-        background-color: white;
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-        margin-left: 1.25rem;
-
-        .text-blue {
-          color: #2687a6;
-        }
-      }
-    }
-  }
-
-  .contentHeader {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    width: 90%;
-
-    .userProfile {
-      display: flex;
-      flex-direction: row;
-      .profile {
-        margin: 0px 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        img {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-        }
-      }
-      .user {
-        margin: 0px 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .usertTitle {
-          display: flex;
-          p {
-            margin: 5px 0px;
-            border: 2px solid #dedede;
-            border-radius: 5px;
-            padding: 5px;
-            font-weight: bolder;
-          }
-        }
-
-        .viewicon {
-          margin: 5px 0px;
-          span {
-            margin-right: 15px;
-          }
-        }
-      }
-    }
-    .icon {
-    }
-  }
-
-  .descHeader {
-    width: 90%;
-    margin: 15px 0px;
-    font-weight: bolder;
-    font-size: 45px;
-  }
-  .desc {
-    width: 90%;
-    border: 1px solid hsla(220, 9%, 46%, 0.3);
-    height: 30%;
-    margin: 30px 0px;
-  }
-  .commentProfile {
-    // flex: 0 1 10%;
-    //margin: 0 15px;
-
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-  }
-  .commentBox {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 90%;
-    height: 70px;
-    margin-top: 30px;
-    .commentProfile {
-      margin-right: 20px;
-      width: 50px;
-      flex: none;
-    }
-
-    /* form {
-      width: 80%;
-      height: 80px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      .commentDesc {
-        margin-left: 30px;
-        width: 80%;
-        input {
-          padding: 15px;
-          border-radius: 10px;
-          width: 90%;
-          height: 15px;
-        }
-      }
-      .submitBtn {
-        button {
-          border-radius: 10px;
-          height: 50px;
-          background-color: skyblue;
-          color: white;
-          border: 0;
-        }
-      }
-    } */
-  }
-
-  .commentBox2 {
-    width: 90%;
-    .comment {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 100%;
-      margin-top: 80px;
-
-      .userProfile {
-        display: flex;
-        flex-direction: column;
-        margin-top: 10px;
-
-        .useruser {
-          display: flex;
-          flex-direction: row;
-
-          .profile {
-            margin: 0px 5px;
-            img {
-              width: 50px;
-              height: 50px;
-              border-radius: 50%;
-            }
-          }
-
-          .user {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            p {
-              margin-left: 10px;
-              border: 2px solid #dedede;
-              border-radius: 5px;
-              padding: 5px;
-              font-weight: bolder;
-            }
-            span {
-              margin-right: 10px;
-            }
-          }
-        }
-        .comment-desc {
-          width: 70%;
-          padding: 20px;
-          margin-top: 10px;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          .comment-btn {
-            button {
-              border: 0;
-              padding: 5px;
-              border-radius: 5px;
-              background-color: #437b92;
-              color: white;
-              margin: 0 5px;
-            }
-          }
-        }
-
-        .reCommentContent {
-          padding: 20px;
-          .commentView_btn {
-            height: 40px;
-            background-color: #437b92;
-            border: 0;
-            border-radius: 5px;
-            color: white;
-            margin: 10px 0;
-          }
-
-          ul {
-            margin-top: 10px;
-          }
-
-          li {
-            padding-top: 20px;
-          }
-        }
-      }
-    }
-  }
-`;
+import StyledMain from "../../components/StyledMain";
 
 const NoticeView = () => {
   const { code } = useParams();
   const [postData, setPostData] = useState();
   const [comments, setComments] = useState([]);
+
+  const [likeCount, setLikeCount] = useState();
 
   const [currClickBtn, setCurrClickBtn] = useState(-1);
   const [succUpdate, setSuccUpdate] = useState(false);
@@ -302,8 +49,8 @@ const NoticeView = () => {
   const getPostHandler = async (code) => {
     const result = await getBoardViewAPI(code);
     setPostData(result.data);
+    setLikeCount(result.data.noticeLike);
   };
-
   const getCommentHandler = async (code) => {
     const result = await getCommentsAPI(code);
     setComments([...result.data]);
@@ -311,7 +58,6 @@ const NoticeView = () => {
 
   const addCommentHandler = async (e) => {
     e.preventDefault();
-    console.log(user);
     if (user?.token) {
       const parentCode = e.target.commentDesc.id;
       const formData = {
@@ -321,14 +67,10 @@ const NoticeView = () => {
         parentCommentCode: parentCode, //부모 댓글의 코드를 백으로 넘기는 법
         commentDesc: e.target.commentDesc.value,
       };
-      console.log(formData);
-      console.log("선택된 댓글 번호?");
-      console.log(selected_Comment);
 
       if (formData.commentDesc) {
         const addCommentResult = await addCommentAPI(formData);
 
-        console.log(addCommentResult.data);
         // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
         const notiData = {
           token: user.token,
@@ -364,7 +106,25 @@ const NoticeView = () => {
       addBookmarkAPI(formData);
     }
   };
-
+  const likeBtnHandler = async () => {
+    if (user.token) {
+      const formData = {
+        postCode: code,
+        token: user.token,
+      };
+      const result = await updateLikeNoticeAPI(formData);
+      if (result.data) {
+        // 좋아요 버튼이 눌려서 추가가 성공되면 ! 혹은 삭제하면 !
+        // await getPostHandler(code);
+        setLikeCount(likeCount + 1);
+      } else {
+        console.log("삭제 코드 들어옴");
+        setLikeCount(likeCount - 1);
+      }
+    } else {
+      alert("로그인 필요합니다.");
+    }
+  };
   const updateCommentHandler = async (code) => {
     if (code == currClickBtn) {
       code = -1;
@@ -390,12 +150,11 @@ const NoticeView = () => {
   };
 
   useEffect(() => {
-    const asyncHandler = async () => {
-      getPostHandler(code);
-      getCommentHandler(code);
+    const handler = async () => {
+      await getPostHandler(code);
+      await getCommentHandler(code);
     };
-
-    asyncHandler();
+    handler();
   }, []);
 
   useEffect(() => {
@@ -445,7 +204,7 @@ const NoticeView = () => {
 
             <div className="viewicon">
               <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#1FB1D1" }} />
-              <span id="like">{postData?.noticeLike}</span>{" "}
+              <span id="like">{likeCount}</span>{" "}
               <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
               <span id="views">{postData?.noticeViews}</span>
               <FontAwesomeIcon icon={faComments} style={{ color: "#1FB1D1" }} />
@@ -480,6 +239,19 @@ const NoticeView = () => {
       <div className="desc">
         <div>{postData?.noticeDesc}</div>
       </div>
+      <div className="likeBtn">
+        <button onClick={likeBtnHandler}>
+          <FontAwesomeIcon
+            icon={faThumbsUp}
+            style={{
+              color: "#1FB1D1",
+              margin: "0px 5px",
+              fontSize: "20px",
+            }}
+          />
+          좋아요 + 1
+        </button>
+      </div>
 
       <div className="commentBox">
         <div className="commentProfile">
@@ -491,7 +263,7 @@ const NoticeView = () => {
       <div className="commentBox2">
         <ul className="comment">
           {comments?.map((comment) =>
-            comment.noticeCommentCodeSuper > 0 ? null : (
+            comment?.noticeCommentCodeSuper > 0 ? null : (
               <li className="userProfile" key={comment.noticeCommentCode}>
                 <div>
                   {
@@ -521,13 +293,13 @@ const NoticeView = () => {
 
                       <CommentBtnComponent
                         code={comment?.noticeCommentCode}
-                        writer={comment?.member.id}
+                        writer={comment?.member?.id}
                         updateCommentHandler={updateCommentHandler}
                         deleteCommentHandler={deleteCommentHandler}
                       />
                     </div>
-                    {currClickBtn === comment.noticeCommentCode ? (
-                      comment?.member.id === user.id ? (
+                    {currClickBtn === comment?.noticeCommentCode ? (
+                      comment?.member?.id === user.id ? (
                         <UpdateCommentComponent
                           code={comment?.noticeCommentCode}
                           updateCommentHandler={updateCommentHandler}
@@ -541,7 +313,7 @@ const NoticeView = () => {
                       // 대댓글 보기, 대댓글 작성 코드
 
                       // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
-                      selected_Comment == comment.noticeCommentCode ? (
+                      selected_Comment == comment?.noticeCommentCode ? (
                         <div>
                           {
                             // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
@@ -556,13 +328,10 @@ const NoticeView = () => {
                           {/* 대댓글 호출 로직 */}
                           <ul>
                             {comments?.map((comment) =>
-                              comment.noticeCommentCodeSuper <
+                              comment?.noticeCommentCodeSuper <
                               0 ? null : comment.noticeCommentCodeSuper !==
                                 selected_Comment ? null : (
-                                <li
-                                  key={comment.noticeCommentCode}
-                                  className="comment-desc"
-                                >
+                                <li key={comment} className="comment-desc">
                                   <ReCommentComponent props={comment} />
                                   <CommentBtnComponent
                                     code={comment?.noticeCommentCode}
