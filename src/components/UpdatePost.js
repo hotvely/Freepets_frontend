@@ -6,7 +6,7 @@ import { addSitterBoard, addImg } from "../api/sitter";
 import SitterPost from "./SitterPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
-import { useNavigate, useParams } from "react-router-dom";
+import { json, useNavigate, useParams } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
 import CommunityPost from "./Community/CommunityPost";
 import Notice from "../pages/notice/Notice";
@@ -122,14 +122,18 @@ const UpdatePost = () => {
   const [rank1, setRank1] = useState();
   const [rank2, setRank2] = useState();
   const [title, setTitle] = useState();
+
   const onClick = async () => {
     const data = JSON.parse(localStorage.getItem("user"));
+    // const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
+    console.log(token);
     const formData = {
       title: title,
       desc: desc,
       token: data.token,
-      boardCode: postCode,
-      code: boardCode,
+      boardCode: postCode, // 백 게시글 코드 : 프론트에서 보낼 게시글 코드
+      code: boardCode, // 백에서는 게시판 코드 : 프론트에서도 게시판 코드
     };
 
     //formData객체에 데이터 추가 하는법

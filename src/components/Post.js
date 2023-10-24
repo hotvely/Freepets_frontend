@@ -8,6 +8,7 @@ import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
 import { useNavigate } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
+import { addCommunity } from "../api/community";
 import CommunityPost from "./Community/CommunityPost";
 import Notice from "../pages/notice/Notice";
 import NoticePost from "./NoticePost";
@@ -130,6 +131,9 @@ const Post = () => {
     formData.append("token", data.token);
 
     if (select == 1) {
+      // formData.append("communityTitle", title);
+      // console.log(formData);
+      await addCommunity(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
