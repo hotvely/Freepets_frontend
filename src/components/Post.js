@@ -125,7 +125,7 @@ const Post = () => {
     const data = JSON.parse(localStorage.getItem("user"));
 
     const formData = new FormData();
-    
+
     formData.append("title", title);
     formData.append("desc", desc);
     formData.append("token", data.token);
@@ -157,7 +157,7 @@ const Post = () => {
   const selectChange = (e) => {
     setSelect(e.currentTarget.value);
   };
-  
+
   const modules = useMemo(
     () => ({
       toolbar: {

@@ -10,10 +10,15 @@ const ContentStyle = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px;
-  width: 100%;
-  div {
-    display: flex;
-    justify-content: space-around;
+  height: 590px;
+  text-align: center;
+  /* background-color: steelblue; */
+  .head-numb {
+    color: snow;
+    /* display: flex; */
+    /* text-align: center; */
+    /* align-items: center; */
+    /* justify-content: space-around; */
   }
 `;
 
@@ -39,12 +44,29 @@ const CommunityList = () => {
 
   const columns = useMemo(
     () => [
-      { accessor: "commonCode", Header: "게시글번호" },
-      { accessor: "commonTitle", Header: "제목" },
+      {
+        accessor: "commonCode",
+        Header: "번호",
+      },
+      {
+        accessor: "commonTitle",
+        Header: "제목",
+        Cell: ({ value }) => (
+          <div style={{ textAlign: "left", width: "250px", cursor: "pointer" }}>
+            {value}
+          </div>
+        ),
+      },
       { accessor: "nickName", Header: "작성자" },
       { accessor: "commonDate", Header: "작성일" },
-      { accessor: "commonViewCount", Header: "조회수" },
-      { accessor: "commonLikeCount", Header: "좋아요" },
+      {
+        accessor: "commonViewCount",
+        Header: "조회수",
+      },
+      {
+        accessor: "commonLikeCount",
+        Header: "좋아요",
+      },
     ],
     []
   );

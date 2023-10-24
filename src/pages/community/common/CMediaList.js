@@ -9,8 +9,9 @@ import { dateFormatDefault } from "../../../api/utils";
 import CommunityList from "./CommonList";
 
 const MainStlye = styled.div`
-  padding: 20px;
+  padding: 10px;
   width: 100%;
+  margin-left: 20px;
 `;
 
 const MainBanner = styled.div`
@@ -190,6 +191,8 @@ const MainContentBox = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding-top: 20px;
+    // border-top: 1px solid #3a98b9;
 
     .page {
       flex-grow: 1;

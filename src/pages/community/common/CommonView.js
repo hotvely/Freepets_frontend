@@ -8,7 +8,7 @@ import yange from "../../../resources/yaonge.jpg";
 import { Link } from "react-router-dom";
 import {
   getCommunity,
-  updateCommunity,
+  // updateCommunity,
   deleteCommunity,
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
@@ -177,8 +177,8 @@ const CommonView = () => {
     }
   }, [code]);
 
-  const UpdateCommunityAPI = (e) => {
-    const id = e.target.value;
+  const UpdateCommunityAPI = (event) => {
+    const id = event.target.value;
     console.log(id);
     navigate(`../${id}/update/1`);
   };
@@ -232,7 +232,7 @@ const CommonView = () => {
             </div>
             <div className="writer-info">
               <div className="profile-img">
-                <img src={yange} alt="배너 이미지" />
+                <img src={yange} alt="양이 이미지" />
               </div>
 
               <div className="profile-area">
@@ -295,6 +295,7 @@ const CommonView = () => {
           >
             <button
               className="update-btn"
+              // id={post?.commonCode}
               onClick={UpdateCommunityAPI}
               value={post?.commonCode}
             >
