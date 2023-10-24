@@ -1,4 +1,20 @@
 import { useSelector } from "react-redux";
+import styled from "styled-components";
+
+const Styled = styled.div`
+  .comment-btn {
+    display: flex;
+    flex-direction: row;
+    button {
+      border: 0;
+      padding: 5px;
+      border-radius: 5px;
+      background-color: #437b92;
+      color: white;
+      margin: 0 5px;
+    }
+  }
+`;
 
 const CommentBtnComponent = (props) => {
   const user = useSelector((state) => {
@@ -8,7 +24,7 @@ const CommentBtnComponent = (props) => {
   const writer = props.writer;
 
   return (
-    <>
+    <Styled>
       <div className="comment-btn">
         <button
           id={props.code}
@@ -30,7 +46,7 @@ const CommentBtnComponent = (props) => {
           삭제
         </button>
       </div>
-    </>
+    </Styled>
   );
 };
 

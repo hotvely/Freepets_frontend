@@ -64,11 +64,15 @@ const StyledMain = styled.main`
 
     .userProfile {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      align-items: center;
       .profile {
         margin: 0px 5px;
+        margin-bottom: 10px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+
         justify-content: center;
 
         img {
@@ -94,10 +98,6 @@ const StyledMain = styled.main`
         }
 
         .viewicon {
-          margin: 5px 0px;
-          span {
-            margin-right: 15px;
-          }
         }
       }
     }
@@ -115,12 +115,13 @@ const StyledMain = styled.main`
     width: 90%;
     border: 1px solid hsla(220, 9%, 46%, 0.3);
     height: 30%;
-    margin: 30px 0px;
   }
   .likeBtn {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
     button {
       border: 0;
       background-color: white;
@@ -142,7 +143,7 @@ const StyledMain = styled.main`
     align-items: center;
     width: 90%;
     height: 70px;
-    margin-top: 30px;
+
     .commentProfile {
       margin-right: 20px;
       width: 50px;
@@ -185,80 +186,65 @@ const StyledMain = styled.main`
       flex-direction: column;
       justify-content: space-between;
       width: 100%;
-      margin-top: 80px;
+      margin-top: 15px;
 
       .userProfile {
         display: flex;
         flex-direction: column;
         margin-top: 10px;
-
-        .useruser {
-          display: flex;
-          flex-direction: row;
-
+        .comment {
           .profile {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
             margin: 0px 5px;
+
             img {
               width: 50px;
               height: 50px;
               border-radius: 50%;
+              margin-right: 20px;
             }
           }
-
-          .user {
+          .comment-desc {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
 
-            p {
-              margin-left: 10px;
-              border: 2px solid #dedede;
-              border-radius: 5px;
-              padding: 5px;
-              font-weight: bolder;
-            }
-            span {
-              margin-right: 10px;
-            }
-          }
-        }
-        .comment-desc {
-          width: 70%;
-          padding: 20px;
-          margin-top: 10px;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          .comment-btn {
-            button {
-              border: 0;
-              padding: 5px;
-              border-radius: 5px;
-              background-color: #437b92;
-              color: white;
-              margin: 0 5px;
+            .commentDate-btn {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: space-between;
             }
           }
         }
 
         .reCommentContent {
-          padding: 20px;
+          padding: 5px;
           .commentView_btn {
-            height: 40px;
+            height: 35px;
             background-color: #437b92;
             border: 0;
             border-radius: 5px;
             color: white;
-            margin: 10px 0;
+            margin: 3px 0;
           }
 
           ul {
-            margin-top: 10px;
-          }
-
-          li {
-            padding-top: 20px;
+            margin-top: 20px;
+            li {
+              display: flex;
+              flex-direction: column;
+              margin-bottom: 15px;
+              .recomment-desc {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+              }
+            }
           }
         }
       }

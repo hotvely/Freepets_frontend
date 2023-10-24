@@ -19,17 +19,18 @@ import {
   updateLikeNoticeAPI,
   updateNoticeAPI,
 } from "../../api/notice";
-import CommentComponent from "./CommentComponent";
-import ReCommentComponent from "./ReCommentComponent";
+import CommentComponent from "../../components/comment/CommentComponent";
+import ReCommentComponent from "../../components/comment/ReCommentComponent";
 import { addBookmarkAPI } from "../../api/bookmark";
 import { useSelector } from "react-redux";
-import UpdateCommentComponent from "./UpdateCommentComponent";
+import UpdateCommentComponent from "../../components/comment/UpdateCommentComponent";
 import {
   addNoticeNotification,
   addNotification,
 } from "../../components/Notification";
-import CommentBtnComponent from "./CommentBtnComponent";
-import StyledMain from "../../components/StyledMain";
+import CommentBtnComponent from "../../components/comment/CommentBtnComponent";
+import StyledMain from "../../components/css/StyledMain";
+import ProfileComponent from "../../components/member/ProfileComponent";
 
 const NoticeView = () => {
   const { code } = useParams();
@@ -165,6 +166,22 @@ const NoticeView = () => {
     }
   }, [succUpdate]);
 
+  const dateFormatter = (data) => {
+    if (data) {
+      const date = new Date(`${data}`);
+
+      const result =
+        date.getFullYear() +
+        "-" +
+        (date.getMonth() > 8
+          ? date.getMonth() + 1
+          : "0" + (date.getMonth() + 1)) +
+        "-" +
+        date.getDate();
+      return result;
+    }
+  };
+
   return (
     <StyledMain>
       <div className="venner">
@@ -191,25 +208,15 @@ const NoticeView = () => {
       </div>
       <div className="contentHeader">
         <div className="userProfile">
-          <div className="profile">
-            <img src={testImg} alt="작성자 프로필" />
-          </div>
+          {postData ? <ProfileComponent props={postData.member} /> : null}
 
-          <div className="user">
-            <div className="usertTitle">
-              <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                {postData?.member?.nickname}
-              </p>
-            </div>
-
-            <div className="viewicon">
-              <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#1FB1D1" }} />
-              <span id="like">{likeCount}</span>{" "}
-              <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
-              <span id="views">{postData?.noticeViews}</span>
-              <FontAwesomeIcon icon={faComments} style={{ color: "#1FB1D1" }} />
-              <span id="comment">{postData?.noticeCommentCount}</span>
-            </div>
+          <div className="viewicon">
+            <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#1FB1D1" }} />
+            <span id="like">{likeCount}</span>{" "}
+            <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
+            <span id="views">{postData?.noticeViews}</span>
+            <FontAwesomeIcon icon={faComments} style={{ color: "#1FB1D1" }} />
+            <span id="comment">{postData?.noticeCommentCount}</span>
           </div>
         </div>
 
@@ -237,7 +244,10 @@ const NoticeView = () => {
         <h1>{postData?.noticeTitle}</h1>
       </div>
       <div className="desc">
-        <div>{postData?.noticeDesc}</div>
+        <div
+          id="noticeDesc"
+          dangerouslySetInnerHTML={{ __html: String(postData?.noticeDesc) }}
+        />
       </div>
       <div className="likeBtn">
         <button onClick={likeBtnHandler}>
@@ -269,19 +279,8 @@ const NoticeView = () => {
                   {
                     // 유저 정보
                   }
-                  <div>
-                    <div className="useruser">
-                      <div className="profile">
-                        <img src={testImg} alt="작성자 프로필" />
-                      </div>
-
-                      <div className="user">
-                        <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                          {comment?.member?.nickname}
-                        </p>
-                      </div>
-                    </div>
-
+                  <div className="comment">
+                    <ProfileComponent props={comment?.member} />
                     {
                       // 댓글 정보
                     }
@@ -289,14 +288,15 @@ const NoticeView = () => {
                       <div className="commentTextBox">
                         {comment?.noticeCommentDesc}
                       </div>
-                      <div>{comment?.noticeCommentDate}</div>
-
-                      <CommentBtnComponent
-                        code={comment?.noticeCommentCode}
-                        writer={comment?.member?.id}
-                        updateCommentHandler={updateCommentHandler}
-                        deleteCommentHandler={deleteCommentHandler}
-                      />
+                      <div className="commentDate-btn ">
+                        <div>{dateFormatter(comment?.noticeCommentDate)}</div>
+                        <CommentBtnComponent
+                          code={comment?.noticeCommentCode}
+                          writer={comment?.member?.id}
+                          updateCommentHandler={updateCommentHandler}
+                          deleteCommentHandler={deleteCommentHandler}
+                        />
+                      </div>
                     </div>
                     {currClickBtn === comment?.noticeCommentCode ? (
                       comment?.member?.id === user.id ? (
@@ -331,14 +331,21 @@ const NoticeView = () => {
                               comment?.noticeCommentCodeSuper <
                               0 ? null : comment.noticeCommentCodeSuper !==
                                 selected_Comment ? null : (
-                                <li key={comment} className="comment-desc">
-                                  <ReCommentComponent props={comment} />
-                                  <CommentBtnComponent
-                                    code={comment?.noticeCommentCode}
-                                    writer={comment?.member.id}
-                                    updateCommentHandler={updateCommentHandler}
-                                    deleteCommentHandler={deleteCommentHandler}
-                                  />
+                                <li key={comment}>
+                                  <div className="recomment-desc">
+                                    <ReCommentComponent props={comment} />
+
+                                    <CommentBtnComponent
+                                      code={comment?.noticeCommentCode}
+                                      writer={comment?.member.id}
+                                      updateCommentHandler={
+                                        updateCommentHandler
+                                      }
+                                      deleteCommentHandler={
+                                        deleteCommentHandler
+                                      }
+                                    />
+                                  </div>
                                   {currClickBtn == comment.noticeCommentCode ? (
                                     comment?.member.id === user.id ? (
                                       <UpdateCommentComponent

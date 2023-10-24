@@ -22,6 +22,7 @@ import LostView from "./pages/community/lost/LostView";
 import UpdatePost from "./components/UpdatePost";
 import HospitalReviewView from "./pages/information/HospitalReviewView";
 import EventCalendar from "./pages/notice/EventCalendar";
+import UserPage from "./pages/member/UserPage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,11 @@ const router = createBrowserRouter([
         element: <MyPage />,
       },
     ],
+  },
+  {
+    path: "/userpage/:id",
+    element: <BLayout />,
+    children: [{ index: true, element: <UserPage /> }],
   },
   {
     path: "/notice",
@@ -90,7 +96,7 @@ const router = createBrowserRouter([
       },
       {
         path: "hospital/:postCode/update/:boardCode",
-        element: <UpdatePost/>
+        element: <UpdatePost />,
       },
     ],
   },
@@ -170,7 +176,7 @@ const router = createBrowserRouter([
       },
       {
         path: ":postCode/update/:boardCode",
-        element: <UpdatePost/>,
+        element: <UpdatePost />,
       },
       {
         path: "create",
