@@ -306,7 +306,7 @@ const SitterView = () => {
     };
     const styleOrange = {
         color: "orange"
-    }
+    };
     const [style1, setStyle1] = useState(styleGray);
     const [style2, setStyle2] = useState(styleGray);
     const [style3, setStyle3] = useState(styleGray);
@@ -445,7 +445,7 @@ const SitterView = () => {
                         </div>
                     </div>
                     <div className="main-content">
-                        <div id="sitterDesc" dangerouslySetInnerHTML={{__html: String(boardView?.desc)}} />
+                        <div className='ql-editor' id="sitterDesc" dangerouslySetInnerHTML={{__html: String(boardView?.desc)}} />
                     </div>
                     {boardView?.memberDTO.id == data.id ? 
                         <div className="main-button">

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getHospitalBoard, getsearchSelect } from "../../../src/api/info";
+import { getHospitalBoard, getsearchSelect, getLikeOrder, getCommentOrder } from "../../../src/api/info";
 import banner from "../../resources/bannerTest.png";
 import yaonge from "../../resources/yaonge.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,7 +14,6 @@ import {
 import { useEffect, useState } from "react";
 import Page from "../../components/Page";
 import { dateFormatTrans } from "../../api/utils";
-import { keyboard } from "@testing-library/user-event/dist/keyboard";
 
 const MainStyle = styled.div`
   margin: 0px 40px;
@@ -257,7 +256,7 @@ const HospitalReview = () => {
   const [searchParams] = useSearchParams();
   const searchPage = searchParams.get('page');
   const [boards, setBoard] = useState([]);
-  const [search, setSearch] = useState(null);
+  const [keyword, setKeyword] = useState(null);
   const [select1, setSelect1] = useState(1);
   const [select2, setSelect2] = useState(1);
   const [totalPages, setTotalPages] = useState();
@@ -268,9 +267,12 @@ const HospitalReview = () => {
     navigator("create");
   };
 
+  const NavView = (e) => {
+    navigator(`view/${e.currentTarget.id}`);
+  }
+
   const getHospitalBoardAPI = async () => {
     const result = await getHospitalBoard(page);
-    console.log(result.data);
     setBoard(result.data.hospitalReviewList);
     setTotalPages(result.data.totalPages);
   };
@@ -278,26 +280,41 @@ const HospitalReview = () => {
   const searchClickHandler = async () => {
     let result = null;
     if(select2 == 1) {
-      console.log(search);
-      result = await getsearchSelect(page, search, 1);
+      result = await getsearchSelect(page, keyword, 1);
     } else {
-      console.log(search);
-      result = await getsearchSelect(page, search, 2);
-    }
-    
+      result = await getsearchSelect(page, keyword, 2);
+    }    
     setBoard(result.data.hospitalReviewList);
     setTotalPages(result.data.totalPages);
   };
 
+  const selectType = async () => {
+    switch(eval(select1)) {
+      case 1:
+        getHospitalBoardAPI(page);
+        break;
+      case 2:
+        const resultLike = await getLikeOrder(page);
+        setBoard(resultLike.data.hospitalReviewList);
+        setTotalPages(resultLike.data.totalPages);
+        break;
+      case 3:
+        const resultComment = await getCommentOrder(page);
+        setBoard(resultComment.data.hospitalReviewList);
+        setTotalPages(resultComment.data.totalPages);
+        break;
+    }
+  }
+
 
   useEffect(() => {
-    // window.scrollTo(0, 0);
-    // if(search != null) {
-    //   searchClickHandler();
-    // } else {
-    //   getHospitalBoardAPI();
-    // }
-  }, []);
+    window.scrollTo(0, 0);
+    if(keyword != null) {
+      searchClickHandler();
+    } else {
+      selectType();
+    }
+  }, [page, keyword, select1, select2]);
 
   return (
     <MainStyle>
@@ -310,7 +327,7 @@ const HospitalReview = () => {
             <select onChange={(e) => setSelect1(e.target.value)}>
               <option value="1">최신순</option>
               <option value="2">추천순</option>
-              <option value="3">조회수</option>
+              <option value="3">댓글수</option>
             </select>
             <button className="button-write" onClick={NavWrite}>
               글쓰기
@@ -327,7 +344,7 @@ const HospitalReview = () => {
               type="text"
               id="search"
               name="search"
-              onClick={(e) => setSearch(e.target.value)}
+              onChange={(e) => setKeyword(e.target.value)}
             />
             <button>
               <FontAwesomeIcon
@@ -344,6 +361,8 @@ const HospitalReview = () => {
             <div className="main-content" key={item.hospitalReviewCode}>
             <div
               className="main-content-view"
+              onClick={NavView}
+              id={item.hospitalReviewCode}
               >
                 <div className="main-content_start">
                   <img
