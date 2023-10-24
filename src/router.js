@@ -90,7 +90,7 @@ const router = createBrowserRouter([
       },
       {
         path: "hospital/:postCode/update/:boardCode",
-        element: <UpdatePost/>
+        element: <UpdatePost />,
       },
     ],
   },
@@ -174,7 +174,7 @@ const router = createBrowserRouter([
       },
       {
         path: ":postCode/update/:boardCode",
-        element: <UpdatePost/>,
+        element: <UpdatePost />,
       },
       {
         path: "create",

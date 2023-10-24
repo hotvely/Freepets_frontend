@@ -210,7 +210,7 @@ const CommonView = () => {
   const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
 
   const NavListPage = () => {
-    navigate("../../");
+    navigate(-1);
     window.scrollTo(0, 0);
   };
 
@@ -285,6 +285,7 @@ const CommonView = () => {
             <button className="list-btn" onClick={NavListPage}>
               목록
             </button>
+
             <button className="top-btn" onClick={ScrollToTopBtn}>
               △위로
             </button>

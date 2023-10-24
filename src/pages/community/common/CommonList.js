@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useMemo } from "react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCommunityList } from "../../../api/community";
 import { dateFormatTrans } from "../../../api/utils";
 import CommunityTableForList from "../../../components/Community/CommunityTableForList";
@@ -24,8 +24,11 @@ const ContentStyle = styled.div`
 
 const CommunityList = () => {
   const [commonPost, setcommonPosts] = useState([]);
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get("page");
+  const page = searchPage != null ? searchPage : 1;
 
   const handleRowClick = (row) => {
     //ViewPage로 이동
@@ -35,12 +38,13 @@ const CommunityList = () => {
   const CommunityListAPI = async () => {
     // 게시글 목록 데이터
     const result = await getCommunityList(page);
-    setcommonPosts([...commonPost, ...result.data]);
+    setcommonPosts(result.data.communityList);
+    // setcommonPosts([...commonPost, ...result.data]);
   };
 
   useEffect(() => {
     CommunityListAPI(); // 게시글 목록 조회 호출
-  }, []);
+  }, [page]);
 
   const columns = useMemo(
     () => [

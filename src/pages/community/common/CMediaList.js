@@ -4,9 +4,10 @@ import banner from "../../../resources/bannerTest.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
 import { getCommunityList } from "../../../api/community";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { dateFormatDefault } from "../../../api/utils";
 import CommunityList from "./CommonList";
+import Page from "../../../components/Page";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -117,7 +118,6 @@ const MainContentBox = styled.div`
     display: flex;
     flex-direction: column;
     /* justify-content: space-between; */
-    /* flex-wrap: wrap; */
     margin: 10px;
     width: 100%-10px;
     gap: 10px;
@@ -126,6 +126,7 @@ const MainContentBox = styled.div`
     .media-colum {
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
       gap: 10px;
       .media-content {
         /* width: 100%; */
@@ -192,7 +193,7 @@ const MainContentBox = styled.div`
     flex-direction: row;
     align-items: center;
     padding-top: 20px;
-    // border-top: 1px solid #3a98b9;
+    border-top: 1px solid #3a98b9;
 
     .page {
       flex-grow: 1;
@@ -200,10 +201,10 @@ const MainContentBox = styled.div`
       .pagination {
         display: flex;
         justify-content: center;
-        /* flex-direction: row; */
-        /* text-align: center; */
+        flex-direction: row;
+        text-align: center;
         list-style: none;
-        /* display: inline-block; */
+        display: inline-block;
 
         a {
           float: left;
@@ -242,7 +243,6 @@ const MainContentBox = styled.div`
         }
       }
     }
-
     #write-btn {
       /* display: flex;
       justify-content: end; */
@@ -259,10 +259,14 @@ const MainContentBox = styled.div`
 `;
 
 const CMediaList = () => {
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get("page");
+  const [totalPages, setTotalPages] = useState();
   const [mediae, setMediae] = useState([]);
-  const [page, setPage] = useState(1);
   const [ListBtn, setListBtn] = useState();
   const navigate = useNavigate();
+
+  const page = searchPage != null ? searchPage : 1;
 
   const onClickList = (e) => {
     // 게시글 타입 변경
@@ -294,13 +298,15 @@ const CMediaList = () => {
 
   const MediaListAPI = async () => {
     // 게시글 목록 데이터
+    // setMediae([...mediae, ...result.data]);
     const result = await getCommunityList(page);
-    setMediae([...mediae, ...result.data]);
+    setMediae(result.data.communityList);
+    setTotalPages(result.data.totalPages);
   };
 
   useEffect(() => {
     MediaListAPI(); // 게시글 목록 조회 호출
-  }, []);
+  }, [page]);
 
   const boardTypeForMedia = () => {
     return (
@@ -413,10 +419,11 @@ const CMediaList = () => {
         </div>
         {ListBtn == 1 ? boardTypeForMedia() : <CommunityList />}
         <div className="main-bottom">
-          {/* 페이지 넘기는 바 만들기
+          <div className="paging-bar">
+            <Page totalPages={totalPages} page={page} />
+            {/* 페이지 넘기는 바 만들기
          <div id="paging"></div> */}
-          <div className="page">
-            <ul className="pagination">
+            {/* <ul className="pagination">
               <li>
                 <a href="#" id="first">
                   처음 페이지
@@ -482,7 +489,7 @@ const CMediaList = () => {
                   마지막 페이지
                 </a>
               </li>
-            </ul>
+            </ul> */}
           </div>
           <div id="write-btn">
             <button onClick={navWrite}>글쓰기</button>
