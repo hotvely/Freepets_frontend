@@ -5,7 +5,8 @@ const ReCommentComponent = forwardRef((props, ref) => {
   const data = props.props;
 
   const Styled = styled.div`
-    width: 80%;
+    display: flex;
+    width: 85%;
     .recomment {
       width: 100%;
       display: flex;
@@ -17,16 +18,20 @@ const ReCommentComponent = forwardRef((props, ref) => {
         display: flex;
         flex-direction: row;
         align-items: center;
+
         img {
           width: 30px;
           height: 30px;
           margin-right: 10px;
+          border-radius: 50%;
         }
         .useName {
           margin-right: 10px;
         }
         .commentTextBox {
+          width: 400px;
           margin-left: 10px;
+          word-break: break-all;
         }
       }
       .commentDate {

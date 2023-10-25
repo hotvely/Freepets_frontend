@@ -5,11 +5,13 @@ const Styled = styled.div`
   .comment-btn {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
     button {
       border: 0;
       padding: 5px;
       border-radius: 5px;
-      background-color: #437b92;
+      background-color: #84afc1;
       color: white;
       margin: 0 5px;
     }

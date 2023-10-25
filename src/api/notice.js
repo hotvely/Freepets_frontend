@@ -4,7 +4,7 @@ const instance = axios.create({
   baseURL: "http://localhost:8080/api/",
 });
 
-export const getBoardsByPage = async (page, sortNum) => {
+export const getBoardsByPageAPI = async (page, sortNum) => {
   console.log("get page 로 게시글들 받아옴");
   let url = `notice?page=${page}&sortNum=${sortNum}`;
 
@@ -16,8 +16,8 @@ export const getBoardViewAPI = async (code) => {
   return await instance.get(url);
 };
 
-export const getSearchAPI = async (keyword) => {
-  let url = `notice/search/${keyword}`;
+export const getSearchAPI = async (keyword, sortNum) => {
+  let url = `notice/search/${keyword}/${sortNum}`;
   return await instance.get(url);
 };
 

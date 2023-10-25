@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faThumbsUp,
@@ -14,10 +13,10 @@ import { useEffect, useState } from "react";
 import {
   addCommentAPI,
   deleteCommentAPI,
+  deleteNoticeAPI,
   getBoardViewAPI,
   getCommentsAPI,
   updateLikeNoticeAPI,
-  updateNoticeAPI,
 } from "../../api/notice";
 import CommentComponent from "../../components/comment/CommentComponent";
 import ReCommentComponent from "../../components/comment/ReCommentComponent";
@@ -29,8 +28,15 @@ import {
   addNotification,
 } from "../../components/Notification";
 import CommentBtnComponent from "../../components/comment/CommentBtnComponent";
-import StyledMain from "../../components/css/StyledMain";
+import {
+  MainStlye,
+  MainBanner,
+  MainContentBox,
+} from "../../components/css/PostView";
 import ProfileComponent from "../../components/member/ProfileComponent";
+import { Link, useNavigate } from "react-router-dom";
+import yange from "../../resources/yaonge.jpg";
+import { dateFormatDefault } from "../../api/utils";
 
 const NoticeView = () => {
   const { code } = useParams();
@@ -42,7 +48,7 @@ const NoticeView = () => {
   const [currClickBtn, setCurrClickBtn] = useState(-1);
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selected_Comment, setSelected_Comment] = useState(0);
-
+  const navigate = useNavigate();
   const user = useSelector((state) => {
     return state.user;
   });
@@ -107,6 +113,7 @@ const NoticeView = () => {
       addBookmarkAPI(formData);
     }
   };
+
   const likeBtnHandler = async () => {
     if (user.token) {
       const formData = {
@@ -126,6 +133,7 @@ const NoticeView = () => {
       alert("로그인 필요합니다.");
     }
   };
+
   const updateCommentHandler = async (code) => {
     if (code == currClickBtn) {
       code = -1;
@@ -150,8 +158,24 @@ const NoticeView = () => {
     setSelected_Comment(0);
   };
 
+  const updateHandler = (e) => {
+    if (user.id == postData.member.id) {
+      navigate(`../update/5/${code}}`);
+    } else console.log("작성자와 사용자가 다름");
+  };
+
+  const deleteHandler = async (e, id) => {
+    if (user.id == postData.member.id) {
+      await deleteNoticeAPI(code);
+      navigate("../");
+    } else {
+      console.log("작성자와 사용자가 다름");
+    }
+  };
+
   useEffect(() => {
     const handler = async () => {
+      console.log("페이지 시작..");
       await getPostHandler(code);
       await getCommentHandler(code);
     };
@@ -159,6 +183,7 @@ const NoticeView = () => {
   }, []);
 
   useEffect(() => {
+    console.log("업데이트 성공시 ..");
     if (succUpdate) {
       setSuccUpdate(false);
       setCurrClickBtn(-1);
@@ -182,226 +207,256 @@ const NoticeView = () => {
     }
   };
 
+  const ScrollToTopBtn = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
-    <StyledMain>
-      <div className="venner">
-        <img src={banner} />
-      </div>
-      <div className="vennerBottom">
-        <div className="full">
-          <div className="full-line-left"></div>
+    <MainStlye>
+      <MainBanner>
+        <div className="banner-img">
+          <img src={banner} alt="배너 이미지" />
         </div>
+      </MainBanner>
+      <MainContentBox>
+        <div className="article-content-box">
+          <div className="article-header">
+            <div className="article-title">
+              <Link to={`../`}>공지사항▷</Link>
+              <div className="title-area">
+                <h2>{postData?.noticeTitle}</h2>
+              </div>
+            </div>
+            <div className="writer-info">
+              <div className="profile-img">
+                <img src={yange} alt="배너 이미지" />
 
-        <div className="vennerText">
-          <div className="text-box">
-            <span></span>
-            <a className="text-blue" href="#">
-              커뮤니티
-            </a>
-            <span></span>
-          </div>
-        </div>
-
-        <div className="full">
-          <div className="full-line-right"></div>
-        </div>
-      </div>
-      <div className="contentHeader">
-        <div className="userProfile">
-          {postData ? <ProfileComponent props={postData.member} /> : null}
-
-          <div className="viewicon">
-            <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#1FB1D1" }} />
-            <span id="like">{likeCount}</span>{" "}
-            <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
-            <span id="views">{postData?.noticeViews}</span>
-            <FontAwesomeIcon icon={faComments} style={{ color: "#1FB1D1" }} />
-            <span id="comment">{postData?.noticeCommentCount}</span>
-          </div>
-        </div>
-
-        <div className="icon">
-          <FontAwesomeIcon
-            icon={faArrowUpFromBracket}
-            style={{
-              color: "#C9C9C9",
-              margin: "0px 5px",
-              fontSize: "20px",
-            }}
-          />
-          <FontAwesomeIcon
-            icon={faBookmark}
-            style={{
-              color: "#C9C9C9",
-              margin: "0px 5px",
-              fontSize: "20px",
-            }}
-            onClick={addBookmarkHandler}
-          />
-        </div>
-      </div>
-      <div className="descHeader">
-        <h1>{postData?.noticeTitle}</h1>
-      </div>
-      <div className="desc">
-        <div
-          id="noticeDesc"
-          dangerouslySetInnerHTML={{ __html: String(postData?.noticeDesc) }}
-        />
-      </div>
-      <div className="likeBtn">
-        <button onClick={likeBtnHandler}>
-          <FontAwesomeIcon
-            icon={faThumbsUp}
-            style={{
-              color: "#1FB1D1",
-              margin: "0px 5px",
-              fontSize: "20px",
-            }}
-          />
-          좋아요 + 1
-        </button>
-      </div>
-
-      <div className="commentBox">
-        <div className="commentProfile">
-          <img src={testImg}></img>
-        </div>
-        <CommentComponent props={0} ref={addCommentHandler} />
-      </div>
-
-      <div className="commentBox2">
-        <ul className="comment">
-          {comments?.map((comment) =>
-            comment?.noticeCommentCodeSuper > 0 ? null : (
-              <li className="userProfile" key={comment.noticeCommentCode}>
-                <div>
-                  {
-                    // 유저 정보
-                  }
-                  <div className="comment">
-                    <ProfileComponent props={comment?.member} />
-                    {
-                      // 댓글 정보
-                    }
-                    <div className="comment-desc">
-                      <div className="commentTextBox">
-                        {comment?.noticeCommentDesc}
-                      </div>
-                      <div className="commentDate-btn ">
-                        <div>{dateFormatter(comment?.noticeCommentDate)}</div>
-                        <CommentBtnComponent
-                          code={comment?.noticeCommentCode}
-                          writer={comment?.member?.id}
-                          updateCommentHandler={updateCommentHandler}
-                          deleteCommentHandler={deleteCommentHandler}
-                        />
-                      </div>
-                    </div>
-                    {currClickBtn === comment?.noticeCommentCode ? (
-                      comment?.member?.id === user.id ? (
-                        <UpdateCommentComponent
-                          code={comment?.noticeCommentCode}
-                          updateCommentHandler={updateCommentHandler}
-                          updateSuccHandler={updateSuccHandler}
-                        />
-                      ) : null
-                    ) : null}
+                <div className="profile-area">
+                  <div className="writer-info">
+                    <div className="writer">{postData?.member?.nickname}</div>
                   </div>
-                  <div className="reCommentContent">
-                    {
-                      // 대댓글 보기, 대댓글 작성 코드
-
-                      // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
-                      selected_Comment == comment?.noticeCommentCode ? (
-                        <div>
-                          {
-                            // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
-                          }
-
-                          <button
-                            className="commentView_btn"
-                            onClick={selected_Comment_handler}
-                          >
-                            댓글 보기 닫기
-                          </button>
-                          {/* 대댓글 호출 로직 */}
-                          <ul>
-                            {comments?.map((comment) =>
-                              comment?.noticeCommentCodeSuper <
-                              0 ? null : comment.noticeCommentCodeSuper !==
-                                selected_Comment ? null : (
-                                <li key={comment}>
-                                  <div className="recomment-desc">
-                                    <ReCommentComponent props={comment} />
-
-                                    <CommentBtnComponent
-                                      code={comment?.noticeCommentCode}
-                                      writer={comment?.member.id}
-                                      updateCommentHandler={
-                                        updateCommentHandler
-                                      }
-                                      deleteCommentHandler={
-                                        deleteCommentHandler
-                                      }
-                                    />
-                                  </div>
-                                  {currClickBtn == comment.noticeCommentCode ? (
-                                    comment?.member.id === user.id ? (
-                                      <UpdateCommentComponent
-                                        code={comment?.noticeCommentCode}
-                                        updateCommentHandler={
-                                          updateCommentHandler
-                                        }
-                                        updateSuccHandler={updateSuccHandler}
-                                      />
-                                    ) : null
-                                  ) : null}
-                                </li>
-                              )
-                            )}
-                          </ul>
-
-                          <CommentComponent
-                            // props={{ num1: currClickComment, num2: 10, num3: 100 }}    //<- 여러개 던질때
-                            props={selected_Comment}
-                            ref={addCommentHandler}
-                          />
-                        </div>
-                      ) : (
-                        <div>
-                          {
-                            //id에 상위 댓글의 코드 값을 넣어서 버튼 id부여함.
-                            // 부여한 이유는... 댓글 작성의 경우에 CommentComponent를 호출해서 재사용 하기 위함
-                          }
-                          <button
-                            className="commentView_btn"
-                            id={`${comment.noticeCommentCode}`}
-                            onClick={(e) => {
-                              setSelected_Comment(comment.noticeCommentCode);
-                            }}
-                          >
-                            댓글 보기
-                          </button>
-                        </div>
-                      )
-                    }
+                  <div className="article-info">
+                    <span>{dateFormatDefault(postData?.noticeDate)}</span>
+                    <span>ㆍ조회{postData?.noticeViews}</span>
+                    <span>ㆍ댓글{postData?.noticeCommentCount}</span>
+                    <span>ㆍ좋아요{postData?.noticeLike}</span>
                   </div>
                 </div>
-
-                <hr
+              </div>
+              <div className="article-tool">
+                <button className="comment-count-btn">
+                  [ <span>{postData?.commonCommentCount}</span> ]
+                </button>
+                <button className="url-copy-btn">URL복사</button>
+              </div>
+            </div>
+          </div>
+          <div className="article-container">
+            {console.log(postData)}
+            <div
+              className="article-viewer"
+              dangerouslySetInnerHTML={{
+                __html: String(postData?.noticeDesc),
+              }}
+            />
+            <div className="likeBtn">
+              <button onClick={likeBtnHandler}>
+                <FontAwesomeIcon
+                  icon={faThumbsUp}
                   style={{
-                    width: "100%",
-                    border: "0px",
-                    borderTop: "1px solid #7BCFE1",
+                    color: "white",
+                    margin: "0px 5px",
+                    fontSize: "20px",
                   }}
                 />
-              </li>
-            )
-          )}
-        </ul>
-      </div>
-    </StyledMain>
+                좋아요
+              </button>
+            </div>
+            <div className="comment-box">
+              <div className="commentBox">
+                <div className="commentProfile">
+                  <img src={testImg}></img>
+                </div>
+                <CommentComponent props={0} ref={addCommentHandler} />
+              </div>
+              <div className="commentBox2">
+                <ul>
+                  {comments?.map((comment) =>
+                    comment?.noticeCommentCodeSuper > 0 ? null : (
+                      <li key={comment.noticeCommentCode}>
+                        <div className="comment">
+                          {
+                            // 유저 정보
+                          }
+                          <div className="comment-content">
+                            <div className="comment-desc">
+                              <ProfileComponent props={comment?.member} />
+                              {
+                                // 댓글 정보
+                              }
+                              <div className="commentTextBox">
+                                <p> {comment?.noticeCommentDesc}</p>
+                              </div>
+                            </div>
+                            <div className="comment-last">
+                              <div className="commentDate-btn ">
+                                <div>
+                                  {dateFormatter(comment?.noticeCommentDate)}
+                                </div>
+                                <CommentBtnComponent
+                                  code={comment?.noticeCommentCode}
+                                  writer={comment?.member?.id}
+                                  updateCommentHandler={updateCommentHandler}
+                                  deleteCommentHandler={deleteCommentHandler}
+                                />
+                              </div>
+                            </div>
+                            {currClickBtn === comment?.noticeCommentCode ? (
+                              comment?.member?.id === user.id ? (
+                                <UpdateCommentComponent
+                                  code={comment?.noticeCommentCode}
+                                  updateCommentHandler={updateCommentHandler}
+                                  updateSuccHandler={updateSuccHandler}
+                                />
+                              ) : null
+                            ) : null}
+                          </div>
+                          <div className="reCommentViewBtn">
+                            {
+                              // 대댓글 보기, 대댓글 작성 코드
+
+                              // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
+                              selected_Comment == comment?.noticeCommentCode ? (
+                                <div>
+                                  {
+                                    // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
+                                  }
+
+                                  <button
+                                    className="commentView_btn"
+                                    onClick={selected_Comment_handler}
+                                  >
+                                    댓글 보기 닫기
+                                  </button>
+                                  {/* 대댓글 호출 로직 */}
+                                  <ul>
+                                    {comments?.map((comment) =>
+                                      comment?.noticeCommentCodeSuper <
+                                      0 ? null : comment.noticeCommentCodeSuper !==
+                                        selected_Comment ? null : (
+                                        <li key={comment.noticeCommentCode}>
+                                          <div className="recomment-desc">
+                                            <ReCommentComponent
+                                              props={comment}
+                                            />
+
+                                            <CommentBtnComponent
+                                              code={comment?.noticeCommentCode}
+                                              writer={comment?.member.id}
+                                              updateCommentHandler={
+                                                updateCommentHandler
+                                              }
+                                              deleteCommentHandler={
+                                                deleteCommentHandler
+                                              }
+                                            />
+                                          </div>
+                                          {currClickBtn ==
+                                          comment.noticeCommentCode ? (
+                                            comment?.member.id === user.id ? (
+                                              <UpdateCommentComponent
+                                                code={
+                                                  comment?.noticeCommentCode
+                                                }
+                                                updateCommentHandler={
+                                                  updateCommentHandler
+                                                }
+                                                updateSuccHandler={
+                                                  updateSuccHandler
+                                                }
+                                              />
+                                            ) : null
+                                          ) : null}
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+
+                                  <CommentComponent
+                                    // props={{ num1: currClickComment, num2: 10, num3: 100 }}    //<- 여러개 던질때
+                                    props={selected_Comment}
+                                    ref={addCommentHandler}
+                                  />
+                                </div>
+                              ) : (
+                                <div>
+                                  {
+                                    //id에 상위 댓글의 코드 값을 넣어서 버튼 id부여함.
+                                    // 부여한 이유는... 댓글 작성의 경우에 CommentComponent를 호출해서 재사용 하기 위함
+                                  }
+                                  <button
+                                    className="commentView_btn"
+                                    id={`${comment.noticeCommentCode}`}
+                                    onClick={(e) => {
+                                      setSelected_Comment(
+                                        comment.noticeCommentCode
+                                      );
+                                    }}
+                                  >
+                                    댓글 보기
+                                  </button>
+                                </div>
+                              )
+                            }
+                          </div>
+                        </div>
+
+                        <hr
+                          style={{
+                            width: "100%",
+                            border: "0px",
+                            borderTop: "1px solid #7BCFE1",
+                          }}
+                        />
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="article-bottom-btn">
+          <div
+            className="left-btn"
+            // style={{ display: viewBtn ? "block" : "none" }}
+          >
+            <button
+              className="update-btn"
+              onClick={updateHandler}
+              value={postData?.commonCode}
+            >
+              수정
+            </button>
+            <button
+              className="delete-btn"
+              onClick={deleteHandler}
+              value={postData?.commonCode}
+            >
+              삭제
+            </button>
+          </div>
+          <div className="right-btn">
+            <button className="list-btn">
+              <Link to={`../`}>목록</Link>
+            </button>
+            <button className="top-btn" onClick={ScrollToTopBtn}>
+              △위로
+            </button>
+          </div>
+        </div>
+      </MainContentBox>
+    </MainStlye>
   );
 };
 export default NoticeView;

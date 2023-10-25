@@ -5,9 +5,6 @@ const Styled = styled.div`
 
   form {
     flex: 1 1 800px;
-
-    margin: 20px 0px;
-    padding: 20px 0px;
     /* border: 1px solid black; */
 
     display: flex;
@@ -16,25 +13,28 @@ const Styled = styled.div`
     align-items: center;
 
     .commentDesc {
-      width: 70%;
+      width: 90%;
 
       input {
         width: 90%;
-        border: 0;
+        border: 1px solid #ededed;
         border-radius: 10px;
-        background-color: darkgray;
-        color: white;
+        background-color: white;
+        color: black;
 
         margin: 0;
         padding: 10px 20px;
       }
     }
     .submitBtn {
-      width: 70px;
+      margin-left: 20px;
       button {
-        height: 40px;
-        background-color: black;
-        border-radius: 10px;
+        width: 80px;
+        height: 35px;
+        border: 0;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: #437b92;
         color: white;
       }
     }
@@ -44,7 +44,6 @@ const Styled = styled.div`
 const CommentComponent = forwardRef((props, ref) => {
   return (
     <Styled>
-
       <form onSubmit={ref}>
         <div className="commentDesc">
           <input
@@ -55,7 +54,7 @@ const CommentComponent = forwardRef((props, ref) => {
           ></input>
         </div>
         <div className="submitBtn">
-          <button type="submit" >댓글작성</button>
+          <button type="submit">댓글작성</button>
         </div>
       </form>
     </Styled>

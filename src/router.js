@@ -23,6 +23,7 @@ import UpdatePost from "./components/UpdatePost";
 import HospitalReviewView from "./pages/information/HospitalReviewView";
 import EventCalendar from "./pages/notice/EventCalendar";
 import UserPage from "./pages/member/UserPage";
+import NoticeList from "./pages/notice/NoticeList";
 
 const router = createBrowserRouter([
   {
