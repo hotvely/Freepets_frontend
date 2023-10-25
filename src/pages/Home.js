@@ -44,50 +44,35 @@ const StyledHeader = styled.header`
   }
 `;
 const StyledMain = styled.main`
-  background-color: #3a98b9;
-  height: 40vh;
+  background-color: #68B0C9;
   width: 100%;
+  height: 50vh;
   display: flex;
+
   .leftNav {
     display: flex;
+    position: fixed;
     flex-direction: column;
-    justify-content: space-between;
-    height: 45%;
-    margin: auto 0rem;
-    font-size: 1.7rem;
-    margin-left: 4rem;
-    font-weight: 600;
-    color: #fff1dc;
-    margin-right: 4rem;
+    font-size: 1.3rem;
+    margin-left: 3rem;
+    font-weight: bold;
+    
+    a {
+      color: #FFF1DC;
+      margin: 10px 0px;
+    }
   }
   .allMain {
     display: flex;
     flex-direction: column;
-    width: 80%;
-    .searchBar {
-      background-color: #eeeeee;
-      width: 90%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #68b0c9;
-      margin-top: 3rem;
-      height: 15%;
-      font-size: 2rem;
-      font-weight: 600;
-      border-radius: 10px;
-      div {
-        display: flex;
-        margin-left: 1.5rem;
-      }
-      img {
-        margin-right: 2rem;
-      }
-    }
+    align-items: center;
+    width: 100%;
+    margin-left: 4rem;
+    
     .best {
       margin-top: 2rem;
       height: 55%;
-      width: 90%;
+      width: 80%;
       display: flex;
       justify-content: space-between;
       .bestInner {
@@ -148,6 +133,18 @@ const StyledMain = styled.main`
   }
 `;
 
+const OurStoryMain = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+`;
+
+const WeeklyBestMain = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: red;
+`;
+
 const Home = () => {
   const dispatch = useDispatch();
 
@@ -198,21 +195,12 @@ const Home = () => {
       <img src={Banner} style={{ width: "100%", height: "59vh" }} />
       <StyledMain>
         <div className="leftNav">
-          <p>MAIN</p>
-          <p>OUR STORY</p>
-          <p>WEEKLY BEST</p>
-          <p>EVENT</p>
+          <a href="#">MAIN</a>
+          <a href="#ourStroy">OUR STORY</a>
+          <a href="#weeklyBest">WEEKLY BEST</a>
+          <a href="#">EVENT</a>
         </div>
         <div className="allMain">
-          <div className="searchBar">
-            <div>
-              <p>통합검색</p>
-              <p>▽</p>
-            </div>
-            <a href="#">
-              <img src={loupe} />
-            </a>
-          </div>
           <div className="best">
             <div className="bestInner">
               <p className="weeklyBest">주간 인기글</p>
@@ -238,6 +226,16 @@ const Home = () => {
           </div>
         </div>
       </StyledMain>
+      <OurStoryMain>
+        <div id="ourStroy">
+
+        </div>
+      </OurStoryMain>
+      <WeeklyBestMain>
+        <div id="weeklyBest">
+
+        </div>
+      </WeeklyBestMain>
     </div>
   );
 };

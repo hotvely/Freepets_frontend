@@ -6,6 +6,7 @@ export const MainStlye = styled.div`
   margin-left: 20px;
   /* margin: 0 50px; */
 `;
+
 export const MainBanner = styled.div`
   display: flex;
   align-items: center;
@@ -133,6 +134,7 @@ export const MainContentBox = styled.div`
                 display: flex;
                 flex-direction: column;
                 .comment-content {
+                  font-size: 0.9rem;
                   display: flex;
                   flex-direction: row;
                   align-items: center;
@@ -144,7 +146,6 @@ export const MainContentBox = styled.div`
                     align-items: center;
                     .commentTextBox {
                       padding: 13px;
-                      width: 400px;
                       height: 100%;
                       display: flex;
                       flex-direction: column;

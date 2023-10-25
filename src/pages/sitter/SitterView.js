@@ -406,8 +406,7 @@ const SitterView = () => {
             alert('삭제되었습니다.');
             const newList = reviews.filter((item) => item.sitterReviewCode != id);
             setReviews(newList);
-        }
-        
+        }   
     }
 
     const reviewDescChange = (e) => {
