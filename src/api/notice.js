@@ -4,9 +4,9 @@ const instance = axios.create({
   baseURL: "http://localhost:8080/api/",
 });
 
-export const getBoardsByPage = async (page) => {
+export const getBoardsByPage = async (page, sortNum) => {
   console.log("get page 로 게시글들 받아옴");
-  let url = `notice?page=${page}`;
+  let url = `notice?page=${page}&sortNum=${sortNum}`;
 
   return await instance.get(url);
 };
@@ -17,7 +17,6 @@ export const getBoardViewAPI = async (code) => {
 };
 
 export const getSearchAPI = async (keyword) => {
-
   let url = `notice/search/${keyword}`;
   return await instance.get(url);
 };
@@ -58,6 +57,10 @@ export const updateNoticeAPI = async (data) => {
 export const updateCommentAPI = async (data) => {
   console.log("UpdateCommentAPI 시작");
   return await instance.put("notice/comment", data);
+};
+
+export const updateLikeNoticeAPI = async (data) => {
+  return await instance.post("notice/like", data);
 };
 
 export const deleteCommentAPI = async (code) => {

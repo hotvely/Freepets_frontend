@@ -9,15 +9,17 @@ import {
   faEye,
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   deleteNoticeAPI,
   getBoardsByPage,
   getSearchAPI,
+  getSortedBoardAPI,
 } from "../../api/notice";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import Page from "../../components/Page";
 
 const MainStyle = styled.main`
   display: flex;
@@ -197,9 +199,13 @@ const PagingStyle = styled.div`
 
 const Notice = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get("page");
+  const [totalPages, setTotalPages] = useState();
+  const page = 1;
   const [boards, setBoards] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [sortNum, setSortNum] = useState(0);
 
   const keywordHandler = (e) => {
     setKeyword(e.target.value);
@@ -210,10 +216,9 @@ const Notice = () => {
   });
 
   const getBoardHandler = async () => {
-    console.log("getBoardHandler들어는 오냐???????????????????");
-
-    const response = await getBoardsByPage(page);
-    setBoards([...response.data]);
+    const response = await getBoardsByPage(page, sortNum);
+    setBoards(response.data.noticeList);
+    setTotalPages(response.data.totalPages);
   };
 
   const getSearchBoardHandler = async () => {
@@ -222,8 +227,7 @@ const Notice = () => {
     console.log(response.data);
     if (response.data.length > 0) {
       setBoards([...response.data]);
-    }
-    else {
+    } else {
       await getBoardHandler(page);
     }
   };
@@ -238,7 +242,7 @@ const Notice = () => {
       setBoards([]);
       await deleteNoticeAPI(e.target.id);
 
-      const response = await getBoardsByPage(page);
+      const response = await getBoardsByPage(page, sortNum);
 
       setBoards([...response.data]);
     } else {
@@ -246,10 +250,21 @@ const Notice = () => {
     }
   };
 
+  const sortHandler = (e) => {
+    setSortNum(e.target.value);
+  };
+
   useEffect(() => {
     console.log("화면 첨 실행될떄..");
     getBoardHandler();
   }, []);
+
+  useEffect(() => {
+    if (sortNum > 0) {
+      console.log("selector 변화 됬을 떄 들어옴???");
+      getBoardHandler();
+    }
+  }, [sortNum]);
 
   return (
     <MainStyle>
@@ -258,8 +273,9 @@ const Notice = () => {
         <div className="board_title">... 게시판</div>
       </div>
       <div className="select">
-        <div className="option">
-          <select>
+        <div className="option" onChange={sortHandler}>
+          <select defaultValue={0}>
+            <option value="0">------</option>
             <option value="1">추천 순</option>
             <option value="2">댓글 순</option>
             <option value="3">조회 순</option>
@@ -355,7 +371,9 @@ const Notice = () => {
           </button>
         </section>
       </ContentStyle>
-      <PagingStyle>페이지 네비게이션 도경쓰 컴포넌트 붙이기</PagingStyle>
+      {/* <PagingStyle> */}
+      <Page totalPages={totalPages} page={page}></Page>
+      {/* </PagingStyle> */}
     </MainStyle>
   );
 };
