@@ -4,9 +4,9 @@ const instance = axios.create({
   baseURL: "http://localhost:8080/api/",
 });
 
-export const getCommunityList = async (page) => {
+export const getCommunityList = async (page, orderBy) => {
   console.log("오고 있니....");
-  let url = `community?&page=${page}`;
+  let url = `community?page=${page}&orderby=${orderBy}`;
   return await instance.get(url);
 };
 

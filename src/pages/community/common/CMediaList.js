@@ -193,7 +193,7 @@ const MainContentBox = styled.div`
     flex-direction: row;
     align-items: center;
     padding-top: 20px;
-    border-top: 1px solid #3a98b9;
+    /* border-top: 1px solid #3a98b9; */
 
     .page {
       flex-grow: 1;
@@ -262,6 +262,7 @@ const CMediaList = () => {
   const [searchParams] = useSearchParams();
   const searchPage = searchParams.get("page");
   const [totalPages, setTotalPages] = useState();
+  const [selectedSort, setSelectedSort] = useState(1);
   const [mediae, setMediae] = useState([]);
   const [ListBtn, setListBtn] = useState();
   const navigate = useNavigate();
@@ -272,6 +273,11 @@ const CMediaList = () => {
     // 게시글 타입 변경
     console.log(e.currentTarget.id);
     setListBtn(e.currentTarget.id);
+  };
+
+  const sortChangeHandler = (event) => {
+    const sort = event.currentTarget.value;
+    setSelectedSort(sort);
   };
 
   // const navRowClick = (row) => {
@@ -304,9 +310,23 @@ const CMediaList = () => {
     setTotalPages(result.data.totalPages);
   };
 
+  const sortSeleted = async () => {
+    switch (selectedSort) {
+      case 1:
+        MediaListAPI();
+        break;
+      case 2:
+        const sortLike = await getCommunityList("commonLikeCount", page);
+        setSelectedSort(sortLike.data.communityList);
+        setTotalPages(sortLike.data.totalPages);
+        break;
+      case 3:
+    }
+  };
+
   useEffect(() => {
     MediaListAPI(); // 게시글 목록 조회 호출
-  }, [page]);
+  }, [page, sortSeleted]);
 
   const boardTypeForMedia = () => {
     return (
@@ -378,7 +398,7 @@ const CMediaList = () => {
         <div className="midea-headerbox">
           <div className="media-sort">
             <div className="media-sort-like">
-              <select>
+              <select onChange={sortChangeHandler}>
                 <option value="1">최신순</option>
                 <option value="2">추천순</option>
                 <option value="3">댓글순</option>

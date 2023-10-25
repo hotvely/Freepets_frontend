@@ -55,8 +55,8 @@ const CommunityTableForList = ({ columns, data, onRowClick }) => {
                   <td
                     {...cell.getCellProps()}
                     style={{
-                      paddingTop: "7px",
-                      paddingBottom: "7px",
+                      paddingTop: "8px",
+                      paddingBottom: "8px",
                       fontSize: "0.9rem",
                       borderBottom: "1px solid #CDF5FD",
                     }}
