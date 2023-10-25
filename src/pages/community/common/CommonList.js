@@ -35,7 +35,7 @@ const CommunityList = () => {
   useEffect(() => {
     CommunityListAPI(); // 게시글 목록 조회 호출
   }, []);
-
+  console.log(commonPost);
   const columns = useMemo(
     () => [
       { accessor: "commonCode", Header: "게시글번호" },
