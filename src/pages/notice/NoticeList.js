@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { dateFormatDefault } from "../../api/utils";
 
 const MainStlye = styled.div`
-  padding: 20px;
   width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const MainBanner = styled.div`
@@ -26,7 +27,7 @@ const MainBanner = styled.div`
 const ContentStyle = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 10px;
+  margin: 30px;
   width: 100%;
   div {
     display: flex;
@@ -36,52 +37,59 @@ const ContentStyle = styled.div`
 
 const NoticeList = (props) => {
   const [boards, setBoards] = useState([]);
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
   // const [data, setData] = useState([]);
   const [columns, setColumns] = useState([
     { accessor: "noticeCode", Header: "게시글번호" },
     { accessor: "noticeTitle", Header: "제목" },
-    { accessor: "nickName", Header: "작성자" },
+    { accessor: "member.nickname", Header: "작성자" },
     { accessor: "noticeDate", Header: "작성일" },
-    { accessor: "noticeViewCount", Header: "조회수" },
-    { accessor: "noticeLikeCount", Header: "좋아요" },
+    { accessor: "noticeViews", Header: "조회수" },
+    { accessor: "noticeLike", Header: "좋아요" },
   ]);
   const page = 1;
   const sortNum = props.props.sortNum;
   const keyword = props.props.searchKey;
   const searchNum = props.props.searchNum;
 
-  // const getBoardHandler = async () => {
-  //   const response = await getBoardsByPageAPI(page, sortNum);
+  const changeDate = (tempArr) => {
+    for (const item in tempArr) {
+      tempArr[item].noticeDate = dateFormatDefault(tempArr[item].noticeDate);
+    }
+    return tempArr;
+  };
 
-  //   setBoards([...response.data.noticeList]);
-  //   // setTotalPages(response.data.totalPages);
-  // };
   const getBoardHandler = async () => {
     const response = await getBoardsByPageAPI(page, sortNum);
 
-    setBoards([...response.data.noticeList]);
+    let tempArr = [...response.data.noticeList];
+    tempArr = [...changeDate(tempArr)];
+
+    setBoards(tempArr);
+
     // setTotalPages(response.data.totalPages);
   };
 
   const getSearchBoardHandler = async () => {
     // 검색기능..
-
+    console.log(keyword, searchNum);
     const response = await getSearchAPI(keyword, searchNum);
 
     console.log(response);
 
     if (response.data.noticeList.length > 0) {
-      setBoards(response.data.noticeList);
-      console.log(keyword, searchNum);
+      let tempArr = [...response.data.noticeList];
+      tempArr = changeDate(tempArr);
+
+      setBoards(tempArr);
     } else {
-      // await getBoardHandler();
+      alert("검색 결과가 없습니다.");
+      await getBoardHandler();
     }
   };
 
-  useEffect(() => {
-    console.log(boards);
-  }, [boards]);
+  useEffect(() => {}, [boards]);
 
   useEffect(() => {
     getBoardHandler();
@@ -95,9 +103,6 @@ const NoticeList = (props) => {
   useEffect(() => {
     if (keyword) {
       getSearchBoardHandler();
-    } else {
-      console.log("키워드 변경?");
-      getBoardHandler();
     }
   }, [keyword]);
 

@@ -272,22 +272,20 @@ const Notice = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchPage = searchParams.get("page");
-  const [totalPages, setTotalPages] = useState();
-  const page = 1;
-  const [boards, setBoards] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [sortNum, setSortNum] = useState(1);
   const [searchNum, setSearchNum] = useState(1);
   const [searchKey, setSearchKey] = useState("");
+
   const keywordHandler = (e) => {
     setKeyword(e.target.value);
   };
-
   const user = useSelector((state) => {
     return state.user;
   });
 
   const getSearchBoardHandler = async () => {
+    document.querySelector("#search").value = "";
     setSearchKey(keyword);
   };
 

@@ -15,6 +15,8 @@ import {
   getNoticeNotification,
 } from "../../components/Notification";
 import MyPageMain from "../../components/css/MyPageMain";
+import { deleteBookmarkAPI, getBookmarkAPI } from "../../api/bookmark";
+import { dateFormatDefault } from "../../api/utils";
 
 const MyPage = () => {
   const { id } = useParams();
@@ -23,6 +25,7 @@ const MyPage = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [bookmark, setBookmark] = useState([]);
 
   const user = useSelector((state) => {
     return state.user;
@@ -45,6 +48,7 @@ const MyPage = () => {
       setNotifications([]);
     } else {
       getNotiHandler();
+      getBookmarkHandler();
     }
   }, [user]);
 
@@ -92,6 +96,11 @@ const MyPage = () => {
     console.log(result.data);
     setNotifications([...result.data]);
   };
+  const getBookmarkHandler = async () => {
+    const result = await getBookmarkAPI(user.token);
+    console.log(result);
+    setBookmark([...result.data]);
+  };
 
   const deleteNotiHandler = async (e) => {
     e.preventDefault();
@@ -103,6 +112,11 @@ const MyPage = () => {
     console.log(result.data);
 
     setNotifications([]);
+  };
+
+  const deleteBookmarkHandler = async (e) => {
+    await deleteBookmarkAPI(e.target.id);
+    await getBookmarkHandler();
   };
 
   return (
@@ -188,21 +202,35 @@ const MyPage = () => {
                 <Link to={noti.url}>
                   <div className="check-Alarm-Content">
                     <div className="check_Alarm-info">
+                      {noti.boardCode == 1 ? (
+                        <div>커뮤니티게시판</div>
+                      ) : noti.boardCode == 2 ? (
+                        <div>분실 신고게시판</div>
+                      ) : noti.boardCode == 3 ? (
+                        <div>시터게시판</div>
+                      ) : noti.boardCode == 4 ? (
+                        <div>병원 정보게시판</div>
+                      ) : noti.boardCode == 5 ? (
+                        <div>공지사항게시판</div>
+                      ) : (
+                        <div>"게시판정보?"</div>
+                      )}
                       {console.log(noti)}
-                      {noti.boardCode == 1
-                        ? "커뮤니티 게시판 "
-                        : noti.boardCode == 2
-                        ? "분실 신고 게시판 "
-                        : noti.boardCode == 3
-                        ? "시터 게시판 "
-                        : noti.boardCode == 4
-                        ? "병원 정보 게시판 "
-                        : noti.boardCode == 5
-                        ? "공지사항 게시판 "
-                        : "게시판정보?"}
-                      {noti.childComment.parentCommentCode > 0
-                        ? `'${noti.boardDTO.title}' 게시글에 작성한 '${noti.parentComment?.commentDesc}' 댓글에 대댓글이 달렸습니다. `
-                        : `'${noti.boardDTO.title}' 게시글에 댓글이 달렸습니다. `}
+                      {noti?.childComment?.parentCommentCode > 0 ? (
+                        <>
+                          <div className="commentTitle">
+                            {noti.boardDTO.title}
+                          </div>
+                          <div>게시글에 작성한</div>
+                          <div className="commentDesc">
+                            {console.log(noti.parentComment.commentDesc)}
+                            {noti.parentComment.commentDesc}
+                          </div>
+                          <div>댓글에 대댓글이 달렸습니다.</div>
+                        </>
+                      ) : (
+                        `'${noti.boardDTO.title}' 게시글에 댓글이 달렸습니다. `
+                      )}
                     </div>
                     <div className="check_Alarm-info">
                       <div>2시간전...</div>
@@ -219,51 +247,43 @@ const MyPage = () => {
           <header>
             <p>북마크 게시글</p>
           </header>
-          <div className="Post">
-            <img src={image}></img>
-            <div className="postInfo_basic">닉네임</div>
-            <div className="postInfo_boardname">게시판이름</div>
-            <div className="postInfo_title">
-              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
+
+          {bookmark?.map((bookmark) => (
+            <div className="Post" key={bookmark.bookmarkCode}>
+              {console.log(bookmark)}
+              <img src={image}></img>
+              <div className="postInfo_basic">{bookmark.nickname}</div>
+              <div className="postInfo_boardname">
+                {bookmark.boardName == "community"
+                  ? "커뮤니티"
+                  : bookmark.boardName == "lost"
+                  ? "분실신고"
+                  : bookmark.boardName == "sitter"
+                  ? "시터"
+                  : bookmark.boardName == "hospitalReview"
+                  ? "병원정보"
+                  : bookmark.boardName == "notice"
+                  ? "공지사항"
+                  : "게시판정보 없음.."}
+              </div>
+              <div className="postInfo_title">
+                <a href={`${bookmark.boardDTO.postPath}`}>
+                  {bookmark.boardDTO.title}
+                </a>
+              </div>
+              <div className="postInfo_date">
+                {dateFormatDefault(bookmark.boardDTO.date)}
+              </div>
+              <div className="bookmarkDeletBtn">
+                <button
+                  id={`${bookmark.bookmarkCode}`}
+                  onClick={deleteBookmarkHandler}
+                >
+                  x
+                </button>
+              </div>
             </div>
-            <div className="postInfo_date">2023-09-21</div>
-          </div>
-          <div className="Post">
-            <img src={image}></img>
-            <div className="postInfo_basic">닉네임</div>
-            <div className="postInfo_boardname">게시판이름</div>
-            <div className="postInfo_title">
-              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
-            </div>
-            <div className="postInfo_date">2023-09-21</div>
-          </div>
-          <div className="Post">
-            <img src={image}></img>
-            <div className="postInfo_basic">닉네임</div>
-            <div className="postInfo_boardname">게시판이름</div>
-            <div className="postInfo_title">
-              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
-            </div>
-            <div className="postInfo_date">2023-09-21</div>
-          </div>
-          <div className="Post">
-            <img src={image}></img>
-            <div className="postInfo_basic">닉네임</div>
-            <div className="postInfo_boardname">게시판이름</div>
-            <div className="postInfo_title">
-              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
-            </div>
-            <div className="postInfo_date">2023-09-21</div>
-          </div>
-          <div className="Post">
-            <img src={image}></img>
-            <div className="postInfo_basic">닉네임</div>
-            <div className="postInfo_boardname">게시판이름</div>
-            <div className="postInfo_title">
-              <a>게시글 제모구람뉴ㅜㅎ마ㅓ규히ㅏ휴김하ㅓ</a>
-            </div>
-            <div className="postInfo_date">2023-09-21</div>
-          </div>
+          ))}
         </div>
       </MyPageMain>
     </>

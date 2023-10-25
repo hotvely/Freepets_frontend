@@ -22,8 +22,12 @@ export const getSearchAPI = async (keyword, sortNum) => {
 };
 
 export const getCommentsAPI = async (postCode) => {
-  let url = `notice/${postCode}/comment`;
+  let url = `notice/${postCode}/comments`;
   return await instance.get(url);
+};
+
+export const getCommentAPI = async (code) => {
+  return await instance.get(`notice/comment/${code}`);
 };
 
 export const getReCommentsAPI = async (pCode) => {

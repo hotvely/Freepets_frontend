@@ -11,7 +11,7 @@ const Styled = styled.div`
       border: 0;
       padding: 5px;
       border-radius: 5px;
-      background-color: #84afc1;
+      background-color: #98dbf2;
       color: white;
       margin: 0 5px;
     }
