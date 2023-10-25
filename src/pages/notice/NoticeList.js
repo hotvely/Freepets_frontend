@@ -4,11 +4,13 @@ import NoticeTableForList from "./NoticeTableForList";
 import { getBoardsByPageAPI, getSearchAPI } from "../../api/notice";
 import { useNavigate } from "react-router-dom";
 import { dateFormatDefault } from "../../api/utils";
+import Page from "../../components/Page";
 
 const MainStlye = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const MainBanner = styled.div`
@@ -27,8 +29,9 @@ const MainBanner = styled.div`
 const ContentStyle = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 30px;
-  width: 100%;
+  align-items: center;
+  margin: 0;
+  width: 90%;
   div {
     display: flex;
     justify-content: space-around;
@@ -37,7 +40,7 @@ const ContentStyle = styled.div`
 
 const NoticeList = (props) => {
   const [boards, setBoards] = useState([]);
-  const [data, setData] = useState([]);
+  const [totalPages, setTotalPages] = useState();
   const navigate = useNavigate();
   // const [data, setData] = useState([]);
   const [columns, setColumns] = useState([
@@ -48,10 +51,10 @@ const NoticeList = (props) => {
     { accessor: "noticeViews", Header: "조회수" },
     { accessor: "noticeLike", Header: "좋아요" },
   ]);
-  const page = 1;
   const sortNum = props.props.sortNum;
   const keyword = props.props.searchKey;
   const searchNum = props.props.searchNum;
+  const page = props.props.page;
 
   const changeDate = (tempArr) => {
     for (const item in tempArr) {
@@ -68,7 +71,7 @@ const NoticeList = (props) => {
 
     setBoards(tempArr);
 
-    // setTotalPages(response.data.totalPages);
+    setTotalPages(response.data.totalPages);
   };
 
   const getSearchBoardHandler = async () => {
@@ -83,6 +86,7 @@ const NoticeList = (props) => {
       tempArr = changeDate(tempArr);
 
       setBoards(tempArr);
+      setTotalPages(response.data.totalPages);
     } else {
       alert("검색 결과가 없습니다.");
       await getBoardHandler();
@@ -106,6 +110,10 @@ const NoticeList = (props) => {
     }
   }, [keyword]);
 
+  useEffect(() => {
+    getBoardHandler();
+  }, [page]);
+
   const handleRowClick = (row) => {
     //ViewPage로 이동
     console.log(row);
@@ -114,7 +122,7 @@ const NoticeList = (props) => {
 
   return (
     <MainStlye>
-      <ContentStyle>
+      <ContentStyle className="content">
         {boards ? (
           <NoticeTableForList
             columns={columns}
@@ -123,6 +131,7 @@ const NoticeList = (props) => {
           />
         ) : null}
       </ContentStyle>
+      <Page totalPages={totalPages} page={page} />
     </MainStlye>
   );
 };

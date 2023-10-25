@@ -277,9 +277,12 @@ const Notice = () => {
   const [searchNum, setSearchNum] = useState(1);
   const [searchKey, setSearchKey] = useState("");
 
+  const page = searchPage != null ? searchPage : 1;
+
   const keywordHandler = (e) => {
     setKeyword(e.target.value);
   };
+
   const user = useSelector((state) => {
     return state.user;
   });
@@ -335,11 +338,9 @@ const Notice = () => {
           </div>
         </div>
 
-        <NoticeList props={{ searchKey, searchNum, sortNum }} />
+        <NoticeList props={{ searchKey, searchNum, sortNum, page }} />
 
         <div className="main-bottom">
-          {/* 페이지 넘기는 바 만들기
-         <div id="paging"></div> */}
           <div className="page"></div>
           <div id="write-btn">
             <button

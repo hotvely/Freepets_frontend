@@ -62,6 +62,10 @@ const router = createBrowserRouter([
         element: <Post />,
       },
       {
+        path: "?page=:page",
+        element: <Notice />,
+      },
+      {
         path: "update/:boardCode/:postCode",
         element: <UpdatePost />,
       },
