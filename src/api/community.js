@@ -6,7 +6,8 @@ const instance = axios.create({
 
 export const getCommunityList = async (page, orderBy) => {
   console.log("오고 있니....");
-  let url = `community?page=${page}&orderby=${orderBy}`;
+  console.log(orderBy);
+  let url = `community?page=${page}&orderBy=${orderBy}`;
   return await instance.get(url);
 };
 

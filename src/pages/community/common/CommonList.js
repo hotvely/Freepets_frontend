@@ -22,6 +22,8 @@ const CommunityList = (props) => {
   const searchPage = searchParams.get("page");
   const page = searchPage != null ? searchPage : 1;
 
+  const orderBy = props.props.orderBy;
+
   const handleRowClick = (row) => {
     //ViewPage로 이동
     navigate(`/community/common/commonview/${row.original.commonCode}`);
@@ -29,14 +31,14 @@ const CommunityList = (props) => {
 
   const CommunityListAPI = async () => {
     // 게시글 목록 데이터
-    const result = await getCommunityList(page);
+    const result = await getCommunityList(page, orderBy);
     setcommonPosts(result.data.communityList);
     // setcommonPosts([...commonPost, ...result.data]);
   };
 
   useEffect(() => {
     CommunityListAPI(); // 게시글 목록 조회 호출
-  }, [page]);
+  }, [page, orderBy]);
 
   const [columns] = useState([
     {
@@ -46,9 +48,18 @@ const CommunityList = (props) => {
     {
       accessor: "commonTitle",
       Header: "제목",
-      Cell: ({ value }) => (
+      Cell: ({ row }) => (
         <div style={{ textAlign: "left", width: "350px", cursor: "pointer" }}>
-          {value}
+          {row.original.commonCommentCount > 0 ? (
+            <div>
+              {row.original.commonTitle}{" "}
+              <div style={{ color: "#C70039" }}>
+                [ {row.original.commonCommentCount} ]
+              </div>
+            </div>
+          ) : (
+            <div>{row.original.commonTitle}</div>
+          )}
         </div>
       ),
     },
@@ -70,6 +81,7 @@ const CommunityList = (props) => {
     const postData = commonPost.map((post) => ({
       commonCode: post.commonCode,
       commonTitle: post.commonTitle,
+      commonCommentCount: post.commonCommentCount,
       nickName: post?.member?.nickname,
       commonDate: dateFormatTrans(post.commonDate),
       commonViewCount: post.commonViewCount,

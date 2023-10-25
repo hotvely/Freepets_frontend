@@ -262,7 +262,8 @@ const CMediaList = () => {
   const [searchParams] = useSearchParams();
   const searchPage = searchParams.get("page");
   const [totalPages, setTotalPages] = useState();
-  const [selectedSort, setSelectedSort] = useState(1);
+  const [orderBy, setOrderBy] = useState(1);
+  const [searchOrderBy, setSearchOrderBy] = useState(1);
   const [mediae, setMediae] = useState([]);
   const [ListBtn, setListBtn] = useState();
   const navigate = useNavigate();
@@ -276,8 +277,15 @@ const CMediaList = () => {
   };
 
   const sortChangeHandler = (event) => {
-    const sort = event.currentTarget.value;
-    setSelectedSort(sort);
+    const selectedOrderBy = event.currentTarget.value;
+    console.log(selectedOrderBy);
+    setOrderBy(selectedOrderBy);
+  };
+
+  const searchSortChangeHandler = (event) => {
+    const selectedSearchOrderBy = event.currentTarget.value;
+    console.log(selectedSearchOrderBy);
+    setSearchOrderBy(selectedSearchOrderBy);
   };
 
   // const navRowClick = (row) => {
@@ -305,28 +313,14 @@ const CMediaList = () => {
   const MediaListAPI = async () => {
     // 게시글 목록 데이터
     // setMediae([...mediae, ...result.data]);
-    const result = await getCommunityList(page);
+    const result = await getCommunityList(page, orderBy);
     setMediae(result.data.communityList);
     setTotalPages(result.data.totalPages);
   };
 
-  const sortSeleted = async () => {
-    switch (selectedSort) {
-      case 1:
-        MediaListAPI();
-        break;
-      case 2:
-        const sortLike = await getCommunityList("commonLikeCount", page);
-        setSelectedSort(sortLike.data.communityList);
-        setTotalPages(sortLike.data.totalPages);
-        break;
-      case 3:
-    }
-  };
-
   useEffect(() => {
     MediaListAPI(); // 게시글 목록 조회 호출
-  }, [page, sortSeleted]);
+  }, [page, orderBy]);
 
   const boardTypeForMedia = () => {
     return (
@@ -427,17 +421,21 @@ const CMediaList = () => {
           </div>
 
           <div className="search-box">
-            <select>
-              <option value="1">게시글+댓글</option>
-              <option value="2">게시글</option>
-              <option value="3">댓글</option>
+            <select onChange={searchSortChangeHandler}>
+              <option value="1">제목+내용</option>
+              <option value="2">제목</option>
+              <option value="3">내용</option>
             </select>
 
             <input type="search" id="search" name="search" />
             <button>검색</button>
           </div>
         </div>
-        {ListBtn == 1 ? boardTypeForMedia() : <CommunityList />}
+        {ListBtn == 1 ? (
+          boardTypeForMedia()
+        ) : (
+          <CommunityList props={{ orderBy, searchOrderBy }} />
+        )}
         <div className="main-bottom">
           <div className="paging-bar">
             <Page totalPages={totalPages} page={page} />
