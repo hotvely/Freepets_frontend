@@ -12,7 +12,7 @@ import {
   deleteCommunity,
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
-import CommentComponent from "../../notice/CommentComponent";
+import CommentComponent from "../../../components/comment/CommentComponent";
 
 const MainStlye = styled.div`
   padding: 10px;

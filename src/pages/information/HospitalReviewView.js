@@ -9,8 +9,14 @@ import { Link } from "react-router-dom";
 import { dateFormatDefault } from "../../api/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import CommentComponent from "../notice/CommentComponent";
+import CommentComponent from "../../components/comment/CommentComponent";
+import CommentBtnComponent from "../../components/comment/CommentBtnComponent";
+
+import ReCommentComponent from "../../components/comment/ReCommentComponent";
+import UpdateCommentComponent from "../../components/comment/UpdateCommentComponent";
 import { addNoticeNotification } from "../../components/Notification";
+import ProfileComponent from "../../components/member/ProfileComponent";
+import StyledMain from "../../components/css/StyledMain";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -208,7 +214,7 @@ const HospitalReviewView = () => {
 
   const getCommentHandler = async (code) => {
     const resultComment = await getHrComment(code);
-    setComments([resultComment.data]);
+    setComments([...resultComment.data]);
   }
 
   const addCommentHandler = async (e) => {
@@ -240,6 +246,14 @@ const HospitalReviewView = () => {
     }
   }
 
+  const updateCommentHandler = async (code) => {
+    if (code == currClickBtn) {
+      code = -1;
+    }
+
+    setCurrClickBtn(code);
+  };
+
   const updateSuccHandler = () => {
     setSuccUpdate(true);
   };
@@ -270,7 +284,7 @@ const HospitalReviewView = () => {
   }, [succUpdate]);
 
   return (
-    <MainStlye>
+    <StyledMain>
       <MainBanner>
         <div className="banner-img">
           <img src={banner} alt="배너 이미지" />
@@ -329,35 +343,145 @@ const HospitalReviewView = () => {
                 {like}
               </button>
             </div>
-            <div className="comment-box">
-              <CommentComponent props={0} ref={addCommentHandler} />
-            </div>
-            <div className="commentBox2">
-              <ul className="comment">
-                  {comments?.map((comment) => comment.superHrCommentCode > 0 ? null : (
-                    <li className="userProfile" key={comment.hrCommentCode}>
-                      <div>
-                        {
-                          // 유저 정보
-                        }
-                        <div>
-                          <div className="useruser">
-                            <div className="profile">
-                                <img src={yange} alt="작성자 프로필" style={{"width" : "50px"}}/>
-                            </div>
-                            <div className="user">
-                              <p style={{fontSize: "18px", fontWeight: "border"}}>{comment?.member?.nickname}</p>
-                            </div>
-                          </div>
-                          {
-                            // 댓글 정보
-                          }
-                        </div>
+            <div className="commentBox">
+        <div className="commentProfile">
+          <img src={yange}></img>
+        </div>
+        <CommentComponent props={0} ref={addCommentHandler} />
+      </div>
+
+      <div className="commentBox2">
+        <ul className="comment">
+          {console.log(comments)}
+          {comments?.map((comment) =>
+            comment?.superHrCommentCode > 0 ? null : (
+              <li className="userProfile" key={comment.hrCommentCode}>
+                <div>
+                  {
+                    // 유저 정보
+                  }
+                  <div className="comment">
+                    <ProfileComponent props={comment?.member} />
+                    {
+                      // 댓글 정보
+                    }
+                    <div className="comment-desc">
+                      <div className="commentTextBox">
+                        {comment?.hrCommentDesc}
                       </div>
-                    </li>
-                  ))}
-              </ul>
-            </div>
+                      <div className="commentDate-btn ">
+                        <div>{dateFormatDefault(comment?.hrCommentDate)}</div>
+                        <CommentBtnComponent
+                          code={comment?.hrCommentCode}
+                          writer={comment?.member?.id}
+                          updateCommentHandler={onClick}
+                          deleteCommentHandler={deleteCommentHandler}
+                        />
+                      </div>
+                    </div>
+                    {currClickBtn === comment?.hrCommentCode ? (
+                      comment?.member?.id === data.id ? (
+                        <UpdateCommentComponent
+                          code={comment?.hrCommentCode}
+                          updateCommentHandler={updateCommentHandler}
+                          updateSuccHandler={updateSuccHandler}
+                        />
+                      ) : null
+                    ) : null}
+                  </div>
+                  <div className="reCommentContent">
+                    {
+                      // 대댓글 보기, 대댓글 작성 코드
+
+                      // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
+                      selectedComment == comment?.hrCommentCode ? (
+                        <div>
+                          {
+                            // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
+                          }
+
+                          <button
+                            className="commentView_btn"
+                            onClick={selectedComment}
+                          >
+                            댓글 보기 닫기
+                          </button>
+                          {/* 대댓글 호출 로직 */}
+                          <ul>
+                            {comments?.map((comment) =>
+                              comment?.superHrCommentCode <
+                              0 ? null : comment.superHrCommentCode !==
+                                selectedComment ? null : (
+                                <li key={comment}>
+                                  <div className="recomment-desc">
+                                    <ReCommentComponent props={comment} />
+
+                                    <CommentBtnComponent
+                                      code={comment?.hrCommentCode}
+                                      writer={comment?.member.id}
+                                      updateCommentHandler={
+                                        updateCommentHandler
+                                      }
+                                      deleteCommentHandler={
+                                        deleteCommentHandler
+                                      }
+                                    />
+                                  </div>
+                                  {currClickBtn == comment.hrCommentCode ? (
+                                    comment?.member.id === data.id ? (
+                                      <UpdateCommentComponent
+                                        code={comment?.hrCommentCode}
+                                        updateCommentHandler={
+                                          updateCommentHandler
+                                        }
+                                        updateSuccHandler={updateSuccHandler}
+                                      />
+                                    ) : null
+                                  ) : null}
+                                </li>
+                              )
+                            )}
+                          </ul>
+
+                          <CommentComponent
+                            // props={{ num1: currClickComment, num2: 10, num3: 100 }}    //<- 여러개 던질때
+                            props={selectCommentHandler}
+                            ref={addCommentHandler}
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          {
+                            //id에 상위 댓글의 코드 값을 넣어서 버튼 id부여함.
+                            // 부여한 이유는... 댓글 작성의 경우에 CommentComponent를 호출해서 재사용 하기 위함
+                          }
+                          <button
+                            className="commentView_btn"
+                            id={`${comment.hrCommentCode}`}
+                            onClick={(e) => {
+                              setSelectedComment(comment.hrCommentCode);
+                            }}
+                          >
+                            댓글 보기
+                          </button>
+                        </div>
+                      )
+                    }
+                  </div>
+                </div>
+
+                <hr
+                  style={{
+                    width: "100%",
+                    border: "0px",
+                    borderTop: "1px solid #7BCFE1",
+                  }}
+                />
+              </li>
+            )
+          )}
+        </ul>
+      </div>
           </div>
         </div>
         <div className="article-bottom-btn">
@@ -388,7 +512,7 @@ const HospitalReviewView = () => {
           </div> : null}
         </div>        
       </MainContentBox>
-    </MainStlye>
+    </StyledMain>
   );
 };
 export default HospitalReviewView;
