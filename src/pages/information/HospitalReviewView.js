@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getOneBoard, deleteBoard, likeAddorDelete } from "../../api/info";
+import { getOneBoard, deleteBoard, likeAddorDelete, getHrComment, addComment,deleteComment } from "../../api/info";
 import { useNavigate } from "react-router-dom";
 import banner from "../../resources/bannerTest.png";
 import yange from "../../resources/yaonge.jpg";
@@ -10,6 +10,7 @@ import { dateFormatDefault } from "../../api/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import CommentComponent from "../notice/CommentComponent";
+import { addNoticeNotification } from "../../components/Notification";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -168,6 +169,10 @@ const HospitalReviewView = () => {
   const navigate = useNavigate();
   const [boardView, setBoardView] = useState();
   const [like, setLike] = useState();
+  const [comments, setComments] = useState([]);
+  const [currClickBtn, setCurrClickBtn] = useState(-1);
+  const [succUpdate, setSuccUpdate] = useState(false);
+  const [selectedComment, setSelectedComment] = useState(0);
   
   const data = JSON.parse(localStorage.getItem('user'));
 
@@ -201,9 +206,68 @@ const HospitalReviewView = () => {
     setLike(result.data.likeCount);
   }
 
+  const getCommentHandler = async (code) => {
+    const resultComment = await getHrComment(code);
+    setComments([resultComment.data]);
+  }
+
+  const addCommentHandler = async (e) => {
+    e.preventDefault();
+    const parentCode = e.target.commentDesc.id;
+    const formData = {
+      token: data.token,
+      boardName: 'hospitalReview',
+      postCode: code,
+      parentCommentCode: parentCode,
+      commentDesc: e.target.commentDesc.value
+    };
+
+    if(formData.commentDesc) {
+      const commentResult = await addComment(formData);
+
+      const notiData = {
+        token: data.token,
+        postCode: formData.postCode,
+        pCommentCode: commentResult.data.superHrCommentCode,
+        cCommentCode: commentResult.data.hrCommentCode,
+        url: `http://localhost:3000/hr/view/${formData.postCode}`,
+      };
+      await addNoticeNotification(notiData);
+      await getCommentHandler(code);
+      e.target.commentDesc.value = null;
+    } else {
+      alert('댓글 작성 후 등록 버튼을 눌러 주세요!');
+    }
+  }
+
+  const updateSuccHandler = () => {
+    setSuccUpdate(true);
+  };
+
+  const deleteCommentHandler = async (commentCode) => {
+    await deleteComment(commentCode);
+    await getCommentHandler(code);
+  };
+
+  const selectCommentHandler = () => {
+    setSelectedComment(0);
+  };
+
   useEffect(() => {
-    boardViewAPI();
+    const asyncHandler = async () => {
+      boardViewAPI();
+      getCommentHandler(code);
+    }
+    asyncHandler();
   }, [])
+
+  useEffect(() => {
+    if (succUpdate) {
+      setSuccUpdate(false);
+      setCurrClickBtn(-1);
+      getCommentHandler(code);
+    }
+  }, [succUpdate]);
 
   return (
     <MainStlye>
@@ -266,7 +330,33 @@ const HospitalReviewView = () => {
               </button>
             </div>
             <div className="comment-box">
-              <CommentComponent />
+              <CommentComponent props={0} ref={addCommentHandler} />
+            </div>
+            <div className="commentBox2">
+              <ul className="comment">
+                  {comments?.map((comment) => comment.superHrCommentCode > 0 ? null : (
+                    <li className="userProfile" key={comment.hrCommentCode}>
+                      <div>
+                        {
+                          // 유저 정보
+                        }
+                        <div>
+                          <div className="useruser">
+                            <div className="profile">
+                                <img src={yange} alt="작성자 프로필" style={{"width" : "50px"}}/>
+                            </div>
+                            <div className="user">
+                              <p style={{fontSize: "18px", fontWeight: "border"}}>{comment?.member?.nickname}</p>
+                            </div>
+                          </div>
+                          {
+                            // 댓글 정보
+                          }
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
             </div>
           </div>
         </div>
