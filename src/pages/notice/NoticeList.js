@@ -77,26 +77,27 @@ const NoticeList = (props) => {
   const getSearchBoardHandler = async () => {
     // 검색기능..
     console.log(keyword, searchNum);
-    const response = await getSearchAPI(keyword, searchNum);
+    if (keyword) {
+      const response = await getSearchAPI(page, keyword, searchNum);
+      console.log(response);
 
-    console.log(response);
+      if (response.data.noticeList.length > 0) {
+        let tempArr = [...response.data.noticeList];
+        tempArr = changeDate(tempArr);
 
-    if (response.data.noticeList.length > 0) {
-      let tempArr = [...response.data.noticeList];
-      tempArr = changeDate(tempArr);
-
-      setBoards(tempArr);
-      setTotalPages(response.data.totalPages);
+        setBoards(tempArr);
+        setTotalPages(response.data.totalPages);
+      }
     } else {
-      alert("검색 결과가 없습니다.");
-      await getBoardHandler();
+      alert("검색어를 입력하세요.");
     }
   };
 
   useEffect(() => {}, [boards]);
 
   useEffect(() => {
-    getBoardHandler();
+    console.log("???");
+    if (page <= 1) getBoardHandler();
   }, []);
 
   useEffect(() => {
@@ -111,7 +112,9 @@ const NoticeList = (props) => {
   }, [keyword]);
 
   useEffect(() => {
-    getBoardHandler();
+    if (keyword != null) {
+      getSearchBoardHandler();
+    }
   }, [page]);
 
   const handleRowClick = (row) => {

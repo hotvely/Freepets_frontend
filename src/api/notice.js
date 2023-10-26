@@ -16,8 +16,8 @@ export const getBoardViewAPI = async (code) => {
   return await instance.get(url);
 };
 
-export const getSearchAPI = async (keyword, sortNum) => {
-  let url = `notice/search/${keyword}/${sortNum}`;
+export const getSearchAPI = async (page, keyword, sortNum) => {
+  let url = `notice/search/${keyword}/${sortNum}?page=${page}`;
   return await instance.get(url);
 };
 
