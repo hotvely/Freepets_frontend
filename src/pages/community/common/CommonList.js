@@ -24,8 +24,9 @@ const CommunityList = (props) => {
   const [searchParams] = useSearchParams();
   const searchPage = searchParams.get("page");
   const page = searchPage != null ? searchPage : 1;
-
   const orderBy = props.props.orderBy;
+  const searchType = props.props.searchType;
+  const searchKeyword = props.props.searchKeyword;
 
   const handleRowClick = (row) => {
     //ViewPage로 이동
@@ -39,9 +40,26 @@ const CommunityList = (props) => {
     // setcommonPosts([...commonPost, ...result.data]);
   };
 
+  const CommunitySearchListAPI = async () => {
+    try {
+      const result = await getSearchCommunityList(
+        page,
+        searchKeyword,
+        searchType
+      );
+      setcommonPosts(result.data.communityList);
+    } catch (error) {
+      console.error("검색 에러: ", error);
+    }
+  };
+
   useEffect(() => {
-    CommunityListAPI(); // 게시글 목록 조회 호출
-  }, [page, orderBy]);
+    if (searchKeyword != null) {
+      CommunitySearchListAPI();
+    } else {
+      CommunityListAPI(); // 게시글 목록 조회 호출
+    }
+  }, [page, orderBy, searchKeyword, searchType]);
 
   const [columns] = useState([
     {

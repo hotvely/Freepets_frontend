@@ -282,8 +282,13 @@ const CMediaList = () => {
 
   const sortChangeHandler = (event) => {
     const selectedOrderBy = event.currentTarget.value;
-    console.log(selectedOrderBy);
     setOrderBy(selectedOrderBy);
+    console.log(selectedOrderBy);
+    if (searchKeyword != null) {
+      MediaSearchListAPI();
+    } else {
+      MediaListAPI();
+    }
   };
 
   const searchSortChangeHandler = (event) => {
@@ -327,9 +332,10 @@ const CMediaList = () => {
       const result = await getSearchCommunityList(
         page,
         searchKeyword,
-        searchType
+        searchType,
+        orderBy
       );
-      setMediae(result.data.CommunityList);
+      setMediae(result.data.communityList);
       setTotalPages(result.data.totalPages);
     } catch (error) {
       console.error("검색 에러: ", error);
@@ -340,7 +346,7 @@ const CMediaList = () => {
     if (searchKeyword != null) {
       MediaSearchListAPI();
     } else {
-      MediaListAPI(page, orderBy);
+      MediaListAPI();
     }
   }, [page, orderBy, searchKeyword, searchType]);
 
@@ -431,7 +437,7 @@ const CMediaList = () => {
         <div className="midea-headerbox">
           <div className="media-sort">
             <div className="media-sort-like">
-              <select onChange={sortChangeHandler}>
+              <select onChange={sortChangeHandler} value={orderBy}>
                 <option value="1">최신순</option>
                 <option value="2">추천순</option>
                 <option value="3">댓글순</option>
@@ -470,6 +476,7 @@ const CMediaList = () => {
               type="search"
               id="search"
               name="search"
+              vlaue={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
             <button onClick={MediaSearchListAPI}>검색</button>
