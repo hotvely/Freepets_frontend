@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getCommunityList } from "../../../api/community";
+import {
+  getCommunityList,
+  getSearchCommunityList,
+} from "../../../api/community";
 import { dateFormatTrans } from "../../../api/utils";
 import CommunityTableForList from "../../../components/Community/CommunityTableForList";
 

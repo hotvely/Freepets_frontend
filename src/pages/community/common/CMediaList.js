@@ -3,7 +3,10 @@ import styled from "styled-components";
 import banner from "../../../resources/bannerTest.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
-import { getCommunityList } from "../../../api/community";
+import {
+  getCommunityList,
+  getSearchCommunityList,
+} from "../../../api/community";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { dateFormatDefault } from "../../../api/utils";
 import CommunityList from "./CommonList";
@@ -263,7 +266,8 @@ const CMediaList = () => {
   const searchPage = searchParams.get("page");
   const [totalPages, setTotalPages] = useState();
   const [orderBy, setOrderBy] = useState(1);
-  const [searchOrderBy, setSearchOrderBy] = useState(1);
+  const [searchType, setSearchType] = useState(1);
+  const [searchKeyword, setSearchKeyword] = useState();
   const [mediae, setMediae] = useState([]);
   const [ListBtn, setListBtn] = useState();
   const navigate = useNavigate();
@@ -285,7 +289,7 @@ const CMediaList = () => {
   const searchSortChangeHandler = (event) => {
     const selectedSearchOrderBy = event.currentTarget.value;
     console.log(selectedSearchOrderBy);
-    setSearchOrderBy(selectedSearchOrderBy);
+    setSearchType(selectedSearchOrderBy);
   };
 
   // const navRowClick = (row) => {
@@ -318,66 +322,101 @@ const CMediaList = () => {
     setTotalPages(result.data.totalPages);
   };
 
+  const MediaSearchListAPI = async () => {
+    try {
+      const result = await getSearchCommunityList(
+        page,
+        searchKeyword,
+        searchType
+      );
+      setMediae(result.data.CommunityList);
+      setTotalPages(result.data.totalPages);
+    } catch (error) {
+      console.error("검색 에러: ", error);
+    }
+  };
+
   useEffect(() => {
-    MediaListAPI(); // 게시글 목록 조회 호출
-  }, [page, orderBy]);
+    if (searchKeyword != null) {
+      MediaSearchListAPI();
+    } else {
+      MediaListAPI(page, orderBy);
+    }
+  }, [page, orderBy, searchKeyword, searchType]);
 
   const boardTypeForMedia = () => {
-    return (
-      <div className="main-content">
-        <div className="media-colum">
-          {mediae.map((media) => (
-            // <Link to={"/commonview/" + media.commonCode}>
-            <div className="media-content" key={media?.commonCode}>
-              <div className="media-thumbnail">
-                <Link to={`/community/common/commonview/${media?.commonCode}`}>
-                  <p>
-                    <img
-                      src={media.commonDesc.substring(
-                        media.commonDesc.indexOf('<img src="') + 10,
-                        media.commonDesc.indexOf('">')
-                      )}
-                      alt="미디어썸네일"
-                    />
-                  </p>
-                </Link>
-              </div>
-              <div className="media-info">
-                <div className="media-info-first-line">
+    if (mediae) {
+      return (
+        <div className="main-content">
+          <div className="media-colum">
+            {mediae.map((media) => (
+              // <Link to={"/commonview/" + media.commonCode}>
+              <div className="media-content" key={media?.commonCode}>
+                <div className="media-thumbnail">
                   <Link
-                    to={"/commonview/" + media?.commonCode}
-                    id="media-info-title"
-                  >
-                    <h3>{media?.commonTitle}</h3>
-                  </Link>
-                  <div
-                    id="media-info-comment"
-                    onClick={() => {
-                      activateComments(media?.commonCode);
-                    }}
+                    to={`/community/common/commonview/${media?.commonCode}`}
                   >
                     <p>
-                      [<span>{media?.commonCommentCount}</span>]
+                      <img
+                        src={media.commonDesc.substring(
+                          media.commonDesc.indexOf('<img src="') + 10,
+                          media.commonDesc.indexOf('">')
+                        )}
+                        alt="미디어썸네일"
+                      />
+                    </p>
+                  </Link>
+                </div>
+                <div className="media-info">
+                  <div className="media-info-first-line">
+                    <Link
+                      to={"/commonview/" + media?.commonCode}
+                      id="media-info-title"
+                    >
+                      <h3>{media?.commonTitle}</h3>
+                    </Link>
+                    <div
+                      id="media-info-comment"
+                      onClick={() => {
+                        activateComments(media?.commonCode);
+                      }}
+                    >
+                      <p>
+                        [<span>{media?.commonCommentCount}</span>]
+                      </p>
+                    </div>
+                  </div>
+
+                  <div id="media-info-writer">
+                    <p>{media?.member?.nickname}</p>
+                  </div>
+
+                  <div id="media-info-detail">
+                    <p>
+                      <span>{dateFormatDefault(media?.commonDate)}</span>
+                      ㆍ조회수
+                      <span id="viewCount">{media?.commonViewCount}</span>회
                     </p>
                   </div>
                 </div>
-
-                <div id="media-info-writer">
-                  <p>{media?.member?.nickname}</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>{dateFormatDefault(media?.commonDate)}</span>ㆍ조회수
-                    <span id="viewCount">{media?.commonViewCount}</span>회
-                  </p>
-                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            paddingTop: "20px",
+          }}
+        >
+          검색 결과가 없습니다.
+        </div>
+      );
+    }
   };
 
   return (
@@ -427,14 +466,19 @@ const CMediaList = () => {
               <option value="3">내용</option>
             </select>
 
-            <input type="search" id="search" name="search" />
-            <button>검색</button>
+            <input
+              type="search"
+              id="search"
+              name="search"
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
+            <button onClick={MediaSearchListAPI}>검색</button>
           </div>
         </div>
         {ListBtn == 1 ? (
           boardTypeForMedia()
         ) : (
-          <CommunityList props={{ orderBy, searchOrderBy }} />
+          <CommunityList props={{ orderBy, searchType, searchKeyword }} />
         )}
         <div className="main-bottom">
           <div className="paging-bar">

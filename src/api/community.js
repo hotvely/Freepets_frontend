@@ -11,6 +11,18 @@ export const getCommunityList = async (page, orderBy) => {
   return await instance.get(url);
 };
 
+export const getSearchCommunityList = async (
+  page,
+  searchKeyword,
+  searchType
+) => {
+  console.log("searchType" + searchType);
+  console.log("page" + page);
+  console.log("searchKeyword" + searchKeyword);
+  let url = `community/search?page=${page}&searchKeyword=${searchKeyword}&searchType=${searchType}`;
+  return await instance.get(url);
+};
+
 export const getCommunity = async (id) => {
   let url = `community/${id}`;
   return await instance.get(url);
