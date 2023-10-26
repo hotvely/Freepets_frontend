@@ -52,7 +52,7 @@ const NoticeList = (props) => {
     { accessor: "noticeLike", Header: "좋아요" },
   ]);
   const sortNum = props.props.sortNum;
-  const keyword = props.props.searchKey;
+  const keyword = props.props.searchKey == "" ? null : props.props.searchKey;
   const searchNum = props.props.searchNum;
   const page = props.props.page;
 

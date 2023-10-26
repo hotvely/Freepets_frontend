@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import EventModal from "./EventModal";
+import { getEventAPI } from "../../api/notice";
+import { async } from "q";
 
 const Calendar = styled.div`
   margin: 0 30px;
@@ -36,6 +39,9 @@ const Calendar = styled.div`
         font-weight: bold;
         font-size: 1.5rem;
         height: 50px;
+      }
+      button: hover {
+        cursor: pointer;
       }
       div {
         background-color: #6995b3;
@@ -93,14 +99,17 @@ const Calendar = styled.div`
 
 const EventCalendar = () => {
   const today = new Date();
+  const [data, setData] = useState([]);
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const daysArray = ["일", "월", "화", "수", "목", "금", "토"];
   // 이번달 첫날짜
-  const firstDate = new Date(year, month, 1);
+  const firstDate = new Date(year, month - 1, 1);
   // 이번달 마지막 날짜
-  const lastDate = new Date(year, month + 1, 0);
+  const lastDate = new Date(year, month, 0);
   // console.log("마지막날.." + lastDate.getDate());
 
   //-----------------------캘린더 월~금 출력
@@ -127,17 +136,23 @@ const EventCalendar = () => {
   //-----------------------캘린더 1일 ~ 마지막날
   const calendar_dates = () => {
     //이번달 첫 날짜의 요일까지 채워넣기...
-    const prevLastDate = new Date(year, month, 0);
+    const prevLastDate = new Date(year, month - 1, 0);
+
     //이번달 1일 이전에 표시해줘야 하는 갯수 구하기
     let prevDate = prevLastDate.getDate() - firstDate.getDay() + 1;
 
     //결과물 출력해 줄 코드 배열
     let result = [];
+    console.log(data);
+
+    // 회색으로 이전 달 정보 출력 할 때,,
     for (let prev = 0; prev < firstDate.getDay(); prev++) {
       result.push(
+        {year == data?.year && month == data?.month}
         <div
+          id={`${month-1}/${prevDate}`}
           className="date prevDate"
-          key={`${month}_${prevDate}`}
+          key={`${month-1}_${prevDate}`}
           style={{ color: "darkgrey" }}
         >
           {prevDate}
@@ -147,7 +162,11 @@ const EventCalendar = () => {
     }
     for (let day = 0; day < lastDate.getDate(); day++) {
       result.push(
-        <div className="date currDate" key={`${month + 1}_${day + 1}`}>
+        <div
+          id={`${month + 1}/${day + 1}`}
+          className="date currDate"
+          key={`${month + 1}_${day + 1}`}
+        >
           {day + 1}
         </div>
       );
@@ -173,32 +192,69 @@ const EventCalendar = () => {
   };
 
   const prevMonth = () => {
-    if (month > 0) {
+    console.log(month);
+    if (month - 1 > 0) {
       setMonth(month - 1);
     } else {
-      setMonth(11);
+      setMonth(12);
       setYear(year - 1);
     }
   };
 
   const nextMonth = () => {
-    if (month < 11) {
+    if (month < 12) {
       setMonth(month + 1);
     } else {
-      setMonth(0);
+      setMonth(1);
       setYear(year + 1);
     }
   };
 
+  const addEventHandler = () => {
+    console.log(isOpen);
+    setIsOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const getEventHandler = async () => {
+    const response = await getEventAPI();
+    setData([...response.data]);
+  };
+
+  useEffect(() => {
+    //이벤트 정보 부르는 API 호출
+    getEventHandler();
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) {
+      document.body.style.overflow = "unset";
+    }
+  }, [isOpen]);
+
   return (
     <>
-      <Calendar>
+      <Calendar id="targetElement">
         <div className="calendar_content">
+          <button onClick={addEventHandler}>이벤트 행사 추가</button>
+          {isOpen ? <EventModal props={{ setIsOpen, month }} /> : null}
           <div className="calendar_header">
             <div>
-              <button onClick={() => prevMonth()}>prev</button>
-              {year}년 {month + 1}월
-              <button onClick={() => nextMonth()}>next</button>
+              <button
+                onClick={() => {
+                  prevMonth();
+                }}
+              >
+                prev
+              </button>
+              {year}년 {month}월
+              <button
+                onClick={() => {
+                  nextMonth();
+                }}
+              >
+                next
+              </button>
             </div>
           </div>
           <div className="calendar_days">{calendar_days()}</div>

@@ -35,6 +35,10 @@ export const getReCommentsAPI = async (pCode) => {
   return await instance.get(url);
 };
 
+export const getEventAPI = async () => {
+  return await instance.get("event");
+};
+
 //Lost Board 게시글 서버로 전송
 export const addNoticeBoard = async (data) => {
   console.log("post로 DB에 게시글 저장 완료");
@@ -47,6 +51,10 @@ export const addCommentAPI = async (data) => {
 
 export const addImg = async (data) => {
   return await instance.post("img", data);
+};
+
+export const addEvent = async (data) => {
+  return await instance.post("event", data);
 };
 
 export const deleteNoticeAPI = async (code) => {
