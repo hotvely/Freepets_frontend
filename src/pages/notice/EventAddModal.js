@@ -166,7 +166,7 @@ const EventAddModal = (props) => {
           <button
             onClick={() => {
               setModalIsOpen(false);
-              props.props.setIsOpen(false);
+              props.props.setAddOpen(false);
             }}
           >
             닫기

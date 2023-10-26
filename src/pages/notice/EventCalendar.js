@@ -41,7 +41,7 @@ const Calendar = styled.div`
         font-size: 1.5rem;
         height: 50px;
       }
-      button: hover {
+      button:hover {
         cursor: pointer;
       }
       div {
@@ -93,31 +93,35 @@ const Calendar = styled.div`
           font-size: 1.3rem;
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          justify-content: start;
           padding-top: 15px;
-
+          flex-shrink: 0;
           .eventInfo {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: start;
+            flex-wrap: nowrap;
+            flex-basis: 80px;
             padding: 10px;
-            height: 80px;
+
             .eventTitle {
-              width: 80%;
-              height: 20px;
+              width: 80px;
+              height: 18px;
+
               background-color: black;
               border-radius: 10px;
-              padding: 5px;
-              margin: 5px 0;
+              padding: 0 8px;
+              margin: 1px 0;
 
               div {
-                display: block;
-                /* align-items: center;
-                justify-content: start; */
+                display: flex;
+                align-items: center;
+                justify-content: start;
+                padding: 0 5px;
                 width: 100px;
                 height: 100%;
-                font-size: 1rem;
+                font-size: 0.85rem;
                 color: white;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -136,24 +140,16 @@ const EventCalendar = () => {
   const today = new Date();
   const [data, setData] = useState([]);
   const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth());
-  const [dataFilter, setDataFilter] = useState();
+  const [month, setMonth] = useState(today.getMonth() + 1);
   const [addOpen, setAddOpen] = useState(false);
   const [viewOpne, setViewOpen] = useState(false);
-  const [selectEvent, setSelectEvent] = useState();
-  console.log(data);
+  const [selectEvent, setSelectEvent] = useState(0);
+  console.log(selectEvent);
   const daysArray = ["일", "월", "화", "수", "목", "금", "토"];
   // 이번달 첫날짜
   const firstDate = new Date(year, month - 1, 1);
   // 이번달 마지막 날짜
   const lastDate = new Date(year, month, 0);
-
-  const OpenModalHandler = (e) => {
-    console.log("들어는 오나..?");
-    setViewOpen(true);
-    console.log(e.target.id);
-    setSelectEvent(e.target.id);
-  };
 
   //-----------------------캘린더 월~금 출력
   const calendar_days = () => {
@@ -251,7 +247,7 @@ const EventCalendar = () => {
             <div>{day}</div>
             <div className="eventInfo">
               {existData.map((data, index) => {
-                return index > 1 ? null : (
+                return (
                   <div key={data.eventCode} className="eventTitle">
                     <div id={`${data.eventCode}`} onClick={viewEventlHandler}>
                       {`${data.eventTitle}`}
@@ -353,17 +349,21 @@ const EventCalendar = () => {
     document.body.style.overflow = "hidden";
   };
 
-  const viewEventlHandler = (e) => {
-    console.log(e.target.id);
-    setSelectEvent(e.target.id);
+  const settingViewModal = (e) => {
     console.log(selectEvent);
-    if (e.target.id == selectEvent) {
+    if (selectEvent === e.target.id) {
       setViewOpen(true);
       console.log(viewOpne);
       console.log("이벤트 정보 보러 모달염");
       document.body.style.overflow = "hidden";
     } else {
     }
+  };
+
+  const viewEventlHandler = async (e) => {
+    setSelectEvent(e.target.id);
+
+    // await settingViewModal(e);
   };
 
   const getEventHandler = async () => {
@@ -385,9 +385,19 @@ const EventCalendar = () => {
   useEffect(() => {
     console.log(viewOpne);
     if (!viewOpne) {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "visible";
+    } else {
+      document.body.style.overflow = "hidden";
     }
   }, [viewOpne]);
+
+  useEffect(() => {
+    if (selectEvent > 0) {
+      setViewOpen(true);
+      console.log(viewOpne);
+      console.log("이벤트 정보 보러 모달염");
+    }
+  }, [selectEvent]);
 
   return (
     <>
