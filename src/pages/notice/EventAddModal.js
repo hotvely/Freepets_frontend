@@ -63,7 +63,7 @@ const FormStyle = styled.form`
   }
 `;
 
-const EventModal = (props) => {
+const EventAddModal = (props) => {
   const [modalIsOpne, setModalIsOpen] = useState(true);
   const customModalStyled = {
     overlay: {
@@ -129,7 +129,7 @@ const EventModal = (props) => {
       ref={targetRef}
       onRequestClose={() => {
         setModalIsOpen(false);
-        props.props.setIsOpen(false);
+        props.props.setAddOpen(false);
       }}
     >
       <FormStyle className="form" onSubmit={formDataHandler}>
@@ -177,4 +177,4 @@ const EventModal = (props) => {
   );
 };
 
-export default EventModal;
+export default EventAddModal;

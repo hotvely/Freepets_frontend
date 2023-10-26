@@ -35,8 +35,8 @@ export const getReCommentsAPI = async (pCode) => {
   return await instance.get(url);
 };
 
-export const getEventAPI = async () => {
-  return await instance.get("event");
+export const getEventAPI = async (year) => {
+  return await instance.get(`event?year=${year}`);
 };
 
 //Lost Board 게시글 서버로 전송

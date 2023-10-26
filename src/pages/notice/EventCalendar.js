@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import EventModal from "./EventModal";
+import EventAddModal from "./EventAddModal";
 import { getEventAPI } from "../../api/notice";
 import { async } from "q";
+import EventViewModal from "./EventViewModal";
 
 const Calendar = styled.div`
   margin: 0 30px;
@@ -67,7 +68,7 @@ const Calendar = styled.div`
       padding-top: 50px;
 
       .days {
-        flex: 0 0 13%;
+        flex: 1 0 13%;
         display: flex;
         justify-content: center;
       }
@@ -78,19 +79,53 @@ const Calendar = styled.div`
       border-bottom-left-radius: 25px;
       border-bottom-right-radius: 25px;
       background-color: #c2d9e3;
+      display: flex;
+
+      grid-gap: 10px;
       div {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+
         .date {
+          flex: 1 0 13%;
           font-size: 1.3rem;
           display: flex;
+          flex-direction: column;
           justify-content: center;
           padding-top: 15px;
-          flex: 0 0 13%;
 
-          height: 150px;
+          .eventInfo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            padding: 10px;
+            height: 80px;
+            .eventTitle {
+              width: 80%;
+              height: 20px;
+              background-color: black;
+              border-radius: 10px;
+              padding: 5px;
+              margin: 5px 0;
+
+              div {
+                display: block;
+                /* align-items: center;
+                justify-content: start; */
+                width: 100px;
+                height: 100%;
+                font-size: 1rem;
+                color: white;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+          }
         }
       }
     }
@@ -102,15 +137,23 @@ const EventCalendar = () => {
   const [data, setData] = useState([]);
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
-
-  const [isOpen, setIsOpen] = useState(false);
-
+  const [dataFilter, setDataFilter] = useState();
+  const [addOpen, setAddOpen] = useState(false);
+  const [viewOpne, setViewOpen] = useState(false);
+  const [selectEvent, setSelectEvent] = useState();
+  console.log(data);
   const daysArray = ["일", "월", "화", "수", "목", "금", "토"];
   // 이번달 첫날짜
   const firstDate = new Date(year, month - 1, 1);
   // 이번달 마지막 날짜
   const lastDate = new Date(year, month, 0);
-  // console.log("마지막날.." + lastDate.getDate());
+
+  const OpenModalHandler = (e) => {
+    console.log("들어는 오나..?");
+    setViewOpen(true);
+    console.log(e.target.id);
+    setSelectEvent(e.target.id);
+  };
 
   //-----------------------캘린더 월~금 출력
   const calendar_days = () => {
@@ -143,56 +186,151 @@ const EventCalendar = () => {
 
     //결과물 출력해 줄 코드 배열
     let result = [];
-    console.log(data);
 
     // 회색으로 이전 달 정보 출력 할 때,,
     for (let prev = 0; prev < firstDate.getDay(); prev++) {
-      result.push(
-        {year == data?.year && month == data?.month}
-        <div
-          id={`${month-1}/${prevDate}`}
-          className="date prevDate"
-          key={`${month-1}_${prevDate}`}
-          style={{ color: "darkgrey" }}
-        >
-          {prevDate}
-        </div>
+      const existData = data.filter(
+        (item) =>
+          item.month === month - 1 && prevDate === item.day && item.eventTitle
       );
-      prevDate += 1;
+      //달이 같은지, 날이 같은지, 제목이 있는지
+      if (existData.length > 0) {
+        result.push(
+          <div
+            id={`${month - 1}/${prevDate}`}
+            className="date prevDate ExistData"
+            key={`${month - 1}_${prevDate}`}
+            style={{ color: "darkgrey" }}
+            href={existData.eventURL}
+          >
+            <div>{prevDate}</div>
+            <div className="eventInfo">
+              {existData.map((data, index) => {
+                return index > 1 ? null : (
+                  <div key={data.eventCode} className="eventTitle">
+                    <div id={`${data.eventCode}`} onClick={viewEventlHandler}>
+                      {`${data.eventTitle}`}
+                      {viewOpne && selectEvent == data.eventCode ? (
+                        <EventViewModal props={{ data, setViewOpen }} />
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      } else {
+        result.push(
+          <div
+            id={`${month - 1}/${prevDate}`}
+            className="date prevDate"
+            key={`${month - 1}_${prevDate}`}
+            style={{ color: "darkgrey" }}
+          >
+            <div>{prevDate}</div>
+            <div className="eventInfo"></div>
+          </div>
+        );
+      }
+
+      ++prevDate;
     }
-    for (let day = 0; day < lastDate.getDate(); day++) {
-      result.push(
-        <div
-          id={`${month + 1}/${day + 1}`}
-          className="date currDate"
-          key={`${month + 1}_${day + 1}`}
-        >
-          {day + 1}
-        </div>
+
+    for (let day = 1; day < lastDate.getDate() + 1; day++) {
+      const existData = data.filter(
+        (item) => item.month == month && day == item.day && item.eventTitle
       );
+      if (existData.length > 0) {
+        result.push(
+          <div
+            id={`${month}/${day}`}
+            className="date currDate ExistData"
+            key={`${month}_${day}`}
+          >
+            <div>{day}</div>
+            <div className="eventInfo">
+              {existData.map((data, index) => {
+                return index > 1 ? null : (
+                  <div key={data.eventCode} className="eventTitle">
+                    <div id={`${data.eventCode}`} onClick={viewEventlHandler}>
+                      {`${data.eventTitle}`}
+                      {viewOpne && selectEvent == data.eventCode ? (
+                        <EventViewModal props={{ data, setViewOpen }} />
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      } else {
+        result.push(
+          <div
+            id={`${month}/${day}`}
+            className="date currDate"
+            key={`${month}_${day}`}
+          >
+            <div>{day}</div>
+            <div className="eventInfo"></div>
+          </div>
+        );
+      }
     }
     // 총 6줄 7칸 -> 42개 에서 내가 표현한 개수 빼주면 다음달 꺼 표현해 줘야 하는 갯수 나오네?
     for (
-      let next = 0;
-      next < 42 - (firstDate.getDay() + lastDate.getDate());
+      let next = 1;
+      next < 43 - (firstDate.getDay() + lastDate.getDate());
       next++
     ) {
-      result.push(
-        <div
-          className="date nextDate"
-          key={`${month + 2}_${next + 1}`}
-          style={{ color: "darkgrey" }}
-        >
-          {next + 1}
-        </div>
+      const existData = data.filter(
+        (item) => item.month == month + 1 && next == item.day && item.eventTitle
       );
+      if (existData.length > 0) {
+        result.push(
+          <div
+            id={`${month + 1}/${next}`}
+            className="date nextDate ExistData"
+            key={`${month + 1}_${next}`}
+            style={{ color: "darkgrey" }}
+          >
+            <div>{next + 1}</div>{" "}
+            <div className="eventInfo">
+              {existData.map((data, index) => {
+                return index > 1 ? null : (
+                  <div key={data.eventCode} className="eventTitle">
+                    <div id={`${data.eventCode}`} onClick={viewEventlHandler}>
+                      {`${data.eventTitle}`}
+                      {viewOpne && selectEvent == data.eventCode ? (
+                        <EventViewModal props={{ data, setViewOpen }} />
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      } else {
+        result.push(
+          <div
+            id={`${month + 1}/${next}`}
+            className="date nextDate"
+            key={`${month + 1}_${next}`}
+            style={{ color: "darkgrey" }}
+          >
+            <div>{next}</div>
+            <div className="eventInfo"></div>
+          </div>
+        );
+      }
     }
 
     return result;
   };
 
   const prevMonth = () => {
-    console.log(month);
     if (month - 1 > 0) {
       setMonth(month - 1);
     } else {
@@ -211,13 +349,25 @@ const EventCalendar = () => {
   };
 
   const addEventHandler = () => {
-    console.log(isOpen);
-    setIsOpen(true);
+    setAddOpen(true);
     document.body.style.overflow = "hidden";
   };
 
+  const viewEventlHandler = (e) => {
+    console.log(e.target.id);
+    setSelectEvent(e.target.id);
+    console.log(selectEvent);
+    if (e.target.id == selectEvent) {
+      setViewOpen(true);
+      console.log(viewOpne);
+      console.log("이벤트 정보 보러 모달염");
+      document.body.style.overflow = "hidden";
+    } else {
+    }
+  };
+
   const getEventHandler = async () => {
-    const response = await getEventAPI();
+    const response = await getEventAPI(year);
     setData([...response.data]);
   };
 
@@ -227,17 +377,24 @@ const EventCalendar = () => {
   }, []);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!addOpen) {
       document.body.style.overflow = "unset";
     }
-  }, [isOpen]);
+  }, [addOpen]);
+
+  useEffect(() => {
+    console.log(viewOpne);
+    if (!viewOpne) {
+      document.body.style.overflow = "unset";
+    }
+  }, [viewOpne]);
 
   return (
     <>
       <Calendar id="targetElement">
         <div className="calendar_content">
           <button onClick={addEventHandler}>이벤트 행사 추가</button>
-          {isOpen ? <EventModal props={{ setIsOpen, month }} /> : null}
+          {addOpen ? <EventAddModal props={{ setAddOpen, month }} /> : null}
           <div className="calendar_header">
             <div>
               <button
