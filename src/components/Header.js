@@ -4,6 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { userLogout, userSave } from "./store/userSlice";
+import { getTokenCookie } from "../api/cookie";
 
 const StyledHeader = styled.header`
   background-color: white;
@@ -47,15 +48,18 @@ const StyledHeader = styled.header`
 const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
 
-  useEffect(() => {
-    const saveuser = localStorage.getItem("user");
-    if (Object.keys(user).length === 0 && saveuser !== null) {
-      dispatch(userSave(JSON.parse(saveuser)));
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -70,7 +74,7 @@ const Header = () => {
           <a href="/information">Information</a>
           <a href="#">CS</a>
           <div className="rightNav">
-            {Object.keys(user).length === 0 ? (
+            {!user ? (
               <>
                 <Link to="/auth/login">Sign in</Link> <p>|</p>
                 <Link to="/auth/register">Sign up</Link>

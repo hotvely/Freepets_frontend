@@ -14,7 +14,10 @@ export const registerAPI = async (data) => {
 
 export const loginAPI = async (data) => {
   console.log("로그인 axios call!!");
-  return await instance.post("login", data);
+  const response = await instance.post("login", data);
+  console.log(response);
+
+  return await response;
 };
 
 export const findIdAPI = async (data) => {

@@ -7,6 +7,7 @@ import {
   registerAPI,
   updateAPI,
 } from "../../api/auth";
+import { setTokenCookie } from "../../api/cookie";
 
 const asyncRegister = createAsyncThunk(
   "userSlice/asyncRegister",
@@ -18,7 +19,7 @@ const asyncRegister = createAsyncThunk(
 
 const asyncLogin = createAsyncThunk("userSlice/asyncLogin", async (data) => {
   const response = await loginAPI(data);
-
+  console.log(response.data);
   return response.data;
 });
 
@@ -54,6 +55,9 @@ const userSlice = createSlice({
       return action.payload;
     },
     userLogout: (state, action) => {
+      console.log("로그아웃!!");
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       return {};
     },
     userReset: (state, action) => {
@@ -79,6 +83,9 @@ const userSlice = createSlice({
       })
       .addCase(asyncLogin.fulfilled, (state, action) => {
         if (action.payload.deleteAccountYN === "N") {
+          setTokenCookie(30);
+          userSave(JSON.stringify(action.payload));
+
           localStorage.setItem("token", action.payload.token);
           localStorage.setItem("user", JSON.stringify(action.payload));
         } else {

@@ -10,7 +10,7 @@ import {
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import {
   deleteNoticeAPI,
@@ -20,6 +20,8 @@ import {
 import { useSearchParams } from "react-router-dom";
 import Page from "../../components/Page";
 import NoticeList from "./NoticeList";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../../components/store/userSlice";
 
 const MainStlye = styled.div`
   padding: 20px;
@@ -283,8 +285,18 @@ const Notice = () => {
     setKeyword(e.target.value);
   };
 
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
 
   const getSearchBoardHandler = async () => {

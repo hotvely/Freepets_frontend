@@ -22,7 +22,7 @@ import {
 import CommentComponent from "../../components/comment/CommentComponent";
 import ReCommentComponent from "../../components/comment/ReCommentComponent";
 import { addBookmarkAPI } from "../../api/bookmark";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UpdateCommentComponent from "../../components/comment/UpdateCommentComponent";
 import {
   addNoticeNotification,
@@ -38,6 +38,8 @@ import ProfileComponent from "../../components/member/ProfileComponent";
 import { Link, useNavigate } from "react-router-dom";
 import yange from "../../resources/yaonge.jpg";
 import { dateFormatDefault } from "../../api/utils";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../../components/store/userSlice";
 
 const NoticeView = () => {
   const { code } = useParams();
@@ -51,8 +53,18 @@ const NoticeView = () => {
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selected_Comment, setSelected_Comment] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
 
   const getPostHandler = async (code) => {
@@ -374,8 +386,11 @@ const NoticeView = () => {
                                         selected_Comment ? null : (
                                         <li key={comment.noticeCommentCode}>
                                           <div className="recomment-desc">
+                                            {console.log(comment)}
                                             <ReCommentComponent
-                                              props={comment}
+                                              member={comment.member}
+                                              desc={comment.noticeCommentDesc}
+                                              date={comment.noticeCommentDate}
                                             />
 
                                             <CommentBtnComponent
