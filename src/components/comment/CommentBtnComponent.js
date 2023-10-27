@@ -1,5 +1,7 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../store/userSlice";
 
 const Styled = styled.div`
   .comment-btn {

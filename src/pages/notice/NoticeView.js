@@ -117,7 +117,7 @@ const NoticeView = () => {
           }
         } else {
           // 부모 댓글 없어서 그냥 댓글 달때
-          if (postData.member.id != user.id) {
+          if (postData.member.id != user?.id) {
             const notiData = {
               id: postData.member.id,
 
@@ -137,7 +137,7 @@ const NoticeView = () => {
       await getCommentHandler(code);
       e.target.commentDesc.value = null;
     } else {
-      alert("댓글 작성후 등록하세요");
+      alert("로그인이 필요합니다.");
     }
   };
 
@@ -146,7 +146,7 @@ const NoticeView = () => {
       const formData = {
         boardName: "notice",
         postCode: postData.noticeCode,
-        token: user.token,
+        token: user?.token,
       };
       console.log(formData);
 
@@ -158,10 +158,10 @@ const NoticeView = () => {
   };
 
   const likeBtnHandler = async () => {
-    if (user.token) {
+    if (user?.token) {
       const formData = {
         postCode: code,
-        token: user.token,
+        token: user?.token,
       };
       const result = await updateLikeNoticeAPI(formData);
       if (result.data) {
@@ -202,13 +202,13 @@ const NoticeView = () => {
   };
 
   const updateHandler = (e) => {
-    if (user.id == postData.member.id) {
+    if (user?.id == postData.member.id) {
       navigate(`../update/5/${code}}`);
     } else console.log("작성자와 사용자가 다름");
   };
 
   const deleteHandler = async (e, id) => {
-    if (user.id == postData.member.id) {
+    if (user?.id == postData.member.id) {
       await deleteNoticeAPI(code);
       navigate("../");
     } else {
@@ -321,7 +321,7 @@ const NoticeView = () => {
                 <ul>
                   {comments?.map((comment) =>
                     comment?.noticeCommentCodeSuper > 0 ? null : (
-                      <li key={comment.noticeCommentCode}>
+                      <li key={comment?.noticeCommentCode}>
                         <div className="comment">
                           {
                             // 유저 정보
@@ -339,6 +339,7 @@ const NoticeView = () => {
                             <div className="comment-last">
                               <div className="commentDate-btn ">
                                 <div>
+                                  {console.log(comment)}
                                   {dateFormatDefault(
                                     comment?.noticeCommentDate
                                   )}
@@ -351,8 +352,9 @@ const NoticeView = () => {
                                 />
                               </div>
                             </div>
+
                             {currClickBtn === comment?.noticeCommentCode ? (
-                              comment?.member?.id === user.id ? (
+                              comment?.member?.id === user?.id ? (
                                 <UpdateCommentComponent
                                   code={comment?.noticeCommentCode}
                                   updateCommentHandler={updateCommentHandler}
@@ -406,7 +408,7 @@ const NoticeView = () => {
                                           </div>
                                           {currClickBtn ==
                                           comment.noticeCommentCode ? (
-                                            comment?.member.id === user.id ? (
+                                            comment?.member.id === user?.id ? (
                                               <UpdateCommentComponent
                                                 code={
                                                   comment?.noticeCommentCode

@@ -202,7 +202,7 @@ const Register = () => {
   console.log(user);
 
   useEffect(() => {
-    console.log("useEffect");
+    if (!user) return;
     // console.log(user);
     // console.log(Object.keys(user).length);
     if (user !== null && Object.keys(user).length !== 0) {

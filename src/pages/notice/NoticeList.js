@@ -59,7 +59,6 @@ const NoticeList = (props) => {
   let sortNum = props.props.sortNum;
   let keyword = props.props.keyword == "" ? null : props.props.keyword;
   let searchNum = props.props.searchNum;
-  console.log(keyword);
   const changeDate = (tempArr) => {
     for (const item in tempArr) {
       tempArr[item].noticeDate = dateFormatDefault(tempArr[item].noticeDate);
@@ -80,17 +79,13 @@ const NoticeList = (props) => {
 
   const getSearchBoardHandler = async (page) => {
     // 검색기능..
-    console.log(keyword, searchNum);
+
     page = 1;
 
     if (keyword) {
       const response = await getSearchAPI(page, keyword, searchNum);
 
-      console.log(response.data);
-      console.log(page);
-
       if (response.data.noticeList.length > 0) {
-        console.log("검색 데이터 있을떄..");
         if (response.data.totalPages < page) {
           page = 1;
           response = await getSearchAPI(page, keyword, searchNum);
@@ -102,7 +97,6 @@ const NoticeList = (props) => {
         setBoards(tempArr);
         setTotalPages(response.data.totalPages);
       } else {
-        console.log("검색 데이터 없을떄....");
         document.querySelector("#search").value = "";
         props.props.setKeyword(null);
         page = 1;
@@ -125,33 +119,26 @@ const NoticeList = (props) => {
   }, [sortNum]);
 
   useEffect(() => {
-    console.log("KEYWORD 변경");
     if (keyword) {
       getSearchBoardHandler(page);
     } else {
-      console.log("키워드 없어서 강제로 페이지 이동시킴");
       if (page != 1) navigate("../notice/?page=1");
     }
   }, [keyword]);
 
-  useEffect(() => {
-    console.log("BOARDS 변경");
-  }, [boards]);
+  useEffect(() => {}, [boards]);
 
   useEffect(() => {
-    console.log("PAGE 변경");
     if (keyword) {
-      console.log(page);
       getSearchBoardHandler(page);
     } else {
-      console.log(page);
       getBoardHandler(page);
     }
   }, [page]);
 
   const handleRowClick = (row) => {
     //ViewPage로 이동
-    console.log(row);
+
     navigate(`/notice/noticeView/${row.original.noticeCode}`);
   };
 

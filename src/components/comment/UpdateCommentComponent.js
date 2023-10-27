@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { updateCommentAPI } from "../../api/notice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { userLogout } from "../store/userSlice";
+import { getTokenCookie } from "../../api/cookie";
 
 const Styled = styled.div`
   margin-top: 20px;
@@ -32,7 +34,7 @@ const UpdateCommentComponent = (props) => {
   let content = "";
   const code = props.code;
   const writerId = props.writer;
-
+  const dispatch = useDispatch();
   const user = useSelector((state) => {
     return state.user;
   });

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import banner from "../../../resources/bannerTest.png";
 import yange from "../../../resources/yaonge.jpg";
@@ -13,6 +13,8 @@ import {
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
 import CommentComponent from "../../../components/comment/CommentComponent";
+import { getTokenCookie } from "../../../api/cookie";
+import { userLogout } from "../../../components/store/userSlice";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -145,7 +147,19 @@ const CommonView = () => {
     console.log(id);
     await deleteCommunity(id);
   };
-  const user = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
+  });
   const viewBtn = post && post.member && post.member.id === user.id;
 
   const ScrollToTopBtn = () => {
