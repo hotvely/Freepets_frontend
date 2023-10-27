@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import NoticeTableForList from "./NoticeTableForList";
 import { getBoardsByPageAPI, getSearchAPI } from "../../api/notice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { dateFormatDefault } from "../../api/utils";
 import Page from "../../components/Page";
+import { faKorvue } from "@fortawesome/free-brands-svg-icons";
 
 const MainStlye = styled.div`
   width: 100%;
@@ -51,11 +52,14 @@ const NoticeList = (props) => {
     { accessor: "noticeViews", Header: "조회수" },
     { accessor: "noticeLike", Header: "좋아요" },
   ]);
-  const sortNum = props.props.sortNum;
-  const keyword = props.props.searchKey == "" ? null : props.props.searchKey;
-  const searchNum = props.props.searchNum;
-  const page = props.props.page;
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get("page");
+  let page = searchPage != null ? searchPage : 1;
 
+  let sortNum = props.props.sortNum;
+  let keyword = props.props.keyword == "" ? null : props.props.keyword;
+  let searchNum = props.props.searchNum;
+  console.log(keyword);
   const changeDate = (tempArr) => {
     for (const item in tempArr) {
       tempArr[item].noticeDate = dateFormatDefault(tempArr[item].noticeDate);
@@ -63,7 +67,7 @@ const NoticeList = (props) => {
     return tempArr;
   };
 
-  const getBoardHandler = async () => {
+  const getBoardHandler = async (page) => {
     const response = await getBoardsByPageAPI(page, sortNum);
 
     let tempArr = [...response.data.noticeList];
@@ -74,19 +78,36 @@ const NoticeList = (props) => {
     setTotalPages(response.data.totalPages);
   };
 
-  const getSearchBoardHandler = async () => {
+  const getSearchBoardHandler = async (page) => {
     // 검색기능..
     console.log(keyword, searchNum);
+    page = 1;
+
     if (keyword) {
       const response = await getSearchAPI(page, keyword, searchNum);
-      console.log(response);
+
+      console.log(response.data);
+      console.log(page);
 
       if (response.data.noticeList.length > 0) {
+        console.log("검색 데이터 있을떄..");
+        if (response.data.totalPages < page) {
+          page = 1;
+          response = await getSearchAPI(page, keyword, searchNum);
+        }
+
         let tempArr = [...response.data.noticeList];
         tempArr = changeDate(tempArr);
 
         setBoards(tempArr);
         setTotalPages(response.data.totalPages);
+      } else {
+        console.log("검색 데이터 없을떄....");
+        document.querySelector("#search").value = "";
+        props.props.setKeyword(null);
+        page = 1;
+        navigate("../notice?page=1");
+        // getBoardHandler(page, sortNum);
       }
     } else {
       alert("검색어를 입력하세요.");
@@ -96,24 +117,35 @@ const NoticeList = (props) => {
   useEffect(() => {}, [boards]);
 
   useEffect(() => {
-    console.log("???");
-    if (page <= 1) getBoardHandler();
+    if (page <= 1) getBoardHandler(1);
   }, []);
 
   useEffect(() => {
-    console.log("게시글 변경됬따.");
-    getBoardHandler();
+    getBoardHandler(1);
   }, [sortNum]);
 
   useEffect(() => {
+    console.log("KEYWORD 변경");
     if (keyword) {
-      getSearchBoardHandler();
+      getSearchBoardHandler(page);
+    } else {
+      console.log("키워드 없어서 강제로 페이지 이동시킴");
+      if (page != 1) navigate("../notice/?page=1");
     }
   }, [keyword]);
 
   useEffect(() => {
-    if (keyword != null) {
-      getSearchBoardHandler();
+    console.log("BOARDS 변경");
+  }, [boards]);
+
+  useEffect(() => {
+    console.log("PAGE 변경");
+    if (keyword) {
+      console.log(page);
+      getSearchBoardHandler(page);
+    } else {
+      console.log(page);
+      getBoardHandler(page);
     }
   }, [page]);
 

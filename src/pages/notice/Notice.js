@@ -272,36 +272,26 @@ const MainContentBox = styled.div`
 
 const Notice = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const searchPage = searchParams.get("page");
+
   const [keyword, setKeyword] = useState("");
   const [sortNum, setSortNum] = useState(1);
   const [searchNum, setSearchNum] = useState(1);
   const [searchKey, setSearchKey] = useState("");
 
-  const page = searchPage != null ? searchPage : 1;
-
-  const keywordHandler = (e) => {
-    setKeyword(e.target.value);
-  };
-
   const dispatch = useDispatch();
 
   const user = useSelector((state) => {
     if (getTokenCookie() != undefined) {
-      console.log("쿠키 있!");
       return state.user;
     } else {
       if (localStorage.getItem("user")) {
-        console.log("호출..?");
         dispatch(userLogout());
       }
     }
   });
 
-  const getSearchBoardHandler = async () => {
-    document.querySelector("#search").value = "";
-    setSearchKey(keyword);
+  const getSearchBoardHandler = () => {
+    setKeyword(document.querySelector("#search").value);
   };
 
   const sortOptionHandler = (e) => {
@@ -340,17 +330,12 @@ const Notice = () => {
               <option value="3">내용</option>
             </select>
 
-            <input
-              type="search"
-              id="search"
-              name="search"
-              onChange={keywordHandler}
-            />
+            <input type="search" id="search" name="search" />
             <button onClick={getSearchBoardHandler}>검색</button>
           </div>
         </div>
 
-        <NoticeList props={{ searchKey, searchNum, sortNum, page }} />
+        <NoticeList props={{ keyword, searchNum, sortNum, setKeyword }} />
 
         <div className="main-bottom">
           <div className="page"></div>

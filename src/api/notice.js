@@ -5,9 +5,7 @@ const instance = axios.create({
 });
 
 export const getBoardsByPageAPI = async (page, sortNum) => {
-  console.log("get page 로 게시글들 받아옴");
   let url = `notice?page=${page}&sortNum=${sortNum}`;
-
   return await instance.get(url);
 };
 
