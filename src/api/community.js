@@ -14,13 +14,14 @@ export const getCommunityList = async (page, orderBy) => {
 export const getSearchCommunityList = async (
   page,
   searchKeyword,
-  searchType,
-  orderBy
+  searchType
+  // orderBy
 ) => {
   console.log("searchType" + searchType);
   console.log("page" + page);
   console.log("searchKeyword" + searchKeyword);
-  let url = `community/search?page=${page}&searchKeyword=${searchKeyword}&searchType=${searchType}}&orderBy=${orderBy}`;
+  // console.log("orderBy" + orderBy);
+  let url = `community/search?page=${page}&searchKeyword=${searchKeyword}&searchType=${searchType}`;
   return await instance.get(url);
 };
 

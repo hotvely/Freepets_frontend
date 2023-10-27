@@ -113,12 +113,23 @@ const CommunityList = (props) => {
 
   return (
     <ContentStyle>
-      <CommunityTableForList
-        columns={columns}
-        data={data}
-        onRowClick={handleRowClick}
-      />
-      {console.log(data)}
+      {commonPost.length === 0 ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            paddingTop: "20px",
+          }}
+        >
+          검색 결과가 없습니다.
+        </div>
+      ) : (
+        <CommunityTableForList
+          columns={columns}
+          data={data}
+          onRowClick={handleRowClick}
+        />
+      )}
     </ContentStyle>
   );
 };

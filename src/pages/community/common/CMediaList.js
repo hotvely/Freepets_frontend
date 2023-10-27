@@ -332,8 +332,8 @@ const CMediaList = () => {
       const result = await getSearchCommunityList(
         page,
         searchKeyword,
-        searchType,
-        orderBy
+        searchType
+        // orderBy
       );
       setMediae(result.data.communityList);
       setTotalPages(result.data.totalPages);
@@ -351,7 +351,7 @@ const CMediaList = () => {
   }, [page, orderBy, searchKeyword, searchType]);
 
   const boardTypeForMedia = () => {
-    if (mediae) {
+    if (mediae && mediae.length > 0) {
       return (
         <div className="main-content">
           <div className="media-colum">
@@ -476,7 +476,7 @@ const CMediaList = () => {
               type="search"
               id="search"
               name="search"
-              vlaue={searchKeyword}
+              value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
             <button onClick={MediaSearchListAPI}>검색</button>
