@@ -97,10 +97,12 @@ const userSlice = createSlice({
       });
 
     builder.addCase(asyncFindId.fulfilled, (state, action) => {
+      console.log(action.payload);
       return action.payload;
     });
 
     builder.addCase(asyncFindPwd.fulfilled, (state, action) => {
+      console.log(action.payload);
       return action.payload;
     });
 

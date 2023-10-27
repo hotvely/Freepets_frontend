@@ -18,11 +18,21 @@ const MemberFindPwd = () => {
       }
     }
   });
-  const findPwd = (e) => {
+  const findPwd = async (e) => {
     e.preventDefault();
     const formData = { id: e.target.id.value, email: e.target.email.value };
-    dispatch(asyncFindPwd(formData));
-    navigate("/main");
+    const result = await dispatch(await asyncFindPwd(formData));
+    console.log(result);
+    if (result.payload == "Success") {
+      alert(
+        "e-mail로 임시 비밀번호 발급 완료 되었습니다. 확인후 로그인 하세요."
+      );
+      navigate("/main");
+    } else {
+      alert("존재하지 않는 회원입니다.");
+    }
+
+    // navigate("/main");
   };
 
   useEffect(() => {

@@ -19,20 +19,24 @@ const MemberFindId = () => {
     }
   });
 
-  const findID = (e) => {
+  const findID = async (e) => {
     e.preventDefault();
+
     const formData = {
       name: e.target.name.value,
       email: e.target.email.value,
     };
     console.log(formData);
-    dispatch(asyncFindId(formData));
-    navigate("/main");
-  };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+    const result = await dispatch(await asyncFindId(formData));
+    if (result.payload) {
+      alert(`아이디는 ${result.payload}입니다.`);
+      navigate("/main");
+    } else {
+      alert("존재하지 않는 유저 입니다.");
+    }
+    //
+  };
 
   return (
     <FindPageStyle>

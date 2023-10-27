@@ -22,6 +22,7 @@ export const loginAPI = async (data) => {
 
 export const findIdAPI = async (data) => {
   console.log("아이디 찾기 axios call");
+  console.log(data);
   return await instance.post("findId", data);
 };
 
