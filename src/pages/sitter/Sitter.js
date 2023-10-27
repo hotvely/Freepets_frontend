@@ -8,9 +8,7 @@ import {
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Modal from "react-modal";
 import Img from "../../resources/kero.jpeg";
-import Chatting from "../Chatting";
 import { useEffect, useState } from "react";
 import Page from "../../components/Page";
 import {
@@ -203,7 +201,6 @@ const Sitter = () => {
   const navigator = useNavigate();
   const [totalPages, setTotalPages] = useState();
   const [select, setSelect] = useState(1);
-  const [modalCheck, setModalCheck] = useState(false);
 
   const page = searchPage != null ? searchPage : 1;
 
@@ -217,21 +214,10 @@ const Sitter = () => {
     });
   };
 
-  const handleModalClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
   const chattingClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setModalCheck(true);
-    console.log(e.currentTarget);
-    console.log(e.currentTarget.id);
-  };
-
-  const handleModalClose = () => {
-    setModalCheck(false);
+    window.open(`../chatting/${e.currentTarget.id}`, "_blank", 'width=800, height=500');
   };
 
   const NavCreate = () => {
@@ -242,24 +228,6 @@ const Sitter = () => {
     const result = await getSitterSearch(page, search);
     setBoards(result.data.sitterList);
     setTotalPages(result.data.totalPages);
-  };
-
-  const ModalStyle = {
-    overlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.05)'
-    },
-    content: {
-      position: 'absolute',
-      top: "20vh",
-      left: "15vw",
-      bottom: "15vh",
-      right: "15vw",
-    },
   };
 
   const selectChange = (e) => {
@@ -386,16 +354,8 @@ const Sitter = () => {
                     <p>
                       <span id="sitterPrice">{items.sitterPrice}</span>₩
                     </p>
-                    <div onClick={handleModalClick}>
+                    <div>
                       <button onClick={chattingClick} id={items.member.id}>1:1 대화</button>
-                      <Modal
-                        isOpen={modalCheck}
-                        ariaHideApp={false}
-                        onRequestClose={handleModalClose}
-                        style={ModalStyle}
-                      >
-                        <Chatting />
-                      </Modal>
                     </div>
                   </div>
                 </div>

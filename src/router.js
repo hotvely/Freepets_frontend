@@ -24,6 +24,7 @@ import HospitalReviewView from "./pages/information/HospitalReviewView";
 import EventCalendar from "./pages/notice/EventCalendar";
 import UserPage from "./pages/member/UserPage";
 import NoticeList from "./pages/notice/NoticeList";
+import Chatting from "./pages/Chatting";
 
 const router = createBrowserRouter([
   {
@@ -215,6 +216,10 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/chatting/:id",
+    element: <Chatting />
+  },
+  {
     path: "/test",
     children: [
       {
@@ -222,7 +227,7 @@ const router = createBrowserRouter([
         element: <Post />,
       },
     ],
-  },
+  }
 ]);
 
 export default router;

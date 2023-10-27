@@ -69,6 +69,27 @@ const StyledMain = styled.main`
     width: 100%;
     margin-left: 4rem;
     
+    .searchBar {
+      background-color: #eeeeee;
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #68b0c9;
+      margin-top: 3rem;
+      height: 15%;
+      font-size: 2rem;
+      font-weight: 600;
+      border-radius: 10px;
+      div {
+        display: flex;
+        margin-left: 1.5rem;
+      }
+      img {
+        margin-right: 2rem;
+      }
+    }
+    
     .best {
       margin-top: 2rem;
       height: 55%;
@@ -201,6 +222,15 @@ const Home = () => {
           <a href="#">EVENT</a>
         </div>
         <div className="allMain">
+        <div className="searchBar">
+            <div>
+              <p>통합검색</p>
+              <p>▽</p>
+            </div>
+            <a href="#">
+              <img src={loupe} />
+            </a>
+          </div>
           <div className="best">
             <div className="bestInner">
               <p className="weeklyBest">주간 인기글</p>

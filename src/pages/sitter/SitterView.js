@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { getReviews, getBoardView, deleteSitterBoard, deleteReview, addReview } from "../../api/sitter";
+import { addBookmarkAPI } from "../../api/bookmark";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Main = styled.div`
@@ -86,6 +87,15 @@ const MainContent = styled.div`
                     padding: 5px;
                     border-radius: 5px;
                 }               
+            }
+
+            .main-header_end-bookmark {
+
+                button {
+                    border: none;
+                    background: none;
+                    cursor: pointer;
+                }
             }
         }
     }
@@ -301,12 +311,15 @@ const SitterView = () => {
     const [reviews, setReviews] = useState([]);
     const [reviewDesc, setReviewDesc] = useState();
     const [star, setStar] = useState(0);
+
     const styleGray = {
         color: "#aaa"
     };
+
     const styleOrange = {
         color: "orange"
     };
+
     const [style1, setStyle1] = useState(styleGray);
     const [style2, setStyle2] = useState(styleGray);
     const [style3, setStyle3] = useState(styleGray);
@@ -368,12 +381,26 @@ const SitterView = () => {
             formData.append("sitterReviewDesc", reviewDesc);
             formData.append("sitter.sitterCode", location.state.code);
             const result = await addReview(formData);
-            console.log(result.data);
             setReviews([, result.data, ...reviews]);
         } else {
             window.alert('자신의 글에는 리뷰를 등록할 수 없습니다.');
         }
     }
+
+    const onBookMarkBtn = async () => {
+        console.log('안녕');
+        const formData = {
+            boardName: 'sitter',
+            postCode: location.state.code,
+            token: data.token,
+        }
+
+        console.log(formData);
+        const result = await addBookmarkAPI(formData);
+        if(!result.data) {
+            alert('이미 북마크에 등록되었습니다.')
+        } else alert('북마크에 등록되었습니다.');
+    };
 
     const boardViewAPI = async () => {
         const boardViewResult = await getBoardView(location.state.code);
@@ -396,6 +423,7 @@ const SitterView = () => {
            await deleteSitterBoard(location.state.code);
            alert('삭제되었습니다.');
         }
+        navigator('../');
     }
 
     const onDeleteReview = async (e) => {
@@ -440,7 +468,11 @@ const SitterView = () => {
                                     </div>
                                 </div>                               
                             </div>
-                            <FontAwesomeIcon icon={faBookmark} style={{fontSize: "2rem", color: "#ddd", marginRight: "10px"}} />
+                            <div className="main-header_end-bookmark">
+                                <button onClick={onBookMarkBtn}>
+                                    <FontAwesomeIcon icon={faBookmark} style={{fontSize: "2rem", color: "#ddd", marginRight: "10px"}} />
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div className="main-content">

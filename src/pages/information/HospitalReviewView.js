@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getOneBoard, deleteBoard, likeAddorDelete, getHrComment, addComment,deleteComment } from "../../api/info";
+import { addBookmarkAPI } from "../../api/bookmark";
 import { useNavigate } from "react-router-dom";
 import banner from "../../resources/bannerTest.png";
 import yaonge from "../../resources/yaonge.jpg";
@@ -10,7 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import CommentComponent from "../../components/comment/CommentComponent";
 import CommentBtnComponent from "../../components/comment/CommentBtnComponent";
-
 import ReCommentComponent from "../../components/comment/ReCommentComponent";
 import UpdateCommentComponent from "../../components/comment/UpdateCommentComponent";
 import { addNoticeNotification } from "../../components/Notification";
@@ -42,6 +42,10 @@ const HospitalReviewView = () => {
     const resultBoard = await getOneBoard(code);
     setBoardView(resultBoard.data);
     setLike(resultBoard.data.likeCount);
+  };
+
+  const onUpdateClick = async () => {
+    navigate(`../${code}/update/4`);
   }
 
   const onDeleteClick = async () => {
@@ -50,7 +54,7 @@ const HospitalReviewView = () => {
       await deleteBoard(code);
       navigate('../');
     }
-  }
+  };
 
   const onLikeBtn = async () => {
     const formData = new FormData();
@@ -58,12 +62,26 @@ const HospitalReviewView = () => {
     formData.append('member.id', data.id);
     const result = await likeAddorDelete(formData);
     setLike(result.data.likeCount);
-  }
+  };
+
+  const onBookMarkBtn = async () => {
+    const formData = {
+      boardName: 'hospitalReview',
+      postCode: code,
+      token: data.token,
+    };
+
+    const result = await addBookmarkAPI(formData);
+    if(!result.data) {
+      alert("이미 북마크에 등록되었습니다.");
+    } else alert("북마크에 등록되었습니다.");
+    
+  };
 
   const getCommentHandler = async (code) => {
     const resultComment = await getHrComment(code);
     setComments([...resultComment.data]);
-  }
+  };
 
   const addCommentHandler = async (e) => {
     console.log(e.target.commentDesc.id)
@@ -93,7 +111,7 @@ const HospitalReviewView = () => {
     } else {
       alert('댓글 작성 후 등록 버튼을 눌러 주세요!');
     }
-  }
+  };
 
   const updateCommentHandler = async (code) => {
     if (code == currClickBtn) {
@@ -157,7 +175,7 @@ const HospitalReviewView = () => {
                     <div className="writer">{boardView?.memberDTO?.nickname}</div>
                   </div>
                   <div className="article-info">
-                    <span>{dateFormatDefault(boardView?.commonDate)}</span>
+                    <span>{dateFormatDefault(boardView?.date)}</span>
                     <span>ㆍ조회 {boardView?.viewCount}</span>
                     <span>ㆍ좋아요 {boardView?.likeCount}</span>
                   </div>
@@ -167,7 +185,7 @@ const HospitalReviewView = () => {
                 <button className="comment-count-btn">
                   [ <span>{boardView?.commentCount}</span> ]
                 </button>
-                <button className="bookmark">
+                <button className="bookmark" onClick={onBookMarkBtn}>
                   <FontAwesomeIcon 
                   icon={faBookmark}
                   style={{fontSize: "1.5rem",
@@ -358,7 +376,7 @@ const HospitalReviewView = () => {
       >
         <button
           className="update-btn"
-          onClick={null}
+          onClick={onUpdateClick}
           value={boardView?.commonCode}
         >
           수정
