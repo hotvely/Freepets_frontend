@@ -12,6 +12,9 @@ import {
   deleteCommunity,
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
+import { faBookmark, faHeart } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getCommentsAPI } from "../../../api/notice";
 import CommentComponent from "../../../components/comment/CommentComponent";
 
 const MainStlye = styled.div`
@@ -160,6 +163,12 @@ const CommonView = () => {
   const { code } = useParams();
   const navigate = useNavigate();
 
+  //댓글
+  const [comments, setComments] = useState([]);
+  const [currClickBtn, setCurrClickBtn] = useState(-1);
+  const [succUpdate, setSuccUpdate] = useState(false);
+  const [selected_Comment, setSelected_Comment] = useState(0);
+
   const CommunityPostAPI = async (id) => {
     const result = await getCommunity(id);
     setPost(result.data);
@@ -211,6 +220,76 @@ const CommonView = () => {
     navigate(-1);
     window.scrollTo(0, 0);
   };
+
+  const getCommentHandler = async (code) => {
+    const result = await getCommentsAPI(code);
+    setComments([...result.data]);
+  };
+
+  const addCommentHandler = async (e) => {
+    e.preventDefault();
+    const parentCode = e.target.commentDesc.id;
+    const formData = {
+      token: user.token,
+      boardName: "community",
+      postCode: code,
+      parentCommentCode: commonCommentCodeSuper, //          부모 댓글의 코드를 백으로 넘기는 법
+      commentDesc: e.target.commentDesc.valuen,
+    };
+    if (formData.commentDesc) {
+      const addCommentResult = await addCommentAPI(formData);
+      console.log(addCommentResult.data);
+      const commonData = {
+        token: user.token,
+        postCode: formData.postCode,
+        pCommentCode: addCommentResult.data.commonCommentCodeSuper,
+        cCommenntCode: addCommentResult.data.commonCommentCode,
+        url: `http://localhost:3000/community/commonView/${formData.postCode}`,
+      };
+      await addNoticeNotification(notiData);
+      await getCommentHandler(code);
+      e.target.commentDesc.value = null;
+    } else {
+      alert("댓글 작성후 등록하세요");
+    }
+  };
+
+  const updateCommentHandler = async (code) => {
+    // 댓글 수정 버튼을 눌렀을 때 실행해야 하는 로직을 처리하기 위한 함수
+    if (code == currClickBtn) {
+      code = -1;
+    }
+    setCurrClickBtn(code);
+  };
+
+  const updateSuccHandler = () => {
+    setSuccUpdate(true);
+  };
+
+  const deleteCommentHandler = async (commentCode) => {
+    await deleteCommentAPI(commentCode);
+    await getCommentHandler(code);
+  };
+
+  const selected_Comment_handler = () => {
+    setSelected_Comment(0);
+  };
+
+  useEffect(() => {
+    const asyncHandler = async () => {
+      getPostHandler(code);
+      getCommentHandler(code);
+    };
+    asyncHandler();
+  }, []);
+
+  useEffect(() => {
+    if (succUpdate) {
+      setSuccUpdate(false);
+      setCurrClickBtn(-1);
+      getCommentHandler(code);
+    }
+  }, [succUpdate]);
 
   return (
     <MainStlye>
