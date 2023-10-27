@@ -10,7 +10,10 @@ export const getCommunityList = async (page, orderBy) => {
   let url = `community?page=${page}&orderBy=${orderBy}`;
   return await instance.get(url);
 };
-
+export const getCommentsAPI = async (postCode) => {
+  let url = `community/${postCode}/comments`;
+  return await instance.get(url);
+};
 export const getSearchCommunityList = async (
   page,
   searchKeyword,
@@ -36,6 +39,10 @@ export const addCommunity = async (data) => {
   return await instance.post("community", data);
 };
 
+export const addCommunityComment = async (data) => {
+  return await instance.post("community/comment", data);
+};
+
 export const updateCommunity = async (data) => {
   return await instance.put("community", data);
 };
@@ -43,4 +50,8 @@ export const updateCommunity = async (data) => {
 export const deleteCommunity = async (id) => {
   console.log("삭제 됐나?");
   return await instance.delete(`community/${id}`);
+};
+
+export const deleteCommunityComment = async (code) => {
+  return await instance.delete(`/community/comment/${code}`);
 };

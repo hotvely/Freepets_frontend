@@ -10,12 +10,16 @@ import {
   getCommunity,
   // updateCommunity,
   deleteCommunity,
+  getCommentsAPI,
+  addCommunityComment,
+  deleteCommunityComment,
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
 import { faBookmark, faHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getCommentsAPI } from "../../../api/notice";
+
 import CommentComponent from "../../../components/comment/CommentComponent";
+import { addNotificationAPI } from "../../../api/auth";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -174,16 +178,6 @@ const CommonView = () => {
     setPost(result.data);
   };
 
-  useEffect(() => {
-    const asyncHandler = async () => {
-      await CommunityPostAPI(code);
-    };
-
-    if (code) {
-      asyncHandler();
-    }
-  }, [code]);
-
   const UpdateCommunityAPI = (event) => {
     const id = event.target.value;
     console.log(id);
@@ -233,11 +227,11 @@ const CommonView = () => {
       token: user.token,
       boardName: "community",
       postCode: code,
-      parentCommentCode: commonCommentCodeSuper, //          부모 댓글의 코드를 백으로 넘기는 법
-      commentDesc: e.target.commentDesc.valuen,
+      parentCommentCode: parentCode, //          부모 댓글의 코드를 백으로 넘기는 법
+      commentDesc: e.target.commentDesc.value,
     };
     if (formData.commentDesc) {
-      const addCommentResult = await addCommentAPI(formData);
+      const addCommentResult = await addCommunityComment(formData);
       console.log(addCommentResult.data);
       const commonData = {
         token: user.token,
@@ -246,7 +240,7 @@ const CommonView = () => {
         cCommenntCode: addCommentResult.data.commonCommentCode,
         url: `http://localhost:3000/community/commonView/${formData.postCode}`,
       };
-      await addNoticeNotification(notiData);
+      await addNotificationAPI(commonData);
       await getCommentHandler(code);
       e.target.commentDesc.value = null;
     } else {
@@ -267,7 +261,7 @@ const CommonView = () => {
   };
 
   const deleteCommentHandler = async (commentCode) => {
-    await deleteCommentAPI(commentCode);
+    await deleteCommunityComment(commentCode);
     await getCommentHandler(code);
   };
 
@@ -277,11 +271,22 @@ const CommonView = () => {
 
   useEffect(() => {
     const asyncHandler = async () => {
-      getPostHandler(code);
+      CommunityPostAPI(code);
       getCommentHandler(code);
     };
     asyncHandler();
   }, []);
+
+  useEffect(() => {
+    const asyncHandler = async () => {
+      await CommunityPostAPI(code);
+    };
+
+    if (code) {
+      asyncHandler();
+    }
+  }, [code]);
+  console.log(post);
 
   useEffect(() => {
     if (succUpdate) {
@@ -353,7 +358,7 @@ const CommonView = () => {
               {console.log(post?.commonLikeCount)}
             </div>
             <div className="comment-box">
-              <CommentComponent />
+              <CommentComponent props={0} ref={addCommentHandler} />
             </div>
           </div>
         </div>
