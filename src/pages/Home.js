@@ -5,8 +5,10 @@ import styled from "styled-components";
 import loupe from "../assets/loupe.png";
 import Logo from "../assets/Logo.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { userSave } from "../components/store/userSlice";
+import { useEffect, useState } from "react";
+import { userLogout, userSave } from "../components/store/userSlice";
+import axios from "axios";
+import { getTokenCookie } from "../api/cookie";
 const StyledHeader = styled.header`
   position: fixed;
   width: 100%;
@@ -152,16 +154,18 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
 
-  useEffect(() => {
-    const saveuser = localStorage.getItem("user");
-    //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
-    if (user !== null && Object.keys(user).length === 0 && saveuser !== null) {
-      dispatch(userSave(JSON.parse(saveuser)));
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div>
@@ -178,9 +182,7 @@ const Home = () => {
           <a href="/information">Information</a>
           <a href="#">CS</a>
           <div className="rightNav">
-            {user === null ||
-              Object.keys(user).length === 0 ||
-              !localStorage.getItem("token") ? (
+            {!user ? (
               <>
                 <Link to="/auth/login">Sign in</Link> <p>|</p>
                 <Link to="/auth/register">Sign up</Link>

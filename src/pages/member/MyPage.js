@@ -5,7 +5,11 @@ import banner from "../../resources/bannerTest.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { asyncDelete, userSave } from "../../components/store/userSlice";
+import {
+  asyncDelete,
+  userLogout,
+  userSave,
+} from "../../components/store/userSlice";
 import ReactModal from "react-modal";
 import MemberUpdate from "./MemberUpdate";
 import Logout from "./Logout";
@@ -17,6 +21,7 @@ import {
 import MyPageMain from "../../components/css/MyPageMain";
 import { deleteBookmarkAPI, getBookmarkAPI } from "../../api/bookmark";
 import { dateFormatDefault } from "../../api/utils";
+import { getTokenCookie } from "../../api/cookie";
 
 const MyPage = () => {
   const { id } = useParams();
@@ -28,7 +33,15 @@ const MyPage = () => {
   const [bookmark, setBookmark] = useState([]);
 
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
 
   useEffect(() => {
