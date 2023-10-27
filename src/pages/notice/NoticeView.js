@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faThumbsUp,
@@ -14,319 +13,44 @@ import { useEffect, useState } from "react";
 import {
   addCommentAPI,
   deleteCommentAPI,
+  deleteNoticeAPI,
   getBoardViewAPI,
+  getCommentAPI,
   getCommentsAPI,
+  updateLikeNoticeAPI,
 } from "../../api/notice";
-import CommentComponent from "./CommentComponent";
-import ReCommentComponent from "./ReCommentComponent";
+import CommentComponent from "../../components/comment/CommentComponent";
+import ReCommentComponent from "../../components/comment/ReCommentComponent";
 import { addBookmarkAPI } from "../../api/bookmark";
 import { useSelector } from "react-redux";
-import UpdateCommentComponent from "./UpdateCommentComponent";
-import { addNoticeNotification, addNotification } from "../../components/Notification";
-
-const StyledMain = styled.main`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  height: 100vw;
-  align-items: center;
-
-  .venner {
-    width: 90%;
-    img {
-      width: 100%;
-      height: 150px;
-    }
-  }
-
-  .vennerBottom {
-    display: flex;
-    align-items: center;
-    width: 90%;
-    margin-top: 1.75rem;
-    margin-bottom: 1.75rem;
-    position: relative;
-
-    .full {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      width: 100%;
-
-      .full-line-left {
-        border: 1px solid hsla(220, 9%, 46%, 0.3);
-        width: 1%;
-      }
-
-      .full-line-right {
-        border: 1px solid hsla(220, 9%, 46%, 0.3);
-        width: 92.7%;
-        margin-left: 103px;
-      }
-    }
-    .vennerText {
-      .text-box {
-        background-color: white;
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-        margin-left: 1.25rem;
-
-        .text-blue {
-          color: #2687a6;
-        }
-      }
-    }
-  }
-
-  .contentHeader {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    width: 90%;
-
-    .userProfile {
-      display: flex;
-      flex-direction: row;
-      .profile {
-        margin: 0px 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        img {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-        }
-      }
-      .user {
-        margin: 0px 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .usertTitle {
-          display: flex;
-          p {
-            margin: 5px 0px;
-            border: 2px solid #dedede;
-            border-radius: 5px;
-            padding: 5px;
-            font-weight: bolder;
-          }
-        }
-
-        .viewicon {
-          margin: 5px 0px;
-          span {
-            margin-right: 15px;
-          }
-        }
-      }
-    }
-    .icon {
-    }
-  }
-
-  .descHeader {
-    width: 90%;
-    margin: 15px 0px;
-    font-weight: bolder;
-    font-size: 45px;
-  }
-  .desc {
-    width: 90%;
-    border: 1px solid hsla(220, 9%, 46%, 0.3);
-    height: 30%;
-    margin: 30px 0px;
-  }
-  .commentProfile {
-    // flex: 0 1 10%;
-    //margin: 0 15px;
-
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-  }
-  .commentBox {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 90%;
-    height: 70px;
-    margin-top: 30px;
-    .commentProfile {
-      margin-right: 20px;
-      width: 50px;
-      flex: none;
-    }
-
-    /* form {
-      width: 80%;
-      height: 80px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      .commentDesc {
-        margin-left: 30px;
-        width: 80%;
-        input {
-          padding: 15px;
-          border-radius: 10px;
-          width: 90%;
-          height: 15px;
-        }
-      }
-      .submitBtn {
-        button {
-          border-radius: 10px;
-          height: 50px;
-          background-color: skyblue;
-          color: white;
-          border: 0;
-        }
-      }
-    } */
-  }
-
-  .commentBox2 {
-    width: 90%;
-    .comment {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 100%;
-      margin-top: 80px;
-
-      .userProfile {
-        display: flex;
-        flex-direction: column;
-        margin-top: 10px;
-
-        .useruser {
-          display: flex;
-          flex-direction: row;
-
-          .profile {
-            margin: 0px 5px;
-            img {
-              width: 50px;
-              height: 50px;
-              border-radius: 50%;
-            }
-          }
-
-          .user {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            p {
-              margin-left: 10px;
-              border: 2px solid #dedede;
-              border-radius: 5px;
-              padding: 5px;
-              font-weight: bolder;
-            }
-            span {
-              margin-right: 10px;
-            }
-          }
-        }
-        .comment-desc {
-          width: 70%;
-          padding: 20px;
-          margin-top: 10px;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          .comment-btn {
-            button {
-              border: 0;
-              padding: 5px;
-              border-radius: 5px;
-              background-color: #437b92;
-              color: white;
-              margin: 0 5px;
-            }
-          }
-        }
-
-        .reCommentContent {
-          padding: 20px;
-          .commentView_btn {
-            height: 40px;
-            background-color: #437b92;
-            border: 0;
-            border-radius: 5px;
-            color: white;
-            margin: 10px 0;
-          }
-
-          ul {
-            margin-top: 10px;
-          }
-
-          li {
-            padding-top: 20px;
-          }
-        }
-      }
-    }
-  }
-`;
-
-const CommentBtnComponent = (props) => {
-  const user = useSelector((state) => {
-    return state.user;
-  });
-
-  const writer = props.writer;
-
-  return (
-    <>
-      <div className="comment-btn">
-        <button
-          id={props.code}
-          onClick={() => {
-            props.updateCommentHandler(props.code);
-          }}
-          className={props.className}
-        >
-          수정
-        </button>
-        <button
-          onClick={() => {
-            if (user.id == writer) {
-              props.deleteCommentHandler(props.code);
-            }
-            console.log("사용자와 작성자가 달라서 삭제 불가");
-          }}
-        >
-          삭제
-        </button>
-      </div>
-    </>
-  );
-};
+import UpdateCommentComponent from "../../components/comment/UpdateCommentComponent";
+import {
+  addNoticeNotification,
+  addNotification,
+} from "../../components/Notification";
+import CommentBtnComponent from "../../components/comment/CommentBtnComponent";
+import {
+  MainStlye,
+  MainBanner,
+  MainContentBox,
+} from "../../components/css/PostView";
+import ProfileComponent from "../../components/member/ProfileComponent";
+import { Link, useNavigate } from "react-router-dom";
+import yange from "../../resources/yaonge.jpg";
+import { dateFormatDefault } from "../../api/utils";
 
 const NoticeView = () => {
   const { code } = useParams();
   const [postData, setPostData] = useState();
   const [comments, setComments] = useState([]);
+  const [parentComment, setParentComment] = useState();
+
+  const [likeCount, setLikeCount] = useState();
 
   const [currClickBtn, setCurrClickBtn] = useState(-1);
-  // const [isClickBtn, setIsClickBtn] = useState(-1);
-  // const [commentUpdateBtn, setCommentUpdateBtn] = useState(false);
-  // const [reCommentUpdateBtn, setReCommentUpdateBtn] = useState(false);
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selected_Comment, setSelected_Comment] = useState(0);
-
+  const navigate = useNavigate();
   const user = useSelector((state) => {
     return state.user;
   });
@@ -334,8 +58,8 @@ const NoticeView = () => {
   const getPostHandler = async (code) => {
     const result = await getBoardViewAPI(code);
     setPostData(result.data);
+    setLikeCount(result.data.noticeLike);
   };
-
   const getCommentHandler = async (code) => {
     const result = await getCommentsAPI(code);
     setComments([...result.data]);
@@ -343,42 +67,63 @@ const NoticeView = () => {
 
   const addCommentHandler = async (e) => {
     e.preventDefault();
-    const parentCode = e.target.commentDesc.id;
-    const formData = {
-      token: user.token,
-      boardName: "notice",
-      postCode: code,
-      parentCommentCode: parentCode, //부모 댓글의 코드를 백으로 넘기는 법
-      commentDesc: e.target.commentDesc.value,
-    };
-    console.log(formData);
-    console.log("선택된 댓글 번호?");
-    console.log(selected_Comment);
-
-
-    if (formData.commentDesc) {
-      const addCommentResult = await addCommentAPI(formData);
-
-
-      console.log(addCommentResult.data)
-      // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
-      const notiData = {
+    if (user?.token) {
+      const parentCode = e.target.commentDesc.id;
+      const formData = {
         token: user.token,
+        boardName: "notice",
+        postCode: code,
+        parentCommentCode: parentCode, //부모 댓글의 코드를 백으로 넘기는 법
+        commentDesc: e.target.commentDesc.value,
+      };
 
-        postCode: formData.postCode,
-        pCommentCode: addCommentResult.data.noticeCommentCodeSuper
-        ,
-        cCommentCode: addCommentResult.data.noticeCommentCode,
-        url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
+      if (formData.commentDesc) {
+        const addCommentResult = await addCommentAPI(formData);
+        console.log(addCommentResult);
+        // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
+        // 단, 게시글 작성자 아이디하고 현재 아이디 하고 같으면 알림 추가 안함
+        if (parentCode > 0) {
+          // 부모 댓글 있을때.
+          console.log(parentCode);
+          const result = await getCommentAPI(parentCode);
+          console.log(result.data);
+
+          // 부모 댓글 작성자와 대댓글 작성자가 다를때
+          if (result.data.member.id != user.id) {
+            const notiData = {
+              id: result.data.member.id,
+
+              postCode: formData.postCode,
+              pCommentCode: addCommentResult.data.noticeCommentCodeSuper,
+              cCommentCode: addCommentResult.data.noticeCommentCode,
+              url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
+            };
+            await addNoticeNotification(notiData);
+            console.log("댓글 작성자랑 달라서 알림 감!");
+          } else {
+            alert("댓글 작성자와 일치한 사람이라 알림 안갑니다.");
+          }
+        } else {
+          // 부모 댓글 없어서 그냥 댓글 달때
+          if (postData.member.id != user.id) {
+            const notiData = {
+              id: postData.member.id,
+
+              postCode: formData.postCode,
+              pCommentCode: addCommentResult.data.noticeCommentCodeSuper,
+              cCommentCode: addCommentResult.data.noticeCommentCode,
+              url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
+            };
+            await addNoticeNotification(notiData);
+            console.log("댓글 작성자랑 달라서 알림 감!");
+          } else {
+            alert("같은사용자는 알림 안감");
+          }
+        }
       }
 
-      await addNoticeNotification(notiData);
-
-      const updatedComment = await getCommentsAPI(code);
-      if (updatedComment) {
-        setComments(updatedComment.data);
-        e.target.commentDesc.value = null;
-      }
+      await getCommentHandler(code);
+      e.target.commentDesc.value = null;
     } else {
       alert("댓글 작성후 등록하세요");
     }
@@ -391,8 +136,32 @@ const NoticeView = () => {
         postCode: postData.noticeCode,
         token: user.token,
       };
+      console.log(formData);
 
-      addBookmarkAPI(formData);
+      const result = await addBookmarkAPI(formData);
+      if (!result.data) {
+        alert("이미 북마크가 등록되어 있습니다.");
+      }
+    }
+  };
+
+  const likeBtnHandler = async () => {
+    if (user.token) {
+      const formData = {
+        postCode: code,
+        token: user.token,
+      };
+      const result = await updateLikeNoticeAPI(formData);
+      if (result.data) {
+        // 좋아요 버튼이 눌려서 추가가 성공되면 ! 혹은 삭제하면 !
+        // await getPostHandler(code);
+        setLikeCount(likeCount + 1);
+      } else {
+        console.log("삭제 코드 들어옴");
+        setLikeCount(likeCount - 1);
+      }
+    } else {
+      alert("로그인 필요합니다.");
     }
   };
 
@@ -420,16 +189,32 @@ const NoticeView = () => {
     setSelected_Comment(0);
   };
 
-  useEffect(() => {
-    const asyncHandler = async () => {
-      getPostHandler(code);
-      getCommentHandler(code);
-    };
+  const updateHandler = (e) => {
+    if (user.id == postData.member.id) {
+      navigate(`../update/5/${code}}`);
+    } else console.log("작성자와 사용자가 다름");
+  };
 
-    asyncHandler();
+  const deleteHandler = async (e, id) => {
+    if (user.id == postData.member.id) {
+      await deleteNoticeAPI(code);
+      navigate("../");
+    } else {
+      console.log("작성자와 사용자가 다름");
+    }
+  };
+
+  useEffect(() => {
+    const handler = async () => {
+      console.log("페이지 시작..");
+      await getPostHandler(code);
+      await getCommentHandler(code);
+    };
+    handler();
   }, []);
 
   useEffect(() => {
+    console.log("업데이트 성공시 ..");
     if (succUpdate) {
       setSuccUpdate(false);
       setCurrClickBtn(-1);
@@ -437,225 +222,269 @@ const NoticeView = () => {
     }
   }, [succUpdate]);
 
+  const ScrollToTopBtn = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
-    <StyledMain>
-      <div className="venner">
-        <img src={banner} />
-      </div>
-      <div className="vennerBottom">
-        <div className="full">
-          <div className="full-line-left"></div>
+    <MainStlye>
+      <MainBanner>
+        <div className="banner-img">
+          <img src={banner} alt="배너 이미지" />
         </div>
-
-        <div className="vennerText">
-          <div className="text-box">
-            <span></span>
-            <a className="text-blue" href="#">
-              커뮤니티
-            </a>
-            <span></span>
-          </div>
-        </div>
-
-        <div className="full">
-          <div className="full-line-right"></div>
-        </div>
-      </div>
-      <div className="contentHeader">
-        <div className="userProfile">
-          <div className="profile">
-            <img src={testImg} alt="작성자 프로필" />
-          </div>
-
-          <div className="user">
-            <div className="usertTitle">
-              <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                {postData?.member?.nickname}
-              </p>
+      </MainBanner>
+      <MainContentBox>
+        <div className="article-content-box">
+          <div className="article-header">
+            <div className="article-title">
+              <Link to={`../`}>공지사항▷</Link>
+              <div className="title-area">
+                <h2>{postData?.noticeTitle}</h2>
+              </div>
             </div>
+            <div className="writer-info">
+              <div
+                className="profile-img"
+                onClick={() => {
+                  navigate(`/userpage/${postData.member.id}`);
+                }}
+              >
+                <img src={yange} alt="배너 이미지" />
 
-            <div className="viewicon">
-              <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#1FB1D1" }} />
-              <span id="like">{postData?.noticeLike}</span>{" "}
-              <FontAwesomeIcon icon={faEye} style={{ color: "#1FB1D1" }} />
-              <span id="views">{postData?.noticeViews}</span>
-              <FontAwesomeIcon icon={faComments} style={{ color: "#1FB1D1" }} />
-              <span id="comment">{postData?.noticeCommentCount}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="icon">
-          <FontAwesomeIcon
-            icon={faArrowUpFromBracket}
-            style={{
-              color: "#C9C9C9",
-              margin: "0px 5px",
-              fontSize: "20px",
-            }}
-          />
-          <FontAwesomeIcon
-            icon={faBookmark}
-            style={{
-              color: "#C9C9C9",
-              margin: "0px 5px",
-              fontSize: "20px",
-            }}
-            onClick={addBookmarkHandler}
-          />
-        </div>
-      </div>
-      <div className="descHeader">
-        <h1>{postData?.noticeTitle}</h1>
-      </div>
-      <div className="desc">
-        <div>{postData?.noticeDesc}</div>
-      </div>
-      <div className="commentBox">
-        <div className="commentProfile">
-          <img src={testImg}></img>
-        </div>
-
-        <CommentComponent props={0} ref={addCommentHandler} />
-      </div>
-      <div className="commentBox2">
-        <ul className="comment">
-          {comments?.map((comment) =>
-            comment.noticeCommentCodeSuper > 0 ? null : (
-              <li className="userProfile" key={comment.noticeCommentCode}>
-                <div>
-                  {
-                    // 유저 정보
-                  }
-                  <div>
-                    <div className="useruser">
-                      <div className="profile">
-                        <img src={testImg} alt="작성자 프로필" />
-                      </div>
-
-                      <div className="user">
-                        <p style={{ fontSize: "18px", fontWeight: "border" }}>
-                          {comment?.member?.nickname}
-                        </p>
-                      </div>
-                    </div>
-
-                    {
-                      // 댓글 정보
-                    }
-                    <div className="comment-desc">
-                      <div className="commentTextBox">
-                        {comment?.noticeCommentDesc}
-                      </div>
-                      <div>{comment?.noticeCommentDate}</div>
-
-                      <CommentBtnComponent
-                        code={comment?.noticeCommentCode}
-                        writer={comment?.member.id}
-                        updateCommentHandler={updateCommentHandler}
-                        deleteCommentHandler={deleteCommentHandler}
-                      />
-                    </div>
-                    {currClickBtn === comment.noticeCommentCode ? (
-                      comment?.member.id === user.id ? (
-                        <UpdateCommentComponent
-                          code={comment?.noticeCommentCode}
-                          updateCommentHandler={updateCommentHandler}
-                          updateSuccHandler={updateSuccHandler}
-                        />
-                      ) : null
-                    ) : null}
+                <div className="profile-area">
+                  <div className="writer-info">
+                    <div className="writer">{postData?.member?.nickname}</div>
                   </div>
-                  <div className="reCommentContent">
-                    {
-                      // 대댓글 보기, 대댓글 작성 코드
-
-                      // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
-                      selected_Comment == comment.noticeCommentCode ? (
-                        <div>
-                          {
-                            // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
-                          }
-
-                          <button
-                            className="commentView_btn"
-                            onClick={selected_Comment_handler}
-                          >
-                            댓글 보기 닫기
-                          </button>
-                          {/* 대댓글 호출 로직 */}
-                          <ul>
-                            {comments?.map((comment) =>
-                              comment.noticeCommentCodeSuper <
-                                0 ? null : comment.noticeCommentCodeSuper !==
-                                  selected_Comment ? null : (
-                                <li
-                                  key={comment.noticeCommentCode}
-                                  className="comment-desc"
-                                >
-                                  <ReCommentComponent props={comment} />
-                                  <CommentBtnComponent
-                                    code={comment?.noticeCommentCode}
-                                    writer={comment?.member.id}
-                                    updateCommentHandler={updateCommentHandler}
-                                    deleteCommentHandler={deleteCommentHandler}
-                                  />
-                                  {currClickBtn == comment.noticeCommentCode ? (
-                                    comment?.member.id === user.id ? (
-                                      <UpdateCommentComponent
-                                        code={comment?.noticeCommentCode}
-                                        updateCommentHandler={
-                                          updateCommentHandler
-                                        }
-                                        updateSuccHandler={updateSuccHandler}
-                                      />
-                                    ) : null
-                                  ) : null}
-                                </li>
-                              )
-                            )}
-                          </ul>
-
-                          <CommentComponent
-                            // props={{ num1: currClickComment, num2: 10, num3: 100 }}    //<- 여러개 던질때
-                            props={selected_Comment}
-                            ref={addCommentHandler}
-                          />
-                        </div>
-                      ) : (
-                        <div>
-                          {
-                            //id에 상위 댓글의 코드 값을 넣어서 버튼 id부여함.
-                            // 부여한 이유는... 댓글 작성의 경우에 CommentComponent를 호출해서 재사용 하기 위함
-                          }
-                          <button
-                            className="commentView_btn"
-                            id={`${comment.noticeCommentCode}`}
-                            onClick={(e) => {
-                              setSelected_Comment(comment.noticeCommentCode);
-                            }}
-                          >
-                            댓글 보기
-                          </button>
-                        </div>
-                      )
-                    }
+                  <div className="article-info">
+                    <span>{dateFormatDefault(postData?.noticeDate)}</span>
+                    <span>ㆍ조회{postData?.noticeViews}</span>
+                    {/* <span>ㆍ댓글{postData?.noticeCommentCount}</span> */}
+                    <span>ㆍ좋아요{postData?.noticeLike}</span>
                   </div>
                 </div>
-
-                <hr
+              </div>
+              <div className="article-tool">
+                <button className="comment-count-btn">
+                  [ <span>{postData?.noticeCommentCount}</span> ]
+                </button>
+                <button className="url-copy-btn">URL복사</button>
+                <button
+                  onClick={() => {
+                    addBookmarkHandler();
+                  }}
+                >
+                  북마크!!
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="article-container">
+            <div
+              className="ql-editor"
+              dangerouslySetInnerHTML={{
+                __html: String(postData?.noticeDesc),
+              }}
+            />
+            <div className="likeBtn">
+              <button onClick={likeBtnHandler}>
+                <FontAwesomeIcon
+                  icon={faThumbsUp}
                   style={{
-                    width: "100%",
-                    border: "0px",
-                    borderTop: "1px solid #7BCFE1",
+                    color: "white",
+                    margin: "0px 5px",
+                    fontSize: "20px",
                   }}
                 />
-              </li>
-            )
-          )}
-        </ul>
-      </div>
-    </StyledMain>
+                좋아요
+              </button>
+            </div>
+            <div className="comment-box">
+              <div className="commentBox">
+                <div className="commentProfile">
+                  <img src={testImg}></img>
+                </div>
+                <CommentComponent props={0} ref={addCommentHandler} />
+              </div>
+              <div className="commentBox2">
+                <ul>
+                  {comments?.map((comment) =>
+                    comment?.noticeCommentCodeSuper > 0 ? null : (
+                      <li key={comment.noticeCommentCode}>
+                        <div className="comment">
+                          {
+                            // 유저 정보
+                          }
+                          <div className="comment-content">
+                            <div className="comment-desc">
+                              <ProfileComponent props={comment?.member} />
+                              {
+                                // 댓글 정보
+                              }
+                              <div className="commentTextBox">
+                                <p> {comment?.noticeCommentDesc}</p>
+                              </div>
+                            </div>
+                            <div className="comment-last">
+                              <div className="commentDate-btn ">
+                                <div>
+                                  {dateFormatDefault(
+                                    comment?.noticeCommentDate
+                                  )}
+                                </div>
+                                <CommentBtnComponent
+                                  code={comment?.noticeCommentCode}
+                                  writer={comment?.member?.id}
+                                  updateCommentHandler={updateCommentHandler}
+                                  deleteCommentHandler={deleteCommentHandler}
+                                />
+                              </div>
+                            </div>
+                            {currClickBtn === comment?.noticeCommentCode ? (
+                              comment?.member?.id === user.id ? (
+                                <UpdateCommentComponent
+                                  code={comment?.noticeCommentCode}
+                                  updateCommentHandler={updateCommentHandler}
+                                  updateSuccHandler={updateSuccHandler}
+                                />
+                              ) : null
+                            ) : null}
+                          </div>
+                          <div className="reCommentViewBtn">
+                            {
+                              // 대댓글 보기, 대댓글 작성 코드
+
+                              // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
+                              selected_Comment == comment?.noticeCommentCode ? (
+                                <div>
+                                  {
+                                    // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
+                                  }
+
+                                  <button
+                                    className="commentView_btn"
+                                    onClick={selected_Comment_handler}
+                                  >
+                                    댓글 보기 닫기
+                                  </button>
+                                  {/* 대댓글 호출 로직 */}
+                                  <ul>
+                                    {comments?.map((comment) =>
+                                      comment?.noticeCommentCodeSuper <
+                                      0 ? null : comment.noticeCommentCodeSuper !==
+                                        selected_Comment ? null : (
+                                        <li key={comment.noticeCommentCode}>
+                                          <div className="recomment-desc">
+                                            <ReCommentComponent
+                                              props={comment}
+                                            />
+
+                                            <CommentBtnComponent
+                                              code={comment?.noticeCommentCode}
+                                              writer={comment?.member.id}
+                                              updateCommentHandler={
+                                                updateCommentHandler
+                                              }
+                                              deleteCommentHandler={
+                                                deleteCommentHandler
+                                              }
+                                            />
+                                          </div>
+                                          {currClickBtn ==
+                                          comment.noticeCommentCode ? (
+                                            comment?.member.id === user.id ? (
+                                              <UpdateCommentComponent
+                                                code={
+                                                  comment?.noticeCommentCode
+                                                }
+                                                updateCommentHandler={
+                                                  updateCommentHandler
+                                                }
+                                                updateSuccHandler={
+                                                  updateSuccHandler
+                                                }
+                                              />
+                                            ) : null
+                                          ) : null}
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+
+                                  <CommentComponent
+                                    // props={{ num1: currClickComment, num2: 10, num3: 100 }}    //<- 여러개 던질때
+                                    props={selected_Comment}
+                                    ref={addCommentHandler}
+                                  />
+                                </div>
+                              ) : (
+                                <div>
+                                  {
+                                    //id에 상위 댓글의 코드 값을 넣어서 버튼 id부여함.
+                                    // 부여한 이유는... 댓글 작성의 경우에 CommentComponent를 호출해서 재사용 하기 위함
+                                  }
+                                  <button
+                                    className="commentView_btn"
+                                    id={`${comment.noticeCommentCode}`}
+                                    onClick={(e) => {
+                                      setSelected_Comment(
+                                        comment.noticeCommentCode
+                                      );
+                                    }}
+                                  >
+                                    댓글 보기
+                                  </button>
+                                </div>
+                              )
+                            }
+                          </div>
+                        </div>
+
+                        <hr
+                          style={{
+                            width: "100%",
+                            border: "0px",
+                            borderTop: "1px solid #7BCFE1",
+                          }}
+                        />
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="article-bottom-btn">
+          <div
+            className="left-btn"
+            // style={{ display: viewBtn ? "block" : "none" }}
+          >
+            <button
+              className="update-btn"
+              onClick={updateHandler}
+              value={postData?.commonCode}
+            >
+              수정
+            </button>
+            <button
+              className="delete-btn"
+              onClick={deleteHandler}
+              value={postData?.commonCode}
+            >
+              삭제
+            </button>
+          </div>
+          <div className="right-btn">
+            <button className="list-btn">
+              <Link to={`../`}>목록</Link>
+            </button>
+            <button className="top-btn" onClick={ScrollToTopBtn}>
+              △위로
+            </button>
+          </div>
+        </div>
+      </MainContentBox>
+    </MainStlye>
   );
 };
 export default NoticeView;

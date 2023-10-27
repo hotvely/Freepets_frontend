@@ -11,195 +11,273 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   deleteNoticeAPI,
-  getBoardsByPage,
   getSearchAPI,
+  getBoardsByPageAPI,
 } from "../../api/notice";
-import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import Page from "../../components/Page";
+import NoticeList from "./NoticeList";
 
-const MainStyle = styled.main`
-  display: flex;
-  flex-direction: column;
+const MainStlye = styled.div`
+  padding: 20px;
   width: 100%;
-  margin: 0 50px;
-  /* height: 100vw; */
-  align-items: center;
+`;
 
-  .venner {
+const MainBanner = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 30px;
+
+  .banner-img {
     width: 100%;
     img {
       width: 100%;
     }
-    .board_title {
-      font-weight: bold;
-      font-size: 2rem;
-      margin: 30px 0;
-    }
   }
-  .select {
-    width: 100%;
+`;
+
+const MainContentBox = styled.div`
+  border: 1px solid #3a98b9;
+  /* display: flex;
+  flex-direction: column; */
+  width: 100%;
+  .midea-headerbox {
+    border-bottom: 1px solid #3a98b9;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .option {
-      flex: 0 1 15%;
-      margin: 20px 50px;
+
+    .media-sort {
+      margin-right: 5px;
+      display: flex;
+      /* flex: row; */
+      /* justify-content: start; */
+      padding: 10px;
+
       select {
         width: 100%;
         height: 30px;
-        font-size: 1.1rem;
+        border-radius: 10px;
+        border: none;
+        color: #3a98b9;
+        font-weight: bold;
+        background-color: #eeee;
+      }
+
+      .media-sort-like {
+        padding-right: 10px;
+      }
+      .view-board {
+        display: flex;
+        .view-check-board {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        button {
+          background-color: #eeee;
+          width: 30px;
+          height: 30px;
+          border: none;
+          border-radius: 10px;
+        }
       }
     }
-    .search {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: end;
-      flex: 0 1 40%;
-      margin: 20px 30px;
 
-      /* font-size: 1.2rem; */
-      label {
-        margin: 5px;
-        font-size: 1.57rem;
+    .search-box {
+      display: flex;
+      /* flex-direction: row; */
+      /* justify-content: end; */
+      align-items: center;
+      width: 400px;
+      height: 30px;
+      padding-right: 15px;
+
+      select {
+        padding-left: 3px;
+        width: 25%;
+        height: 100%;
+        border: none;
+        background-color: #eeee;
+        color: #3a98b9;
         font-weight: bold;
-        color: black;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
       }
       input {
-        padding: 0 10px;
-        margin: 5px;
-        width: 170px;
-        height: 30px;
-        border: 0;
-        border-radius: 25px;
-        background-color: lightblue;
+        width: 60%;
+        height: 100%;
+        border: solid 2px #eeee;
       }
       button {
-        border: 0;
-        background-color: white;
-      }
-    }
-  }
-`;
-
-const ContentStyle = styled.div`
-  width: 100%;
-  //border: 5px solid black; //#C1F1FC;
-
-  section {
-    margin: 50px 50px;
-
-    hr {
-      border: 0px;
-      border-top: 4px dotted lightblue;
-    }
-
-    button {
-      background-color: black;
-      width: 150px;
-      color: white;
-    }
-  }
-`;
-
-const PostStyle = styled.div`
-  width: 100%;
-  height: 100px;
-  display: flex;
-  /* align-items: center; */
-  margin: 20px 0;
-
-  flex-direction: row;
-  .memberPhoto {
-    flex: 0 1 10%;
-    margin: 0 15px;
-
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-  }
-  .postInfo {
-    flex: 0 1 75%;
-
-    .userInfo {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-
-      #nickName {
-        line-height: 200%;
-        padding: 0 10px;
-        background-color: black;
-        color: white;
-        border-radius: 15px;
-        font-size: 1.2rem;
+        width: 15%;
+        height: 100%;
+        border: none;
+        color: #3a98b9;
         font-weight: bold;
-      }
-      #date {
-        margin-right: 20px;
-        font-size: 1.2rem;
-      }
-    }
-    .postTitle {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin: 8px 0;
-      title {
-      }
-    }
-    .postIcons {
-      display: flex;
-      flex-direction: row;
-      margin-top: 10px;
-      font-size: 1.1rem;
-      div {
-        margin-right: 15px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
       }
     }
   }
-  .postBtn {
+
+  .main-content {
+    /* width:70vw; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    /* flex-wrap: wrap; */
+    margin: 10px;
+    width: 100%-10px;
+    gap: 10px;
+    /* padding: 10px; */
+    /* margin-right: 10px; */
+    .media-colum {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      .media-content {
+        /* width: 100%; */
+        flex: 1 0 15%;
+        /* width: 20%; */
+        /* padding-top: 10px;
+      padding-left: 10px; */
+        /* border: solid 2px #eeee; */
+        background-color: #eeee;
+        height: 300px;
+
+        .media-thumbnail {
+          height: 240px;
+
+          img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+          }
+        }
+
+        .media-info {
+          width: 250px;
+          height: 70px;
+
+          .media-info-first-line {
+            display: flex;
+            align-items: center;
+            height: 25px;
+            h3 {
+              padding-right: 3px;
+              font-size: 1rem;
+            }
+            p {
+              color: tomato;
+              font-size: 1rem;
+            }
+          }
+          #media-info-writer {
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            p {
+              padding-top: 2px;
+              font-size: 0.8rem;
+            }
+          }
+
+          #media-info-detail {
+            padding-top: 2px;
+            padding-left: 2px;
+            p {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .main-bottom {
+    margin: 20px;
     display: flex;
     flex-direction: row;
-    justify-content: end;
     align-items: center;
-    flex: 0 0 15%;
 
-    button {
-      width: 50px;
-      height: 50px;
-      background-color: skyblue;
-      color: black;
-      font-size: 1rem;
-      border: 2px solid darkgray;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 15px;
-      margin-right: 5px;
-      outline: none;
+    .page {
+      flex-grow: 1;
+      text-align: center;
+      .pagination {
+        display: flex;
+        justify-content: center;
+        /* flex-direction: row; */
+        /* text-align: center; */
+        list-style: none;
+        /* display: inline-block; */
+
+        a {
+          float: left;
+          display: block;
+          font-size: 14px;
+          text-decoration: none;
+          padding: 5px 12px;
+          color: #96a0ad;
+          line-height: 1.5;
+        }
+        a:active {
+          cursor: default;
+          color: #ffffff;
+          outline: none;
+        }
+        #first:hover,
+        #last:hover,
+        #arrow-left:hover,
+        #arrow-right:hover {
+          color: #2e9cdf;
+        }
+
+        #num {
+          /* margin-left: 3px; */
+          -moz-border-radius: 100%;
+          -webkit-border-radius: 100%;
+          border-radius: 100%;
+        }
+        #num:hover {
+          background-color: #2e9cdf;
+          color: #ffffff;
+        }
+        #num.active {
+          background-color: #2e9cdf;
+          cursor: pointer;
+        }
+      }
     }
-  }
-`;
 
-const PagingStyle = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 20px 0;
-  a {
-    padding: 5px;
+    #write-btn {
+      /* display: flex;
+      justify-content: end; */
+      button {
+        font-weight: bold;
+        color: #3a98b9;
+        width: 80px;
+        height: 40px;
+        border: none;
+        border-radius: 10px;
+      }
+    }
   }
 `;
 
 const Notice = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  const [boards, setBoards] = useState([]);
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get("page");
   const [keyword, setKeyword] = useState("");
+  const [sortNum, setSortNum] = useState(1);
+  const [searchNum, setSearchNum] = useState(1);
+  const [searchKey, setSearchKey] = useState("");
+
+  const page = searchPage != null ? searchPage : 1;
 
   const keywordHandler = (e) => {
     setKeyword(e.target.value);
@@ -209,154 +287,73 @@ const Notice = () => {
     return state.user;
   });
 
-  const getBoardHandler = async () => {
-    console.log("getBoardHandler들어는 오냐???????????????????");
-
-    const response = await getBoardsByPage(page);
-    setBoards([...response.data]);
-  };
-
   const getSearchBoardHandler = async () => {
-    // 검색기능..
-    const response = await getSearchAPI(keyword);
-    console.log(response.data);
-    if (response.data.length > 0) {
-      setBoards([...response.data]);
-    }
-    else {
-      await getBoardHandler(page);
-    }
+    document.querySelector("#search").value = "";
+    setSearchKey(keyword);
   };
 
-  const updateHandler = (e, id) => {
-    if (user.id == id) navigate(`/notice/update/5/${e.target.id}`);
-    else console.log("작성자와 사용자가 다름");
+  const sortOptionHandler = (e) => {
+    setSortNum(e.target.value);
   };
 
-  const deleteHandler = async (e, id) => {
-    if (user.id == id) {
-      setBoards([]);
-      await deleteNoticeAPI(e.target.id);
-
-      const response = await getBoardsByPage(page);
-
-      setBoards([...response.data]);
-    } else {
-      console.log("작성자와 사용자가 다름");
-    }
+  const searchOptionHandler = (e) => {
+    setSearchNum(e.target.value);
   };
-
-  useEffect(() => {
-    console.log("화면 첨 실행될떄..");
-    getBoardHandler();
-  }, []);
 
   return (
-    <MainStyle>
-      <div className="venner">
-        <img src={banner}></img>
-        <div className="board_title">... 게시판</div>
-      </div>
-      <div className="select">
-        <div className="option">
-          <select>
-            <option value="1">추천 순</option>
-            <option value="2">댓글 순</option>
-            <option value="3">조회 순</option>
-          </select>
+    <MainStlye>
+      <MainBanner>
+        <div className="banner-img">
+          <img src={banner} alt="배너 이미지" />
         </div>
-        <div className="search">
-          <label>검색</label>
-          <input
-            type="text"
-            id="search"
-            name="search"
-            onChange={keywordHandler}
-          />
-          <button onClick={getSearchBoardHandler}>
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              style={{ color: "#138CA7", margin: "0px 5px" }}
-            />
-          </button>
-        </div>
-      </div>
+      </MainBanner>
 
-      <ContentStyle>
-        <section>
-          {boards?.map((items) => (
-            <div key={items?.noticeCode}>
-              <PostStyle>
-                <div className="memberPhoto">
-                  <img src={testImg}></img>
-                </div>
-                <div className="postInfo">
-                  <Link to={`../notice/noticeView/${items?.noticeCode}`}>
-                    <div className="userInfo">
-                      <div id="nickName">{items?.member.nickname}</div>
-                      <div id="date">7일 전</div>
-                    </div>
-                    <div className="postTitle">
-                      <div className="title">{items?.noticeTitle}</div>
-                    </div>
-                    <div className="postIcons">
-                      <FontAwesomeIcon
-                        icon={faThumbsUp}
-                        style={{ color: "#1FB1D1" }}
-                      />
-                      <div id="like">{items?.noticeLike}</div>
-                      <FontAwesomeIcon
-                        icon={faEye}
-                        style={{ color: "#1FB1D1" }}
-                      />
-                      <div id="views">{items?.noticeViews}</div>
-                      <FontAwesomeIcon
-                        icon={faComments}
-                        style={{ color: "#1FB1D1" }}
-                      />
-                      <div id="comment">{items?.noticeCommentCount}</div>
-                    </div>
-                  </Link>
-                </div>
-                <div className="postBtn">
-                  <button
-                    id={items?.noticeCode}
-                    style={{ backgroundColor: "lightyellow" }}
-                    onClick={(e) => {
-                      updateHandler(e, items.member.id);
-                    }}
-                  >
-                    수정
-                  </button>
-                  <button
-                    id={items?.noticeCode}
-                    style={{ backgroundColor: "pink" }}
-                    onClick={(e) => {
-                      deleteHandler(e, items.member.id);
-                    }}
-                  >
-                    삭제
-                  </button>
-                </div>
-              </PostStyle>
-              <hr className="hr-dotted" />
+      <MainContentBox>
+        <div className="midea-headerbox">
+          <div className="media-sort">
+            <div className="media-sort-like">
+              <select onChange={sortOptionHandler}>
+                <option value="1">최신순</option>
+                <option value="2">추천순</option>
+                <option value="3">댓글순</option>
+                <option value="4">조회순</option>
+              </select>
             </div>
-          ))}
-          <button
-            onClick={() => {
-              if (user !== null && Object.keys(user).length !== 0) {
-                console.log("글쓰기 버튼 클릭눌림");
-                // <Post handler={handler} />;
+          </div>
+
+          <div className="search-box">
+            <select onChange={searchOptionHandler}>
+              <option value="1">제목+내용</option>
+              <option value="2">제목</option>
+              <option value="3">내용</option>
+            </select>
+
+            <input
+              type="search"
+              id="search"
+              name="search"
+              onChange={keywordHandler}
+            />
+            <button onClick={getSearchBoardHandler}>검색</button>
+          </div>
+        </div>
+
+        <NoticeList props={{ searchKey, searchNum, sortNum, page }} />
+
+        <div className="main-bottom">
+          <div className="page"></div>
+          <div id="write-btn">
+            <button
+              onClick={() => {
                 navigate("/notice/create");
-              } else alert("로그인이 되어 있지 않습니다.");
-            }}
-          >
-            글쓰기
-          </button>
-        </section>
-      </ContentStyle>
-      <PagingStyle>페이지 네비게이션 도경쓰 컴포넌트 붙이기</PagingStyle>
-    </MainStyle>
+              }}
+            >
+              글쓰기
+            </button>
+          </div>
+        </div>
+      </MainContentBox>
+    </MainStlye>
   );
 };
 export default Notice;

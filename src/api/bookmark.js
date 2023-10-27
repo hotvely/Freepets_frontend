@@ -7,3 +7,11 @@ export const addBookmarkAPI = async (data) => {
   console.log("북마크 등록 axios call!!");
   return await instance.post("bookmark", data);
 };
+
+export const getBookmarkAPI = async (token) => {
+  return await instance.get(`bookmark/${token}`);
+};
+
+export const deleteBookmarkAPI = async (code) => {
+  return await instance.delete(`bookmark/${code}`);
+};
