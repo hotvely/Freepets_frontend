@@ -58,7 +58,7 @@ const userSlice = createSlice({
       console.log("로그아웃!!");
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-      return {};
+      return action.payload;
     },
     userReset: (state, action) => {
       return {};
@@ -83,8 +83,8 @@ const userSlice = createSlice({
       })
       .addCase(asyncLogin.fulfilled, (state, action) => {
         if (action.payload.deleteAccountYN === "N") {
-          setTokenCookie(30);
-          userSave(JSON.stringify(action.payload));
+          setTokenCookie(60); //<- cookie 만료 기간 정해주는 것 현재는 분단위로 지정 되어 있음.
+          userSave(action.payload);
 
           localStorage.setItem("token", action.payload.token);
           localStorage.setItem("user", JSON.stringify(action.payload));

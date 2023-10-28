@@ -280,19 +280,6 @@ const Notice = () => {
   const [keyword, setKeyword] = useState("");
   const [sortNum, setSortNum] = useState(1);
   const [searchNum, setSearchNum] = useState(1);
-  const [searchKey, setSearchKey] = useState("");
-
-  const dispatch = useDispatch();
-
-  const user = useSelector((state) => {
-    if (getTokenCookie() != undefined) {
-      return state.user;
-    } else {
-      if (localStorage.getItem("user")) {
-        dispatch(userLogout());
-      }
-    }
-  });
 
   const getSearchBoardHandler = () => {
     setKeyword(document.querySelector("#search").value);

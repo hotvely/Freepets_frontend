@@ -56,12 +56,15 @@ const NoticeView = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => {
-    if (getTokenCookie() != undefined) {
-      console.log("쿠키 있!");
-      return state.user;
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("호출..?");
+        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -142,6 +145,7 @@ const NoticeView = () => {
   };
 
   const addBookmarkHandler = async () => {
+    console.log(user);
     if (postData.noticeCode) {
       const formData = {
         boardName: "notice",
@@ -501,6 +505,7 @@ const NoticeView = () => {
           </div>
         </div>
       </MainContentBox>
+      {user ? null : <Link to={`../noticeView/${code}`} />}
     </MainStlye>
   );
 };
