@@ -9,6 +9,9 @@ import {
   userReset,
 } from "../../components/store/userSlice";
 import { getTokenCookie } from "../../api/cookie";
+import { useDaumPostcodePopup } from "react-daum-postcode";
+import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
+import KakaoAPI from "./kakaoAPI";
 
 const Explanation = styled.div`
   span {
@@ -108,6 +111,7 @@ const RegisterPage = styled.div`
           border: 0;
           border-radius: 25px;
           flex-basis: 200px;
+
           height: 30px;
           margin-left: 20px;
           outline: none;
@@ -126,7 +130,7 @@ const RegisterPage = styled.div`
           span {
             font-size: 1rem;
             font-weight: bold;
-            width: 110px;
+            width: 100%;
             height: 35px;
             background: skyblue;
             border-radius: 10px;
@@ -233,6 +237,8 @@ const Register = () => {
   const [emailValid, setEmailValid] = useState(true);
   const [idValid, setIdValid] = useState(true);
   const [passwordVaild, setPasswordValid] = useState(true);
+  const [isOpenKakaoAPI, setIsOpenKakaoAPI] = useState(false);
+  const [postAddress, setPostAddree] = useState("");
   const today = new Date();
   const [date, setDate] = useState(today.toISOString().split("T")[0]);
   const [btnClick, setBtnClick] = useState(false);
@@ -327,6 +333,23 @@ const Register = () => {
     setDate(e.target.value);
   };
 
+  const changePostAddress = (e) => {
+    if (e.target.value != "" || e.target.value) {
+      setPostAddree(e.target.value);
+      setIsOpenKakaoAPI(true);
+    } else {
+      setIsOpenKakaoAPI(false);
+    }
+  };
+
+  console.log(isOpenKakaoAPI);
+  const openAPIHandler = () => {
+    if (postAddress && isOpenKakaoAPI) {
+      console.log("???");
+      return <KakaoAPI />;
+    }
+  };
+
   const formDataHandler = (e) => {
     e.preventDefault();
 
@@ -365,7 +388,7 @@ const Register = () => {
                 onChange={checkId}
                 required
               ></input>
-            </div>{" "}
+            </div>
             {idValid ? null : (
               <Explanation>
                 <span>
@@ -441,13 +464,23 @@ const Register = () => {
               ></input>
             </div>
             <div className="form_item">
-              <span>😄주소</span>
-              <input
-                type="text"
-                name="userAddr"
-                placeholder="주소"
-                required
-              ></input>
+              <span>😄주소찾기</span>
+              <div>
+                <div>
+                  <input
+                    type="text"
+                    name="userAddr"
+                    placeholder="우편번호"
+                    onChange={changePostAddress}
+                    required
+                  ></input>
+                  <button type="button" onClick={openAPIHandler}>
+                    우편 번호 검색
+                  </button>
+                </div>
+                <span>검색 API에서 찾은 주소</span>
+                <input placeholder="상세주소"></input>
+              </div>
             </div>
             <div className="form_item_last">
               <span>😄닉네임</span>
