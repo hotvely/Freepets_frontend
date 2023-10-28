@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { registerAPI } from "../../api/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   asyncRegister,
@@ -11,7 +11,7 @@ import {
 import { getTokenCookie } from "../../api/cookie";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
-import KakaoAPI from "./kakaoAPI";
+import KakaoAPI from "./KakaoPostAPI";
 
 const Explanation = styled.div`
   span {
@@ -164,6 +164,53 @@ const RegisterPage = styled.div`
           }
         }
       }
+
+      .address {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .header {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 10px;
+
+          span {
+            flex-basis: 150px;
+          }
+
+          button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            width: 100px;
+            height: 25px;
+            padding: 0;
+            border: 0;
+            color: white;
+            border-radius: 5px;
+            background-color: skyblue;
+          }
+        }
+
+        .detailAddress {
+          margin-left: 10px;
+          height: 60px;
+          input {
+            margin: 0;
+            padding-left: 10px;
+          }
+          span {
+            margin: 0;
+            padding-left: 10px;
+            height: 30px;
+          }
+        }
+      }
+
       .form_item_last {
         font-size: 1.5rem;
         display: flex;
@@ -237,12 +284,11 @@ const Register = () => {
   const [emailValid, setEmailValid] = useState(true);
   const [idValid, setIdValid] = useState(true);
   const [passwordVaild, setPasswordValid] = useState(true);
-  const [isOpenKakaoAPI, setIsOpenKakaoAPI] = useState(false);
-  const [postAddress, setPostAddree] = useState("");
   const today = new Date();
   const [date, setDate] = useState(today.toISOString().split("T")[0]);
   const [btnClick, setBtnClick] = useState(false);
-
+  let [address, setAddress] = useState("");
+  const [newwindow, setNewWindow] = useState();
   //-------------useState
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -333,24 +379,20 @@ const Register = () => {
     setDate(e.target.value);
   };
 
-  const changePostAddress = (e) => {
-    if (e.target.value != "" || e.target.value) {
-      setPostAddree(e.target.value);
-      setIsOpenKakaoAPI(true);
-    } else {
-      setIsOpenKakaoAPI(false);
+  const receiveMessage = async (e) => {
+    if (e.data?.address) {
+      setAddress(e.data.address);
     }
   };
-
-  console.log(isOpenKakaoAPI);
-  const openAPIHandler = () => {
-    if (postAddress && isOpenKakaoAPI) {
-      console.log("???");
-      return <KakaoAPI />;
-    }
+  const closeWindowHandler = () => {
+    newwindow.close();
   };
 
-  const formDataHandler = (e) => {
+  useEffect(() => {
+    window.addEventListener("message", receiveMessage, false);
+  }, []);
+
+  const formDataHandler = async (e) => {
     e.preventDefault();
 
     const formData = {
@@ -361,14 +403,18 @@ const Register = () => {
       name: e.target.userName.value,
       gender: e.target.userGender.value,
       birth: e.target.userBithday.value,
-      address: e.target.userAddr.value,
+      address: address + e.target.detalAddress.value,
       nickname: e.target.userNickname.value,
     };
     console.log(formData);
 
-    if (idValid && passwordVaild && phoneValid && emailValid)
-      dispatch(asyncRegister(formData));
-    else return alert("양식을 지켜주세요.");
+    if (idValid && passwordVaild && phoneValid && emailValid) {
+      const response = await dispatch(await asyncRegister(formData));
+
+      if (response.payload) {
+        navigate("/main");
+      }
+    } else return alert("양식을 지켜주세요.");
   };
 
   return (
@@ -463,23 +509,29 @@ const Register = () => {
                 required
               ></input>
             </div>
-            <div className="form_item">
-              <span>😄주소찾기</span>
-              <div>
-                <div>
-                  <input
-                    type="text"
-                    name="userAddr"
-                    placeholder="우편번호"
-                    onChange={changePostAddress}
-                    required
-                  ></input>
-                  <button type="button" onClick={openAPIHandler}>
-                    우편 번호 검색
-                  </button>
-                </div>
-                <span>검색 API에서 찾은 주소</span>
-                <input placeholder="상세주소"></input>
+            <div className="form_item address">
+              <div className="header">
+                <span>😄주소찾기</span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const newwindow = window.open(
+                      "http://localhost:3000/auth/API",
+                      "_blank",
+                      "width=500, height=502"
+                    );
+                    setNewWindow(newwindow);
+                  }}
+                >
+                  주소찾기
+                </button>
+              </div>
+              {address ? closeWindowHandler() : null}
+              <div className="detailAddress">
+                <span>{address}</span>
+                <input placeholder="상세주소" name="detalAddress"></input>
               </div>
             </div>
             <div className="form_item_last">
