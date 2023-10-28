@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 const MyPageMain = styled.main`
   margin: 0;
-  flex: 0 1 100%-800px;
+  flex-basis: 800px;
+  flex-grow: 1;
   padding: 0 100px;
   img {
     width: 100%;
