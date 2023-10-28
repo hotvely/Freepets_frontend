@@ -16,6 +16,10 @@ export const addHospitalBoard = async (data) => {
   return await instance.post("hr", data);
 };
 
+export const updateHospitalBoard = async (data) => {
+  return await instance.put("hr", data);
+}
+
 export const getsearchSelect = async (page, keyword, select) => {
   let url = `hr/search?page=${page}&keyword=${keyword}&select=${select}`
   return await instance.get(url);
@@ -52,6 +56,10 @@ export const getChildrenComment = async (id) => {
 
 export const addComment = async (data) => {
   return await instance.post('hr/comment', data)
+}
+
+export const updateComment = async (data) => {
+  return await instance.put('hr/comment', data);
 }
 
 export const deleteComment = async (id) => {

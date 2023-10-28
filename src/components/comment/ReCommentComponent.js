@@ -1,8 +1,11 @@
 import { forwardRef } from "react";
 import profileImg from "../../../src/resources/kero.jpeg";
+import { dateFormatDefault } from "../../api/utils";
 import styled from "styled-components";
 const ReCommentComponent = forwardRef((props, ref) => {
-  const data = props.props;
+  const member = props.member;
+  const desc = props.desc;
+  const commentDate = props.date;
 
   const Styled = styled.div`
     display: flex;
@@ -35,6 +38,7 @@ const ReCommentComponent = forwardRef((props, ref) => {
         }
       }
       .commentDate {
+        font-size: 0.9rem;
       }
     }
   `;
@@ -60,19 +64,13 @@ const ReCommentComponent = forwardRef((props, ref) => {
       <div className="recomment">
         <div className="infoUser-commentDesc">
           <img
-            src={
-              data.member.memberImg == null
-                ? profileImg
-                : `${data.member.memberImg}`
-            }
+            src={member.memberImg == null ? profileImg : `${member.memberImg}`}
           ></img>
 
-          <div className="userName">{data.member.nickname} :</div>
-          <div className="commentTextBox"> {data.noticeCommentDesc} </div>
+          <div className="userName">{member.nickname} :</div>
+          <div className="commentTextBox"> {desc} </div>
         </div>
-        <div className="commentDate">
-          {dateFormatter(data.noticeCommentDate)}
-        </div>
+        <div className="commentDate">{dateFormatDefault(commentDate)}</div>
       </div>
     </Styled>
   );

@@ -84,10 +84,38 @@ export const MainContentBox = styled.div`
           button:hover {
             color: #3a98b9;
           }
+          }
         }
+        .hospital-container {
+          display: flex;
+          margin-top: 10px;
+
+          #hospitalName {
+            margin-right: 10px;
+            background-color: #98C2D4;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: white;
+          }
+
+          #hospitalAddress {
+            background-color: #67C7F0;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: white;
+          }
       }
     }
     .article-container {
+
+      .hospitalMap-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      
       .article-viewer {
         min-height: 300px;
         margin-bottom: 20px;

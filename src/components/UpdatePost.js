@@ -2,12 +2,12 @@ import { useMemo, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import styled from "styled-components";
-import { addSitterBoard, updateSitterBoard } from "../api/sitter";
+import { updateSitterBoard } from "../api/sitter";
 import SitterPost from "./SitterPost";
 import LostPost from "./LostPost";
 import HospitalPost from "./HospitalPost";
 import { json, useNavigate, useParams } from "react-router-dom";
-import { addHospitalBoard } from "../api/info";
+import { updateHospitalBoard } from "../api/info";
 import CommunityPost from "./Community/CommunityPost";
 import Notice from "../pages/notice/Notice";
 import NoticePost from "./NoticePost";
@@ -147,6 +147,9 @@ const UpdatePost = () => {
       formData.sitterLoc = rank2;
       await updateSitterBoard(formData);
     } else if (select == 4) {
+      formData.hospitalName = rank1;
+      formData.hospitalAddress = rank2;
+      await updateHospitalBoard(formData);
     } else if (select == 5) {
       await updateNoticeAPI(formData);
     }

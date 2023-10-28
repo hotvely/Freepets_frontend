@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getOneBoard, deleteBoard, likeAddorDelete, getHrComment, addComment,deleteComment } from "../../api/info";
+import { getOneBoard, 
+        deleteBoard, 
+        likeAddorDelete, 
+        getHrComment, 
+        addComment,
+        deleteComment,
+        updateComment } from "../../api/info";
 import { addBookmarkAPI } from "../../api/bookmark";
 import { useNavigate } from "react-router-dom";
 import banner from "../../resources/bannerTest.png";
@@ -20,6 +26,7 @@ import {
   MainBanner,
   MainContentBox,
 } from "../../components/css/PostView";
+import HospitalMap from "./HospitalMap";
 
 
 const HospitalReviewView = () => {
@@ -84,7 +91,6 @@ const HospitalReviewView = () => {
   };
 
   const addCommentHandler = async (e) => {
-    console.log(e.target.commentDesc.id)
     e.preventDefault();
     const parentCode = e.target.commentDesc.id;
     const formData = {
@@ -113,12 +119,11 @@ const HospitalReviewView = () => {
     }
   };
 
-  const updateCommentHandler = async (code) => {
-    if (code == currClickBtn) {
-      code = -1;
+  const updateCommentHandler = async (id) => {
+    if (id == currClickBtn) {
+      id = -1;
     }
-
-    setCurrClickBtn(code);
+    setCurrClickBtn(id);
   };
 
   const updateSuccHandler = () => {
@@ -126,8 +131,11 @@ const HospitalReviewView = () => {
   };
 
   const deleteCommentHandler = async (commentCode) => {
-    await deleteComment(commentCode);
-    await getCommentHandler(code);
+    const response = window.confirm('정말로 삭제하시겠습니까?');
+    if(response) {
+      await deleteComment(commentCode);
+      await getCommentHandler(code);
+    }
   };
 
   const selectCommentHandler = () => {
@@ -135,6 +143,7 @@ const HospitalReviewView = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const asyncHandler = async () => {
       boardViewAPI();
       getCommentHandler(code);
@@ -193,8 +202,17 @@ const HospitalReviewView = () => {
                 </button>
               </div>
             </div>
+            <div className="hospital-container">
+                <div id="hospitalName"># {boardView?.hospitalName}</div>
+                <div id="hospitalAddress">{boardView?.hospitalAddress}</div>
+            </div>
           </div>
           <div className="article-container">
+            <div className="hospitalMap-container">
+              <HospitalMap 
+              hospitalAddress={boardView?.hospitalAddress}
+              />
+            </div>
             <div
               className="ql-editor"
               dangerouslySetInnerHTML={{
@@ -245,12 +263,14 @@ const HospitalReviewView = () => {
                                 <div>
                                   {dateFormatDefault(comment?.hrCommentDate)}
                                 </div>
+                                {data.id == comment?.member.id ? 
                                 <CommentBtnComponent
-                                  code={comment?.hrCommentCode}
-                                  writer={comment?.member?.id}
-                                  updateCommentHandler={updateCommentHandler}
-                                  deleteCommentHandler={deleteCommentHandler}
-                                />
+                                code={comment?.hrCommentCode}
+                                writer={comment?.member?.id}
+                                updateCommentHandler={updateCommentHandler}
+                                deleteCommentHandler={deleteCommentHandler}
+                              /> : null
+                              }                               
                               </div>
                             </div>
                             {currClickBtn === comment?.hrCommentCode ? (
@@ -289,19 +309,22 @@ const HospitalReviewView = () => {
                                         <li key={comment.hrCommentCode}>
                                           <div className="recomment-desc">
                                             <ReCommentComponent
-                                              props={comment}
+                                              member={comment.member}
+                                              desc={comment.hrCommentDesc}
+                                              date={comment.hrCommentDate}
                                             />
-
+                                            {data.id == comment.member.id ? 
                                             <CommentBtnComponent
-                                              code={comment?.hrCommentCode}
-                                              writer={comment?.member.id}
-                                              updateCommentHandler={
-                                                updateCommentHandler
-                                              }
-                                              deleteCommentHandler={
-                                                deleteCommentHandler
-                                              }
-                                            />
+                                            code={comment?.hrCommentCode}
+                                            writer={comment?.member.id}
+                                            updateCommentHandler={
+                                              updateCommentHandler
+                                            }
+                                            deleteCommentHandler={
+                                              deleteCommentHandler
+                                            }
+                                          /> : null
+                                          }                                           
                                           </div>
                                           {currClickBtn ==
                                           comment.hrCommentCode ? (

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../css/page.css';
+import '../components/css/page.css';
 import { Link } from 'react-router-dom';
 
 const Page = ({ page, totalPages }) => {

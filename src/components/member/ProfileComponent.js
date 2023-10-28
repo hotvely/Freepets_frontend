@@ -23,7 +23,6 @@ const StyledProfileView = styled.div`
 
 const ProfileComponent = (props) => {
   const memberData = props.props;
-  console.log(memberData);
   return (
     <StyledProfileView>
       {props ? (
