@@ -24,16 +24,18 @@ import { getTokenCookie } from "../../api/cookie";
 import { userLogout } from "../../components/store/userSlice";
 
 const MainStlye = styled.div`
-  padding: 20px;
-  width: 100%;
+  padding: 0 20px;
+  flex-basis: 800px;
+  flex-shrink: 0;
+  flex-grow: 1;
 `;
 
 const MainBanner = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  padding-bottom: 30px;
-
+  padding-bottom: 0 30px;
+  flex-basis: 800px;
   .banner-img {
     width: 100%;
     img {
@@ -44,9 +46,11 @@ const MainBanner = styled.div`
 
 const MainContentBox = styled.div`
   border: 1px solid #3a98b9;
+  flex-basis: 800px;
+  margin-top: 20px;
   /* display: flex;
   flex-direction: column; */
-  width: 100%;
+
   .midea-headerbox {
     border-bottom: 1px solid #3a98b9;
     display: flex;

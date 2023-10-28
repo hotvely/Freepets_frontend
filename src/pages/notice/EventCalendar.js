@@ -9,6 +9,9 @@ const Calendar = styled.div`
   margin: 0 30px;
   flex: 0 0 1000px;
   height: 550px;
+  flex-basis: 800px;
+  flex-shrink: 0;
+  flex-grow: 1;
 
   .calendar_content {
     /* flex: 1 0 70%; */
@@ -232,7 +235,6 @@ const EventCalendar = () => {
 
       ++prevDate;
     }
-
     for (let day = 1; day < lastDate.getDate() + 1; day++) {
       const existData = data.filter(
         (item) => item.month == month && day == item.day && item.eventTitle

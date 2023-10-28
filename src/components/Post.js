@@ -16,6 +16,9 @@ import { addNoticeBoard } from "../api/notice";
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
+
+  flex-basis: 800px;
+  flex-shrink: 0;
   width: 100%;
   height: 100%;
   justify-content: center;
@@ -125,7 +128,7 @@ const Post = () => {
     const data = JSON.parse(localStorage.getItem("user"));
 
     const formData = new FormData();
-    
+
     formData.append("title", title);
     formData.append("desc", desc);
     formData.append("token", data.token);
@@ -157,7 +160,7 @@ const Post = () => {
   const selectChange = (e) => {
     setSelect(e.currentTarget.value);
   };
-  
+
   const modules = useMemo(
     () => ({
       toolbar: {

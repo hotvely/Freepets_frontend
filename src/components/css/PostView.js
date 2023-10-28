@@ -5,6 +5,9 @@ export const MainStlye = styled.div`
   width: 100%;
   margin-left: 20px;
   /* margin: 0 50px; */
+  flex-basis: 800px;
+  flex-shrink: 0;
+  flex-grow: 1;
 `;
 export const MainBanner = styled.div`
   display: flex;
