@@ -343,17 +343,18 @@ const NoticeView = () => {
                             <div className="comment-last">
                               <div className="commentDate-btn ">
                                 <div>
-                                  {console.log(comment)}
                                   {dateFormatDefault(
                                     comment?.noticeCommentDate
                                   )}
                                 </div>
-                                <CommentBtnComponent
-                                  code={comment?.noticeCommentCode}
-                                  writer={comment?.member?.id}
-                                  updateCommentHandler={updateCommentHandler}
-                                  deleteCommentHandler={deleteCommentHandler}
-                                />
+                                {comment?.member.id === user?.id ? (
+                                  <CommentBtnComponent
+                                    code={comment?.noticeCommentCode}
+                                    writer={comment?.member?.id}
+                                    updateCommentHandler={updateCommentHandler}
+                                    deleteCommentHandler={deleteCommentHandler}
+                                  />
+                                ) : null}
                               </div>
                             </div>
 
@@ -392,23 +393,26 @@ const NoticeView = () => {
                                         selected_Comment ? null : (
                                         <li key={comment.noticeCommentCode}>
                                           <div className="recomment-desc">
-                                            {console.log(comment)}
                                             <ReCommentComponent
                                               member={comment.member}
                                               desc={comment.noticeCommentDesc}
                                               date={comment.noticeCommentDate}
                                             />
-
-                                            <CommentBtnComponent
-                                              code={comment?.noticeCommentCode}
-                                              writer={comment?.member.id}
-                                              updateCommentHandler={
-                                                updateCommentHandler
-                                              }
-                                              deleteCommentHandler={
-                                                deleteCommentHandler
-                                              }
-                                            />
+                                            {comment?.member?.id ===
+                                            user?.id ? (
+                                              <CommentBtnComponent
+                                                code={
+                                                  comment?.noticeCommentCode
+                                                }
+                                                writer={comment?.member.id}
+                                                updateCommentHandler={
+                                                  updateCommentHandler
+                                                }
+                                                deleteCommentHandler={
+                                                  deleteCommentHandler
+                                                }
+                                              />
+                                            ) : null}
                                           </div>
                                           {currClickBtn ==
                                           comment.noticeCommentCode ? (

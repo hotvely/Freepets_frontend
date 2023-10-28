@@ -3,6 +3,8 @@ import testImg from "../../../src/resources/image.jpg";
 
 const StyledProfileView = styled.div`
   margin-right: 20px;
+  flex-basis: 20%;
+  flex-grow: 1;
   .profile {
     display: flex;
     flex-direction: row;
@@ -15,6 +17,15 @@ const StyledProfileView = styled.div`
           height: 40px;
           border-radius: 50%;
           margin-right: 15px;
+        }
+      }
+    }
+    .userTitle {
+      width: 100px;
+      p {
+        width: 100%;
+        a {
+          width: 100%;
         }
       }
     }
