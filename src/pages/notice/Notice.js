@@ -280,6 +280,22 @@ const Notice = () => {
   const [keyword, setKeyword] = useState("");
   const [sortNum, setSortNum] = useState(1);
   const [searchNum, setSearchNum] = useState(1);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
+  });
 
   const getSearchBoardHandler = () => {
     setKeyword(document.querySelector("#search").value);
@@ -331,13 +347,15 @@ const Notice = () => {
         <div className="main-bottom">
           <div className="page"></div>
           <div id="write-btn">
-            <button
-              onClick={() => {
-                navigate("/notice/create");
-              }}
-            >
-              글쓰기
-            </button>
+            {user?.authority === "ADMIN" ? (
+              <button
+                onClick={() => {
+                  navigate("/notice/create");
+                }}
+              >
+                글쓰기
+              </button>
+            ) : null}
           </div>
         </div>
       </MainContentBox>

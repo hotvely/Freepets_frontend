@@ -206,18 +206,12 @@ const NoticeView = () => {
   };
 
   const updateHandler = (e) => {
-    if (user?.id == postData.member.id) {
-      navigate(`../update/5/${code}}`);
-    } else console.log("작성자와 사용자가 다름");
+    navigate(`../update/5/${code}}`);
   };
 
   const deleteHandler = async (e, id) => {
-    if (user?.id == postData.member.id) {
-      await deleteNoticeAPI(code);
-      navigate("../");
-    } else {
-      console.log("작성자와 사용자가 다름");
-    }
+    await deleteNoticeAPI(code);
+    navigate("../");
   };
 
   useEffect(() => {
@@ -480,25 +474,28 @@ const NoticeView = () => {
           </div>
         </div>
         <div className="article-bottom-btn">
-          <div
-            className="left-btn"
-            // style={{ display: viewBtn ? "block" : "none" }}
-          >
-            <button
-              className="update-btn"
-              onClick={updateHandler}
-              value={postData?.commonCode}
+          {user?.authority === "ADMIN" ? (
+            <div
+              className="left-btn"
+              // style={{ display: viewBtn ? "block" : "none" }}
             >
-              수정
-            </button>
-            <button
-              className="delete-btn"
-              onClick={deleteHandler}
-              value={postData?.commonCode}
-            >
-              삭제
-            </button>
-          </div>
+              <button
+                className="update-btn"
+                onClick={updateHandler}
+                value={postData?.commonCode}
+              >
+                수정
+              </button>
+              <button
+                className="delete-btn"
+                onClick={deleteHandler}
+                value={postData?.commonCode}
+              >
+                삭제
+              </button>
+            </div>
+          ) : null}
+
           <div className="right-btn">
             <button className="list-btn">
               <Link to={`../`}>목록</Link>
