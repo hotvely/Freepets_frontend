@@ -2,6 +2,17 @@ import styled from "styled-components";
 import { getAddress, getIp, getWeather } from "../api/utils";
 import { useEffect } from "react";
 import { useState } from "react";
+import {
+  faTemperature3,
+  faSun,
+  faCloud,
+  faUmbrella,
+  faSnowflake,
+  faBolt,
+  faWind,
+  faSmog,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const StyledRSide = styled.div`
   /* width: 300px; */
@@ -25,15 +36,58 @@ const StyledRSide = styled.div`
     .rMenuAction {
       display: flex;
       flex-direction: column;
+      margin-top: 20px;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      width: 100%;
-      div {
-        flex: 1 1 80%;
-        width: 80%;
-        border: 1px solid black;
-        margin: 20px 0;
+      width: 80%;
+      .weather-content {
+        background-color: #3a98b9;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        flex-basis: 190px;
+        border-radius: 20px;
+        flex-shrink: 0;
+        flex-grow: 1;
+        width: 100%;
+
+        .weather-addr {
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 20px;
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
+        .weather-info-header {
+          font-size: 1.1rem;
+          font-weight: 550;
+          height: 40px;
+          display: flex;
+          align-items: start;
+          justify-content: center;
+        }
+
+        .weather-info {
+          font-size: 1.2rem;
+          font-weight: 550;
+          height: 25px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 10px;
+        }
+        .weather-temp {
+          font-size: 1.2rem;
+          font-weight: 550;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
     }
 
@@ -106,21 +160,108 @@ const RSide = () => {
         <div className="rMenu">
           <div className="rMenuAction">
             <div className="weather-content">
-              <div>
+              <div className="weather-addr">
                 {city} {area}
               </div>
-              <div>날씨 정보</div>
-              <div>
-                {weather ? weather?.weather[0].description : "Loading.."}
+              <div className="weather-info-header">날씨 정보</div>
+              <div className="weather-info">
+                {weather ? (
+                  weather?.weather[0].description.includes("clear") ? (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faSun}
+                        style={{
+                          color: "white",
+                          margin: "0px 5px",
+                        }}
+                      />
+                      <span>맑음</span>
+                    </span>
+                  ) : weather?.weather[0].description.includes("cloud") ? (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faCloud}
+                        style={{
+                          color: "white",
+                          margin: "0px 5px",
+                        }}
+                      />
+                      <span>구름</span>
+                    </span>
+                  ) : weather?.weather[0].description.includes("rain") ? (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faUmbrella}
+                        style={{
+                          color: "white",
+                          margin: "0px 5px",
+                        }}
+                      />
+                      <span>비</span>
+                    </span>
+                  ) : weather?.weather[0].description.includes("snow") ? (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faSnowflake}
+                        style={{
+                          color: "white",
+                          margin: "0px 5px",
+                        }}
+                      />
+                      <span>눈</span>
+                    </span>
+                  ) : weather?.weather[0].description.includes(
+                      "thunderstorm"
+                    ) ? (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faBolt}
+                        style={{
+                          color: "white",
+                          margin: "0px 5px",
+                        }}
+                      />
+                      <span>번개</span>
+                    </span>
+                  ) : weather?.weather[0].description.includes("windy") ? (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faWind}
+                        style={{
+                          color: "white",
+                          margin: "0px 5px",
+                        }}
+                      />
+                    </span>
+                  ) : weather?.weather[0].description.includes("fog") ? (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faSmog}
+                        style={{
+                          color: "white",
+                          margin: "0px 5px",
+                        }}
+                      />
+                      <span>안개</span>
+                    </span>
+                  ) : null
+                ) : (
+                  "Loading.."
+                )}
               </div>
-              <div>
+              <div className="weather-temp">
+                <FontAwesomeIcon
+                  icon={faTemperature3}
+                  style={{
+                    color: "white",
+                    margin: "0px 5px",
+                  }}
+                />
                 {weather
                   ? (weather?.main.temp - 273.15).toFixed(1) + " ºC"
                   : "Loading.."}
               </div>
             </div>
-            <div>우측 기능1ads sa ada sasd a </div>
-            <div>우측 기능1 ads dasd ad </div>
           </div>
         </div>
       </StyledRSide>
