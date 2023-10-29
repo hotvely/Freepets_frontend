@@ -2,10 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import NoticeTableForList from "./NoticeTableForList";
 import { getBoardsByPageAPI, getSearchAPI } from "../../api/notice";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { dateFormatDefault } from "../../api/utils";
 import Page from "../../components/Page";
-import { faKorvue } from "@fortawesome/free-brands-svg-icons";
 
 const MainStlye = styled.div`
   width: 100%;
@@ -52,13 +51,11 @@ const NoticeList = (props) => {
     { accessor: "noticeViews", Header: "조회수" },
     { accessor: "noticeLike", Header: "좋아요" },
   ]);
-  const [searchParams] = useSearchParams();
-  const searchPage = searchParams.get("page");
-  let page = searchPage != null ? searchPage : 1;
+  const sortNum = props.props.sortNum;
+  const keyword = props.props.searchKey == "" ? null : props.props.searchKey;
+  const searchNum = props.props.searchNum;
+  const page = props.props.page;
 
-  let sortNum = props.props.sortNum;
-  let keyword = props.props.keyword == "" ? null : props.props.keyword;
-  let searchNum = props.props.searchNum;
   const changeDate = (tempArr) => {
     for (const item in tempArr) {
       tempArr[item].noticeDate = dateFormatDefault(tempArr[item].noticeDate);
@@ -66,7 +63,7 @@ const NoticeList = (props) => {
     return tempArr;
   };
 
-  const getBoardHandler = async (page) => {
+  const getBoardHandler = async () => {
     const response = await getBoardsByPageAPI(page, sortNum);
 
     let tempArr = [...response.data.noticeList];
@@ -77,31 +74,19 @@ const NoticeList = (props) => {
     setTotalPages(response.data.totalPages);
   };
 
-  const getSearchBoardHandler = async (page) => {
+  const getSearchBoardHandler = async () => {
     // 검색기능..
-
-    page = 1;
-
+    console.log(keyword, searchNum);
     if (keyword) {
       const response = await getSearchAPI(page, keyword, searchNum);
+      console.log(response);
 
       if (response.data.noticeList.length > 0) {
-        if (response.data.totalPages < page) {
-          page = 1;
-          response = await getSearchAPI(page, keyword, searchNum);
-        }
-
         let tempArr = [...response.data.noticeList];
         tempArr = changeDate(tempArr);
 
         setBoards(tempArr);
         setTotalPages(response.data.totalPages);
-      } else {
-        document.querySelector("#search").value = "";
-        props.props.setKeyword(null);
-        page = 1;
-        navigate("../notice?page=1");
-        // getBoardHandler(page, sortNum);
       }
     } else {
       alert("검색어를 입력하세요.");
@@ -111,34 +96,30 @@ const NoticeList = (props) => {
   useEffect(() => {}, [boards]);
 
   useEffect(() => {
-    if (page <= 1) getBoardHandler(1);
+    console.log("???");
+    if (page <= 1) getBoardHandler();
   }, []);
 
   useEffect(() => {
-    getBoardHandler(1);
+    console.log("게시글 변경됬따.");
+    getBoardHandler();
   }, [sortNum]);
 
   useEffect(() => {
     if (keyword) {
-      getSearchBoardHandler(page);
-    } else {
-      if (page != 1) navigate("../notice/?page=1");
+      getSearchBoardHandler();
     }
   }, [keyword]);
 
-  useEffect(() => {}, [boards]);
-
   useEffect(() => {
-    if (keyword) {
-      getSearchBoardHandler(page);
-    } else {
-      getBoardHandler(page);
+    if (keyword != null) {
+      getSearchBoardHandler();
     }
   }, [page]);
 
   const handleRowClick = (row) => {
     //ViewPage로 이동
-
+    console.log(row);
     navigate(`/notice/noticeView/${row.original.noticeCode}`);
   };
 

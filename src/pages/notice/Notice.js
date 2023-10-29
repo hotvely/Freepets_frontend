@@ -24,18 +24,16 @@ import { getTokenCookie } from "../../api/cookie";
 import { userLogout } from "../../components/store/userSlice";
 
 const MainStlye = styled.div`
-  padding: 0 20px;
-  flex-basis: 800px;
-  flex-shrink: 0;
-  flex-grow: 1;
+  padding: 20px;
+  width: 100%;
 `;
 
 const MainBanner = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  padding-bottom: 0 30px;
-  flex-basis: 800px;
+  padding-bottom: 30px;
+
   .banner-img {
     width: 100%;
     img {
@@ -46,11 +44,9 @@ const MainBanner = styled.div`
 
 const MainContentBox = styled.div`
   border: 1px solid #3a98b9;
-  flex-basis: 800px;
-  margin-top: 20px;
   /* display: flex;
   flex-direction: column; */
-
+  width: 100%;
   .midea-headerbox {
     border-bottom: 1px solid #3a98b9;
     display: flex;
@@ -276,29 +272,36 @@ const MainContentBox = styled.div`
 
 const Notice = () => {
   const navigate = useNavigate();
-
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get("page");
   const [keyword, setKeyword] = useState("");
   const [sortNum, setSortNum] = useState(1);
   const [searchNum, setSearchNum] = useState(1);
+  const [searchKey, setSearchKey] = useState("");
+
+  const page = searchPage != null ? searchPage : 1;
+
+  const keywordHandler = (e) => {
+    setKeyword(e.target.value);
+  };
+
   const dispatch = useDispatch();
 
   const user = useSelector((state) => {
-    if (getTokenCookie() !== undefined) {
-      if (state.user.user) {
-        return state.user;
-      } else {
-        return JSON.parse(localStorage.getItem("user"));
-      }
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
     } else {
       if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
+        console.log("호출..?");
         dispatch(userLogout());
       }
     }
   });
 
-  const getSearchBoardHandler = () => {
-    setKeyword(document.querySelector("#search").value);
+  const getSearchBoardHandler = async () => {
+    document.querySelector("#search").value = "";
+    setSearchKey(keyword);
   };
 
   const sortOptionHandler = (e) => {
@@ -337,25 +340,28 @@ const Notice = () => {
               <option value="3">내용</option>
             </select>
 
-            <input type="search" id="search" name="search" />
+            <input
+              type="search"
+              id="search"
+              name="search"
+              onChange={keywordHandler}
+            />
             <button onClick={getSearchBoardHandler}>검색</button>
           </div>
         </div>
 
-        <NoticeList props={{ keyword, searchNum, sortNum, setKeyword }} />
+        <NoticeList props={{ searchKey, searchNum, sortNum, page }} />
 
         <div className="main-bottom">
           <div className="page"></div>
           <div id="write-btn">
-            {user?.authority === "ADMIN" ? (
-              <button
-                onClick={() => {
-                  navigate("/notice/create");
-                }}
-              >
-                글쓰기
-              </button>
-            ) : null}
+            <button
+              onClick={() => {
+                navigate("/notice/create");
+              }}
+            >
+              글쓰기
+            </button>
           </div>
         </div>
       </MainContentBox>

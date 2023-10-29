@@ -28,11 +28,10 @@ const ReCommentComponent = forwardRef((props, ref) => {
           border-radius: 50%;
         }
         .useName {
-          flex-basis: 200px;
           margin-right: 10px;
         }
         .commentTextBox {
-          flex-basis: 85%;
+          width: 400px;
           margin-left: 10px;
           word-break: break-all;
         }

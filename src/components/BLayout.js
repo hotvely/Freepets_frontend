@@ -9,7 +9,6 @@ const StyleMain = styled.main`
   display: flex;
   flex-direction: row;
   justify-content: start;
-  width: 100%;
 `;
 
 const BLayout = () => {

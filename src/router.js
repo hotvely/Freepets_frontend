@@ -24,7 +24,6 @@ import HospitalReviewView from "./pages/information/HospitalReviewView";
 import EventCalendar from "./pages/notice/EventCalendar";
 import UserPage from "./pages/member/UserPage";
 import NoticeList from "./pages/notice/NoticeList";
-import KakaoPostAPI from "./pages/member/KakaoPostAPI";
 
 const router = createBrowserRouter([
   {
@@ -216,10 +215,6 @@ const router = createBrowserRouter([
       {
         path: "findPwd",
         element: <MemberFindPwd />,
-      },
-      {
-        path: "API",
-        element: <KakaoPostAPI />,
       },
     ],
   },

@@ -33,19 +33,37 @@ const MyPage = () => {
   const [bookmark, setBookmark] = useState([]);
 
   const user = useSelector((state) => {
-    if (getTokenCookie() !== undefined) {
-      if (state.user.user) {
-        return state.user;
-      } else {
-        return JSON.parse(localStorage.getItem("user"));
-      }
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
     } else {
       if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
+        console.log("호출..?");
         dispatch(userLogout());
       }
     }
   });
+
+  useEffect(() => {
+    const saveuser = localStorage.getItem("user");
+
+    //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
+    if (Object.keys(user).length === 0 && saveuser !== null) {
+      dispatch(userSave(JSON.parse(saveuser)));
+    } else if (Object.keys(user).length === 0 && saveuser === null) {
+      navigate("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      navigate("/main");
+      setNotifications([]);
+    } else {
+      getNotiHandler();
+      getBookmarkHandler();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -134,49 +152,50 @@ const MyPage = () => {
           <div>
             <img src={border} className="profileBorder"></img>
             <img
-              src={user?.memberImg == null ? image : user?.memberImg}
+              src={user.memberImg == null ? image : user.memberImg}
               className="profileImg"
             ></img>
           </div>
-          <label>{user?.nickname}</label>
+          <label>{user.nickname}</label>
         </div>
         <div className="profileInfo">
           <div>
             <p>Id</p>
-            <div>{user?.id}</div>
+            <div>{user.id}</div>
           </div>
           <div>
             <p>E-mail</p>
-            <div>{user?.email}</div>
+            <div>{user.email}</div>
           </div>
           <div>
             <p>Phone</p>
-            <div>{phoneFormatter(user?.phone)}</div>
+            <div>{phoneFormatter(user.phone)}</div>
           </div>
           <div>
             <p>Address</p>
-            <div>{user?.address}</div>
+            <div>{user.address}</div>
           </div>
           <div>
             <p>생일</p>
-            <div>{dateFormatter(user?.birth)}</div>
+            <div>{dateFormatter(user.birth)}</div>
           </div>
           <div>
             <p>가입일</p>
-            <div>{dateFormatter(user?.createAccountDate)}</div>
+            <div>{dateFormatter(user.createAccountDate)}</div>
           </div>
           <div>
             <p>Grade</p>
-            <div>{user?.authority}</div>
+            <div>{user.authority}</div>
           </div>
           <div>
             <p>Info</p>
             <div>
-              {user?.memberInfo == null ? "유저의 정보 입력" : user?.memberInfo}
+              {user.memberInfo == null ? "유저의 정보 입력" : user.memberInfo}
             </div>
           </div>
         </div>
       </div>
+
       <div className="profile_btn">
         <button onClick={openModalHandler}>회원 정보수정</button>
         <MemberUpdate props={{ isOpen, setIsOpen, user, dispatch }} />
@@ -185,6 +204,7 @@ const MyPage = () => {
           회원 탈퇴
         </button>
       </div>
+
       <div className="profile-alram">
         <header>
           <p>알림 확인하기</p>
@@ -243,6 +263,7 @@ const MyPage = () => {
           </div>
         ))}
       </div>
+
       <div className="profile-Post">
         <header>
           <p>북마크 게시글</p>
@@ -285,7 +306,6 @@ const MyPage = () => {
           </div>
         ))}
       </div>
-      {user ? null : navigate("/")}
     </MyPageMain>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { registerAPI } from "../../api/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   asyncRegister,
@@ -9,23 +9,6 @@ import {
   userReset,
 } from "../../components/store/userSlice";
 import { getTokenCookie } from "../../api/cookie";
-import { useDaumPostcodePopup } from "react-daum-postcode";
-import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
-import KakaoAPI from "./KakaoPostAPI";
-
-const Explanation = styled.div`
-  span {
-    color: red;
-    font-size: 0.7rem;
-    padding: 10px 0px;
-    border-left: 4px solid skyblue;
-    border-right: 4px solid skyblue;
-    border-bottom: 4px solid skyblue;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
 
 const RegisterPage = styled.div`
   width: 100vw;
@@ -54,7 +37,7 @@ const RegisterPage = styled.div`
         font-size: 1.5rem;
         display: flex;
         align-items: center;
-        justify-content: start;
+        justify-content: space-between;
 
         border-top: 4px solid skyblue;
         border-left: 4px solid skyblue;
@@ -63,74 +46,48 @@ const RegisterPage = styled.div`
         border-top-left-radius: 25px;
         border-top-right-radius: 25px;
         padding: 10px 15px;
-
-        span {
-          font-size: 1rem;
-          font-weight: bold;
-          flex-basis: 90px;
-          display: flex;
-          align-items: center;
-          padding-left: 10px;
-        }
-
         input {
           font-size: 1rem;
           border: 0;
           border-radius: 25px;
-          flex-basis: 200px;
+          width: 70%;
           height: 30px;
-          margin-left: 20px;
+          margin-left: 30px;
           outline: none;
         }
       }
-
       .form_item {
         font-size: 1.5rem;
         display: flex;
-        flex-direction: row;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: start;
+        justify-content: space-between;
 
         border-bottom: 4px solid skyblue;
         border-left: 4px solid skyblue;
         border-right: 4px solid skyblue;
         padding: 10px 15px;
 
-        span {
-          font-size: 1rem;
-          font-weight: bold;
-          flex-basis: 90px;
-          display: flex;
-          align-items: center;
-          padding-left: 10px;
-        }
-
         input {
           font-size: 1rem;
           border: 0;
           border-radius: 25px;
-          flex-basis: 200px;
-
+          width: 70%;
           height: 30px;
-          margin-left: 20px;
+          margin-left: 30px;
           outline: none;
         }
-
         .genderRadio {
           display: flex;
           flex-direction: row;
-          align-items: center;
           justify-content: center;
           align-items: center;
           width: 150px;
-          flex-basis: 100px;
-          margin: 0 35px;
 
           span {
             font-size: 1rem;
             font-weight: bold;
-            width: 100%;
+            width: 110px;
             height: 35px;
             background: skyblue;
             border-radius: 10px;
@@ -139,7 +96,6 @@ const RegisterPage = styled.div`
             justify-content: center;
             align-items: center;
             color: white;
-            padding: 0;
 
             // 체크박스하고 바로 위 span태그 둘다 스타일적용
             :checked + span {
@@ -164,58 +120,11 @@ const RegisterPage = styled.div`
           }
         }
       }
-
-      .address {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        .header {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          margin-bottom: 10px;
-
-          span {
-            flex-basis: 150px;
-          }
-
-          button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            width: 100px;
-            height: 25px;
-            padding: 0;
-            border: 0;
-            color: white;
-            border-radius: 5px;
-            background-color: skyblue;
-          }
-        }
-
-        .detailAddress {
-          margin-left: 10px;
-          height: 60px;
-          input {
-            margin: 0;
-            padding-left: 10px;
-          }
-          span {
-            margin: 0;
-            padding-left: 10px;
-            height: 30px;
-          }
-        }
-      }
-
       .form_item_last {
         font-size: 1.5rem;
         display: flex;
         align-items: center;
-        justify-content: start;
+        justify-content: space-between;
 
         border-bottom: 4px solid skyblue;
         border-left: 4px solid skyblue;
@@ -224,22 +133,13 @@ const RegisterPage = styled.div`
         border-bottom-right-radius: 25px;
         padding: 10px 15px;
 
-        span {
-          font-size: 1rem;
-          font-weight: bold;
-          flex-basis: 90px;
-          display: flex;
-          align-items: center;
-          padding-left: 10px;
-        }
-
         input {
           font-size: 1rem;
           border: 0;
           border-radius: 25px;
-          flex-basis: 200px;
+          width: 70%;
           height: 30px;
-          margin-left: 20px;
+          margin-left: 30px;
           outline: none;
         }
       }
@@ -280,15 +180,11 @@ const RegisterPage = styled.div`
 const Register = () => {
   //-------------useState
   const genderList = ["남자", "여자"];
-  const [phoneValid, setPhoneValid] = useState(true);
-  const [emailValid, setEmailValid] = useState(true);
-  const [idValid, setIdValid] = useState(true);
-  const [passwordVaild, setPasswordValid] = useState(true);
+  const [passwordValid, setPasswordValid] = useState(true);
   const today = new Date();
   const [date, setDate] = useState(today.toISOString().split("T")[0]);
   const [btnClick, setBtnClick] = useState(false);
-  let [address, setAddress] = useState("");
-  const [newwindow, setNewWindow] = useState();
+
   //-------------useState
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -303,9 +199,10 @@ const Register = () => {
       }
     }
   });
+  console.log(user);
 
   useEffect(() => {
-    if (!user) return;
+    console.log("useEffect");
     // console.log(user);
     // console.log(Object.keys(user).length);
     if (user !== null && Object.keys(user).length !== 0) {
@@ -321,21 +218,6 @@ const Register = () => {
     }
   }, [user]);
   // console.log(user);
-
-  const checkId = (e) => {
-    if (e.target != null) {
-      const regExp = /^[0-9a-zA-Z]([-_]?[0-9a-zA-Z]){3,16}$/;
-      const isValid = regExp.test(e.target.value);
-      setIdValid(isValid);
-    }
-  };
-  const checkPassword = (e) => {
-    if (e.target != null) {
-      const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-      const isValid = regExp.test(e.target.value);
-      setPasswordValid(isValid);
-    }
-  };
 
   const checkGender = () => {
     const result = [];
@@ -362,37 +244,16 @@ const Register = () => {
     if (e.target != null) {
       const regExp = /^[0-9]{11}$/;
       const isValid = regExp.test(e.target.value);
-      setPhoneValid(isValid);
-    }
-  };
-
-  const checkEmail = (e) => {
-    if (e.target != null) {
-      const regExp =
-        /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-      const isValid = regExp.test(e.target.value);
-      setEmailValid(isValid);
+      setPasswordValid(isValid);
     }
   };
 
   const dateHandler = (e) => {
+    console.log(e.target.value);
     setDate(e.target.value);
   };
 
-  const receiveMessage = async (e) => {
-    if (e.data?.address) {
-      setAddress(e.data.address);
-    }
-  };
-  const closeWindowHandler = () => {
-    newwindow.close();
-  };
-
-  useEffect(() => {
-    window.addEventListener("message", receiveMessage, false);
-  }, []);
-
-  const formDataHandler = async (e) => {
+  const formDataHandler = (e) => {
     e.preventDefault();
 
     const formData = {
@@ -403,18 +264,11 @@ const Register = () => {
       name: e.target.userName.value,
       gender: e.target.userGender.value,
       birth: e.target.userBithday.value,
-      address: address + e.target.detalAddress.value,
+      address: e.target.userAddr.value,
       nickname: e.target.userNickname.value,
     };
     console.log(formData);
-
-    if (idValid && passwordVaild && phoneValid && emailValid) {
-      const response = await dispatch(await asyncRegister(formData));
-
-      if (response.payload) {
-        navigate("/main");
-      }
-    } else return alert("양식을 지켜주세요.");
+    dispatch(asyncRegister(formData));
   };
 
   return (
@@ -426,39 +280,27 @@ const Register = () => {
         <div className="registerContent">
           <form className="registerForm" onSubmit={formDataHandler}>
             <div className="form_item_first">
-              <span>😄아이디</span>
+              <span>😄</span>
               <input
                 type="text"
                 name="userId"
                 placeholder="아이디"
-                onChange={checkId}
                 required
               ></input>
             </div>
-            {idValid ? null : (
-              <Explanation>
-                <span>
-                  아이디는 '-','_' 을 제외한 특수문자 사용불가, 4~16자리 입니다
-                </span>
-              </Explanation>
-            )}
+
             <div className="form_item">
-              <span>😄비밀번호</span>
+              <span>😄</span>
               <input
-                type="password"
+                type="text"
                 name="userPwd"
                 placeholder="비밀번호"
-                onChange={checkPassword}
                 required
               ></input>
             </div>
-            {passwordVaild ? null : (
-              <Explanation>
-                <span>비밀번호는 특수문자 포함한 16자리 입니다</span>
-              </Explanation>
-            )}
+
             <div className="form_item">
-              <span>😄전화번호</span>
+              <span>😄</span>
               <input
                 type="text"
                 name="userPhone"
@@ -466,31 +308,33 @@ const Register = () => {
                 onChange={checkPhoneNumber}
                 placeholder="전화번호"
                 required
-                style={{ color: phoneValid ? "black" : "red" }}
+                style={{ color: passwordValid ? "black" : "red" }}
               ></input>
+              {passwordValid ? null : (
+                <div
+                  style={{
+                    color: "red",
+                    fontSize: "0.7rem",
+                    paddingTop: "10px",
+                  }}
+                >
+                  비밀번호는 - 을 제외한 11자리 숫자로 입력해 주세요.
+                </div>
+              )}
             </div>
-            {phoneValid ? null : (
-              <Explanation>
-                <span>비밀번호는 - 을 제외한 11자리 숫자로 입니다</span>
-              </Explanation>
-            )}
+
             <div className="form_item">
-              <span>😄이메일</span>
+              <span>😄</span>
               <input
-                type="email"
+                type="text"
                 name="userEmail"
                 placeholder="e_mail"
-                onChange={checkEmail}
                 required
               ></input>
             </div>
-            {emailValid ? null : (
-              <Explanation>
-                <span>@, .com을 포함한 이메일 양식을 지켜주세요</span>
-              </Explanation>
-            )}
+
             <div className="form_item">
-              <span>😄이름</span>
+              <span>😄</span>
               <input
                 type="text"
                 name="userName"
@@ -498,9 +342,11 @@ const Register = () => {
                 required
               ></input>
             </div>
-            <div className="form_item radio">{checkGender()}</div>
+
+            <div className="form_item">{checkGender()}</div>
+
             <div className="form_item">
-              <span>😄생일</span>
+              <span>😄</span>
               <input
                 type="date"
                 name="userBithday"
@@ -509,33 +355,19 @@ const Register = () => {
                 required
               ></input>
             </div>
-            <div className="form_item address">
-              <div className="header">
-                <span>😄주소찾기</span>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const newwindow = window.open(
-                      "http://localhost:3000/auth/API",
-                      "_blank",
-                      "width=500, height=502"
-                    );
-                    setNewWindow(newwindow);
-                  }}
-                >
-                  주소찾기
-                </button>
-              </div>
-              {address ? closeWindowHandler() : null}
-              <div className="detailAddress">
-                <span>{address}</span>
-                <input placeholder="상세주소" name="detalAddress"></input>
-              </div>
+
+            <div className="form_item">
+              <span>😄</span>
+              <input
+                type="text"
+                name="userAddr"
+                placeholder="주소"
+                required
+              ></input>
             </div>
+
             <div className="form_item_last">
-              <span>😄닉네임</span>
+              <span>😄</span>
               <input
                 type="text"
                 name="userNickname"
@@ -543,6 +375,7 @@ const Register = () => {
                 required
               ></input>
             </div>
+
             <button
               type="submit"
               className={`${btnClick ? "registerBtnClicked" : "registerBtn"}`}

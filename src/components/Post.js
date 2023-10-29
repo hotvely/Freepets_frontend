@@ -16,9 +16,6 @@ import { addNoticeBoard } from "../api/notice";
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
-
-  flex-basis: 800px;
-  flex-shrink: 0;
   width: 100%;
   height: 100%;
   justify-content: center;
@@ -132,6 +129,7 @@ const Post = () => {
     formData.append("title", title);
     formData.append("desc", desc);
     formData.append("token", data.token);
+
     if (select == 1) {
       // formData.append("communityTitle", title);
       // console.log(formData);
@@ -153,7 +151,6 @@ const Post = () => {
   };
 
   const InputDescHandler = (e) => {
-    console.log(e);
     setDesc(e);
   };
 
