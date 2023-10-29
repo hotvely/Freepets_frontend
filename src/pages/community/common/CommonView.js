@@ -5,20 +5,27 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import banner from "../../../resources/bannerTest.png";
 import yange from "../../../resources/yaonge.jpg";
+import hamster from "../../../resources/hamster.test.jpg";
 import { Link } from "react-router-dom";
 import {
   getCommunity,
   // updateCommunity,
   deleteCommunity,
   getCommentsAPI,
+  getCommentAPI,
   addCommunityComment,
   deleteCommunityComment,
+  updateCommunityLike,
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
 import { faBookmark, faHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import CommentComponent from "../../../components/comment/CommentComponent";
+import UpdateCommentComponent from "../../../components/comment/UpdateCommentComponent";
+import ReCommentComponent from "../../../components/comment/ReCommentComponent";
+import CommentBtnComponent from "../../../components/comment/CommentBtnComponent";
+import ProfileComponent from "../../../components/member/ProfileComponent";
 import { addNotificationAPI } from "../../../api/auth";
 
 const MainStlye = styled.div`
@@ -173,9 +180,13 @@ const CommonView = () => {
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selected_Comment, setSelected_Comment] = useState(0);
 
+  //좋아요
+  const [liked, setLiked] = useState(false);
+
   const CommunityPostAPI = async (id) => {
     const result = await getCommunity(id);
     setPost(result.data);
+    setLiked(result.data.commonLikeCount);
   };
 
   const UpdateCommunityAPI = (event) => {
@@ -193,6 +204,7 @@ const CommonView = () => {
   };
   const user = useSelector((state) => state.user);
   const viewBtn = post && post.member && post.member.id === user.id;
+  console.log("사용자: " + user?.token);
 
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
@@ -215,36 +227,76 @@ const CommonView = () => {
     window.scrollTo(0, 0);
   };
 
+  const updateLikeHandler = async (data) => {
+    console.log("liked" + liked);
+    const formData = new FormData();
+    formData.append("commonLike.community.commonCode", code);
+    console.log("게시글번호 : " + code);
+    formData.append("commonLike", user?.id);
+    console.log("유저아이디 : " + user?.id);
+    const result = await updateCommunityLike(formData);
+    setLiked(result.data.commonLikeCount);
+  };
+
   const getCommentHandler = async (code) => {
     const result = await getCommentsAPI(code);
     setComments([...result.data]);
   };
 
   const addCommentHandler = async (e) => {
+    console.log(e.target.commentDesc.id);
     e.preventDefault();
-    const parentCode = e.target.commentDesc.id;
-    const formData = {
-      token: user.token,
-      boardName: "community",
-      postCode: code,
-      parentCommentCode: parentCode, //          부모 댓글의 코드를 백으로 넘기는 법
-      commentDesc: e.target.commentDesc.value,
-    };
-    if (formData.commentDesc) {
-      const addCommentResult = await addCommunityComment(formData);
-      console.log(addCommentResult.data);
-      const commonData = {
+    if (user?.token) {
+      const parentCode = e.target.commentDesc.id;
+      const formData = {
         token: user.token,
-        postCode: formData.postCode,
-        pCommentCode: addCommentResult.data.commonCommentCodeSuper,
-        cCommenntCode: addCommentResult.data.commonCommentCode,
-        url: `http://localhost:3000/community/commonView/${formData.postCode}`,
+        boardName: "community",
+        postCode: code,
+        parentCommentCode: parentCode, //          부모 댓글의 코드를 백으로 넘기는 법
+        commentDesc: e.target.commentDesc.value,
       };
-      await addNotificationAPI(commonData);
+      if (formData.commentDesc) {
+        const addCommentResult = await addCommunityComment(formData);
+        console.log(addCommentResult.data);
+
+        if (parentCode > 0) {
+          // 부모 댓글 있을때.
+          console.log(parentCode);
+          const result = await getCommentAPI(parentCode);
+          console.log(result.data);
+
+          if (result.data.member.id != user.id) {
+            const commonData = {
+              id: result.data.member.id,
+              postCode: formData.postCode,
+              pCommentCode: addCommentResult.data.commonCommentCodeSuper,
+              cCommenntCode: addCommentResult.data.commonCommentCode,
+              url: `http://localhost:3000/community/commonView/${formData.postCode}`,
+            };
+            await addNotificationAPI(commonData);
+          } else {
+            alert("댓글 작성자와 일치하여 알림이 가지 않습니다.");
+          }
+        } else {
+          if (post.member.id != user?.id) {
+            const commonData = {
+              id: post.member.id,
+              postCode: formData.postCode,
+              pCommentCode: addCommentResult.data.commonCommentCodeSuper,
+              cCommenntCode: addCommentResult.data.commonCommentCode,
+              url: `http://localhost:3000/community/commonView/${formData.postCode}`,
+            };
+            await addNotificationAPI(commonData);
+          } else {
+            alert("작성자가 같아서 알림이 가지 않음");
+          }
+        }
+      }
+
       await getCommentHandler(code);
       e.target.commentDesc.value = null;
     } else {
-      alert("댓글 작성후 등록하세요");
+      alert("로그인이 필요합니다.");
     }
   };
 
@@ -269,17 +321,18 @@ const CommonView = () => {
     setSelected_Comment(0);
   };
 
+  // useEffect(() => {
+  //   const asyncHandler = async () => {
+  //     CommunityPostAPI(code);
+  //     getCommentHandler(code);
+  //   };
+  //   asyncHandler();
+  // }, []);
+
   useEffect(() => {
     const asyncHandler = async () => {
       CommunityPostAPI(code);
       getCommentHandler(code);
-    };
-    asyncHandler();
-  }, []);
-
-  useEffect(() => {
-    const asyncHandler = async () => {
-      await CommunityPostAPI(code);
     };
 
     if (code) {
@@ -350,7 +403,7 @@ const CommonView = () => {
               dangerouslySetInnerHTML={{ __html: String(post?.commonDesc) }}
             />
             <div className="like-btn">
-              <button>
+              <button onClick={updateLikeHandler}>
                 <FontAwesomeIcon icon={faHeart} style={{ color: "#FF6969" }} />
                 {" 추천 "}
                 {post?.commonLikeCount}
@@ -358,10 +411,165 @@ const CommonView = () => {
               {console.log(post?.commonLikeCount)}
             </div>
             <div className="comment-box">
-              <CommentComponent props={0} ref={addCommentHandler} />
+              <div className="commentBox">
+                <div className="commentProfile">
+                  {/* <img src={hamster}></img> */}
+                </div>
+                <CommentComponent props={0} ref={addCommentHandler} />
+              </div>
+              <div className="commentBox2">
+                <ul>
+                  {comments?.map((comment) =>
+                    comment?.commonCommentCodeSuper > 0 ? null : (
+                      <li key={comment?.commonCommentCode}>
+                        <div className="comment">
+                          {
+                            // 유저 정보
+                          }
+                          <div className="comment-content">
+                            <div className="comment-desc">
+                              <ProfileComponent props={comment?.member} />
+                              {
+                                // 댓글 정보
+                              }
+                              <div className="commentTextBox">
+                                <p> {comment?.commonCommentDesc}</p>
+                              </div>
+                            </div>
+                            <div className="comment-last">
+                              <div className="commentDate-btn ">
+                                <div>
+                                  {dateFormatDefault(
+                                    comment?.commonCommentDate
+                                  )}
+                                </div>
+                                <CommentBtnComponent
+                                  code={comment?.commonCommentCode}
+                                  writer={comment?.member?.id}
+                                  updateCommentHandler={updateCommentHandler}
+                                  deleteCommentHandler={deleteCommentHandler}
+                                />
+                              </div>
+                            </div>
+
+                            {currClickBtn === comment?.commonCommentCode ? (
+                              comment?.member?.id === user?.id ? (
+                                <UpdateCommentComponent
+                                  code={comment?.commonCommentCode}
+                                  updateCommentHandler={updateCommentHandler}
+                                  updateSuccHandler={updateSuccHandler}
+                                />
+                              ) : null
+                            ) : null}
+                          </div>
+                          <div className="reCommentViewBtn">
+                            {
+                              // 대댓글 보기, 대댓글 작성 코드
+
+                              // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
+                              selected_Comment == comment?.commonCommentCode ? (
+                                <div>
+                                  {
+                                    // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
+                                  }
+
+                                  <button
+                                    className="commentView_btn"
+                                    onClick={selected_Comment_handler}
+                                  >
+                                    댓글 보기 닫기
+                                  </button>
+                                  {/* 대댓글 호출 로직 */}
+                                  <ul>
+                                    {comments?.map((comment) =>
+                                      comment?.commonCommentCodeSuper <
+                                      0 ? null : comment.commonCommentCodeSuper !==
+                                        selected_Comment ? null : (
+                                        <li key={comment.commonCommentCode}>
+                                          <div className="recomment-desc">
+                                            <ReCommentComponent
+                                              member={comment.member}
+                                              desc={comment.commonCommentDesc}
+                                              date={comment.commonCommentDate}
+                                            />
+
+                                            <CommentBtnComponent
+                                              code={comment?.commonCommentCode}
+                                              writer={comment?.member.id}
+                                              updateCommentHandler={
+                                                updateCommentHandler
+                                              }
+                                              deleteCommentHandler={
+                                                deleteCommentHandler
+                                              }
+                                            />
+                                          </div>
+                                          {currClickBtn ==
+                                          comment.commonCommentCode ? (
+                                            comment?.member.id === user?.id ? (
+                                              <UpdateCommentComponent
+                                                code={
+                                                  comment?.commonCommentCode
+                                                }
+                                                updateCommentHandler={
+                                                  updateCommentHandler
+                                                }
+                                                updateSuccHandler={
+                                                  updateSuccHandler
+                                                }
+                                              />
+                                            ) : null
+                                          ) : null}
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+
+                                  <CommentComponent
+                                    // props={{ num1: currClickComment, num2: 10, num3: 100 }}    //<- 여러개 던질때
+                                    props={selected_Comment}
+                                    ref={addCommentHandler}
+                                  />
+                                </div>
+                              ) : (
+                                <div>
+                                  {
+                                    //id에 상위 댓글의 코드 값을 넣어서 버튼 id부여함.
+                                    // 부여한 이유는... 댓글 작성의 경우에 CommentComponent를 호출해서 재사용 하기 위함
+                                  }
+                                  <button
+                                    className="commentView_btn"
+                                    id={`${comment.commonCommentCode}`}
+                                    onClick={(e) => {
+                                      setSelected_Comment(
+                                        comment.commonCommentCode
+                                      );
+                                    }}
+                                  >
+                                    댓글 보기
+                                  </button>
+                                </div>
+                              )
+                            }
+                          </div>
+                        </div>
+
+                        <hr
+                          style={{
+                            width: "100%",
+                            border: "0px",
+                            borderTop: "1px solid #7BCFE1",
+                          }}
+                        />
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
+
         <div className="article-bottom-btn">
           <div className="left-btn">
             <button className="list-btn" onClick={NavListPage}>

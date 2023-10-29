@@ -1,3 +1,4 @@
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 const instance = axios.create({
@@ -8,10 +9,6 @@ export const getCommunityList = async (page, orderBy) => {
   console.log("오고 있니....");
   console.log(orderBy);
   let url = `community?page=${page}&orderBy=${orderBy}`;
-  return await instance.get(url);
-};
-export const getCommentsAPI = async (postCode) => {
-  let url = `community/${postCode}/comments`;
   return await instance.get(url);
 };
 export const getSearchCommunityList = async (
@@ -32,6 +29,13 @@ export const getCommunity = async (id) => {
   let url = `community/${id}`;
   return await instance.get(url);
 };
+export const getCommentsAPI = async (postCode) => {
+  let url = `community/${postCode}/comments`;
+  return await instance.get(url);
+};
+export const getCommentAPI = async (code) => {
+  return await instance.get(`community/comment/${code}`);
+};
 
 export const addCommunity = async (data) => {
   console.log("글쓰기 데이터 갔냐고...");
@@ -45,6 +49,16 @@ export const addCommunityComment = async (data) => {
 
 export const updateCommunity = async (data) => {
   return await instance.put("community", data);
+};
+
+export const updateCommentAPI = async (data) => {
+  console.log("UpdateCommentAPI 시작");
+  return await instance.put("community/comment", data);
+};
+
+export const updateCommunityLike = async (data) => {
+  console.log("좋아요: " + data);
+  return await instance.post("community/like", data);
 };
 
 export const deleteCommunity = async (id) => {
