@@ -202,7 +202,8 @@ const CommonView = () => {
     await deleteCommunity(id);
     navigate("../../");
   };
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
+  const user = JSON.parse(localStorage.getItem("user"));
   const viewBtn = post && post.member && post.member.id === user.id;
   console.log("사용자: " + user?.token);
 
@@ -227,14 +228,14 @@ const CommonView = () => {
     window.scrollTo(0, 0);
   };
 
-  const updateLikeHandler = async (data) => {
+  const updateLikeHandler = async () => {
     console.log("liked" + liked);
     const formData = new FormData();
-    formData.append("commonLike.community.commonCode", code);
+    formData.append("boardDTO.boardCode", code);
     console.log("게시글번호 : " + code);
-    formData.append("commonLike", user?.id);
-    console.log("유저아이디 : " + user?.id);
-    const result = await updateCommunityLike(formData);
+    formData.append("boardDTO.token", user?.token);
+    console.log("유저아이디 : " + user?.token);
+    const result = await updateCommunityLike();
     setLiked(result.data.commonLikeCount);
   };
 

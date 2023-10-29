@@ -60,7 +60,7 @@ const LSide = () => {
             <hr />
             <label>Community</label>
             <a href="/community">CommonBoard</a>
-            <a href="/community/lost/lostList">LostBoard</a>
+            <a href="/community/lost">LostBoard</a>
             <hr />
             <label>Information</label>
             <a href="#">Hospital Info</a>
