@@ -2,8 +2,10 @@ import styled from "styled-components";
 
 const MyPageMain = styled.main`
   margin: 0;
-  flex: 0 1 100%-800px;
-  padding: 0 100px;
+  flex-basis: 1000px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  padding: 0 50px;
   img {
     width: 100%;
   }
@@ -17,7 +19,6 @@ const MyPageMain = styled.main`
     width: 100%;
     height: 80px;
     color: white;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -40,7 +41,6 @@ const MyPageMain = styled.main`
   .profile {
     display: flex;
     flex-direction: row;
-
     .profile-photo {
       padding: 30px 20px;
       display: flex;
@@ -80,30 +80,36 @@ const MyPageMain = styled.main`
 
     .profileInfo {
       display: flex;
-      flex: 0 1 100%;
+
       flex-direction: column;
       padding: 20px 20px;
-
+      flex-shrink: 0;
       div {
-        margin: 0 20px;
         display: flex;
         flex-direction: row;
         width: 100%-200px;
         padding: 5px 0;
         align-items: center;
-
+        flex-shrink: 0;
         p {
           font-size: 1.15rem;
           font-weight: bold;
-          width: 30%;
+          flex-basis: 130px;
+          flex-grow: 0;
+          flex-wrap: nowrap;
+          flex-shrink: 0;
           color: rgb(129, 129, 129);
         }
         div {
+          display: flex;
+          flex-wrap: wrap;
           font-size: 1.15rem;
+          flex-basis: 500px;
+          flex-shrink: 0;
           font-weight: bold;
-          width: 70%;
-          white-space: normal;
           line-height: 150%;
+          flex-grow: 1;
+          word-wrap: break-word;
         }
       }
     }

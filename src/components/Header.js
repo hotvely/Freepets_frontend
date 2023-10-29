@@ -48,12 +48,15 @@ const StyledHeader = styled.header`
 const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => {
-    if (getTokenCookie() != undefined) {
-      console.log("쿠키 있!");
-      return state.user;
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("호출..?");
+        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -65,14 +68,13 @@ const Header = () => {
     <>
       <StyledHeader>
         <nav>
-          <a href="/main">
+          <Link to="/main">
             <img src={Logo}></img>
-          </a>
-          <a href="/notice">Notice</a>
-          <a href="/sitter">Sitter</a>
-          <a href="/community">Community</a>
-          <a href="/information">Information</a>
-          <a href="#">CS</a>
+          </Link>
+          <Link to="/notice">Notice</Link>
+          <Link to="/sitter">Sitter</Link>
+          <Link to="/community">Community</Link>
+          <Link to="/information">Information</Link>
           <div className="rightNav">
             {!user ? (
               <>

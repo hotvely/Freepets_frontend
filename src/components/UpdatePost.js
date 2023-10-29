@@ -20,6 +20,9 @@ const Main = styled.div`
   height: 100%;
   justify-content: center;
   flex-direction: column;
+  flex-basis: 800px;
+  flex-shrink: 0;
+  flex-grow: 1;
 `;
 const MainBox = styled.main`
   display: flex;

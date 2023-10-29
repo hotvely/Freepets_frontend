@@ -5,6 +5,9 @@ export const MainStlye = styled.div`
   width: 100%;
   margin-left: 20px;
   /* margin: 0 50px; */
+  flex-basis: 800px;
+  flex-shrink: 0;
+  flex-grow: 1;
 `;
 export const MainBanner = styled.div`
   display: flex;
@@ -136,6 +139,7 @@ export const MainContentBox = styled.div`
                 display: flex;
                 flex-direction: column;
                 .comment-content {
+                  width: 100%;
                   display: flex;
                   flex-direction: row;
                   align-items: center;
@@ -145,9 +149,11 @@ export const MainContentBox = styled.div`
                     display: flex;
                     flex-direction: row;
                     align-items: center;
+                    flex-basis: 75%;
                     .commentTextBox {
                       padding: 13px;
-                      width: 400px;
+                      flex-basis: 800px;
+                      flex-grow: 0;
                       height: 100%;
                       display: flex;
                       flex-direction: column;

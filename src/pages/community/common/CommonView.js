@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import banner from "../../../resources/bannerTest.png";
 import yange from "../../../resources/yaonge.jpg";
@@ -202,7 +202,19 @@ const CommonView = () => {
     await deleteCommunity(id);
     navigate("../../");
   };
-  const user = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
+  });
   const viewBtn = post && post.member && post.member.id === user.id;
   console.log("사용자: " + user?.token);
 
@@ -232,7 +244,7 @@ const CommonView = () => {
     const formData = new FormData();
     formData.append("commonLike.community.commonCode", code);
     console.log("게시글번호 : " + code);
-    formData.append("commonLike", user?.id);
+    formData.append("commonLike.member.id", user?.id);
     console.log("유저아이디 : " + user?.id);
     const result = await updateCommunityLike(formData);
     setLiked(result.data.commonLikeCount);
