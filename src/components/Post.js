@@ -132,7 +132,6 @@ const Post = () => {
     formData.append("title", title);
     formData.append("desc", desc);
     formData.append("token", data.token);
-
     if (select == 1) {
       // formData.append("communityTitle", title);
       // console.log(formData);
@@ -154,6 +153,7 @@ const Post = () => {
   };
 
   const InputDescHandler = (e) => {
+    console.log(e);
     setDesc(e);
   };
 

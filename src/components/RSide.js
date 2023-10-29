@@ -76,7 +76,6 @@ const RSide = () => {
   const weatherHandler = async () => {
     const responseWeather = await getWeather(lat, lng);
     setWeather(responseWeather);
-    console.log(responseWeather);
   };
 
   useEffect(() => {}, []);

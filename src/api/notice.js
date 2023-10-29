@@ -40,6 +40,7 @@ export const getEventAPI = async (year) => {
 //Lost Board 게시글 서버로 전송
 export const addNoticeBoard = async (data) => {
   console.log("post로 DB에 게시글 저장 완료");
+  console.log(data);
   return await instance.post("notice", data);
 };
 

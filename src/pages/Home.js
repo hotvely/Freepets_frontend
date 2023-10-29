@@ -168,8 +168,6 @@ const Home = () => {
     }
   });
 
-  console.log(user);
-
   return (
     <div>
       <StyledHeader>

@@ -16,7 +16,6 @@ const Root = () => {
 
   useEffect(() => {
     if (!isRender) {
-      console.log("isRender == false");
       const script1 = document.createElement("script");
       script1.src =
         "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7t48wvf7nm";
@@ -34,8 +33,6 @@ const Root = () => {
         setIsRender(true);
       };
       document.head.appendChild(script2);
-    } else {
-      console.log("isRender == true");
     }
   }, [isRender]);
 

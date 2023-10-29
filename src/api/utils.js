@@ -31,9 +31,6 @@ export const dateFormatTrans = (data) => {
 };
 
 export const getWeather = async (lat, lon) => {
-  console.log(lat);
-  console.log(lon);
-  console.log("날씨 API접속..?");
   const key = `451caf66add814bfc5587bbf6e077350`;
   const response = await axios.get(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&lang`
@@ -55,8 +52,6 @@ export const getIp = async () => {
 };
 
 export const getAddress = async (lat, lon) => {
-  console.log(lat);
-  console.log(lon);
   return await axios.get(
     `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${lat},${lon}&output=json`,
     {
