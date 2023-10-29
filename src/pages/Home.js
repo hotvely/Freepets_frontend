@@ -174,15 +174,21 @@ const Home = () => {
     <div>
       <StyledHeader>
         <nav>
-          <a href="/">
+          <Link to="/">
             <img src={Logo}></img>
-          </a>
+          </Link>
 
-          <a href="/notice">Notice</a>
-          <a href="/sitter">Sitter</a>
+          <Link to="/notice">Notice</Link>
+          <Link to href="/sitter">
+            Sitter
+          </Link>
 
-          <a href="/community">Community</a>
-          <a href="/information">Information</a>
+          <Link to href="/community">
+            Community
+          </Link>
+          <Link to href="/information">
+            Information
+          </Link>
 
           <div className="rightNav">
             {!user ? (

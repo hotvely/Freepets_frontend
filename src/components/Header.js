@@ -68,13 +68,13 @@ const Header = () => {
     <>
       <StyledHeader>
         <nav>
-          <a href="/main">
+          <Link to="/main">
             <img src={Logo}></img>
-          </a>
-          <a href="/notice">Notice</a>
-          <a href="/sitter">Sitter</a>
-          <a href="/community">Community</a>
-          <a href="/information">Information</a>
+          </Link>
+          <Link to="/notice">Notice</Link>
+          <Link to="/sitter">Sitter</Link>
+          <Link to="/community">Community</Link>
+          <Link to="/information">Information</Link>
           <div className="rightNav">
             {!user ? (
               <>
