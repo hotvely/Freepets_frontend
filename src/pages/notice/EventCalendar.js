@@ -4,6 +4,9 @@ import EventAddModal from "./EventAddModal";
 import { getEventAPI } from "../../api/notice";
 import { async } from "q";
 import EventViewModal from "./EventViewModal";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../../components/store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Calendar = styled.div`
   margin: 0 30px;
@@ -21,6 +24,18 @@ const Calendar = styled.div`
     align-items: center;
     justify-content: center;
     align-items: center;
+
+    button {
+      width: 90%;
+      height: 50px;
+      border-radius: 10px;
+      color: white;
+      border: 0;
+      font-weight: bold;
+      font-size: 1.3rem;
+      background-color: skyblue;
+      margin-bottom: 30px;
+    }
 
     .calendar_header {
       width: 90%;
@@ -401,11 +416,30 @@ const EventCalendar = () => {
     }
   }, [selectEvent]);
 
+  const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
+  });
+
   return (
     <>
       <Calendar id="targetElement">
         <div className="calendar_content">
-          <button onClick={addEventHandler}>이벤트 행사 추가</button>
+          {user?.authority === "ADMIN" ? (
+            <button onClick={addEventHandler}>이벤트 행사 추가</button>
+          ) : null}
+
           {addOpen ? <EventAddModal props={{ setAddOpen, month }} /> : null}
           <div className="calendar_header">
             <div>

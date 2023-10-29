@@ -75,7 +75,6 @@ const Header = () => {
           <a href="/sitter">Sitter</a>
           <a href="/community">Community</a>
           <a href="/information">Information</a>
-          <a href="#">CS</a>
           <div className="rightNav">
             {!user ? (
               <>

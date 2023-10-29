@@ -183,7 +183,7 @@ const Home = () => {
 
           <a href="/community">Community</a>
           <a href="/information">Information</a>
-          <a href="#">CS</a>
+
           <div className="rightNav">
             {!user ? (
               <>
