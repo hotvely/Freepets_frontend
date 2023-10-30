@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import banner from "../../../resources/bannerTest.png";
+import hamster from "../../../resources/hamster.test.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -162,6 +163,10 @@ const MainContentBox = styled.div`
             h3 {
               padding-right: 3px;
               font-size: 1rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 200px; /* 원하는 최대 너비 설정 */
             }
             p {
               color: tomato;
@@ -198,53 +203,9 @@ const MainContentBox = styled.div`
     padding-top: 20px;
     /* border-top: 1px solid #3a98b9; */
 
-    .page {
+    .paging-bar {
       flex-grow: 1;
       text-align: center;
-      .pagination {
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
-        text-align: center;
-        list-style: none;
-        display: inline-block;
-
-        a {
-          float: left;
-          display: block;
-          font-size: 14px;
-          text-decoration: none;
-          padding: 5px 12px;
-          color: #96a0ad;
-          line-height: 1.5;
-        }
-        a:active {
-          cursor: default;
-          color: #ffffff;
-          outline: none;
-        }
-        #first:hover,
-        #last:hover,
-        #arrow-left:hover,
-        #arrow-right:hover {
-          color: #2e9cdf;
-        }
-
-        #num {
-          /* margin-left: 3px; */
-          -moz-border-radius: 100%;
-          -webkit-border-radius: 100%;
-          border-radius: 100%;
-        }
-        #num:hover {
-          background-color: #2e9cdf;
-          color: #ffffff;
-        }
-        #num.active {
-          background-color: #2e9cdf;
-          cursor: pointer;
-        }
-      }
     }
     #write-btn {
       /* display: flex;
@@ -256,6 +217,7 @@ const MainContentBox = styled.div`
         height: 40px;
         border: none;
         border-radius: 10px;
+        cursor: pointer;
       }
     }
   }
@@ -364,10 +326,12 @@ const CMediaList = () => {
                   >
                     <p>
                       <img
-                        src={media.commonDesc.substring(
-                          media.commonDesc.indexOf('<img src="') + 10,
-                          media.commonDesc.indexOf('">')
-                        )}
+                        src={
+                          hamster
+                          // media.commonDesc.substring(
+                          // media.commonDesc.indexOf('<img src="') + 10,
+                          // media.commonDesc.indexOf('">'))
+                        }
                         alt="미디어썸네일"
                       />
                     </p>
@@ -376,7 +340,7 @@ const CMediaList = () => {
                 <div className="media-info">
                   <div className="media-info-first-line">
                     <Link
-                      to={"/commonview/" + media?.commonCode}
+                      to={`/community/common/commonview/${media?.commonCode}`}
                       id="media-info-title"
                     >
                       <h3>{media?.commonTitle}</h3>
@@ -490,75 +454,6 @@ const CMediaList = () => {
         <div className="main-bottom">
           <div className="paging-bar">
             <Page totalPages={totalPages} page={page} />
-            {/* 페이지 넘기는 바 만들기
-         <div id="paging"></div> */}
-            {/* <ul className="pagination">
-              <li>
-                <a href="#" id="first">
-                  처음 페이지
-                </a>
-              </li>
-              <li>
-                <a href="#" id="arrow-left">
-                  ◀
-                </a>
-              </li>
-              <li>
-                <a href="#" id="active-num">
-                  1
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  2
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  3
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  4
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  5
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  6
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  7
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  8
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  9
-                </a>
-              </li>
-              <li>
-                <a href="#" id="arrow-right">
-                  ▶
-                </a>
-              </li>
-              <li>
-                <a href="#" id="last">
-                  마지막 페이지
-                </a>
-              </li>
-            </ul> */}
           </div>
           <div id="write-btn">
             <button onClick={navWrite}>글쓰기</button>
