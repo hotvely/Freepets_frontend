@@ -16,6 +16,7 @@ import {
   addCommunityComment,
   deleteCommunityComment,
   updateCommunityLike,
+  updateCommentAPI,
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
 import { faBookmark, faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -179,7 +180,7 @@ const CommonView = () => {
   const [currClickBtn, setCurrClickBtn] = useState(-1);
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selected_Comment, setSelected_Comment] = useState(0);
-
+  const [content, setContent] = useState("");
   //좋아요
   const [liked, setLiked] = useState(false);
 
@@ -191,13 +192,13 @@ const CommonView = () => {
 
   const UpdateCommunityAPI = (event) => {
     const id = event.target.value;
-    console.log(id);
+
     navigate(`../${id}/update/1`);
   };
 
   const DeleteCommunityAPI = async (event) => {
     const id = event.target.value;
-    console.log(id);
+
     alert("게시물이 삭제되었습니다.");
     await deleteCommunity(id);
     navigate("../../");
@@ -205,7 +206,6 @@ const CommonView = () => {
   // const user = useSelector((state) => state.user);
   const user = JSON.parse(localStorage.getItem("user"));
   const viewBtn = post && post.member && post.member.id === user.id;
-  console.log("사용자: " + user?.token);
 
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
@@ -230,13 +230,18 @@ const CommonView = () => {
 
   const updateLikeHandler = async () => {
     console.log("liked" + liked);
-    const formData = new FormData();
-    formData.append("boardDTO.boardCode", code);
+    const formData = {
+      postCode: code,
+      token: user?.token,
+    };
     console.log("게시글번호 : " + code);
-    formData.append("boardDTO.token", user?.token);
-    console.log("유저아이디 : " + user?.token);
-    const result = await updateCommunityLike();
-    setLiked(result.data.commonLikeCount);
+
+    const result = await updateCommunityLike(formData);
+    if (result.data) {
+      setLiked(liked + 1);
+    } else {
+      setLiked(liked - 1);
+    }
   };
 
   const getCommentHandler = async (code) => {
@@ -309,6 +314,29 @@ const CommonView = () => {
     setCurrClickBtn(code);
   };
 
+  useEffect(() => {
+    const handler = async () => {
+      console.log("수정 관련 핸들러");
+      console.log(currClickBtn);
+      if (succUpdate) {
+        const formData = {
+          commentCode: currClickBtn,
+          commentDesc: content,
+        };
+        console.log(formData);
+        const result = await updateCommentAPI(formData);
+        console.log(result.data);
+        if (result.data) {
+          setSuccUpdate(false);
+          setCurrClickBtn(-1);
+          getCommentHandler(code);
+        }
+      }
+    };
+
+    handler();
+  }, [succUpdate]);
+
   const updateSuccHandler = () => {
     setSuccUpdate(true);
   };
@@ -340,15 +368,14 @@ const CommonView = () => {
       asyncHandler();
     }
   }, [code]);
-  console.log(post);
 
-  useEffect(() => {
-    if (succUpdate) {
-      setSuccUpdate(false);
-      setCurrClickBtn(-1);
-      getCommentHandler(code);
-    }
-  }, [succUpdate]);
+  // useEffect(() => {
+  //   if (succUpdate) {
+  //     setSuccUpdate(false);
+  //     setCurrClickBtn(-1);
+  //     getCommentHandler(code);
+  //   }
+  // }, [succUpdate]);
 
   return (
     <MainStlye>
@@ -452,14 +479,17 @@ const CommonView = () => {
                                 />
                               </div>
                             </div>
-
+                            {console.log(comment)}
                             {currClickBtn === comment?.commonCommentCode ? (
                               comment?.member?.id === user?.id ? (
-                                <UpdateCommentComponent
-                                  code={comment?.commonCommentCode}
-                                  updateCommentHandler={updateCommentHandler}
-                                  updateSuccHandler={updateSuccHandler}
-                                />
+                                <>
+                                  <UpdateCommentComponent
+                                    code={comment?.commonCommentCode}
+                                    updateCommentHandler={updateCommentHandler}
+                                    updateSuccHandler={updateSuccHandler}
+                                    setContent={setContent}
+                                  />
+                                </>
                               ) : null
                             ) : null}
                           </div>
@@ -518,6 +548,7 @@ const CommonView = () => {
                                                 updateSuccHandler={
                                                   updateSuccHandler
                                                 }
+                                                setContent={setContent}
                                               />
                                             ) : null
                                           ) : null}
