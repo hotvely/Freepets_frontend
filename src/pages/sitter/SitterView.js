@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getReviews, getBoardView, deleteSitterBoard, deleteReview, addReview } from "../../api/sitter";
 import { addBookmarkAPI } from "../../api/bookmark";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Main = styled.div`
     display: flex;
@@ -326,7 +327,9 @@ const SitterView = () => {
     const [style4, setStyle4] = useState(styleGray);
     const [style5, setStyle5] = useState(styleGray);
 
-    const data = JSON.parse(localStorage.getItem('user'));
+    const data = useSelector((state) => {
+        return state.user;
+    });
 
     const onRatings = (event) => {
         switch(eval(event.currentTarget.value)) {
@@ -381,7 +384,9 @@ const SitterView = () => {
             formData.append("sitterReviewDesc", reviewDesc);
             formData.append("sitter.sitterCode", location.state.code);
             const result = await addReview(formData);
-            setReviews([, result.data, ...reviews]);
+            setReviews([result.data, ...reviews]);
+            setReviewDesc('');
+
         } else {
             window.alert('자신의 글에는 리뷰를 등록할 수 없습니다.');
         }
@@ -438,7 +443,7 @@ const SitterView = () => {
     }
 
     const reviewDescChange = (e) => {
-        setReviewDesc(e.currentTarget.innerHTML);    
+        setReviewDesc(e.currentTarget.value);    
     }
 
     useEffect(() => {
@@ -505,8 +510,8 @@ const SitterView = () => {
                                         <button onClick={onRatings} value="5"><FontAwesomeIcon icon={faStar} style={style5}/></button>
                                     </div>
                                 </div>                               
-                            </div>                
-                            <div contentEditable="true" id="sitterReviewDesc" onInput={reviewDescChange}></div>
+                            </div>
+                            <input type="text" id="sitterReviewDesc" onChange={reviewDescChange} value={reviewDesc} />
                             <div className="write-content_center-button">
                                 <button onClick={onReviewEnroll}>등록</button>
                             </div>                       

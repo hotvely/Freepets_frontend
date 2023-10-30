@@ -35,7 +35,7 @@ const HospitalMap = ({hospitalAddress}) => {
         })
     }, [hospitalAddress])
 
-    return <div ref={mapRef} style={{width: "400px", height: "250px"}}></div>
+    return <div ref={mapRef} style={{width: "100%", height: "250px"}}></div>
 };
 
 export default HospitalMap;

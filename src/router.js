@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import BLayout from "./components/BLayout";
+import HLayout from "./components/HLayout";
 import MyPage from "./pages/member/MyPage";
 import HospitalReview from "./pages/information/HospitalReview";
 import Sitter from "./pages/sitter/Sitter";
@@ -25,6 +26,7 @@ import EventCalendar from "./pages/notice/EventCalendar";
 import UserPage from "./pages/member/UserPage";
 import NoticeList from "./pages/notice/NoticeList";
 import Chatting from "./pages/Chatting";
+import TotalSearch from "./pages/TotalSearch";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,20 @@ const router = createBrowserRouter([
   {
     path: "/main",
     element: <Home />,
+  },
+  {
+    path: '/totalSearch',
+    element: <HLayout/>,
+    children: [
+      {
+        index: true,
+        element: <TotalSearch/>,
+      },
+      {
+        path: '?search=:search',
+        element: <TotalSearch/>,
+      }
+    ]
   },
   {
     path: "/mypage",

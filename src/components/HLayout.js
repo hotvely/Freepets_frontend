@@ -13,7 +13,6 @@ const HLayout = () => {
     return (
         <>
         <Header></Header>
-
         <StyleMain>
             <Outlet></Outlet>
         </StyleMain>

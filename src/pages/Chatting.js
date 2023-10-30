@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { addMessage, getMessageList, getMessageOne } from "../api/chatting";
 import { dateFormatDefault } from "../api/utils";
 import { getMemberByIdAPI } from "../api/auth";
+import { useSelector } from "react-redux";
 
 const Main = styled.div`
     width: 100%;
@@ -176,6 +177,7 @@ const Chatting = () => {
     const [messages, setMessages] = useState([]);
     const [nickname, setNickname] = useState();
     const { id } = useParams();
+
     const data = JSON.parse(localStorage.getItem('user'));
 
     const onSendMessage = async () => {

@@ -27,6 +27,7 @@ import {
   MainContentBox,
 } from "../../components/css/PostView";
 import HospitalMap from "./HospitalMap";
+import { useSelector } from "react-redux";
 
 
 const HospitalReviewView = () => {
@@ -38,8 +39,11 @@ const HospitalReviewView = () => {
   const [currClickBtn, setCurrClickBtn] = useState(-1);
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selectedComment, setSelectedComment] = useState(0);
+  const [content, setContent] = useState("");
   
-  const data = JSON.parse(localStorage.getItem('user'));
+  const data = useSelector((state) => {
+    return state.user;
+  });
 
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
@@ -152,11 +156,21 @@ const HospitalReviewView = () => {
   }, []);
 
   useEffect(() => {
-    if (succUpdate) {
-      setSuccUpdate(false);
-      setCurrClickBtn(-1);
-      getCommentHandler(code);
+    const handler = async () => {
+      if (succUpdate) {
+        const formData = {
+          commentCode: currClickBtn,
+          commentDesc: content
+        };
+        const result = await updateComment(formData);
+      if (result.data) {
+        setSuccUpdate(false);
+        setCurrClickBtn(-1);
+        getCommentHandler(code);
+      }
     }
+    };
+    handler();
   }, [succUpdate]);
 
   return (
@@ -276,7 +290,7 @@ const HospitalReviewView = () => {
                             {currClickBtn === comment?.hrCommentCode ? (
                               comment?.member?.id === data.id ? (
                                 <UpdateCommentComponent
-                                  code={comment?.hrCommentCode}
+                                  setContent={setContent}
                                   updateCommentHandler={updateCommentHandler}
                                   updateSuccHandler={updateSuccHandler}
                                 />
@@ -330,9 +344,7 @@ const HospitalReviewView = () => {
                                           comment.hrCommentCode ? (
                                             comment?.member.id == data.id ? (
                                               <UpdateCommentComponent
-                                                code={
-                                                  comment?.hrCommentCode
-                                                }
+                                                setContent={setContent}
                                                 updateCommentHandler={
                                                   updateCommentHandler
                                                 }
