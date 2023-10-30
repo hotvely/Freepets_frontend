@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { updateCommentAPI } from "../../api/notice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { userLogout } from "../store/userSlice";
-import { getTokenCookie } from "../../api/cookie";
 
 const Styled = styled.div`
   margin-top: 20px;
@@ -30,32 +28,20 @@ const Styled = styled.div`
 `;
 
 const UpdateCommentComponent = (props) => {
-  // const [content, setContent] = useState();
-  let content = "";
-  const code = props.code;
-  const writerId = props.writer;
-  const dispatch = useDispatch();
+  const [content, setContent] = useState("");
+
   const user = useSelector((state) => {
     return state.user;
   });
 
   const contentHandler = (e) => {
-    content = e.target.value;
+    setContent(e.target.value);
+    props.setContent(e.target.value);
   };
 
   const updateComment = async () => {
     console.log(content);
-    const formData = {
-      commentCode: code,
-      commentDesc: content,
-    };
-
-    console.log(formData);
-    const result = await updateCommentAPI(formData);
-    console.log("updateCommentComponent updateCommet 내부 함수");
-    console.log(result.data);
-    if (result.data) {
-      // 결과 반환해주면.. 버튼 눌림 처리 둘다 꺼버리기.
+    if (content) {
       props.updateSuccHandler();
     }
   };

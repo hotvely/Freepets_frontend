@@ -17,6 +17,7 @@ import {
   getBoardViewAPI,
   getCommentAPI,
   getCommentsAPI,
+  updateCommentAPI,
   updateLikeNoticeAPI,
 } from "../../api/notice";
 import CommentComponent from "../../components/comment/CommentComponent";
@@ -40,12 +41,13 @@ import yaonge from "../../resources/yaonge.jpg";
 import { dateFormatDefault } from "../../api/utils";
 import { getTokenCookie } from "../../api/cookie";
 import { userLogout } from "../../components/store/userSlice";
+import { async } from "q";
 
 const NoticeView = () => {
   const { code } = useParams();
   const [postData, setPostData] = useState();
   const [comments, setComments] = useState([]);
-  const [parentComment, setParentComment] = useState();
+  const [content, setContent] = useState("");
 
   const [likeCount, setLikeCount] = useState();
 
@@ -227,12 +229,18 @@ const NoticeView = () => {
   }, []);
 
   useEffect(() => {
-    console.log("업데이트 성공시 ..");
-    if (succUpdate) {
-      setSuccUpdate(false);
-      setCurrClickBtn(-1);
-      getCommentHandler(code);
-    }
+    const handler = async () => {
+      if (succUpdate) {
+        const formData = { commentCode: currClickBtn, commentDesc: content };
+        const result = await updateCommentAPI(formData);
+        if (result.data) {
+          setSuccUpdate(false);
+          setCurrClickBtn(-1);
+          getCommentHandler(code);
+        }
+      }
+    };
+    handler();
   }, [succUpdate]);
 
   const ScrollToTopBtn = () => {
@@ -363,7 +371,7 @@ const NoticeView = () => {
                             {currClickBtn === comment?.noticeCommentCode ? (
                               comment?.member?.id === user?.id ? (
                                 <UpdateCommentComponent
-                                  code={comment?.noticeCommentCode}
+                                  setContent={setContent}
                                   updateCommentHandler={updateCommentHandler}
                                   updateSuccHandler={updateSuccHandler}
                                 />
@@ -420,9 +428,7 @@ const NoticeView = () => {
                                           comment.noticeCommentCode ? (
                                             comment?.member.id === user?.id ? (
                                               <UpdateCommentComponent
-                                                code={
-                                                  comment?.noticeCommentCode
-                                                }
+                                                setContent={setContent}
                                                 updateCommentHandler={
                                                   updateCommentHandler
                                                 }
