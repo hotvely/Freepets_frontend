@@ -269,7 +269,8 @@ const NoticeView = () => {
                     <span>{dateFormatDefault(postData?.noticeDate)}</span>
                     <span>ㆍ조회{postData?.noticeViews}</span>
                     {/* <span>ㆍ댓글{postData?.noticeCommentCount}</span> */}
-                    <span>ㆍ좋아요{postData?.noticeLike}</span>
+
+                    <span>ㆍ좋아요{likeCount}</span>
                   </div>
                 </div>
               </div>
