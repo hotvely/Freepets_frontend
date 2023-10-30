@@ -96,16 +96,27 @@ const StyledRSide = styled.div`
 `;
 
 const RSide = () => {
-  const [lat, setLat] = useState();
-  const [lng, setLng] = useState();
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
   const [city, setCity] = useState();
   const [area, setArea] = useState();
   const [weather, setWeather] = useState();
 
-  const searchAddr = async () => {
+  const searchAddr = () => {
+    console.log(window);
+    if (window) {
+      console.log("일단 윈도 있음");
+      if (window.naver) {
+        console.log("네이버도 윈도 안에 있음");
+        if (window.naver.maps) {
+          console.log("윈도 안에 네이버안에 맵스 잉씀");
+        }
+      }
+    }
+
     if (window.naver) {
       const coords = new window.naver.maps.LatLng(lat, lng);
-
+      console.log("있으니까 들어온거 아녀?");
       window.naver.maps.Service.reverseGeocode(
         {
           coords: coords,
@@ -127,24 +138,21 @@ const RSide = () => {
       );
     }
   };
+
   const weatherHandler = async () => {
     const responseWeather = await getWeather(lat, lng);
     setWeather(responseWeather);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setLat(pos.coords.latitude);
+      setLng(pos.coords.longitude);
+    });
+  }, []);
 
   useEffect(() => {
-    if (window.naver) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        setLat(pos.coords.latitude);
-        setLng(pos.coords.longitude);
-      });
-    }
-    // setCity(address.area1.name);
-  }, [window.naver]);
-
-  useEffect(() => {
+    console.log("이제 네이버 맵 가져온다~");
     if (lat && lng) searchAddr();
   }, [lat, lng]);
 
@@ -155,8 +163,8 @@ const RSide = () => {
   }, [city, area]);
 
   return (
-    <>
-      <StyledRSide>
+    <StyledRSide>
+      {window.naver ? (
         <div className="rMenu">
           <div className="rMenuAction">
             <div className="weather-content">
@@ -264,8 +272,8 @@ const RSide = () => {
             </div>
           </div>
         </div>
-      </StyledRSide>
-    </>
+      ) : null}
+    </StyledRSide>
   );
 };
 

@@ -56,8 +56,10 @@ const NoticeList = (props) => {
   const searchPage = searchParams.get("page");
   let page = searchPage != null ? searchPage : 1;
 
+  const [keyword, setKeyword] = useState();
   let sortNum = props.props.sortNum;
-  let keyword = props.props.keyword == "" ? null : props.props.keyword;
+
+  let getKeyword = props.props.keyword == "" ? null : props.props.keyword;
   let searchNum = props.props.searchNum;
   const changeDate = (tempArr) => {
     for (const item in tempArr) {
@@ -111,6 +113,7 @@ const NoticeList = (props) => {
   useEffect(() => {}, [boards]);
 
   useEffect(() => {
+    setKeyword(getKeyword);
     if (page <= 1) getBoardHandler(1);
   }, []);
 
@@ -130,7 +133,10 @@ const NoticeList = (props) => {
 
   useEffect(() => {
     if (keyword) {
-      getSearchBoardHandler(page);
+      if (page != 1) {
+        page = 1;
+        getSearchBoardHandler(page);
+      }
     } else {
       getBoardHandler(page);
     }
@@ -153,6 +159,7 @@ const NoticeList = (props) => {
           />
         ) : null}
       </ContentStyle>
+      {console.log(page)}
       <Page totalPages={totalPages} page={page} />
     </MainStlye>
   );
