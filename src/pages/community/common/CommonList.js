@@ -7,14 +7,41 @@ import {
 } from "../../../api/community";
 import { dateFormatTrans } from "../../../api/utils";
 import CommunityTableForList from "../../../components/Community/CommunityTableForList";
+import Page from "../../../components/Page";
 
 const ContentStyle = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px;
-  height: 470px;
+  height: 580px;
   text-align: center;
   /* background-color: steelblue; */
+
+  .main-bottom {
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* border-top: 1px solid #3a98b9; */
+
+    .paging-bar {
+      flex-grow: 1;
+      text-align: center;
+    }
+    #write-btn {
+      /* display: flex;
+      justify-content: end; */
+      button {
+        font-weight: bold;
+        color: #3a98b9;
+        width: 80px;
+        height: 40px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    }
+  }
 `;
 
 const CommunityList = (props) => {
@@ -27,6 +54,7 @@ const CommunityList = (props) => {
   const orderBy = props.props.orderBy;
   const searchType = props.props.searchType;
   const searchKeyword = props.props.searchKeyword;
+  const [totalPages, setTotalPages] = useState();
 
   const handleRowClick = (row) => {
     //ViewPage로 이동
@@ -37,6 +65,7 @@ const CommunityList = (props) => {
     // 게시글 목록 데이터
     const result = await getCommunityList(page, orderBy);
     setcommonPosts(result.data.communityList);
+    setTotalPages(result.data.totalPages);
     // setcommonPosts([...commonPost, ...result.data]);
   };
 
@@ -48,9 +77,14 @@ const CommunityList = (props) => {
         searchType
       );
       setcommonPosts(result.data.communityList);
+      setTotalPages(result.data.totalPages);
     } catch (error) {
       console.error("검색 에러: ", error);
     }
+  };
+
+  const navWrite = () => {
+    navigate("/community/common/create");
   };
 
   useEffect(() => {
@@ -70,7 +104,17 @@ const CommunityList = (props) => {
       accessor: "commonTitle",
       Header: "제목",
       Cell: ({ row }) => (
-        <div style={{ textAlign: "left", width: "350px", cursor: "pointer" }}>
+        <div
+          style={{
+            textAlign: "left",
+            width: "350px",
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "350px",
+          }}
+        >
           {row.original.commonCommentCount > 0 ? (
             <div>
               {row.original.commonTitle}{" "}
@@ -130,6 +174,14 @@ const CommunityList = (props) => {
           onRowClick={handleRowClick}
         />
       )}
+      <div className="main-bottom">
+        <div className="paging-bar">
+          <Page totalPages={totalPages} page={page} />
+        </div>
+        <div id="write-btn">
+          <button onClick={navWrite}>글쓰기</button>
+        </div>
+      </div>
     </ContentStyle>
   );
 };

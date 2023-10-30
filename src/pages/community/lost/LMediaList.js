@@ -56,7 +56,26 @@ const MainContentBox = styled.div`
         font-weight: bold;
         background-color: #eeee;
       }
+
+      .media-sort-like {
+        padding-right: 10px;
+      }
+      .view-board {
+        display: flex;
+        .view-check-board {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        button {
+          background-color: #eeee;
+          width: 30px;
+          height: 30px;
+          border: none;
+          border-radius: 10px;
+        }
+      }
     }
+
     .search-box {
       display: flex;
       /* flex-direction: row; */
@@ -105,17 +124,12 @@ const MainContentBox = styled.div`
     /* padding: 10px; */
     /* margin-right: 10px; */
     .media-colum {
-      display: flex;
-      flex-direction: row;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       flex-wrap: wrap;
-      gap: 10px;
+      grid-gap: 10px;
       .media-content {
-        /* width: 100%; */
         flex: 1 0 15%;
-        /* width: 20%; */
-        /* padding-top: 10px;
-      padding-left: 10px; */
-        /* border: solid 2px #eeee; */
         background-color: #eeee;
         height: 300px;
 
@@ -140,6 +154,10 @@ const MainContentBox = styled.div`
             h3 {
               padding-right: 3px;
               font-size: 1rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 200px; /* 원하는 최대 너비 설정 */
             }
             p {
               color: tomato;
@@ -176,53 +194,9 @@ const MainContentBox = styled.div`
     padding-top: 20px;
     /* border-top: 1px solid #3a98b9; */
 
-    .page {
+    .paging-bar {
       flex-grow: 1;
       text-align: center;
-      .pagination {
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
-        text-align: center;
-        list-style: none;
-        display: inline-block;
-
-        a {
-          float: left;
-          display: block;
-          font-size: 14px;
-          text-decoration: none;
-          padding: 5px 12px;
-          color: #96a0ad;
-          line-height: 1.5;
-        }
-        a:active {
-          cursor: default;
-          color: #ffffff;
-          outline: none;
-        }
-        #first:hover,
-        #last:hover,
-        #arrow-left:hover,
-        #arrow-right:hover {
-          color: #2e9cdf;
-        }
-
-        #num {
-          /* margin-left: 3px; */
-          -moz-border-radius: 100%;
-          -webkit-border-radius: 100%;
-          border-radius: 100%;
-        }
-        #num:hover {
-          background-color: #2e9cdf;
-          color: #ffffff;
-        }
-        #num.active {
-          background-color: #2e9cdf;
-          cursor: pointer;
-        }
-      }
     }
     #write-btn {
       /* display: flex;
@@ -234,6 +208,7 @@ const MainContentBox = styled.div`
         height: 40px;
         border: none;
         border-radius: 10px;
+        cursor: pointer;
       }
     }
   }
@@ -288,6 +263,7 @@ const LMediaList = () => {
         searchType
         // orderBy
       );
+      console.log("글이 들어와?" + result.data.lostList);
       setMediae(result.data.lostList);
       setTotalPages(result.data.totalPages);
     } catch (error) {
@@ -342,17 +318,19 @@ const LMediaList = () => {
           {mediae && mediae.length > 0 ? (
             <div className="main-content">
               <div className="media-colum">
-                {mediae.map((media) => (
-                  // <Link to={"/commonview/" + media.commonCode}>
-                  <div className="media-content" key={media?.lostCode}>
+                {mediae.map((media, index) => (
+                  <div className="media-content" key={index}>
                     <div className="media-thumbnail">
                       <Link to={`/community/lost/lostview/${media?.lostCode}`}>
                         <p>
                           <img
-                            src={media.lostDesc.substring(
-                              media.lostDesc.indexOf('<img src="') + 10,
-                              media.lostDesc.indexOf('">')
-                            )}
+                            src={
+                              hamster
+                              //   media.lostDesc.substring(
+                              //   media.lostDesc.indexOf('<img src="') + 10,
+                              //   media.lostDesc.indexOf('">')
+                              // )
+                            }
                             alt="미디어썸네일"
                           />
                         </p>
@@ -361,7 +339,7 @@ const LMediaList = () => {
                     <div className="media-info">
                       <div className="media-info-first-line">
                         <Link
-                          to={"/lostview/" + media?.lostCode}
+                          to={`/community/lost/lostview/${media?.lostCode}`}
                           id="media-info-title"
                         >
                           <h3>{media?.lostTitle}</h3>
@@ -387,6 +365,13 @@ const LMediaList = () => {
                     </div>
                   </div>
                 ))}
+                {Array(3 - (mediae.length % 3))
+                  .fill(null)
+                  .map((_, index) => (
+                    <div className="empty-space" key={mediae.length + index}>
+                      &nbsp;
+                    </div>
+                  ))}
               </div>
             </div>
           ) : (

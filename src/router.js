@@ -151,7 +151,7 @@ const router = createBrowserRouter([
             element: <LMediaList />,
           },
           {
-            path: "lostview/:id",
+            path: "lostview/:code",
             element: <LostView />,
           },
           {

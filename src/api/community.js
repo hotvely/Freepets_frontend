@@ -78,6 +78,7 @@ export const getLostList = async (page, orderBy) => {
 };
 
 export const getLostAPI = async (id) => {
+  console.log("포스트 연결" + id);
   let url = `community/lost/${id}`;
   return await instance.get(url);
 };

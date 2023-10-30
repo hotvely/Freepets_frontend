@@ -128,10 +128,10 @@ const MainContentBox = styled.div`
     /* padding: 10px; */
     /* margin-right: 10px; */
     .media-colum {
-      display: flex;
-      flex-direction: row;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       flex-wrap: wrap;
-      gap: 10px;
+      grid-gap: 10px;
       .media-content {
         /* width: 100%; */
         flex: 1 0 15%;
@@ -200,7 +200,7 @@ const MainContentBox = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-top: 20px;
+    /* padding-top: 20px; */
     /* border-top: 1px solid #3a98b9; */
 
     .paging-bar {
@@ -317,9 +317,8 @@ const CMediaList = () => {
       return (
         <div className="main-content">
           <div className="media-colum">
-            {mediae.map((media) => (
-              // <Link to={"/commonview/" + media.commonCode}>
-              <div className="media-content" key={media?.commonCode}>
+            {mediae.map((media, index) => (
+              <div className="media-content" key={index}>
                 <div className="media-thumbnail">
                   <Link
                     to={`/community/common/commonview/${media?.commonCode}`}
@@ -371,6 +370,21 @@ const CMediaList = () => {
                 </div>
               </div>
             ))}
+            {Array(3 - (mediae.length % 3))
+              .fill(null)
+              .map((_, index) => (
+                <div className="empty-space" key={mediae.length + index}>
+                  &nbsp;
+                </div>
+              ))}
+          </div>
+          <div className="main-bottom">
+            <div className="paging-bar">
+              <Page totalPages={totalPages} page={page} />
+            </div>
+            <div id="write-btn">
+              <button onClick={navWrite}>글쓰기</button>
+            </div>
           </div>
         </div>
       );
@@ -451,14 +465,6 @@ const CMediaList = () => {
         ) : (
           <CommunityList props={{ orderBy, searchType, searchKeyword }} />
         )}
-        <div className="main-bottom">
-          <div className="paging-bar">
-            <Page totalPages={totalPages} page={page} />
-          </div>
-          <div id="write-btn">
-            <button onClick={navWrite}>글쓰기</button>
-          </div>
-        </div>
       </MainContentBox>
     </MainStlye>
   );
