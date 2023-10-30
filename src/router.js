@@ -23,6 +23,7 @@ import HospitalReviewView from "./pages/information/HospitalReviewView";
 import EventCalendar from "./pages/notice/EventCalendar";
 import UserPage from "./pages/member/UserPage";
 import NoticeList from "./pages/notice/NoticeList";
+import ProfileComponent from "./components/member/ProfileComponent";
 
 const router = createBrowserRouter([
   {

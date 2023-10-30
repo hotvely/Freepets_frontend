@@ -13,5 +13,6 @@ export const getBookmarkAPI = async (token) => {
 };
 
 export const deleteBookmarkAPI = async (code) => {
+  console.log("북마크 삭제" + code);
   return await instance.delete(`bookmark/${code}`);
 };

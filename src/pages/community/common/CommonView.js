@@ -21,7 +21,7 @@ import {
 import { dateFormatDefault } from "../../../api/utils";
 import { faBookmark, faHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { addBookmarkAPI, deleteBookmarkAPI } from "../../../api/bookmark";
 import CommentComponent from "../../../components/comment/CommentComponent";
 import UpdateCommentComponent from "../../../components/comment/UpdateCommentComponent";
 import ReCommentComponent from "../../../components/comment/ReCommentComponent";
@@ -171,7 +171,6 @@ const MainContentBox = styled.div`
 
 const CommonView = () => {
   const [post, setPost] = useState();
-  const [isIconActive, setIsIconActive] = useState(false);
   const { code } = useParams();
   const navigate = useNavigate();
 
@@ -182,7 +181,10 @@ const CommonView = () => {
   const [selected_Comment, setSelected_Comment] = useState(0);
   const [content, setContent] = useState("");
   //좋아요
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(0);
+  // 북마크
+  const [isIconActive, setIsIconActive] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
 
   const CommunityPostAPI = async (id) => {
     const result = await getCommunity(id);
@@ -210,18 +212,40 @@ const CommonView = () => {
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
   };
-  const BookMarkBtn = () => {
-    //나중에 북마크 경로로
-    window.scrollTo(0, 0);
-    setIsIconActive(!isIconActive);
-    if (isIconActive) {
-      alert("북마크가 해제되었습니다.");
-    } else {
-      alert("북마크 되었습니다.");
-    }
-  };
 
   const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
+  const BookMarkBtn = async () => {
+    //나중에 북마크 경로로
+    const formData = {
+      boardName: "community",
+      postCode: code,
+      token: user?.token,
+    };
+    window.scrollTo(0, 0);
+
+    if (bookmark) {
+      // 북마크 삭제
+      const deleteResult = await deleteBookmarkAPI(code);
+      console.log("삭제 :" + deleteResult);
+      if (deleteResult) {
+        alert("북마크가 해제되었습니다.");
+        setBookmark(false);
+        setIsIconActive(false);
+      } else {
+        alert("북마크 해제에 실패했습니다.");
+      }
+    } else {
+      // 북마크 등록
+      const addResult = await addBookmarkAPI(formData);
+      if (addResult.data) {
+        alert("북마크 되었습니다.");
+        setBookmark(true);
+        setIsIconActive(true);
+      } else {
+        alert("북마크 등록에 실패했습니다.");
+      }
+    }
+  };
 
   const NavListPage = () => {
     navigate(-1);
@@ -397,7 +421,6 @@ const CommonView = () => {
               <div className="profile-img">
                 <img src={yange} alt="양이 이미지" />
               </div>
-
               <div className="profile-area">
                 <div className="writer-info">
                   <div className="writer">{post?.member?.nickname}</div>
@@ -434,7 +457,8 @@ const CommonView = () => {
               <button onClick={updateLikeHandler}>
                 <FontAwesomeIcon icon={faHeart} style={{ color: "#FF6969" }} />
                 {" 추천 "}
-                {post?.commonLikeCount}
+                {/* {post?.commonLikeCount} */}
+                {liked}
               </button>
               {console.log(post?.commonLikeCount)}
             </div>
