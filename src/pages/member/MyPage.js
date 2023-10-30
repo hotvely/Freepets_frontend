@@ -48,6 +48,11 @@ const MyPage = () => {
   });
 
   useEffect(() => {
+    getNotiHandler();
+    getBookmarkHandler();
+  }, []);
+
+  useEffect(() => {
     if (!isOpen) {
       setIsOpen(false);
       document.body.style.overflow = "unset";
@@ -100,6 +105,7 @@ const MyPage = () => {
     console.log(result.data);
     setNotifications([...result.data]);
   };
+
   const getBookmarkHandler = async () => {
     const result = await getBookmarkAPI(user.token);
     console.log(result);

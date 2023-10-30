@@ -56,10 +56,11 @@ const NoticeList = (props) => {
   const searchPage = searchParams.get("page");
   let page = searchPage != null ? searchPage : 1;
 
-  const [keyword, setKeyword] = useState();
+  // const [keyword, setKeyword] = useState();
   let sortNum = props.props.sortNum;
 
-  let getKeyword = props.props.keyword == "" ? null : props.props.keyword;
+  let keyword = props.props.keyword ? props.props.keyword : "";
+
   let searchNum = props.props.searchNum;
   const changeDate = (tempArr) => {
     for (const item in tempArr) {
@@ -69,28 +70,32 @@ const NoticeList = (props) => {
   };
 
   const getBoardHandler = async (page) => {
-    const response = await getBoardsByPageAPI(page, sortNum);
+    if (keyword) {
+      console.log("보드 핸들러 키워드 있어");
+      getSearchBoardHandler(page);
+    } else {
+      const response = await getBoardsByPageAPI(page, sortNum);
 
-    let tempArr = [...response.data.noticeList];
-    tempArr = [...changeDate(tempArr)];
+      let tempArr = [...response.data.noticeList];
+      tempArr = [...changeDate(tempArr)];
 
-    setBoards(tempArr);
+      setBoards(tempArr);
 
-    setTotalPages(response.data.totalPages);
+      setTotalPages(response.data.totalPages);
+    }
   };
 
   const getSearchBoardHandler = async (page) => {
     // 검색기능..
 
-    page = 1;
-
     if (keyword) {
-      const response = await getSearchAPI(page, keyword, searchNum);
+      console.log(searchNum);
+      const response = await getSearchAPI(page, keyword, searchNum, sortNum);
 
       if (response.data.noticeList.length > 0) {
         if (response.data.totalPages < page) {
           page = 1;
-          response = await getSearchAPI(page, keyword, searchNum);
+          response = await getSearchAPI(page, keyword, searchNum, sortNum);
         }
 
         let tempArr = [...response.data.noticeList];
@@ -100,8 +105,9 @@ const NoticeList = (props) => {
         setTotalPages(response.data.totalPages);
       } else {
         document.querySelector("#search").value = "";
-        props.props.setKeyword(null);
+
         page = 1;
+        getBoardHandler(page);
         navigate("../notice?page=1");
         // getBoardHandler(page, sortNum);
       }
@@ -113,18 +119,28 @@ const NoticeList = (props) => {
   useEffect(() => {}, [boards]);
 
   useEffect(() => {
-    setKeyword(getKeyword);
     if (page <= 1) getBoardHandler(1);
   }, []);
 
   useEffect(() => {
-    getBoardHandler(1);
+    console.log("정렬 번호 바쎳을때");
+    console.log(sortNum);
+    getBoardHandler(page);
+    navigate("../notice/?page=1");
   }, [sortNum]);
 
   useEffect(() => {
+    console.log("keyword useEffect");
     if (keyword) {
-      getSearchBoardHandler(page);
+      console.log(keyword);
+      if (page != 1) {
+        getSearchBoardHandler(1);
+        navigate("../notice/?page=1");
+      } else {
+        getSearchBoardHandler(page);
+      }
     } else {
+      getBoardHandler(page);
       if (page != 1) navigate("../notice/?page=1");
     }
   }, [keyword]);
@@ -132,14 +148,8 @@ const NoticeList = (props) => {
   useEffect(() => {}, [boards]);
 
   useEffect(() => {
-    if (keyword) {
-      if (page != 1) {
-        page = 1;
-        getSearchBoardHandler(page);
-      }
-    } else {
-      getBoardHandler(page);
-    }
+    console.log("페이지 유즈 이펙트");
+    getBoardHandler(page);
   }, [page]);
 
   const handleRowClick = (row) => {
@@ -159,7 +169,7 @@ const NoticeList = (props) => {
           />
         ) : null}
       </ContentStyle>
-      {console.log(page)}
+
       <Page totalPages={totalPages} page={page} />
     </MainStlye>
   );

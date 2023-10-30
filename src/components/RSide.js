@@ -103,20 +103,9 @@ const RSide = () => {
   const [weather, setWeather] = useState();
 
   const searchAddr = () => {
-    console.log(window);
-    if (window) {
-      console.log("일단 윈도 있음");
-      if (window.naver) {
-        console.log("네이버도 윈도 안에 있음");
-        if (window.naver.maps) {
-          console.log("윈도 안에 네이버안에 맵스 잉씀");
-        }
-      }
-    }
-
     if (window.naver) {
       const coords = new window.naver.maps.LatLng(lat, lng);
-      console.log("있으니까 들어온거 아녀?");
+
       window.naver.maps.Service.reverseGeocode(
         {
           coords: coords,
@@ -152,7 +141,6 @@ const RSide = () => {
   }, []);
 
   useEffect(() => {
-    console.log("이제 네이버 맵 가져온다~");
     if (lat && lng) searchAddr();
   }, [lat, lng]);
 

@@ -298,7 +298,8 @@ const Notice = () => {
   });
 
   const getSearchBoardHandler = () => {
-    setKeyword(document.querySelector("#search").value);
+    const word = document.querySelector("#search").value;
+    setKeyword(word);
   };
 
   const sortOptionHandler = (e) => {

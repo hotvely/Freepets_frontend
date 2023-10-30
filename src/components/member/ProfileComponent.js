@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import testImg from "../../../src/resources/image.jpg";
+import yaonge from "../../../src/resources/yaonge.jpg";
 
 const StyledProfileView = styled.div`
   margin-right: 20px;
@@ -43,7 +43,7 @@ const ProfileComponent = (props) => {
               {memberData?.memberImg ? (
                 <img src={memberData.memberImg} alt="작성자 프로필" />
               ) : (
-                <img src={testImg} alt="작성자 프로필" />
+                <img src={yaonge} alt="작성자 프로필" />
               )}
             </a>
           </div>

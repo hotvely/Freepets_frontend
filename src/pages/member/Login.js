@@ -80,7 +80,11 @@ const Login = () => {
           </div>
           <div className="downArea">
             <span>😄</span>
-            <input type="text" name="userPwd" placeholder="비밀번호"></input>
+            <input
+              type="password"
+              name="userPwd"
+              placeholder="비밀번호"
+            ></input>
           </div>
           <button
             type="submit"

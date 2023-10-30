@@ -36,7 +36,7 @@ import {
 } from "../../components/css/PostView";
 import ProfileComponent from "../../components/member/ProfileComponent";
 import { Link, useNavigate } from "react-router-dom";
-import yange from "../../resources/yaonge.jpg";
+import yaonge from "../../resources/yaonge.jpg";
 import { dateFormatDefault } from "../../api/utils";
 import { getTokenCookie } from "../../api/cookie";
 import { userLogout } from "../../components/store/userSlice";
@@ -95,6 +95,7 @@ const NoticeView = () => {
       if (formData.commentDesc) {
         const addCommentResult = await addCommentAPI(formData);
         console.log(addCommentResult);
+        await getPostHandler(code);
         // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
         // 단, 게시글 작성자 아이디하고 현재 아이디 하고 같으면 알림 추가 안함
         if (parentCode > 0) {
@@ -130,6 +131,7 @@ const NoticeView = () => {
               url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
             };
             await addNoticeNotification(notiData);
+
             console.log("댓글 작성자랑 달라서 알림 감!");
           } else {
             alert("같은사용자는 알림 안감");
@@ -158,6 +160,7 @@ const NoticeView = () => {
       if (!result.data) {
         alert("이미 북마크가 등록되어 있습니다.");
       }
+      alert("북마크가 등록 되었습니다.");
     }
   };
 
@@ -259,7 +262,7 @@ const NoticeView = () => {
                   navigate(`/userpage/${postData.member.id}`);
                 }}
               >
-                <img src={yange} alt="배너 이미지" />
+                <img src={yaonge} alt="배너 이미지" />
 
                 <div className="profile-area">
                   <div className="writer-info">
@@ -312,7 +315,11 @@ const NoticeView = () => {
             <div className="comment-box">
               <div className="commentBox">
                 <div className="commentProfile">
-                  <img src={testImg}></img>
+                  {user.memberImg ? (
+                    <img src={user.memberImg}></img>
+                  ) : (
+                    <img src={yaonge}></img>
+                  )}
                 </div>
                 <CommentComponent props={0} ref={addCommentHandler} />
               </div>
