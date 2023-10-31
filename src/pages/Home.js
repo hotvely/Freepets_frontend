@@ -7,6 +7,8 @@ import Logo from "../assets/Logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { userSave } from "../components/store/userSlice";
+import Header from "../components/Header";
+
 const StyledHeader = styled.header`
   position: fixed;
   width: 100%;
@@ -43,6 +45,7 @@ const StyledHeader = styled.header`
     }
   }
 `;
+
 const StyledMain = styled.main`
   background-color: #68B0C9;
   width: 100%;
@@ -324,8 +327,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      <StyledHeader>
+    <div style={{width: "100%"}}>
+     
+      {/* <StyledHeader>
         <nav>
           <a href="#">
             <img src={Logo}></img>
@@ -354,7 +358,7 @@ const Home = () => {
             )}
           </div>
         </nav>
-      </StyledHeader>
+      </StyledHeader> */}
       <StyledMain>
         <img src={Banner} style={{ width: "100%", height: "59vh" }} />
         <div className="allMain">

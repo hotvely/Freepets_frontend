@@ -27,18 +27,32 @@ import UserPage from "./pages/member/UserPage";
 import NoticeList from "./pages/notice/NoticeList";
 import Chatting from "./pages/Chatting";
 import TotalSearch from "./pages/TotalSearch";
+import Header from "./components/Header";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element:  <HLayout/>,
+    children: [
+      {
+        index: true,
+        element: <Home/>,
+      },
+     
+    ]
   },
   {
     path: "/main",
-    element: <Home />,
+    element:  <HLayout/>,
+    children: [
+      {
+        index: true,
+        element: <Home/>,
+      },
+    ]
   },
   {
-    path: '/totalSearch',
+    path: "/totalSearch",
     element: <HLayout/>,
     children: [
       {
