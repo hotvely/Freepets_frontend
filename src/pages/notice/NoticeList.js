@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import NoticeTableForList from "./NoticeTableForList";
 import { getBoardsByPageAPI, getSearchAPI } from "../../api/notice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { dateFormatDefault } from "../../api/utils";
 import Page from "../../components/Page";
 
@@ -51,6 +51,9 @@ const NoticeList = (props) => {
     { accessor: "noticeViews", Header: "조회수" },
     { accessor: "noticeLike", Header: "좋아요" },
   ]);
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get("page");
+  let page = searchPage != null ? searchPage : 1;
 
   // const [keyword, setKeyword] = useState();
   let sortNum = props.props.sortNum;

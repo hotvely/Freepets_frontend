@@ -311,12 +311,15 @@ const Home = () => {
   const [search, setSearch] = useState();
 
   const user = useSelector((state) => {
-    if (getTokenCookie() != undefined) {
-      console.log("쿠키 있!");
-      return state.user;
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("호출..?");
+        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -325,14 +328,6 @@ const Home = () => {
   const onSearchChange = (e) => {
     setSearch(e.target.value);
   }
-
-  useEffect(() => {
-    const saveuser = localStorage.getItem("user");
-    //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
-    if (user !== null && Object.keys(user).length === 0 && saveuser !== null) {
-      dispatch(userSave(JSON.parse(saveuser)));
-    }
-  }, []);
 
   return (
     <div style={{width: "100%"}}>
