@@ -191,8 +191,7 @@ const CommonView = () => {
   //좋아요
   const [liked, setLiked] = useState(0);
   // 북마크
-  const [isIconActive, setIsIconActive] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
+  // const [isIconActive, setIsIconActive] = useState(false);
 
   const CommunityPostAPI = async (id) => {
     const result = await getCommunity(id);
@@ -215,26 +214,30 @@ const CommonView = () => {
   };
 
   const dispatch = useDispatch();
-  // const user = useSelector((state) => state.user);
-  const user = useSelector((state) => {
-    if (getTokenCookie() != undefined) {
-      console.log("쿠키 있!");
-      return state.user;
-    } else {
-      if (localStorage.getItem("user")) {
-        console.log("호출..?");
-        dispatch(userLogout());
-      }
-    }
-  });
-
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  // const user = useSelector((state) => {
+  //   if (getTokenCookie() != undefined) {
+  //     console.log("쿠키 있!");
+  //     if (state.user != {}) {
+  //       return state.user;
+  //     }
+  //     return JSON.parse(localStorage.getItem("user"));
+  //   } else {
+  //     if (localStorage.getItem("user")) {
+  //       console.log("호출..?");
+  //       dispatch(userLogout());
+  //     }
+  //   }
+  // });
+  //const user = JSON.parse(localStorage.getItem("user"));
   const viewBtn = post && post.member && post.member.id === user.id;
 
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
   };
 
-  const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
+  // const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
   const BookMarkBtn = async () => {
     //나중에 북마크 경로로
     const formData = {
@@ -244,28 +247,11 @@ const CommonView = () => {
     };
     window.scrollTo(0, 0);
 
-    if (bookmark) {
-      // 북마크 삭제
-      const deleteResult = await deleteBookmarkAPI(code);
-      console.log("삭제 :" + deleteResult);
-      if (deleteResult) {
-        alert("북마크가 해제되었습니다.");
-        setBookmark(false);
-        setIsIconActive(false);
-      } else {
-        alert("북마크 해제에 실패했습니다.");
-      }
-    } else {
-      // 북마크 등록
-      const addResult = await addBookmarkAPI(formData);
-      if (addResult.data) {
-        alert("북마크 되었습니다.");
-        setBookmark(true);
-        setIsIconActive(true);
-      } else {
-        alert("북마크 등록에 실패했습니다.");
-      }
-    }
+    // 북마크 등록
+    const result = await addBookmarkAPI(formData);
+    if (!result.data) {
+      alert("이미 북마크에 등록되었습니다.");
+    } else alert("북마크에 등록되었습니다.");
   };
 
   const NavListPage = () => {
@@ -310,6 +296,7 @@ const CommonView = () => {
         const addCommentResult = await addCommunityComment(formData);
         console.log(addCommentResult.data);
 
+        CommunityPostAPI(code);
         if (parentCode > 0) {
           // 부모 댓글 있을때.
           console.log(parentCode);
@@ -343,14 +330,15 @@ const CommonView = () => {
           }
         }
       }
-
+      console.log("여기까지 오나?");
       await getCommentHandler(code);
+
       e.target.commentDesc.value = null;
     } else {
       alert("로그인이 필요합니다.");
     }
   };
-
+  console.log(comments);
   const updateCommentHandler = async (code) => {
     // 댓글 수정 버튼을 눌렀을 때 실행해야 하는 로직을 처리하기 위한 함수
     if (code == currClickBtn) {
@@ -389,6 +377,7 @@ const CommonView = () => {
   const deleteCommentHandler = async (commentCode) => {
     await deleteCommunityComment(commentCode);
     await getCommentHandler(code);
+    await CommunityPostAPI(code);
   };
 
   const selected_Comment_handler = () => {
@@ -464,7 +453,7 @@ const CommonView = () => {
                     icon={faBookmark}
                     style={{
                       fontSize: "1rem",
-                      color: iconColor,
+                      // color: iconColor,
                       marginRight: "10px",
                     }}
                   />
@@ -526,7 +515,6 @@ const CommonView = () => {
                                 />
                               </div>
                             </div>
-                            {console.log(comment)}
                             {currClickBtn === comment?.commonCommentCode ? (
                               comment?.member?.id === user?.id ? (
                                 <>

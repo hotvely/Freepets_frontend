@@ -7,7 +7,7 @@ export const getTokenCookie = () => {
 export const setTokenCookie = (min) => {
   const date = new Date();
   console.log(date);
-  date.setTime(date.getTime() + min * 60 * 1000);
+  date.setTime(date.getTime() + min * 60 * 60 * 1000);
   console.log(date);
   document.cookie = `token=expiration;expires=${date.toUTCString()};path=/`;
 };
