@@ -315,6 +315,7 @@ const CMediaList = () => {
 
   useEffect(() => {
     if (param.ListBtn) setListBtn(param.ListBtn);
+    MediaListAPI();
   }, []);
 
   useEffect(() => {
