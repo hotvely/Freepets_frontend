@@ -9,68 +9,17 @@ import { useEffect, useState } from "react";
 import { userLogout, userSave } from "../components/store/userSlice";
 import axios from "axios";
 import { getTokenCookie } from "../api/cookie";
-const StyledHeader = styled.header`
-  position: fixed;
-  width: 100%;
-  nav {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 2.7rem 0;
-    color: #68b0c9;
-    font-weight: 650;
-    align-items: center;
-    z-index: 10;
-    position: relative;
-    a {
-      font-size: 1.5rem;
-      color: #68b0c9;
-      text-decoration: none;
-      img {
-        width: 11rem;
-      }
-    }
-    .rightNav {
-      display: flex;
-      a {
-        font-size: 1.3rem;
-        text-decoration: none;
-        color: #68b0c9;
-      }
-      p {
-        margin: 0 0.5rem;
-        font-size: 1.3rem;
-      }
-    }
-  }
-`;
 
 const StyledMain = styled.main`
   background-color: #68B0C9;
   width: 100%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
 
   .allMain {
     display: flex;
     width: 100%;
-    height: 45vh;
 
-    .leftNav {
-      display: flex;
-      position: fixed;
-      flex-direction: column;
-      font-size: 1.3rem;
-      margin-left: 1rem;
-      margin-top: 3rem;
-      
-      a {
-        color: #FFF1DC;
-        margin: 10px 0px;
-      }
-    }
     .rightNav {
       display: flex;
       flex-direction: column;
@@ -107,78 +56,67 @@ const StyledMain = styled.main`
           margin-right: 1rem;
         }
       }
-      
-      .best {
+      .ourStroy {
         margin-top: 2rem;
-        width: 65%;
-        height: 25vh;
+        width: 100%;
         display: flex;
-        justify-content: space-between;
-
-        .bestInner {
-          background-color: #eee;
-          width: 45%;
+        justify-content: center;
+        align-items: center;
+    
+        .mainBox {
           display: flex;
           flex-direction: column;
           align-items: center;
-          border-radius: 10px;
-
-          .weeklyBest {
-            width: 70%;
+          width: 100%;
+    
+          .center {
             display: flex;
             flex-direction: column;
-            align-items: center;
-          
-            .weeklyBestTitle {
-              color: #68b0c9;
-              font-size: 1.5rem;
-              font-weight: 600;
-              margin-top: 1rem;
-            }
-
-            div {
+            width: 70%;
+    
+            .center-start {
               width: 100%;
-              background-color: white;
-              margin-top: 2rem;
               display: flex;
-              flex-direction: column;
-              align-items: center;
-              font-size: 1rem;
+              justify-content: center;
+              font-size: 1.5rem;
+              color: #2E6578;
               font-weight: bold;
-              padding: 10px;
-              border-radius: 10px;
+              margin-bottom: 2rem;
             }
-          }
-        }
-
-        .findMe {
-          background-color: #eeeeee;
-          width: 45%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          border-radius: 10px;
-
-          .findBest {
-            color: #68b0c9;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-top: 1rem;
-          }
-          .findMeDiv {
-            display: flex;
-            width: 80%;
-            justify-content: space-between;
-            margin-top: 1rem;
-            div {
+    
+            .center-end {
               display: flex;
-              flex-direction: column;
-              align-items: center;
-              img {
-                width: 95%;
-                height: 50%;
-                margin-top: 1rem;
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+    
+              .center-end_container {
+                display: flex;
+                width: 300px;
+                flex-direction: column;
+                align-items: center;
+                background-color: #eee;
+                padding: 20px;
                 border-radius: 10px;
+                margin: 5px;
+    
+                .center-end_container-title {
+                  color: #68B0C9;
+                  font-size: 1.5rem;
+                  font-weight: bold;
+                  margin-bottom: 5px;
+                }
+    
+                .center-end_container-name {
+                  color: #999;
+                  font-size: 1.2rem;
+                  margin-bottom: 1.5rem;
+                }
+    
+                .center-end_container-desc {
+                  font-size: 1.1rem;
+                  font-weight: bold;
+                }
               }
             }
           }
@@ -186,112 +124,6 @@ const StyledMain = styled.main`
       }
     }
   }
-`;
-
-const OurStoryMain = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-
-  .ourStroy {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .mainBox {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      
-      .header {
-        width: 60%;
-        display: flex;
-        justify-content: center;
-        background-color: #8FCCDF;
-        padding: 1rem;
-        margin-bottom: 5rem;
-        align-items: center;
-        animation: textAni 1s forwards;
-  
-        #freepetsLogo {
-          margin-right: 2rem;
-          font-size: 3rem;
-          font-weight: bold;
-          color: #1A454F;
-        }
-
-        .freepetsDesc {
-          font-weight: bold;
-          font-size: 1.1rem;
-        }
-      }
-
-      .center {
-        display: flex;
-        flex-direction: column;
-        width: 70%;
-
-        .center-start {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          margin-bottom: 5rem;
-          font-size: 2rem;
-          font-weight: bold;
-        }
-
-        .center-end {
-          display: flex;
-          width: 100%;
-          display: flex;
-          justify-content: space-between;
-
-          .center-end_container {
-            display: flex;
-            width: 300px;
-            flex-direction: column;
-            align-items: center;
-            border: 1px solid #eee;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 5px;
-
-            .center-end_container-title {
-              color: #68B0C9;
-              font-size: 1.5rem;
-              font-weight: bold;
-              margin-bottom: 5px;
-            }
-
-            .center-end_container-name {
-              color: #999;
-              font-size: 1.2rem;
-              margin-bottom: 1.5rem;
-            }
-
-            .center-end_container-desc {
-              font-size: 1.1rem;
-              font-weight: bold;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  @keyframes textAni {
-    from {
-        opacity: 0;
-        transform: translateX(700px);
-    } to {
-        opacity: 1;
-        transform: translateX(0px);
-    }
-  }
-  
 `;
 
 const Home = () => {
@@ -326,18 +158,14 @@ const Home = () => {
             <div className="searchBar">
               <div>
                 <label htmlFor="totalSearch">통합검색 ▽</label>
-                <input type="text" id="totalSearch" onChange={onSearchChange}/>
+                <input type="text" id="totalSearch" onChange={onSearchChange} placeholder="검색어를 입력해 주세요."/>
               </div>
               <Link to={`/totalSearch?search=${search}`}>
                 <img src={loupe} />
               </Link>
             </div>
-            <div className="ourStroy" id="ourStroy">
+            <div className="ourStroy">
               <div className="mainBox">
-                <div className="header">
-                  <p id="freepetsLogo">FREEPET'S</p>
-                  <p className="freepetsDesc">반려동물과 함께하는 Free한 공간</p>
-                </div>
                 <div className="center">
                   <p className="center-start">반려동물을 위해,</p>
                   <div className="center-end">
