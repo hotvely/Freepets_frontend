@@ -27,7 +27,9 @@ import {
   MainContentBox,
 } from "../../components/css/PostView";
 import HospitalMap from "./HospitalMap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { userLogout } from "../../components/store/userSlice";
+import { getTokenCookie } from "../../api/cookie";
 
 
 const HospitalReviewView = () => {
@@ -40,9 +42,21 @@ const HospitalReviewView = () => {
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selectedComment, setSelectedComment] = useState(0);
   const [content, setContent] = useState("");
+  const dispatch = useDispatch();
   
   const data = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
   });
 
   const ScrollToTopBtn = () => {
@@ -70,7 +84,7 @@ const HospitalReviewView = () => {
   const onLikeBtn = async () => {
     const formData = new FormData();
     formData.append('hospitalReview.hospitalReviewCode', code);
-    formData.append('member.id', data.id);
+    formData.append('member.id', data?.id);
     const result = await likeAddorDelete(formData);
     setLike(result.data.likeCount);
   };
@@ -79,7 +93,7 @@ const HospitalReviewView = () => {
     const formData = {
       boardName: 'hospitalReview',
       postCode: code,
-      token: data.token,
+      token: data?.token,
     };
 
     const result = await addBookmarkAPI(formData);
@@ -98,7 +112,7 @@ const HospitalReviewView = () => {
     e.preventDefault();
     const parentCode = e.target.commentDesc.id;
     const formData = {
-      token: data.token,
+      token: data?.token,
       boardName: 'hospitalReview',
       postCode: code,
       parentCommentCode: parentCode,
@@ -109,7 +123,7 @@ const HospitalReviewView = () => {
       const commentResult = await addComment(formData);
 
       const notiData = {
-        token: data.token,
+        token: data?.token,
         postCode: formData.postCode,
         pCommentCode: commentResult.data.superHrCommentCode,
         cCommentCode: commentResult.data.hrCommentCode,
@@ -277,7 +291,7 @@ const HospitalReviewView = () => {
                                 <div>
                                   {dateFormatDefault(comment?.hrCommentDate)}
                                 </div>
-                                {data.id == comment?.member.id ? 
+                                {data?.id == comment?.member.id ? 
                                 <CommentBtnComponent
                                 code={comment?.hrCommentCode}
                                 writer={comment?.member?.id}
@@ -288,7 +302,7 @@ const HospitalReviewView = () => {
                               </div>
                             </div>
                             {currClickBtn === comment?.hrCommentCode ? (
-                              comment?.member?.id === data.id ? (
+                              comment?.member?.id === data?.id ? (
                                 <UpdateCommentComponent
                                   setContent={setContent}
                                   updateCommentHandler={updateCommentHandler}
@@ -327,7 +341,7 @@ const HospitalReviewView = () => {
                                               desc={comment.hrCommentDesc}
                                               date={comment.hrCommentDate}
                                             />
-                                            {data.id == comment.member.id ? 
+                                            {data?.id == comment.member.id ? 
                                             <CommentBtnComponent
                                             code={comment?.hrCommentCode}
                                             writer={comment?.member.id}
@@ -342,7 +356,7 @@ const HospitalReviewView = () => {
                                           </div>
                                           {currClickBtn ==
                                           comment.hrCommentCode ? (
-                                            comment?.member.id == data.id ? (
+                                            comment?.member.id == data?.id ? (
                                               <UpdateCommentComponent
                                                 setContent={setContent}
                                                 updateCommentHandler={
@@ -404,7 +418,7 @@ const HospitalReviewView = () => {
           </div>
         </div>
         <div className="article-bottom-btn">
-        {boardView?.memberDTO?.id == data.id ? 
+        {boardView?.memberDTO?.id == data?.id ? 
         <div
         className="left-btn"
         // style={{ display: viewBtn ? "block" : "none" }}

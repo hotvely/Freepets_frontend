@@ -5,8 +5,10 @@ import { faBookmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { getReviews, getBoardView, deleteSitterBoard, deleteReview, addReview } from "../../api/sitter";
 import { addBookmarkAPI } from "../../api/bookmark";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../../components/store/userSlice";
 
 const Main = styled.div`
     display: flex;
@@ -307,11 +309,28 @@ const Star = ({color1, color2, color3, color4, color5}) => {
 
 const SitterView = () => {
     const location = useLocation();
+    const { code } = useParams();
     const navigator = useNavigate();
     const [boardView, setBoardView] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [reviewDesc, setReviewDesc] = useState();
     const [star, setStar] = useState(0);
+    const dispatch = useDispatch();
+
+    const data = useSelector((state) => {
+        if (getTokenCookie() !== undefined) {
+          if (state.user.user) {
+            return state.user;
+          } else {
+            return JSON.parse(localStorage.getItem("user"));
+          }
+        } else {
+          if (localStorage.getItem("user")) {
+            console.log("로그아웃 !!!");
+            dispatch(userLogout());
+          }
+        }
+      });
 
     const styleGray = {
         color: "#aaa"
@@ -327,9 +346,6 @@ const SitterView = () => {
     const [style4, setStyle4] = useState(styleGray);
     const [style5, setStyle5] = useState(styleGray);
 
-    const data = useSelector((state) => {
-        return state.user;
-    });
 
     const onRatings = (event) => {
         switch(eval(event.currentTarget.value)) {
@@ -377,12 +393,12 @@ const SitterView = () => {
     }
 
     const onReviewEnroll = async () => {
-        if(boardView?.memberDTO.id != data.id) {
+        if(boardView?.memberDTO.id != data?.id) {
             const formData = new FormData();
-            formData.append("member.id", data.id);
+            formData.append("member.id", data?.id);
             formData.append("sitterReviewRatings", star);
             formData.append("sitterReviewDesc", reviewDesc);
-            formData.append("sitter.sitterCode", location.state.code);
+            formData.append("sitter.sitterCode", code);
             const result = await addReview(formData);
             setReviews([result.data, ...reviews]);
             setReviewDesc('');
@@ -396,8 +412,8 @@ const SitterView = () => {
         console.log('안녕');
         const formData = {
             boardName: 'sitter',
-            postCode: location.state.code,
-            token: data.token,
+            postCode: code,
+            token: data?.token,
         }
 
         console.log(formData);
@@ -408,24 +424,25 @@ const SitterView = () => {
     };
 
     const boardViewAPI = async () => {
-        const boardViewResult = await getBoardView(location.state.code);
+        const boardViewResult = await getBoardView(code);
+        console.log('모야');
         setBoardView(boardViewResult.data);
     }
 
     const getReviewsAPI = async () => {
-        const reviewsResult = await getReviews(location.state.id);
+        const reviewsResult = await getReviews(boardView?.memberDTO?.id);
         setReviews([...reviews, ...reviewsResult.data]);
     }
 
     const onUpdateBoard = () => {
-        const code = location.state.code;
-        navigator(`../${code}/update/3`);
+        const codeView = code;
+        navigator(`../${codeView}/update/3`);
     }
 
     const onDeleteBoard = async () => {
         const response = window.confirm('정말로 삭제하시겠습니까?');
         if(response) {
-           await deleteSitterBoard(location.state.code);
+           await deleteSitterBoard(code);
            alert('삭제되었습니다.');
         }
         navigator('../');

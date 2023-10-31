@@ -229,28 +229,11 @@ const CommonView = () => {
     };
     window.scrollTo(0, 0);
 
-    if (bookmark) {
-      // 북마크 삭제
-      const deleteResult = await deleteBookmarkAPI(code);
-      console.log("삭제 :" + deleteResult);
-      if (deleteResult) {
-        alert("북마크가 해제되었습니다.");
-        setBookmark(false);
-        setIsIconActive(false);
-      } else {
-        alert("북마크 해제에 실패했습니다.");
-      }
-    } else {
-      // 북마크 등록
-      const addResult = await addBookmarkAPI(formData);
-      if (addResult.data) {
-        alert("북마크 되었습니다.");
-        setBookmark(true);
-        setIsIconActive(true);
-      } else {
-        alert("북마크 등록에 실패했습니다.");
-      }
-    }
+    // 북마크 등록
+    const result = await addBookmarkAPI(formData);
+    if (!result.data) {
+      alert("이미 북마크에 등록되었습니다.");
+    } else alert("북마크에 등록되었습니다.");
   };
 
   const NavListPage = () => {

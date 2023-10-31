@@ -294,18 +294,6 @@ const OurStoryMain = styled.div`
   
 `;
 
-const WeeklyBestMain = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: red;
-`;
-
-const EventMain = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: green;
-`;
-
 const Home = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState();
@@ -331,44 +319,9 @@ const Home = () => {
 
   return (
     <div style={{width: "100%"}}>
-     
-      {/* <StyledHeader>
-        <nav>
-          <a href="#">
-            <img src={Logo}></img>
-          </a>
-
-          <a href="/notice">Notice</a>
-          <a href="/sitter">Sitter</a>
-
-          <a href="/community">Community</a>
-          <a href="/hospital">Information</a>
-          <a href="#">CS</a>
-          <div className="rightNav">
-            {!user ? (
-              <>
-                <Link to="/auth/login">Sign in</Link> <p>|</p>
-                <Link to="/auth/register">Sign up</Link>
-              </>
-            ) : (
-              <>
-                <Link to="/mypage">Mypage</Link>
-                <p>|</p>
-                <Link to="/auth/logout">Logout</Link>
-              </>
-            )}
-          </div>
-        </nav>
-      </StyledHeader> */}
       <StyledMain>
         <img src={Banner} style={{ width: "100%", height: "59vh" }} />
         <div className="allMain">
-          <div className="leftNav">
-            <a href="#">MAIN</a>
-            <a href="#ourStroy">OUR STORY</a>
-            <a href="#weeklyBest">WEEKLY BEST</a>
-            <a href="#event">EVENT</a>
-          </div>
           <div className="rightNav">
             <div className="searchBar">
               <div>
@@ -379,78 +332,42 @@ const Home = () => {
                 <img src={loupe} />
               </Link>
             </div>
-            <div className="best">
-              <div className="bestInner">
-                <div className="weeklyBest">
-                  <p className="weeklyBestTitle">주간 인기글</p>
-                  <div className="WeeklyList">
-                    <p>1. 광진구 테크노 햄스터</p>
-                    <p>2. 광진구 테크노 햄스터</p>
-                    <p>3. 광진구 테크노 햄스터</p>
-                  </div>
-                </div>               
-              </div>
-              <div className="findMe">
-              <p className="findBest">찾아 주세요!</p>
-                <div className="findMeDiv">
-                  <div>
-                    <p>광진구 테크노 햄스터</p>
-                    <img src={findMe} />
-                  </div>
-                  <div>
-                    <p>광진구 테크노 햄스터</p>
-                    <img src={findMe} />
+            <div className="ourStroy" id="ourStroy">
+              <div className="mainBox">
+                <div className="header">
+                  <p id="freepetsLogo">FREEPET'S</p>
+                  <p className="freepetsDesc">반려동물과 함께하는 Free한 공간</p>
+                </div>
+                <div className="center">
+                  <p className="center-start">반려동물을 위해,</p>
+                  <div className="center-end">
+                    <div className="center-end_container">
+                      <p className="center-end_container-title">PETSITTER</p>
+                      <p className="center-end_container-name">케어 서비스</p>
+                      <p className="center-end_container-desc">도움을 요청해 보세요</p>
+                    </div>
+                    <div className="center-end_container">
+                      <p className="center-end_container-title">FIND</p>
+                      <p className="center-end_container-name">분실</p>
+                      <p className="center-end_container-desc">주인을 찾아 주세요</p>
+                    </div>
+                    <div className="center-end_container">
+                      <p className="center-end_container-title">INFORMATION</p>
+                      <p className="center-end_container-name">정보</p>
+                      <p className="center-end_container-desc">정보를 나눠 보세요</p>
+                    </div>
+                    <div className="center-end_container">
+                      <p className="center-end_container-title">SOCIAL</p>
+                      <p className="center-end_container-name">소통</p>
+                      <p className="center-end_container-desc">자유롭게 대화하세요</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+        </div>
           </div>
         </div>
       </StyledMain>
-      <OurStoryMain>
-        <div className="ourStroy" id="ourStroy">
-          <div className="mainBox">
-            <div className="header">
-              <p id="freepetsLogo">FREEPET'S</p>
-              <p className="freepetsDesc">반려동물과 함께하는 Free한 공간</p>
-            </div>
-            <div className="center">
-              <p className="center-start">반려동물을 위해,</p>
-              <div className="center-end">
-                <div className="center-end_container">
-                  <p className="center-end_container-title">PETSITTER</p>
-                  <p className="center-end_container-name">케어 서비스</p>
-                  <p className="center-end_container-desc">도움을 요청해 보세요</p>
-                </div>
-                <div className="center-end_container">
-                  <p className="center-end_container-title">FIND</p>
-                  <p className="center-end_container-name">분실</p>
-                  <p className="center-end_container-desc">주인을 찾아 주세요</p>
-                </div>
-                <div className="center-end_container">
-                  <p className="center-end_container-title">INFORMATION</p>
-                  <p className="center-end_container-name">정보</p>
-                  <p className="center-end_container-desc">정보를 나눠 보세요</p>
-                </div>
-                <div className="center-end_container">
-                  <p className="center-end_container-title">SOCIAL</p>
-                  <p className="center-end_container-name">소통</p>
-                  <p className="center-end_container-desc">자유롭게 대화하세요</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </OurStoryMain>
-      <WeeklyBestMain>
-        <div id="weeklyBest">
-
-        </div>
-      </WeeklyBestMain>
-      <EventMain>
-        <div id="event">
-        </div>
-      </EventMain>
     </div>
   );
 };
