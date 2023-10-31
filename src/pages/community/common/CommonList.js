@@ -58,7 +58,9 @@ const CommunityList = (props) => {
 
   const handleRowClick = (row) => {
     //ViewPage로 이동
-    navigate(`/community/common/commonview/${row.original.commonCode}`);
+    navigate(
+      `/community/common/commonview/${row.original.commonCode}/${props.props.ListBtn}`
+    );
   };
 
   const CommunityListAPI = async () => {

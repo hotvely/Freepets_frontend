@@ -118,7 +118,7 @@ const router = createBrowserRouter([
 
         children: [
           {
-            path: "cmedialist",
+            path: "cmedialist/:ListBtn",
             element: <CMediaList />,
           },
           {
@@ -126,7 +126,7 @@ const router = createBrowserRouter([
             element: <CommonList />,
           },
           {
-            path: "commonview/:code",
+            path: "commonview/:code/:ListBtn",
             element: <CommonView />,
           },
           {

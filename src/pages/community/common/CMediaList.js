@@ -8,7 +8,12 @@ import {
   getCommunityList,
   getSearchCommunityList,
 } from "../../../api/community";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { dateFormatDefault } from "../../../api/utils";
 import CommunityList from "./CommonList";
 import Page from "../../../components/Page";
@@ -224,6 +229,9 @@ const MainContentBox = styled.div`
 `;
 
 const CMediaList = () => {
+  const param = useParams();
+  console.log(param);
+
   const [searchParams] = useSearchParams();
   const searchPage = searchParams.get("page");
   const [totalPages, setTotalPages] = useState();
@@ -233,7 +241,8 @@ const CMediaList = () => {
   const [mediae, setMediae] = useState([]);
   const [ListBtn, setListBtn] = useState();
   const navigate = useNavigate();
-
+  // const [selectBoard, setSelectBoard] = useState(1);
+  console.log(param.ListBtn);
   const page = searchPage != null ? searchPage : 1;
 
   const onClickList = (e) => {
@@ -305,6 +314,10 @@ const CMediaList = () => {
   };
 
   useEffect(() => {
+    if (param.ListBtn) setListBtn(param.ListBtn);
+  }, []);
+
+  useEffect(() => {
     if (searchKeyword != null) {
       MediaSearchListAPI();
     } else {
@@ -321,7 +334,7 @@ const CMediaList = () => {
               <div className="media-content" key={index}>
                 <div className="media-thumbnail">
                   <Link
-                    to={`/community/common/commonview/${media?.commonCode}`}
+                    to={`/community/common/commonview/${media?.commonCode}/${ListBtn}`}
                   >
                     <p>
                       <img
@@ -339,7 +352,7 @@ const CMediaList = () => {
                 <div className="media-info">
                   <div className="media-info-first-line">
                     <Link
-                      to={`/community/common/commonview/${media?.commonCode}`}
+                      to={`/community/common/commonview/${media?.commonCode}/${ListBtn}`}
                       id="media-info-title"
                     >
                       <h3>{media?.commonTitle}</h3>
@@ -460,10 +473,13 @@ const CMediaList = () => {
             <button onClick={MediaSearchListAPI}>검색</button>
           </div>
         </div>
+
         {ListBtn == 1 ? (
           boardTypeForMedia()
         ) : (
-          <CommunityList props={{ orderBy, searchType, searchKeyword }} />
+          <CommunityList
+            props={{ orderBy, searchType, searchKeyword, ListBtn }}
+          />
         )}
       </MainContentBox>
     </MainStlye>

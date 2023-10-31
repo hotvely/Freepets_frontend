@@ -174,6 +174,12 @@ const CommonView = () => {
   const { code } = useParams();
   const navigate = useNavigate();
 
+  //게시판 타입 받기
+  const param = useParams();
+  console.log(param.ListBtn);
+  const ListBtn = param.ListBtn;
+  console.log("LIstBtn :" + ListBtn);
+
   //댓글
   const [comments, setComments] = useState([]);
   const [currClickBtn, setCurrClickBtn] = useState(-1);
@@ -412,7 +418,10 @@ const CommonView = () => {
         <div className="article-content-box">
           <div className="article-header">
             <div className="article-title">
-              <Link to={`/community`}>자유게시판▷</Link>
+              <Link to={`/community/common/cmedialist/${ListBtn}`}>
+                자유게시판▷
+              </Link>
+
               <div className="title-area">
                 <h2>{post?.commonTitle}</h2>
               </div>
@@ -460,7 +469,6 @@ const CommonView = () => {
                 {/* {post?.commonLikeCount} */}
                 {liked}
               </button>
-              {console.log(post?.commonLikeCount)}
             </div>
             <div className="comment-box">
               <div className="commentBox">
