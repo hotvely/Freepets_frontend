@@ -15,6 +15,7 @@ const Logout = () => {
   useEffect(() => {
     logout();
     navigate("/");
+    // 아..
   }, []);
   return null;
 };
