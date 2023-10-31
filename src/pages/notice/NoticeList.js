@@ -51,11 +51,13 @@ const NoticeList = (props) => {
     { accessor: "noticeViews", Header: "조회수" },
     { accessor: "noticeLike", Header: "좋아요" },
   ]);
-  const sortNum = props.props.sortNum;
-  const keyword = props.props.searchKey == "" ? null : props.props.searchKey;
-  const searchNum = props.props.searchNum;
-  const page = props.props.page;
 
+  // const [keyword, setKeyword] = useState();
+  let sortNum = props.props.sortNum;
+
+  let keyword = props.props.keyword ? props.props.keyword : "";
+
+  let searchNum = props.props.searchNum;
   const changeDate = (tempArr) => {
     for (const item in tempArr) {
       tempArr[item].noticeDate = dateFormatDefault(tempArr[item].noticeDate);
@@ -63,30 +65,47 @@ const NoticeList = (props) => {
     return tempArr;
   };
 
-  const getBoardHandler = async () => {
-    const response = await getBoardsByPageAPI(page, sortNum);
+  const getBoardHandler = async (page) => {
+    if (keyword) {
+      console.log("보드 핸들러 키워드 있어");
+      getSearchBoardHandler(page);
+    } else {
+      const response = await getBoardsByPageAPI(page, sortNum);
 
-    let tempArr = [...response.data.noticeList];
-    tempArr = [...changeDate(tempArr)];
+      let tempArr = [...response.data.noticeList];
+      tempArr = [...changeDate(tempArr)];
 
-    setBoards(tempArr);
+      setBoards(tempArr);
 
-    setTotalPages(response.data.totalPages);
+      setTotalPages(response.data.totalPages);
+    }
   };
 
   const getSearchBoardHandler = async () => {
     // 검색기능..
-    console.log(keyword, searchNum);
+
     if (keyword) {
-      const response = await getSearchAPI(page, keyword, searchNum);
-      console.log(response);
+      console.log(searchNum);
+      const response = await getSearchAPI(page, keyword, searchNum, sortNum);
 
       if (response.data.noticeList.length > 0) {
+        if (response.data.totalPages < page) {
+          page = 1;
+          response = await getSearchAPI(page, keyword, searchNum, sortNum);
+        }
+
         let tempArr = [...response.data.noticeList];
         tempArr = changeDate(tempArr);
 
         setBoards(tempArr);
         setTotalPages(response.data.totalPages);
+      } else {
+        document.querySelector("#search").value = "";
+
+        page = 1;
+        getBoardHandler(page);
+        navigate("../notice?page=1");
+        // getBoardHandler(page, sortNum);
       }
     } else {
       alert("검색어를 입력하세요.");
@@ -101,20 +120,31 @@ const NoticeList = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("게시글 변경됬따.");
-    getBoardHandler();
+    console.log("정렬 번호 바쎳을때");
+    console.log(sortNum);
+    getBoardHandler(page);
+    navigate("../notice/?page=1");
   }, [sortNum]);
 
   useEffect(() => {
+    console.log("keyword useEffect");
     if (keyword) {
-      getSearchBoardHandler();
+      console.log(keyword);
+      if (page != 1) {
+        getSearchBoardHandler(1);
+        navigate("../notice/?page=1");
+      } else {
+        getSearchBoardHandler(page);
+      }
+    } else {
+      getBoardHandler(page);
+      if (page != 1) navigate("../notice/?page=1");
     }
   }, [keyword]);
 
   useEffect(() => {
-    if (keyword != null) {
-      getSearchBoardHandler();
-    }
+    console.log("페이지 유즈 이펙트");
+    getBoardHandler(page);
   }, [page]);
 
   const handleRowClick = (row) => {
@@ -134,6 +164,7 @@ const NoticeList = (props) => {
           />
         ) : null}
       </ContentStyle>
+
       <Page totalPages={totalPages} page={page} />
     </MainStlye>
   );

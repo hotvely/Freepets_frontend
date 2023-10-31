@@ -299,9 +299,9 @@ const Notice = () => {
     }
   });
 
-  const getSearchBoardHandler = async () => {
-    document.querySelector("#search").value = "";
-    setSearchKey(keyword);
+  const getSearchBoardHandler = () => {
+    const word = document.querySelector("#search").value;
+    setKeyword(word);
   };
 
   const sortOptionHandler = (e) => {

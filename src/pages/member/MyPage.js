@@ -45,25 +45,9 @@ const MyPage = () => {
   });
 
   useEffect(() => {
-    const saveuser = localStorage.getItem("user");
-
-    //Object.keys(user).length === 0 <- 얘는 현재 redux에 아무것도 들어있지 않다는 의미
-    if (Object.keys(user).length === 0 && saveuser !== null) {
-      dispatch(userSave(JSON.parse(saveuser)));
-    } else if (Object.keys(user).length === 0 && saveuser === null) {
-      navigate("/");
-    }
+    getNotiHandler();
+    getBookmarkHandler();
   }, []);
-
-  useEffect(() => {
-    if (Object.keys(user).length === 0) {
-      navigate("/main");
-      setNotifications([]);
-    } else {
-      getNotiHandler();
-      getBookmarkHandler();
-    }
-  }, [user]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -118,6 +102,7 @@ const MyPage = () => {
     console.log(result.data);
     setNotifications([...result.data]);
   };
+
   const getBookmarkHandler = async () => {
     const result = await getBookmarkAPI(user.token);
     console.log(result);

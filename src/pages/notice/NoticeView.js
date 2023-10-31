@@ -17,6 +17,7 @@ import {
   getBoardViewAPI,
   getCommentAPI,
   getCommentsAPI,
+  updateCommentAPI,
   updateLikeNoticeAPI,
 } from "../../api/notice";
 import CommentComponent from "../../components/comment/CommentComponent";
@@ -36,16 +37,17 @@ import {
 } from "../../components/css/PostView";
 import ProfileComponent from "../../components/member/ProfileComponent";
 import { Link, useNavigate } from "react-router-dom";
-import yange from "../../resources/yaonge.jpg";
+import yaonge from "../../resources/yaonge.jpg";
 import { dateFormatDefault } from "../../api/utils";
 import { getTokenCookie } from "../../api/cookie";
 import { userLogout } from "../../components/store/userSlice";
+import { async } from "q";
 
 const NoticeView = () => {
   const { code } = useParams();
   const [postData, setPostData] = useState();
   const [comments, setComments] = useState([]);
-  const [parentComment, setParentComment] = useState();
+  const [content, setContent] = useState("");
 
   const [likeCount, setLikeCount] = useState();
 
@@ -92,6 +94,7 @@ const NoticeView = () => {
       if (formData.commentDesc) {
         const addCommentResult = await addCommentAPI(formData);
         console.log(addCommentResult);
+        await getPostHandler(code);
         // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
         // 단, 게시글 작성자 아이디하고 현재 아이디 하고 같으면 알림 추가 안함
         if (parentCode > 0) {
@@ -127,6 +130,7 @@ const NoticeView = () => {
               url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
             };
             await addNoticeNotification(notiData);
+
             console.log("댓글 작성자랑 달라서 알림 감!");
           } else {
             alert("같은사용자는 알림 안감");
@@ -154,6 +158,7 @@ const NoticeView = () => {
       if (!result.data) {
         alert("이미 북마크가 등록되어 있습니다.");
       }
+      alert("북마크가 등록 되었습니다.");
     }
   };
 
@@ -226,12 +231,18 @@ const NoticeView = () => {
   }, []);
 
   useEffect(() => {
-    console.log("업데이트 성공시 ..");
-    if (succUpdate) {
-      setSuccUpdate(false);
-      setCurrClickBtn(-1);
-      getCommentHandler(code);
-    }
+    const handler = async () => {
+      if (succUpdate) {
+        const formData = { commentCode: currClickBtn, commentDesc: content };
+        const result = await updateCommentAPI(formData);
+        if (result.data) {
+          setSuccUpdate(false);
+          setCurrClickBtn(-1);
+          getCommentHandler(code);
+        }
+      }
+    };
+    handler();
   }, [succUpdate]);
 
   const ScrollToTopBtn = () => {
@@ -261,7 +272,7 @@ const NoticeView = () => {
                   navigate(`/userpage/${postData.member.id}`);
                 }}
               >
-                <img src={yange} alt="배너 이미지" />
+                <img src={yaonge} alt="배너 이미지" />
 
                 <div className="profile-area">
                   <div className="writer-info">
@@ -271,7 +282,8 @@ const NoticeView = () => {
                     <span>{dateFormatDefault(postData?.noticeDate)}</span>
                     <span>ㆍ조회{postData?.noticeViews}</span>
                     {/* <span>ㆍ댓글{postData?.noticeCommentCount}</span> */}
-                    <span>ㆍ좋아요{postData?.noticeLike}</span>
+
+                    <span>ㆍ좋아요{likeCount}</span>
                   </div>
                 </div>
               </div>
@@ -313,7 +325,11 @@ const NoticeView = () => {
             <div className="comment-box">
               <div className="commentBox">
                 <div className="commentProfile">
-                  <img src={testImg}></img>
+                  {user.memberImg ? (
+                    <img src={user.memberImg}></img>
+                  ) : (
+                    <img src={yaonge}></img>
+                  )}
                 </div>
                 <CommentComponent props={0} ref={addCommentHandler} />
               </div>
@@ -354,7 +370,7 @@ const NoticeView = () => {
                             {currClickBtn === comment?.noticeCommentCode ? (
                               comment?.member?.id === user.id ? (
                                 <UpdateCommentComponent
-                                  code={comment?.noticeCommentCode}
+                                  setContent={setContent}
                                   updateCommentHandler={updateCommentHandler}
                                   updateSuccHandler={updateSuccHandler}
                                 />
@@ -408,9 +424,7 @@ const NoticeView = () => {
                                           comment.noticeCommentCode ? (
                                             comment?.member.id === user.id ? (
                                               <UpdateCommentComponent
-                                                code={
-                                                  comment?.noticeCommentCode
-                                                }
+                                                setContent={setContent}
                                                 updateCommentHandler={
                                                   updateCommentHandler
                                                 }

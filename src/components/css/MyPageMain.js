@@ -165,19 +165,23 @@ const MyPageMain = styled.main`
           display: flex;
           flex-direction: row;
           margin: 5px 0;
+          flex-basis: 750px;
+          flex-grow: 1;
           div {
           }
           .commentTitle {
-            width: 100px;
-            margin-left: 10px;
+            margin-left: 20px;
             white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정합니다. */
             overflow: hidden; /* 요소의 내용이 너무 길어지면 숨깁니다. */
             text-overflow: ellipsis; /* 생략 부호(...)를 사용하여 표시됩니다. */
+            flex-grow: 0;
+            flex-shrink: 1;
           }
 
           .commentDesc {
             margin-left: 10px;
-            width: 200px;
+
+            flex-grow: 0;
             white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정합니다. */
             overflow: hidden; /* 요소의 내용이 너무 길어지면 숨깁니다. */
             text-overflow: ellipsis; /* 생략 부호(...)를 사용하여 표시됩니다. */
@@ -195,8 +199,11 @@ const MyPageMain = styled.main`
       display: flex;
       flex-direction: row;
       align-items: center;
+      flex-basis: 50px;
+      width: 750px;
 
-      margin: 20px 50px;
+      margin-top: 20px;
+      margin-left: 70px;
 
       img {
         width: 50px;
