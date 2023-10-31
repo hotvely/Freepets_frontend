@@ -58,12 +58,15 @@ const NoticeView = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => {
-    if (getTokenCookie() != undefined) {
-      console.log("쿠키 있!");
-      return state.user;
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("호출..?");
+        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -120,7 +123,7 @@ const NoticeView = () => {
           }
         } else {
           // 부모 댓글 없어서 그냥 댓글 달때
-          if (postData.member.id != user.id) {
+          if (postData.member.id != user?.id) {
             const notiData = {
               id: postData.member.id,
 
@@ -141,16 +144,17 @@ const NoticeView = () => {
       await getCommentHandler(code);
       e.target.commentDesc.value = null;
     } else {
-      alert("댓글 작성후 등록하세요");
+      alert("로그인이 필요합니다.");
     }
   };
 
   const addBookmarkHandler = async () => {
+    console.log(user);
     if (postData.noticeCode) {
       const formData = {
         boardName: "notice",
         postCode: postData.noticeCode,
-        token: user.token,
+        token: user?.token,
       };
       console.log(formData);
 
@@ -163,10 +167,10 @@ const NoticeView = () => {
   };
 
   const likeBtnHandler = async () => {
-    if (user.token) {
+    if (user?.token) {
       const formData = {
         postCode: code,
-        token: user.token,
+        token: user?.token,
       };
       const result = await updateLikeNoticeAPI(formData);
       if (result.data) {
@@ -207,18 +211,12 @@ const NoticeView = () => {
   };
 
   const updateHandler = (e) => {
-    if (user.id == postData.member.id) {
-      navigate(`../update/5/${code}}`);
-    } else console.log("작성자와 사용자가 다름");
+    navigate(`../update/5/${code}}`);
   };
 
   const deleteHandler = async (e, id) => {
-    if (user.id == postData.member.id) {
-      await deleteNoticeAPI(code);
-      navigate("../");
-    } else {
-      console.log("작성자와 사용자가 다름");
-    }
+    await deleteNoticeAPI(code);
+    navigate("../");
   };
 
   useEffect(() => {
@@ -325,8 +323,8 @@ const NoticeView = () => {
             <div className="comment-box">
               <div className="commentBox">
                 <div className="commentProfile">
-                  {user.memberImg ? (
-                    <img src={user.memberImg}></img>
+                  {user?.memberImg ? (
+                    <img src={user?.memberImg}></img>
                   ) : (
                     <img src={yaonge}></img>
                   )}
@@ -337,7 +335,7 @@ const NoticeView = () => {
                 <ul>
                   {comments?.map((comment) =>
                     comment?.noticeCommentCodeSuper > 0 ? null : (
-                      <li key={comment.noticeCommentCode}>
+                      <li key={comment?.noticeCommentCode}>
                         <div className="comment">
                           {
                             // 유저 정보
@@ -359,16 +357,19 @@ const NoticeView = () => {
                                     comment?.noticeCommentDate
                                   )}
                                 </div>
-                                <CommentBtnComponent
-                                  code={comment?.noticeCommentCode}
-                                  writer={comment?.member?.id}
-                                  updateCommentHandler={updateCommentHandler}
-                                  deleteCommentHandler={deleteCommentHandler}
-                                />
+                                {comment?.member.id === user?.id ? (
+                                  <CommentBtnComponent
+                                    code={comment?.noticeCommentCode}
+                                    writer={comment?.member?.id}
+                                    updateCommentHandler={updateCommentHandler}
+                                    deleteCommentHandler={deleteCommentHandler}
+                                  />
+                                ) : null}
                               </div>
                             </div>
+
                             {currClickBtn === comment?.noticeCommentCode ? (
-                              comment?.member?.id === user.id ? (
+                              comment?.member?.id === user?.id ? (
                                 <UpdateCommentComponent
                                   setContent={setContent}
                                   updateCommentHandler={updateCommentHandler}
@@ -402,27 +403,30 @@ const NoticeView = () => {
                                         selected_Comment ? null : (
                                         <li key={comment.noticeCommentCode}>
                                           <div className="recomment-desc">
-                                            {console.log(comment)}
                                             <ReCommentComponent
                                               member={comment.member}
                                               desc={comment.noticeCommentDesc}
                                               date={comment.noticeCommentDate}
                                             />
-
-                                            <CommentBtnComponent
-                                              code={comment?.noticeCommentCode}
-                                              writer={comment?.member.id}
-                                              updateCommentHandler={
-                                                updateCommentHandler
-                                              }
-                                              deleteCommentHandler={
-                                                deleteCommentHandler
-                                              }
-                                            />
+                                            {comment?.member?.id ===
+                                            user?.id ? (
+                                              <CommentBtnComponent
+                                                code={
+                                                  comment?.noticeCommentCode
+                                                }
+                                                writer={comment?.member.id}
+                                                updateCommentHandler={
+                                                  updateCommentHandler
+                                                }
+                                                deleteCommentHandler={
+                                                  deleteCommentHandler
+                                                }
+                                              />
+                                            ) : null}
                                           </div>
                                           {currClickBtn ==
                                           comment.noticeCommentCode ? (
-                                            comment?.member.id === user.id ? (
+                                            comment?.member.id === user?.id ? (
                                               <UpdateCommentComponent
                                                 setContent={setContent}
                                                 updateCommentHandler={
@@ -484,25 +488,28 @@ const NoticeView = () => {
           </div>
         </div>
         <div className="article-bottom-btn">
-          <div
-            className="left-btn"
-            // style={{ display: viewBtn ? "block" : "none" }}
-          >
-            <button
-              className="update-btn"
-              onClick={updateHandler}
-              value={postData?.commonCode}
+          {user?.authority === "ADMIN" ? (
+            <div
+              className="left-btn"
+              // style={{ display: viewBtn ? "block" : "none" }}
             >
-              수정
-            </button>
-            <button
-              className="delete-btn"
-              onClick={deleteHandler}
-              value={postData?.commonCode}
-            >
-              삭제
-            </button>
-          </div>
+              <button
+                className="update-btn"
+                onClick={updateHandler}
+                value={postData?.commonCode}
+              >
+                수정
+              </button>
+              <button
+                className="delete-btn"
+                onClick={deleteHandler}
+                value={postData?.commonCode}
+              >
+                삭제
+              </button>
+            </div>
+          ) : null}
+
           <div className="right-btn">
             <button className="list-btn">
               <Link to={`../`}>목록</Link>
@@ -513,6 +520,7 @@ const NoticeView = () => {
           </div>
         </div>
       </MainContentBox>
+      {user ? null : <Link to={`../noticeView/${code}`} />}
     </MainStlye>
   );
 };

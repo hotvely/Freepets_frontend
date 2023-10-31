@@ -27,6 +27,7 @@ import NoticeList from "./pages/notice/NoticeList";
 import Chatting from "./pages/Chatting";
 import TotalSearch from "./pages/TotalSearch";
 import Header from "./components/Header";
+import KakaoPostAPI from "./pages/member/KakaoPostAPI";
 
 const router = createBrowserRouter([
   {
@@ -240,6 +241,10 @@ const router = createBrowserRouter([
       {
         path: "findPwd",
         element: <MemberFindPwd />,
+      },
+      {
+        path: "API",
+        element: <KakaoPostAPI />,
       },
     ],
   },

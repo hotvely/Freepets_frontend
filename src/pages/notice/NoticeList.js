@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import NoticeTableForList from "./NoticeTableForList";
 import { getBoardsByPageAPI, getSearchAPI } from "../../api/notice";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { dateFormatDefault } from "../../api/utils";
 import Page from "../../components/Page";
+import { faKorvue } from "@fortawesome/free-brands-svg-icons";
 
 const MainStlye = styled.div`
   width: 100%;
@@ -84,7 +85,7 @@ const NoticeList = (props) => {
     }
   };
 
-  const getSearchBoardHandler = async () => {
+  const getSearchBoardHandler = async (page) => {
     // 검색기능..
 
     if (keyword) {
@@ -118,8 +119,7 @@ const NoticeList = (props) => {
   useEffect(() => {}, [boards]);
 
   useEffect(() => {
-    console.log("???");
-    if (page <= 1) getBoardHandler();
+    if (page <= 1) getBoardHandler(1);
   }, []);
 
   useEffect(() => {
@@ -145,6 +145,8 @@ const NoticeList = (props) => {
     }
   }, [keyword]);
 
+  useEffect(() => {}, [boards]);
+
   useEffect(() => {
     console.log("페이지 유즈 이펙트");
     getBoardHandler(page);
@@ -152,7 +154,7 @@ const NoticeList = (props) => {
 
   const handleRowClick = (row) => {
     //ViewPage로 이동
-    console.log(row);
+
     navigate(`/notice/noticeView/${row.original.noticeCode}`);
   };
 
