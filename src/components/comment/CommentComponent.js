@@ -34,7 +34,7 @@ const Styled = styled.div`
         border: 0;
         padding: 5px;
         border-radius: 5px;
-        background-color: #437b92;
+        background-color: #98dbf2;
         color: white;
       }
     }

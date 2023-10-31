@@ -67,8 +67,8 @@ const FormInput = styled.div`
     }
   }
 `;
-
-const MemberUpdate = (isOpen, setIsOpen, user, dispatch) => {
+// isOpen, setIsOpen, user, dispatch
+const MemberUpdate = (props) => {
   const customModalStyled = {
     overlay: {
       backgroundColor: " rgba(0, 0, 0, 0.4)",
@@ -96,8 +96,13 @@ const MemberUpdate = (isOpen, setIsOpen, user, dispatch) => {
     },
   };
 
-  const openModalHandler = () => {
-    setIsOpen(!isOpen);
+  const setIsOpen = () => {
+    props.props.setIsOpen();
+  };
+  const isOpen = props.props.isOpen;
+  const user = props.props.user;
+  const dispatch = () => {
+    props.props.dispatch();
   };
 
   const formDataHandler = (e) => {
@@ -119,7 +124,7 @@ const MemberUpdate = (isOpen, setIsOpen, user, dispatch) => {
 
         console.log("데이터 전송 후 수정 완료");
         alert("정보 수정 완료!");
-        setIsOpen(!isOpen);
+        setIsOpen(false);
         return true;
       }
     }
@@ -133,10 +138,18 @@ const MemberUpdate = (isOpen, setIsOpen, user, dispatch) => {
 
       <div
         onClick={(e) => {
-          if (e.target.className.includes("Overlay")) openModalHandler();
+          if (e.target.className.includes("Overlay")) setIsOpen(true);
+          else setIsOpen(false);
         }}
       >
-        <Modal isOpen={isOpen} style={customModalStyled} ariaHideApp={false}>
+        <Modal
+          isOpen={isOpen}
+          style={customModalStyled}
+          onRequestClose={() => {
+            setIsOpen(false);
+          }}
+          ariaHideApp={false}
+        >
           <FormInput>
             <form className="form" onSubmit={formDataHandler}>
               <div className="inputForm_title">정보 수정</div>
@@ -163,7 +176,13 @@ const MemberUpdate = (isOpen, setIsOpen, user, dispatch) => {
               </div>
               <div className="btn">
                 <button type="submit">submit</button>
-                <button onClick={openModalHandler}>exit</button>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                >
+                  exit
+                </button>
               </div>
             </form>
           </FormInput>

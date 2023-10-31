@@ -15,13 +15,14 @@ import {
   deleteCommentAPI,
   deleteNoticeAPI,
   getBoardViewAPI,
+  getCommentAPI,
   getCommentsAPI,
   updateLikeNoticeAPI,
 } from "../../api/notice";
 import CommentComponent from "../../components/comment/CommentComponent";
 import ReCommentComponent from "../../components/comment/ReCommentComponent";
 import { addBookmarkAPI } from "../../api/bookmark";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UpdateCommentComponent from "../../components/comment/UpdateCommentComponent";
 import {
   addNoticeNotification,
@@ -37,11 +38,14 @@ import ProfileComponent from "../../components/member/ProfileComponent";
 import { Link, useNavigate } from "react-router-dom";
 import yange from "../../resources/yaonge.jpg";
 import { dateFormatDefault } from "../../api/utils";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../../components/store/userSlice";
 
 const NoticeView = () => {
   const { code } = useParams();
   const [postData, setPostData] = useState();
   const [comments, setComments] = useState([]);
+  const [parentComment, setParentComment] = useState();
 
   const [likeCount, setLikeCount] = useState();
 
@@ -49,8 +53,18 @@ const NoticeView = () => {
   const [succUpdate, setSuccUpdate] = useState(false);
   const [selected_Comment, setSelected_Comment] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
 
   const getPostHandler = async (code) => {
@@ -77,28 +91,53 @@ const NoticeView = () => {
 
       if (formData.commentDesc) {
         const addCommentResult = await addCommentAPI(formData);
-
+        console.log(addCommentResult);
         // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
-        const notiData = {
-          token: user.token,
+        // 단, 게시글 작성자 아이디하고 현재 아이디 하고 같으면 알림 추가 안함
+        if (parentCode > 0) {
+          // 부모 댓글 있을때.
+          console.log(parentCode);
+          const result = await getCommentAPI(parentCode);
+          console.log(result.data);
 
-          postCode: formData.postCode,
-          pCommentCode: addCommentResult.data.noticeCommentCodeSuper,
-          cCommentCode: addCommentResult.data.noticeCommentCode,
-          url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
-        };
-        await addNoticeNotification(notiData);
+          // 부모 댓글 작성자와 대댓글 작성자가 다를때
+          if (result.data.member.id != user.id) {
+            const notiData = {
+              id: result.data.member.id,
 
-        // const postData = {};
-        // await updateNoticeAPI(postData);
+              postCode: formData.postCode,
+              pCommentCode: addCommentResult.data.noticeCommentCodeSuper,
+              cCommentCode: addCommentResult.data.noticeCommentCode,
+              url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
+            };
+            await addNoticeNotification(notiData);
+            console.log("댓글 작성자랑 달라서 알림 감!");
+          } else {
+            alert("댓글 작성자와 일치한 사람이라 알림 안갑니다.");
+          }
+        } else {
+          // 부모 댓글 없어서 그냥 댓글 달때
+          if (postData.member.id != user.id) {
+            const notiData = {
+              id: postData.member.id,
 
-        await getCommentHandler(code);
-        e.target.commentDesc.value = null;
-      } else {
-        alert("댓글 작성후 등록하세요");
+              postCode: formData.postCode,
+              pCommentCode: addCommentResult.data.noticeCommentCodeSuper,
+              cCommentCode: addCommentResult.data.noticeCommentCode,
+              url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
+            };
+            await addNoticeNotification(notiData);
+            console.log("댓글 작성자랑 달라서 알림 감!");
+          } else {
+            alert("같은사용자는 알림 안감");
+          }
+        }
       }
+
+      await getCommentHandler(code);
+      e.target.commentDesc.value = null;
     } else {
-      alert("로그인이 필요합니다");
+      alert("댓글 작성후 등록하세요");
     }
   };
 
@@ -109,8 +148,12 @@ const NoticeView = () => {
         postCode: postData.noticeCode,
         token: user.token,
       };
+      console.log(formData);
 
-      addBookmarkAPI(formData);
+      const result = await addBookmarkAPI(formData);
+      if (!result.data) {
+        alert("이미 북마크가 등록되어 있습니다.");
+      }
     }
   };
 
@@ -191,22 +234,6 @@ const NoticeView = () => {
     }
   }, [succUpdate]);
 
-  const dateFormatter = (data) => {
-    if (data) {
-      const date = new Date(`${data}`);
-
-      const result =
-        date.getFullYear() +
-        "-" +
-        (date.getMonth() > 8
-          ? date.getMonth() + 1
-          : "0" + (date.getMonth() + 1)) +
-        "-" +
-        date.getDate();
-      return result;
-    }
-  };
-
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
   };
@@ -228,7 +255,12 @@ const NoticeView = () => {
               </div>
             </div>
             <div className="writer-info">
-              <div className="profile-img">
+              <div
+                className="profile-img"
+                onClick={() => {
+                  navigate(`/userpage/${postData.member.id}`);
+                }}
+              >
                 <img src={yange} alt="배너 이미지" />
 
                 <div className="profile-area">
@@ -238,23 +270,29 @@ const NoticeView = () => {
                   <div className="article-info">
                     <span>{dateFormatDefault(postData?.noticeDate)}</span>
                     <span>ㆍ조회{postData?.noticeViews}</span>
-                    <span>ㆍ댓글{postData?.noticeCommentCount}</span>
+                    {/* <span>ㆍ댓글{postData?.noticeCommentCount}</span> */}
                     <span>ㆍ좋아요{postData?.noticeLike}</span>
                   </div>
                 </div>
               </div>
               <div className="article-tool">
                 <button className="comment-count-btn">
-                  [ <span>{postData?.commonCommentCount}</span> ]
+                  [ <span>{postData?.noticeCommentCount}</span> ]
                 </button>
                 <button className="url-copy-btn">URL복사</button>
+                <button
+                  onClick={() => {
+                    addBookmarkHandler();
+                  }}
+                >
+                  북마크!!
+                </button>
               </div>
             </div>
           </div>
           <div className="article-container">
-            {console.log(postData)}
             <div
-              className="article-viewer"
+              className="ql-editor"
               dangerouslySetInnerHTML={{
                 __html: String(postData?.noticeDesc),
               }}
@@ -301,7 +339,9 @@ const NoticeView = () => {
                             <div className="comment-last">
                               <div className="commentDate-btn ">
                                 <div>
-                                  {dateFormatter(comment?.noticeCommentDate)}
+                                  {dateFormatDefault(
+                                    comment?.noticeCommentDate
+                                  )}
                                 </div>
                                 <CommentBtnComponent
                                   code={comment?.noticeCommentCode}
@@ -346,8 +386,11 @@ const NoticeView = () => {
                                         selected_Comment ? null : (
                                         <li key={comment.noticeCommentCode}>
                                           <div className="recomment-desc">
+                                            {console.log(comment)}
                                             <ReCommentComponent
-                                              props={comment}
+                                              member={comment.member}
+                                              desc={comment.noticeCommentDesc}
+                                              date={comment.noticeCommentDate}
                                             />
 
                                             <CommentBtnComponent

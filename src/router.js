@@ -18,7 +18,6 @@ import CommonView from "./pages/community/common/CommonView";
 import Notice from "./pages/notice/Notice";
 import NoticeView from "./pages/notice/NoticeView";
 import LMediaList from "./pages/community/lost/LMediaList";
-import LostList from "./pages/community/lost/LostList";
 import LostView from "./pages/community/lost/LostView";
 import UpdatePost from "./components/UpdatePost";
 import HospitalReviewView from "./pages/information/HospitalReviewView";
@@ -93,6 +92,10 @@ const router = createBrowserRouter([
         element: <Post />,
       },
       {
+        path: "?page=:page",
+        element: <Notice />,
+      },
+      {
         path: "update/:boardCode/:postCode",
         element: <UpdatePost />,
       },
@@ -145,7 +148,7 @@ const router = createBrowserRouter([
 
         children: [
           {
-            path: "cmedialist",
+            path: "cmedialist/:ListBtn",
             element: <CMediaList />,
           },
           {
@@ -153,7 +156,7 @@ const router = createBrowserRouter([
             element: <CommonList />,
           },
           {
-            path: "commonview/:code",
+            path: "commonview/:code/:ListBtn",
             element: <CommonView />,
           },
           {
@@ -166,32 +169,27 @@ const router = createBrowserRouter([
           },
         ],
       },
-      // {
-      //   path: "lost",
-      //   element: <BLayout />, // Lost의 레이아웃
-      //   children: [
-      //     {
-      //       index: true,
-      //       element: <LMediaList />,
-      //     },
-      //     {
-      //       path: "lmedialist",
-      //       element: <LMediaList />,
-      //     },
-      //     {
-      //       path: "lostList",
-      //       element: <LostList />,
-      //     },
-      //     {
-      //       path: "lostview/:id",
-      //       element: <LostView />,
-      //     },
-      //     {
-      //       path: "community/create",
-      //       element: <Post />,
-      //     },
-      //   ],
-      // },
+      {
+        path: "lost",
+        children: [
+          {
+            index: true,
+            element: <LMediaList />,
+          },
+          {
+            path: "lostList",
+            element: <LMediaList />,
+          },
+          {
+            path: "lostview/:code",
+            element: <LostView />,
+          },
+          {
+            path: "create",
+            element: <Post />,
+          },
+        ],
+      },
     ],
   },
   {

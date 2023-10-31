@@ -3,7 +3,12 @@ import styled from "styled-components";
 import { registerAPI } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { asyncRegister, userReset } from "../../components/store/userSlice";
+import {
+  asyncRegister,
+  userLogout,
+  userReset,
+} from "../../components/store/userSlice";
+import { getTokenCookie } from "../../api/cookie";
 
 const RegisterPage = styled.div`
   width: 100vw;
@@ -184,7 +189,15 @@ const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
   console.log(user);
 

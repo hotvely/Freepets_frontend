@@ -12,6 +12,7 @@ import CommunityPost from "./Community/CommunityPost";
 import Notice from "../pages/notice/Notice";
 import NoticePost from "./NoticePost";
 import { addNoticeBoard, updateNoticeAPI } from "../api/notice";
+import { updateCommunity } from "../api/community";
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
@@ -141,6 +142,7 @@ const UpdatePost = () => {
     console.log(formData);
 
     if (select == 1) {
+      await updateCommunity(formData);
     } else if (select == 2) {
     } else if (select == 3) {
       formData.sitterPrice = rank1;

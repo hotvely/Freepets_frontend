@@ -16,19 +16,27 @@ export const getBoardViewAPI = async (code) => {
   return await instance.get(url);
 };
 
-export const getSearchAPI = async (keyword, sortNum) => {
-  let url = `notice/search/${keyword}/${sortNum}`;
+export const getSearchAPI = async (page, keyword, sortNum) => {
+  let url = `notice/search/${keyword}/${sortNum}?page=${page}`;
   return await instance.get(url);
 };
 
 export const getCommentsAPI = async (postCode) => {
-  let url = `notice/${postCode}/comment`;
+  let url = `notice/${postCode}/comments`;
   return await instance.get(url);
+};
+
+export const getCommentAPI = async (code) => {
+  return await instance.get(`notice/comment/${code}`);
 };
 
 export const getReCommentsAPI = async (pCode) => {
   let url = `notice/comment/${pCode}`;
   return await instance.get(url);
+};
+
+export const getEventAPI = async (year) => {
+  return await instance.get(`event?year=${year}`);
 };
 
 //Lost Board 게시글 서버로 전송
@@ -43,6 +51,10 @@ export const addCommentAPI = async (data) => {
 
 export const addImg = async (data) => {
   return await instance.post("img", data);
+};
+
+export const addEvent = async (data) => {
+  return await instance.post("event", data);
 };
 
 export const deleteNoticeAPI = async (code) => {

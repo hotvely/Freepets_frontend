@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import banner from "../../../resources/bannerTest.png";
+import hamster from "../../../resources/hamster.test.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
-import { getCommunityList } from "../../../api/community";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  getCommunityList,
+  getSearchCommunityList,
+} from "../../../api/community";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { dateFormatDefault } from "../../../api/utils";
 import CommunityList from "./CommonList";
+import Page from "../../../components/Page";
 
 const MainStlye = styled.div`
-  padding: 20px;
+  padding: 10px;
   width: 100%;
+  margin-left: 20px;
 `;
 
 const MainBanner = styled.div`
@@ -115,16 +127,16 @@ const MainContentBox = styled.div`
     display: flex;
     flex-direction: column;
     /* justify-content: space-between; */
-    /* flex-wrap: wrap; */
     margin: 10px;
     width: 100%-10px;
     gap: 10px;
     /* padding: 10px; */
     /* margin-right: 10px; */
     .media-colum {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      flex-wrap: wrap;
+      grid-gap: 10px;
       .media-content {
         /* width: 100%; */
         flex: 1 0 15%;
@@ -156,6 +168,10 @@ const MainContentBox = styled.div`
             h3 {
               padding-right: 3px;
               font-size: 1rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 200px; /* 원하는 최대 너비 설정 */
             }
             p {
               color: tomato;
@@ -189,56 +205,13 @@ const MainContentBox = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    /* padding-top: 20px; */
+    /* border-top: 1px solid #3a98b9; */
 
-    .page {
+    .paging-bar {
       flex-grow: 1;
       text-align: center;
-      .pagination {
-        display: flex;
-        justify-content: center;
-        /* flex-direction: row; */
-        /* text-align: center; */
-        list-style: none;
-        /* display: inline-block; */
-
-        a {
-          float: left;
-          display: block;
-          font-size: 14px;
-          text-decoration: none;
-          padding: 5px 12px;
-          color: #96a0ad;
-          line-height: 1.5;
-        }
-        a:active {
-          cursor: default;
-          color: #ffffff;
-          outline: none;
-        }
-        #first:hover,
-        #last:hover,
-        #arrow-left:hover,
-        #arrow-right:hover {
-          color: #2e9cdf;
-        }
-
-        #num {
-          /* margin-left: 3px; */
-          -moz-border-radius: 100%;
-          -webkit-border-radius: 100%;
-          border-radius: 100%;
-        }
-        #num:hover {
-          background-color: #2e9cdf;
-          color: #ffffff;
-        }
-        #num.active {
-          background-color: #2e9cdf;
-          cursor: pointer;
-        }
-      }
     }
-
     #write-btn {
       /* display: flex;
       justify-content: end; */
@@ -249,21 +222,50 @@ const MainContentBox = styled.div`
         height: 40px;
         border: none;
         border-radius: 10px;
+        cursor: pointer;
       }
     }
   }
 `;
 
 const CMediaList = () => {
+  const param = useParams();
+  console.log(param);
+
+  const [searchParams] = useSearchParams();
+  const searchPage = searchParams.get("page");
+  const [totalPages, setTotalPages] = useState();
+  const [orderBy, setOrderBy] = useState(1);
+  const [searchType, setSearchType] = useState(1);
+  const [searchKeyword, setSearchKeyword] = useState();
   const [mediae, setMediae] = useState([]);
-  const [page, setPage] = useState(1);
   const [ListBtn, setListBtn] = useState();
   const navigate = useNavigate();
+  // const [selectBoard, setSelectBoard] = useState(1);
+  console.log(param.ListBtn);
+  const page = searchPage != null ? searchPage : 1;
 
   const onClickList = (e) => {
     // 게시글 타입 변경
     console.log(e.currentTarget.id);
     setListBtn(e.currentTarget.id);
+  };
+
+  const sortChangeHandler = (event) => {
+    const selectedOrderBy = event.currentTarget.value;
+    setOrderBy(selectedOrderBy);
+    console.log(selectedOrderBy);
+    if (searchKeyword != null) {
+      MediaSearchListAPI();
+    } else {
+      MediaListAPI();
+    }
+  };
+
+  const searchSortChangeHandler = (event) => {
+    const selectedSearchOrderBy = event.currentTarget.value;
+    console.log(selectedSearchOrderBy);
+    setSearchType(selectedSearchOrderBy);
   };
 
   // const navRowClick = (row) => {
@@ -290,70 +292,128 @@ const CMediaList = () => {
 
   const MediaListAPI = async () => {
     // 게시글 목록 데이터
-    const result = await getCommunityList(page);
-    setMediae([...mediae, ...result.data]);
+    // setMediae([...mediae, ...result.data]);
+    const result = await getCommunityList(page, orderBy);
+    setMediae(result.data.communityList);
+    setTotalPages(result.data.totalPages);
+  };
+
+  const MediaSearchListAPI = async () => {
+    try {
+      const result = await getSearchCommunityList(
+        page,
+        searchKeyword,
+        searchType
+        // orderBy
+      );
+      setMediae(result.data.communityList);
+      setTotalPages(result.data.totalPages);
+    } catch (error) {
+      console.error("검색 에러: ", error);
+    }
   };
 
   useEffect(() => {
-    MediaListAPI(); // 게시글 목록 조회 호출
+    if (param.ListBtn) setListBtn(param.ListBtn);
   }, []);
 
+  useEffect(() => {
+    if (searchKeyword != null) {
+      MediaSearchListAPI();
+    } else {
+      MediaListAPI();
+    }
+  }, [page, orderBy, searchKeyword, searchType]);
+
   const boardTypeForMedia = () => {
-    return (
-      <div className="main-content">
-        <div className="media-colum">
-          {mediae.map((media) => (
-            // <Link to={"/commonview/" + media.commonCode}>
-            <div className="media-content" key={media?.commonCode}>
-              <div className="media-thumbnail">
-                <Link to={`/community/common/commonview/${media?.commonCode}`}>
-                  <p>
-                    <img
-                      src={media.commonDesc.substring(
-                        media.commonDesc.indexOf('<img src="') + 10,
-                        media.commonDesc.indexOf('">')
-                      )}
-                      alt="미디어썸네일"
-                    />
-                  </p>
-                </Link>
-              </div>
-              <div className="media-info">
-                <div className="media-info-first-line">
+    if (mediae && mediae.length > 0) {
+      return (
+        <div className="main-content">
+          <div className="media-colum">
+            {mediae.map((media, index) => (
+              <div className="media-content" key={index}>
+                <div className="media-thumbnail">
                   <Link
-                    to={"/commonview/" + media?.commonCode}
-                    id="media-info-title"
-                  >
-                    <h3>{media?.commonTitle}</h3>
-                  </Link>
-                  <div
-                    id="media-info-comment"
-                    onClick={() => {
-                      activateComments(media?.commonCode);
-                    }}
+                    to={`/community/common/commonview/${media?.commonCode}/${ListBtn}`}
                   >
                     <p>
-                      [<span>{media?.commonCommentCount}</span>]
+                      <img
+                        src={
+                          hamster
+                          // media.commonDesc.substring(
+                          // media.commonDesc.indexOf('<img src="') + 10,
+                          // media.commonDesc.indexOf('">'))
+                        }
+                        alt="미디어썸네일"
+                      />
+                    </p>
+                  </Link>
+                </div>
+                <div className="media-info">
+                  <div className="media-info-first-line">
+                    <Link
+                      to={`/community/common/commonview/${media?.commonCode}/${ListBtn}`}
+                      id="media-info-title"
+                    >
+                      <h3>{media?.commonTitle}</h3>
+                    </Link>
+                    <div
+                      id="media-info-comment"
+                      onClick={() => {
+                        activateComments(media?.commonCode);
+                      }}
+                    >
+                      <p>
+                        [<span>{media?.commonCommentCount}</span>]
+                      </p>
+                    </div>
+                  </div>
+
+                  <div id="media-info-writer">
+                    <p>{media?.member?.nickname}</p>
+                  </div>
+
+                  <div id="media-info-detail">
+                    <p>
+                      <span>{dateFormatDefault(media?.commonDate)}</span>
+                      ㆍ조회수
+                      <span id="viewCount">{media?.commonViewCount}</span>회
                     </p>
                   </div>
                 </div>
-
-                <div id="media-info-writer">
-                  <p>{media?.member?.nickname}</p>
-                </div>
-
-                <div id="media-info-detail">
-                  <p>
-                    <span>{media?.commonDate}</span>ㆍ조회수
-                    <span id="viewCount">{media?.commonViewCount}</span>회
-                  </p>
-                </div>
               </div>
+            ))}
+            {Array(3 - (mediae.length % 3))
+              .fill(null)
+              .map((_, index) => (
+                <div className="empty-space" key={mediae.length + index}>
+                  &nbsp;
+                </div>
+              ))}
+          </div>
+          <div className="main-bottom">
+            <div className="paging-bar">
+              <Page totalPages={totalPages} page={page} />
             </div>
-          ))}
+            <div id="write-btn">
+              <button onClick={navWrite}>글쓰기</button>
+            </div>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            paddingTop: "20px",
+          }}
+        >
+          검색 결과가 없습니다.
+        </div>
+      );
+    }
   };
 
   return (
@@ -368,7 +428,7 @@ const CMediaList = () => {
         <div className="midea-headerbox">
           <div className="media-sort">
             <div className="media-sort-like">
-              <select>
+              <select onChange={sortChangeHandler} value={orderBy}>
                 <option value="1">최신순</option>
                 <option value="2">추천순</option>
                 <option value="3">댓글순</option>
@@ -397,93 +457,30 @@ const CMediaList = () => {
           </div>
 
           <div className="search-box">
-            <select>
-              <option value="1">게시글+댓글</option>
-              <option value="2">게시글</option>
-              <option value="3">댓글</option>
+            <select onChange={searchSortChangeHandler}>
+              <option value="1">제목+내용</option>
+              <option value="2">제목</option>
+              <option value="3">내용</option>
             </select>
 
-            <input type="search" id="search" name="search" />
-            <button>검색</button>
+            <input
+              type="search"
+              id="search"
+              name="search"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
+            <button onClick={MediaSearchListAPI}>검색</button>
           </div>
         </div>
-        {ListBtn == 1 ? boardTypeForMedia() : <CommunityList />}
-        <div className="main-bottom">
-          {/* 페이지 넘기는 바 만들기
-         <div id="paging"></div> */}
-          <div className="page">
-            <ul className="pagination">
-              <li>
-                <a href="#" id="first">
-                  처음 페이지
-                </a>
-              </li>
-              <li>
-                <a href="#" id="arrow-left">
-                  ◀
-                </a>
-              </li>
-              <li>
-                <a href="#" id="active-num">
-                  1
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  2
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  3
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  4
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  5
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  6
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  7
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  8
-                </a>
-              </li>
-              <li>
-                <a href="#" id="num">
-                  9
-                </a>
-              </li>
-              <li>
-                <a href="#" id="arrow-right">
-                  ▶
-                </a>
-              </li>
-              <li>
-                <a href="#" id="last">
-                  마지막 페이지
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div id="write-btn">
-            <button onClick={navWrite}>글쓰기</button>
-          </div>
-        </div>
+
+        {ListBtn == 1 ? (
+          boardTypeForMedia()
+        ) : (
+          <CommunityList
+            props={{ orderBy, searchType, searchKeyword, ListBtn }}
+          />
+        )}
       </MainContentBox>
     </MainStlye>
   );

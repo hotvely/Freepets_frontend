@@ -10,7 +10,7 @@ import {
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import {
   deleteNoticeAPI,
@@ -20,6 +20,8 @@ import {
 import { useSearchParams } from "react-router-dom";
 import Page from "../../components/Page";
 import NoticeList from "./NoticeList";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../../components/store/userSlice";
 
 const MainStlye = styled.div`
   padding: 20px;
@@ -272,22 +274,33 @@ const Notice = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchPage = searchParams.get("page");
-  const [totalPages, setTotalPages] = useState();
-  const page = 1;
-  const [boards, setBoards] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [sortNum, setSortNum] = useState(1);
   const [searchNum, setSearchNum] = useState(1);
   const [searchKey, setSearchKey] = useState("");
+
+  const page = searchPage != null ? searchPage : 1;
+
   const keywordHandler = (e) => {
     setKeyword(e.target.value);
   };
 
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
 
   const getSearchBoardHandler = async () => {
+    document.querySelector("#search").value = "";
     setSearchKey(keyword);
   };
 
@@ -337,11 +350,9 @@ const Notice = () => {
           </div>
         </div>
 
-        <NoticeList props={{ searchKey, searchNum, sortNum }} />
+        <NoticeList props={{ searchKey, searchNum, sortNum, page }} />
 
         <div className="main-bottom">
-          {/* 페이지 넘기는 바 만들기
-         <div id="paging"></div> */}
           <div className="page"></div>
           <div id="write-btn">
             <button

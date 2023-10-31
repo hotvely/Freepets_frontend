@@ -5,17 +5,25 @@ import styled from "styled-components";
 const Styles = styled.div`
   table {
     width: 100%;
-    margin-right: 20px;
-    table-layout: fixed;
-  }
-  thead {
-    border: solid 1px #3a98b9;
-  }
-  th {
-    padding: 10px;
-    font-size: 0.8rem;
-    color: #3a98b9;
-    font-weight: 800;
+    /* margin-right: 20px;/ */
+    /* table-layout: fixed; */
+    thead {
+      border-bottom: 1px solid #cdf5fd;
+      margin-bottom: 10px;
+      height: 25px;
+      color: #7d7c7c;
+      font-weight: bold;
+      /* border: solid 1px #3a98b9; */
+      tr {
+        /* background-color: white; */
+        th {
+        }
+      }
+    }
+    tbody {
+      tr {
+      }
+    }
   }
 `;
 
@@ -44,7 +52,17 @@ const CommunityTableForList = ({ columns, data, onRowClick }) => {
                 // onClick={() => console.log(row.original)}
               >
                 {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  <td
+                    {...cell.getCellProps()}
+                    style={{
+                      paddingTop: "8px",
+                      paddingBottom: "8px",
+                      fontSize: "0.9rem",
+                      borderBottom: "1px solid #CDF5FD",
+                    }}
+                  >
+                    {cell.render("Cell")}
+                  </td>
                 ))}
               </tr>
             );

@@ -6,9 +6,9 @@ import loupe from "../assets/loupe.png";
 import Logo from "../assets/Logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { userSave } from "../components/store/userSlice";
-import Header from "../components/Header";
-
+import { userLogout, userSave } from "../components/store/userSlice";
+import axios from "axios";
+import { getTokenCookie } from "../api/cookie";
 const StyledHeader = styled.header`
   position: fixed;
   width: 100%;
@@ -311,7 +311,15 @@ const Home = () => {
   const [search, setSearch] = useState();
 
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      return state.user;
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
   });
 
   const onSearchChange = (e) => {
@@ -342,9 +350,7 @@ const Home = () => {
           <a href="/hospital">Information</a>
           <a href="#">CS</a>
           <div className="rightNav">
-            {user === null ||
-              Object.keys(user).length === 0 ||
-              !localStorage.getItem("token") ? (
+            {!user ? (
               <>
                 <Link to="/auth/login">Sign in</Link> <p>|</p>
                 <Link to="/auth/register">Sign up</Link>

@@ -135,15 +135,16 @@ const MyPageMain = styled.main`
     .check-Alarm {
       display: flex;
       flex-direction: row;
-      width: 90%;
+      width: 100%;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       margin: 20px 0;
 
       img {
         width: 50px;
         height: 50px;
         border-radius: 50%;
+        margin-right: 15px;
       }
       button {
         background-color: white;
@@ -154,7 +155,7 @@ const MyPageMain = styled.main`
       .check-Alarm-Content {
         width: 800px;
         height: 50px;
-        margin-left: 20px;
+
         /* margin-right: 100px; */
         display: flex;
         flex-direction: column;
@@ -165,7 +166,21 @@ const MyPageMain = styled.main`
           flex-direction: row;
           margin: 5px 0;
           div {
-            margin-right: 40px;
+          }
+          .commentTitle {
+            width: 100px;
+            margin-left: 10px;
+            white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정합니다. */
+            overflow: hidden; /* 요소의 내용이 너무 길어지면 숨깁니다. */
+            text-overflow: ellipsis; /* 생략 부호(...)를 사용하여 표시됩니다. */
+          }
+
+          .commentDesc {
+            margin-left: 10px;
+            width: 200px;
+            white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정합니다. */
+            overflow: hidden; /* 요소의 내용이 너무 길어지면 숨깁니다. */
+            text-overflow: ellipsis; /* 생략 부호(...)를 사용하여 표시됩니다. */
           }
         }
       }
@@ -193,6 +208,7 @@ const MyPageMain = styled.main`
         flex: 0 1 50px;
         padding-left: 20px;
         font-weight: bold;
+        width: 350px;
       }
       .postInfo_boardname {
         flex: 0 1 100px;
@@ -200,12 +216,21 @@ const MyPageMain = styled.main`
         font-weight: bold;
       }
       .postInfo_title {
-        flex: 0 1 500px;
+        flex: 0 1 300px;
         padding-left: 20px;
+        text-overflow: ellipsis;
       }
       .postInfo_date {
         flex: 0 1 150px;
         padding-left: 20px;
+      }
+      .bookmarkDeletBtn {
+        button {
+          border: 0;
+          background-color: white;
+          font-weight: bold;
+          font-size: 1rem;
+        }
       }
     }
   }

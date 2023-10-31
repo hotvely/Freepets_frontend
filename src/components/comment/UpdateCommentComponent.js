@@ -39,6 +39,11 @@ const UpdateCommentComponent = (props) => {
   };
 
   const updateComment = async () => {
+    // console.log(content);
+    // const formData = {
+    //   commentCode: code,
+    //   commentDesc: content,
+    // };
     console.log(content);
     if (content) {
       props.updateSuccHandler();

@@ -9,6 +9,7 @@ import HospitalPost from "./HospitalPost";
 import { useNavigate } from "react-router-dom";
 import { addHospitalBoard } from "../api/info";
 import { addCommunity } from "../api/community";
+import { addLostAPI } from "../api/community";
 import CommunityPost from "./Community/CommunityPost";
 import Notice from "../pages/notice/Notice";
 import NoticePost from "./NoticePost";
@@ -125,7 +126,7 @@ const Post = () => {
     const data = JSON.parse(localStorage.getItem("user"));
 
     const formData = new FormData();
-    
+
     formData.append("title", title);
     formData.append("desc", desc);
     formData.append("token", data.token);
@@ -135,6 +136,7 @@ const Post = () => {
       // console.log(formData);
       await addCommunity(formData);
     } else if (select == 2) {
+      await addLostAPI(formData);
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
       formData.append("sitterLoc", rank2);
@@ -157,7 +159,7 @@ const Post = () => {
   const selectChange = (e) => {
     setSelect(e.currentTarget.value);
   };
-  
+
   const modules = useMemo(
     () => ({
       toolbar: {

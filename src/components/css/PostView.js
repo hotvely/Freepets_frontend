@@ -59,6 +59,9 @@ export const MainContentBox = styled.div`
             margin-right: 20px;
           }
         }
+        .profile-img :hover {
+          cursor: pointer;
+        }
         .profile-area {
           margin-right: 0px;
           padding-top: 5px;
@@ -130,7 +133,7 @@ export const MainContentBox = styled.div`
           border: 0;
           padding: 5px;
           border-radius: 5px;
-          background-color: #437b92;
+          background-color: #98dbf2;
           color: white;
           margin: 0 5px;
 
@@ -199,7 +202,7 @@ export const MainContentBox = styled.div`
                     border: 0;
                     padding: 5px;
                     border-radius: 5px;
-                    background-color: #437b92;
+                    background-color: #98dbf2;
                     color: white;
                     margin: 0 5px;
                   }
@@ -219,7 +222,7 @@ export const MainContentBox = styled.div`
                         border: 0;
                         padding: 5px;
                         border-radius: 5px;
-                        background-color: #84afc1;
+                        background-color: #98dbf2;
                         color: white;
                         margin: 0 5px;
                       }
@@ -243,7 +246,7 @@ export const MainContentBox = styled.div`
       border: 0;
       padding: 5px;
       border-radius: 5px;
-      background-color: #437b92;
+      background-color: #98dbf2;
       color: white;
       margin: 0 5px;
 
