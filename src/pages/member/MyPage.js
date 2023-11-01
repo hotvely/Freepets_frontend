@@ -218,6 +218,8 @@ const MyPage = () => {
                       <div>병원 정보게시판</div>
                     ) : noti.boardCode == 5 ? (
                       <div>공지사항게시판</div>
+                    ) : noti.boardCode == 6 ? (
+                      <div>채팅</div>
                     ) : (
                       <div>"게시판정보?"</div>
                     )}
