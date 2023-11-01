@@ -1,12 +1,12 @@
 import { wait } from "@testing-library/user-event/dist/utils";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "react-modal";
 import { useParams } from "react-router-dom";
 import { outside } from "semver";
 import styled from "styled-components";
 import { updateAPI } from "../../api/auth";
 import { useDispatch } from "react-redux";
-import { asyncUpdate } from "../../components/store/userSlice";
+import { asyncUpdate, userSave } from "../../components/store/userSlice";
 
 const FormInput = styled.div`
   .inputForm_title {
@@ -95,6 +95,11 @@ const MemberUpdate = (props) => {
       overflow: "auto",
     },
   };
+  const [img, setImg] = useState();
+  const [phoneValid, setPhoneValid] = useState(true);
+  const [emailValid, setEmailValid] = useState(true);
+
+  const [passwordVaild, setPasswordValid] = useState(true);
 
   const setIsOpen = () => {
     props.props.setIsOpen();
@@ -105,25 +110,37 @@ const MemberUpdate = (props) => {
     props.props.dispatch();
   };
 
-  const formDataHandler = (e) => {
+  const formDataHandler = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
-    const formData = {
-      token: user.token,
-      password: e.target.password.value,
-      nickname: e.target.nickname.value,
-      email: e.target.email.value,
-      phone: e.target.phone.value,
-      address: e.target.address.value,
-      memberInfo: e.target.userInfo.value,
-    };
+    const formData = new FormData();
 
+    formData.append("token", user.token);
+    formData.append("password", e.target.password.value);
+    formData.append("nickname", e.target.password.value);
+    formData.append("email", e.target.password.value);
+    formData.append("phone", e.target.password.value);
+    formData.append("memberInfo", e.target.userInfo.value);
+
+    console.log(formData);
     for (let key in formData) {
-      if (key != "token" && formData[key].length > 0) {
-        dispatch(asyncUpdate(formData));
-
+      let file = null;
+      if (e.target.img.files[0] != undefined) {
+        file = e.target.img.files[0];
+      }
+      console.log(file);
+      if (key != "token" && (formData[key].length > 0 || file != {})) {
+        formData.append("file", file);
+        console.log(formData);
+        const result = await updateAPI(formData);
+        console.log(result.data);
         console.log("데이터 전송 후 수정 완료");
         alert("정보 수정 완료!");
+
+        userSave(result.data);
+        localStorage.setItem("user", JSON.stringify(result.data));
+
         setIsOpen(false);
         return true;
       }
@@ -132,62 +149,98 @@ const MemberUpdate = (props) => {
     return false;
   };
 
+  const checkPassword = (e) => {
+    if (e.target != null) {
+      const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+      const isValid = regExp.test(e.target.value);
+      setPasswordValid(isValid);
+    }
+  };
+  const checkEmail = (e) => {
+    if (e.target != null) {
+      const regExp =
+        /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      const isValid = regExp.test(e.target.value);
+      setEmailValid(isValid);
+    }
+  };
+  const checkPhoneNumber = (e) => {
+    if (e.target != null) {
+      const regExp = /^[0-9]{11}$/;
+      const isValid = regExp.test(e.target.value);
+      setPhoneValid(isValid);
+    }
+  };
   return (
     <>
-      {console.log(isOpen)}
-
-      <div
-        // onClick={(e) => {
-        //   if (e.target.className.includes("Overlay")) setIsOpen(true);
-        //   else setIsOpen(false);
-        // }}
+      <Modal
+        isOpen={isOpen}
+        style={customModalStyled}
+        onRequestClose={() => {
+          setIsOpen(true);
+        }}
+        ariaHideApp={false}
       >
-        <Modal
-          isOpen={isOpen}
-          style={customModalStyled}
-          onRequestClose={() => {
-            setIsOpen(false);
-          }}
-          ariaHideApp={false}
-        >
-          <FormInput>
-            <form className="form" onSubmit={formDataHandler}>
-              <div className="inputForm_title">정보 수정</div>
-              <div className="inputForm">
-                변경할 비밀번호 <input type="text" name="password"></input>
-              </div>
-              <div className="inputForm">
-                변경할 닉네임 <input type="text" name="nickname"></input>
-              </div>
-              <div className="inputForm">
-                변경할 E-mail <input type="text" name="email"></input>
-              </div>
-              <div className="inputForm">
-                변경할 전화번호 <input type="text" name="phone"></input>
-              </div>
-              <div className="inputForm phoneNumberInfo">
-                하이픈('-')을 제외한 숫자만 입력하세요.
-              </div>
-              <div className="inputForm">
-                변경할 주소 <input type="text" name="address"></input>
-              </div>
-              <div className="inputForm">
-                자기소개 <textarea name="userInfo"></textarea>
-              </div>
-              <div className="btn">
-                <button type="submit">submit</button>
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
-                  }}
-                >
-                  exit
-                </button>
-              </div>
-            </form>
-          </FormInput>
-        </Modal>
-      </div>
+        <FormInput>
+          <form className="form" onSubmit={formDataHandler}>
+            <div className="inputForm_title">정보 수정</div>
+            <div className="inputForm">
+              변경할 비밀번호
+              <input
+                type="password"
+                name="password"
+                onChange={checkPassword}
+              ></input>
+            </div>
+            {passwordVaild ? null : (
+              <span className="error">
+                비밀번호는 특수문자 포함한 8~16자리 까지 입니다
+              </span>
+            )}
+            <div className="inputForm">
+              변경할 닉네임 <input type="text" name="nickname"></input>
+            </div>
+            <div className="inputForm">
+              변경할 이미지 <input type="file" name="img"></input>
+            </div>
+            <div className="inputForm">
+              변경할 E-mail
+              <input type="text" name="email" onChange={checkEmail}></input>
+            </div>
+            {emailValid ? null : (
+              <span className="error">
+                @, .com을 포함한 이메일 양식을 지켜주세요
+              </span>
+            )}
+            <div className="inputForm">
+              변경할 전화번호
+              <input
+                type="text"
+                name="phone"
+                onChange={checkPhoneNumber}
+              ></input>
+            </div>
+            {phoneValid ? null : (
+              <span className="error">
+                비밀번호는 - 을 제외한 11자리 숫자 입니다
+              </span>
+            )}
+            <div className="inputForm">
+              자기소개 <textarea name="userInfo"></textarea>
+            </div>
+            <div className="btn">
+              <button type="submit">submit</button>
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                }}
+              >
+                exit
+              </button>
+            </div>
+          </form>
+        </FormInput>
+      </Modal>
     </>
   );
 };

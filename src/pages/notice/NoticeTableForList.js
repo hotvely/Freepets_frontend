@@ -4,40 +4,39 @@ import styled from "styled-components";
 
 const Styles = styled.div`
   width: 100%;
-  margin: 40px;
+
   table {
     width: 100%;
     display: flex;
     flex-direction: column;
     table-layout: fixed;
     thead {
-      width: 100%;
-      border: solid 1px #3a98b9;
+      border-bottom: solid 1px #3a98b9;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       tr {
         th {
           display: flex;
-          width: 20%;
-          height: 40px;
+
+          height: 30px;
           align-items: center;
           justify-content: center;
           font-weight: bold;
-          font-size: 1.05rem;
+          font-size: 1rem;
+          color: #7d7c7c;
         }
       }
     }
     tbody {
       tr {
+        border-bottom: #3a98b9;
         td {
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 20%;
-          height: 50px;
-          border-bottom: 1px solid #3a98b9;
-          font-weight: bold;
+
+          border-bottom: 1px solid #cdf5fd;
         }
       }
       tr :hover {
@@ -46,12 +45,6 @@ const Styles = styled.div`
     }
   }
 
-  th {
-    padding: 10px;
-    font-size: 0.8rem;
-    color: #3a98b9;
-    font-weight: 800;
-  }
   tr {
     width: 100%;
     display: flex;
@@ -72,7 +65,28 @@ const NoticeTableForList = ({ columns, data, onRowClick }) => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th
+                  {...column.getHeaderProps()}
+                  style={
+                    column.Header === "제목"
+                      ? {
+                          width: "400px",
+                          paddingTop: "8px",
+                          paddingBottom: "8px",
+                          fontSize: "0.9rem",
+
+                          flexGrow: "1",
+                        }
+                      : {
+                          width: "120px",
+                          paddingTop: "8px",
+                          paddingBottom: "8px",
+                          fontSize: "0.9rem",
+                        }
+                  }
+                >
+                  {column.render("Header")}
+                </th>
               ))}
             </tr>
           ))}
@@ -88,7 +102,29 @@ const NoticeTableForList = ({ columns, data, onRowClick }) => {
               >
                 {/* {console.log(row)} */}
                 {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  <td
+                    {...cell.getCellProps()}
+                    style={
+                      cell.column.Header === "제목"
+                        ? {
+                            width: "400px",
+                            paddingTop: "8px",
+                            paddingBottom: "8px",
+                            fontSize: "0.9rem",
+                            borderBottom: "1px solid #CDF5FD",
+                            flexGrow: "1",
+                          }
+                        : {
+                            width: "120px",
+                            paddingTop: "8px",
+                            paddingBottom: "8px",
+                            fontSize: "0.9rem",
+                            borderBottom: "1px solid #CDF5FD",
+                          }
+                    }
+                  >
+                    {cell.render("Cell")}
+                  </td>
                 ))}
               </tr>
             );
