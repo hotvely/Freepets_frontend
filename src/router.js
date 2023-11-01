@@ -32,38 +32,37 @@ import KakaoPostAPI from "./pages/member/KakaoPostAPI";
 const router = createBrowserRouter([
   {
     path: "/",
-    element:  <HLayout/>,
+    element: <HLayout />,
     children: [
       {
         index: true,
-        element: <Home/>,
+        element: <Home />,
       },
-     
-    ]
+    ],
   },
   {
     path: "/main",
-    element:  <HLayout/>,
+    element: <HLayout />,
     children: [
       {
         index: true,
-        element: <Home/>,
+        element: <Home />,
       },
-    ]
+    ],
   },
   {
     path: "/totalSearch",
-    element: <HLayout/>,
+    element: <HLayout />,
     children: [
       {
         index: true,
-        element: <TotalSearch/>,
+        element: <TotalSearch />,
       },
       {
-        path: '?search=:search',
-        element: <TotalSearch/>,
-      }
-    ]
+        path: "?search=:search",
+        element: <TotalSearch />,
+      },
+    ],
   },
   {
     path: "/mypage",
@@ -119,7 +118,7 @@ const router = createBrowserRouter([
         element: <HospitalReview />,
       },
       {
-        path: '?page=:page',
+        path: "?page=:page",
         element: <HospitalReview />,
       },
       {
@@ -132,7 +131,7 @@ const router = createBrowserRouter([
       },
       {
         path: ":postCode/update/:boardCode",
-        element: <UpdatePost/>
+        element: <UpdatePost />,
       },
     ],
   },
@@ -250,7 +249,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/chatting/:id",
-    element: <Chatting />
+    element: <Chatting />,
   },
   {
     path: "/test",
@@ -260,7 +259,7 @@ const router = createBrowserRouter([
         element: <Post />,
       },
     ],
-  }
+  },
 ]);
 
 export default router;

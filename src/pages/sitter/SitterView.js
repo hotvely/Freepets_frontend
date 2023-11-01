@@ -308,18 +308,21 @@ const Star = ({color1, color2, color3, color4, color5}) => {
 }
 
 const SitterView = () => {
-    const location = useLocation();
     const { code } = useParams();
     const navigator = useNavigate();
     const [boardView, setBoardView] = useState(null);
     const [reviews, setReviews] = useState([]);
-    const [reviewDesc, setReviewDesc] = useState();
+    const [reviewDesc, setReviewDesc] = useState("");
     const [star, setStar] = useState(0);
     const dispatch = useDispatch();
 
     const data = useSelector((state) => {
         if (getTokenCookie() !== undefined) {
           if (state.user.user) {
+            if(state.user.user == {})
+            {
+              return JSON.parse(localStorage.getItem("user")); 
+            }
             return state.user;
           } else {
             return JSON.parse(localStorage.getItem("user"));
@@ -331,7 +334,7 @@ const SitterView = () => {
           }
         }
       });
-
+    
     const styleGray = {
         color: "#aaa"
     };
@@ -425,7 +428,6 @@ const SitterView = () => {
 
     const boardViewAPI = async () => {
         const boardViewResult = await getBoardView(code);
-        console.log('모야');
         setBoardView(boardViewResult.data);
     }
 
@@ -465,8 +467,13 @@ const SitterView = () => {
 
     useEffect(() => {
         boardViewAPI();
-        getReviewsAPI();
     }, []);
+
+    useEffect(() => {
+        if(boardView) {
+            getReviewsAPI();
+        }
+    }, [boardView]);
 
     return (
         <Main>
@@ -500,7 +507,7 @@ const SitterView = () => {
                     <div className="main-content">
                         <div className='ql-editor' id="sitterDesc" dangerouslySetInnerHTML={{__html: String(boardView?.desc)}} />
                     </div>
-                    {boardView?.memberDTO.id == data.id ? 
+                    {boardView?.memberDTO.id == data?.id ? 
                         <div className="main-button">
                             <button className="update" onClick={onUpdateBoard}>수정</button>
                             <button className="delete" onClick={onDeleteBoard}>삭제</button>
@@ -517,7 +524,7 @@ const SitterView = () => {
                                 <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
                                 <div className="write-content_header-start">
                                     <div className="write-content_header-start_name">
-                                        <p id="nickname">{data.nickname}</p>
+                                        <p id="nickname">{data?.nickname}</p>
                                     </div>
                                     <div className="write-content_header-start_ratings">                                       
                                         <button onClick={onRatings} value="1"><FontAwesomeIcon icon={faStar} style={style1}/></button>
@@ -545,7 +552,7 @@ const SitterView = () => {
                                 <div className="review-content_start-user">
                                     <div className="review-content_start-user_name">
                                         <p id="nickname">{items?.member.nickname}</p>
-                                        {items?.member.id == data.id ? 
+                                        {items?.member.id == data?.id ? 
                                         <button className="review-content_start-delete" onClick={onDeleteReview} value={items?.sitterReviewCode}>삭제</button> :
                                         <div></div>
                                     }

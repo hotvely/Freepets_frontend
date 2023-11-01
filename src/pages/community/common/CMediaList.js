@@ -8,6 +8,7 @@ import {
   getCommunityList,
   getSearchCommunityList,
 } from "../../../api/community";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Link,
   useNavigate,
@@ -17,6 +18,8 @@ import {
 import { dateFormatDefault } from "../../../api/utils";
 import CommunityList from "./CommonList";
 import Page from "../../../components/Page";
+import { getTokenCookie } from "../../../api/cookie";
+import { userLogout } from "../../../components/store/userSlice";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -244,6 +247,23 @@ const CMediaList = () => {
   // const [selectBoard, setSelectBoard] = useState(1);
   console.log(param.ListBtn);
   const page = searchPage != null ? searchPage : 1;
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => {
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      if (state.user != {}) {
+        return state.user;
+      }
+      return JSON.parse(localStorage.getItem("user"));
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
+  });
+  console.log(user);
 
   const onClickList = (e) => {
     // 게시글 타입 변경
@@ -315,6 +335,7 @@ const CMediaList = () => {
 
   useEffect(() => {
     if (param.ListBtn) setListBtn(param.ListBtn);
+    MediaListAPI();
   }, []);
 
   useEffect(() => {

@@ -131,10 +131,12 @@ const Post = () => {
     formData.append("desc", desc);
     formData.append("token", data.token);
 
+    let url = "../";
     if (select == 1) {
       // formData.append("communityTitle", title);
       // console.log(formData);
       await addCommunity(formData);
+      url = "/community";
     } else if (select == 2) {
       await addLostAPI(formData);
     } else if (select == 3) {
@@ -149,7 +151,7 @@ const Post = () => {
     } else if (select == 5) {
       await addNoticeBoard(formData);
     }
-    navigate("../");
+    navigate(url);
   };
 
   const InputDescHandler = (e) => {

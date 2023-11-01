@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import banner from "../../../resources/bannerTest.png";
 import yange from "../../../resources/yaonge.jpg";
@@ -28,6 +28,8 @@ import ReCommentComponent from "../../../components/comment/ReCommentComponent";
 import CommentBtnComponent from "../../../components/comment/CommentBtnComponent";
 import ProfileComponent from "../../../components/member/ProfileComponent";
 import { addNotificationAPI } from "../../../api/auth";
+import { getTokenCookie } from "../../../api/cookie";
+import { userLogout } from "../../../components/store//userSlice";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -189,8 +191,7 @@ const CommonView = () => {
   //좋아요
   const [liked, setLiked] = useState(0);
   // 북마크
-  const [isIconActive, setIsIconActive] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
+  // const [isIconActive, setIsIconActive] = useState(false);
 
   const CommunityPostAPI = async (id) => {
     const result = await getCommunity(id);
@@ -211,15 +212,32 @@ const CommonView = () => {
     await deleteCommunity(id);
     navigate("../../");
   };
-  // const user = useSelector((state) => state.user);
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  // const user = useSelector((state) => {
+  //   if (getTokenCookie() != undefined) {
+  //     console.log("쿠키 있!");
+  //     if (state.user != {}) {
+  //       return state.user;
+  //     }
+  //     return JSON.parse(localStorage.getItem("user"));
+  //   } else {
+  //     if (localStorage.getItem("user")) {
+  //       console.log("호출..?");
+  //       dispatch(userLogout());
+  //     }
+  //   }
+  // });
+  //const user = JSON.parse(localStorage.getItem("user"));
   const viewBtn = post && post.member && post.member.id === user.id;
 
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
   };
 
-  const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
+  // const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
   const BookMarkBtn = async () => {
     //나중에 북마크 경로로
     const formData = {
@@ -268,7 +286,7 @@ const CommonView = () => {
     if (user?.token) {
       const parentCode = e.target.commentDesc.id;
       const formData = {
-        token: user.token,
+        token: user?.token,
         boardName: "community",
         postCode: code,
         parentCommentCode: parentCode, //          부모 댓글의 코드를 백으로 넘기는 법
@@ -278,6 +296,7 @@ const CommonView = () => {
         const addCommentResult = await addCommunityComment(formData);
         console.log(addCommentResult.data);
 
+        CommunityPostAPI(code);
         if (parentCode > 0) {
           // 부모 댓글 있을때.
           console.log(parentCode);
@@ -311,14 +330,15 @@ const CommonView = () => {
           }
         }
       }
-
+      console.log("여기까지 오나?");
       await getCommentHandler(code);
+
       e.target.commentDesc.value = null;
     } else {
       alert("로그인이 필요합니다.");
     }
   };
-
+  console.log(comments);
   const updateCommentHandler = async (code) => {
     // 댓글 수정 버튼을 눌렀을 때 실행해야 하는 로직을 처리하기 위한 함수
     if (code == currClickBtn) {
@@ -357,6 +377,7 @@ const CommonView = () => {
   const deleteCommentHandler = async (commentCode) => {
     await deleteCommunityComment(commentCode);
     await getCommentHandler(code);
+    await CommunityPostAPI(code);
   };
 
   const selected_Comment_handler = () => {
@@ -432,7 +453,7 @@ const CommonView = () => {
                     icon={faBookmark}
                     style={{
                       fontSize: "1rem",
-                      color: iconColor,
+                      // color: iconColor,
                       marginRight: "10px",
                     }}
                   />
@@ -494,7 +515,6 @@ const CommonView = () => {
                                 />
                               </div>
                             </div>
-                            {console.log(comment)}
                             {currClickBtn === comment?.commonCommentCode ? (
                               comment?.member?.id === user?.id ? (
                                 <>

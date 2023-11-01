@@ -3,10 +3,8 @@ import Header from "./Header";
 import styled from "styled-components";
 
 const StyleMain = styled.main`
-    padding: 150px 0;
+    padding-top: 150px;
     width: 100%;
-  
-
     display: flex;
     justify-content: center;
 `
@@ -14,12 +12,11 @@ const StyleMain = styled.main`
 const HLayout = () => {
     return (
         <>
-        <Header></Header>
+        <Header />
         <StyleMain>
             <Outlet></Outlet>
-        </StyleMain>
-        
-    </>
+        </StyleMain> 
+        </>
     );
 }
 
