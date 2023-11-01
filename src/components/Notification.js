@@ -20,7 +20,7 @@ export const addCommunityNotification = async (formData) => {
   //data <- 유저id, 게시판 코드, 게시글 코드, 댓글 코드, 현재 게시글 url 링크 주소 들어 있어야 함
   console.log(formData);
   const data = {
-    token: formData.token,
+    id: formData.id,
     boardCode: 1,
     postCode: formData.postCode,
     commentCode: formData.commentCode,
@@ -35,7 +35,7 @@ export const addLostNotification = async (formData) => {
   //data <- 유저id, 게시판 코드, 게시글 코드, 댓글 코드, 현재 게시글 url 링크 주소 들어 있어야 함
   console.log(formData);
   const data = {
-    token: formData.token,
+    id: formData.id,
     boardCode: 2,
     postCode: formData.postCode,
     commentCode: formData.commentCode,
@@ -50,7 +50,7 @@ export const addSitterNotification = async (formData) => {
   //data <- 유저id, 게시판 코드, 게시글 코드, 댓글 코드, 현재 게시글 url 링크 주소 들어 있어야 함
   console.log(formData);
   const data = {
-    token: formData.token,
+    id: formData.id,
     boardCode: 3,
     postCode: formData.postCode,
     commentCode: formData.commentCode,
@@ -65,7 +65,7 @@ export const addhospitalRevieNotification = async (formData) => {
   //data <- 유저id, 게시판 코드, 게시글 코드, 댓글 코드, 현재 게시글 url 링크 주소 들어 있어야 함
   console.log(formData);
   const data = {
-    token: formData.token,
+    id: formData.id,
     boardCode: 4,
     postCode: formData.postCode,
     commentCode: formData.commentCode,

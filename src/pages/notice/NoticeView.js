@@ -118,12 +118,11 @@ const NoticeView = () => {
             };
             await addNoticeNotification(notiData);
             console.log("댓글 작성자랑 달라서 알림 감!");
-          } else {
-            alert("댓글 작성자와 일치한 사람이라 알림 안갑니다.");
           }
         } else {
           // 부모 댓글 없어서 그냥 댓글 달때
-          if (postData.member.id != user?.id) {
+          console.log(postData);
+          if (postData?.member.id != user?.id) {
             const notiData = {
               id: postData.member.id,
 
@@ -133,10 +132,6 @@ const NoticeView = () => {
               url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
             };
             await addNoticeNotification(notiData);
-
-            console.log("댓글 작성자랑 달라서 알림 감!");
-          } else {
-            alert("같은사용자는 알림 안감");
           }
         }
       }
