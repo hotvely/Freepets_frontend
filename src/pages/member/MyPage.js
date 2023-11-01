@@ -227,7 +227,7 @@ const MyPage = () => {
                     {noti?.childComment?.parentCommentCode > 0 ? (
                       <>
                         <div className="commentTitle">
-                          {noti.boardDTO.title}
+                          {noti.boardDTO?.title}
                         </div>
                         <div>게시글에 작성한</div>
                         <div className="commentDesc">
@@ -237,7 +237,7 @@ const MyPage = () => {
                         <div>댓글에 대댓글이 달렸습니다.</div>
                       </>
                     ) : (
-                      `'${noti.boardDTO.title}' 게시글에 댓글이 달렸습니다. `
+                      `'${noti.boardDTO?.title}' 게시글에 댓글이 달렸습니다. `
                     )}
                   </div>
                   <div className="check_Alarm-info">
@@ -275,7 +275,7 @@ const MyPage = () => {
             </div>
             <div className="postInfo_title">
               <a href={`${bookmark.boardDTO.postPath}`}>
-                {bookmark.boardDTO.title}
+                {bookmark.boardDTO?.title}
               </a>
             </div>
             <div className="postInfo_date">

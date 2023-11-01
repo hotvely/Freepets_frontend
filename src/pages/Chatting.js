@@ -214,7 +214,6 @@ const Chatting = () => {
                 id: id,
                 url : `http://localhost:3000/chatting/${data.id}`,
             }
-            await addNoticeNotification(NotiFormData);
         };
     };
 

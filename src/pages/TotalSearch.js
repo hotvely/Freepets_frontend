@@ -1,25 +1,29 @@
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, NavLink, useNavigate } from 'react-router-dom';
 import '../components/css/totalSearch.css';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { getTotalSearch } from '../api/totalSearch';
 
 const TotalSearch = () => {
     const [searchParams] = useSearchParams();
     const search = searchParams.get('search');
+    const navigate = useNavigate();
     const [noticeList, setNoticeList] = useState([]);
     const [communityList, setCommunityList] = useState([]);
     const [sitterList, setSitterList] = useState([]);
     const [hospitalList, setHospitalList] = useState([]);
 
-    // const get 
+    const getTotalSearchAPI = async () => {
+        const result = await getTotalSearch(search);
+        setCommunityList(result.data.communityList);
+        setSitterList(result.data.sitterList);
+        setHospitalList(result.data.hospitalReviewList);
+        setNoticeList(result.data.noticeList);
+    };
     
     useEffect(() => {
-        if(search === null) {
-            console.log('?');
-        } else {
-            console.log(search);
-        }
+        getTotalSearchAPI();
     }, []);
 
     return (
@@ -34,24 +38,38 @@ const TotalSearch = () => {
                         <p id='title'>공지사항</p>
                     </div>
                     <div className='board'>
-                        <div>동물에 관한 공지 강낭콩</div>
-                        <div>동물 단체에 공지 당나귀</div>
+                        {noticeList.map((item, i) => (
+                            i <= 2 ? 
+                            <div className='board-list' key={i} id={item.noticeCode} onClick={(e) => {navigate(`../notice/noticeView/${e.currentTarget.id}`)}}>
+                                <div>{item.noticeTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.noticeTitle.split(search)[1]}</div>
+                                <div>{item.member?.nickname}</div>
+                            </div> : null
+                        ))}                       
                     </div>
-                    <Link to="../notice">
-                        <div className='moveBoard'>공지사항 더 보기 <FontAwesomeIcon icon={faArrowRight}/></div>
-                    </Link>
+                    <div className='moveBoard'>
+                        <Link to="../notice">
+                            공지사항 더 보기 <FontAwesomeIcon icon={faArrowRight}/>
+                        </Link>
+                    </div>
                 </div>
                 <div className='main-center_container_div'>
                     <div className='container'>
                         <p id='title'>시터</p>
                     </div>
                     <div className='board'>
-                        <div>동물에 관한 공지 강낭콩</div>
-                        <div>동물 단체에 공지 당나귀</div>
+                        {sitterList.map((item, i) => (
+                            i <= 2 ? 
+                            <div className='board-list' key={i} id={item.sitterCode} onClick={(e) => {navigate(`../sitter/view/${e.currentTarget.id}`)}}>
+                                <div>{item.sitterTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.sitterTitle.split(search)[1]}</div>
+                                <div>{item.member?.nickname}</div>
+                            </div> : null
+                        ))}
                     </div>
-                    <Link to="../sitter">
-                        <div className='moveBoard'>시터 더 보기 <FontAwesomeIcon icon={faArrowRight}/></div>
-                    </Link>
+                    <div className='moveBoard'>
+                        <Link to="../sitter">
+                            시터 더 보기 <FontAwesomeIcon icon={faArrowRight}/>
+                        </Link>
+                    </div>
                 </div>
             </div>
             <div className='main-center_container'>
@@ -60,24 +78,38 @@ const TotalSearch = () => {
                         <p id='title'>커뮤니티</p>
                     </div>
                     <div className='board'>
-                        <div>동물에 관한 공지 강낭콩</div>
-                        <div>동물 단체에 공지 당나귀</div>
+                        {communityList.map((item, i) => (
+                            i <= 2 ? 
+                            <div className='board-list' key={i} id={item.commonCode} onClick={(e) => {navigate(`../community/common/commonview/${e.currentTarget.id}/undefined`)}}>
+                                <div>{item.commonTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.commonTitle.split(search)[1]}</div>
+                                <div>{item.member?.nickname}</div>
+                            </div> : null
+                        ))}
                     </div>
-                    <Link to="../community">
-                        <div>커뮤니티 더 보기 <FontAwesomeIcon icon={faArrowRight}/></div>
-                    </Link>
+                    <div className='moveBoard'>
+                        <Link to="../community">
+                            커뮤니티 더 보기 <FontAwesomeIcon icon={faArrowRight}/>
+                        </Link>
+                    </div>
                 </div>
                 <div className='main-center_container_div'>
                     <div className='container'>
                         <p id='title'>병원 정보</p>
                     </div>
                     <div className='board'>
-                        <div>동물에 관한 공지 강낭콩</div>
-                        <div>동물 단체에 공지 당나귀</div>
+                        {hospitalList.map((item, i) => (
+                            i <= 2 ? 
+                            <div className='board-list' key={i} id={item.hospitalReviewCode} onClick={(e) => {navigate(`../hospital/view/${e.currentTarget.id}`)}}>
+                                <div>{item.hospitalReviewTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.hospitalReviewTitle.split(search)[1]}</div>
+                                <div>{item.member?.nickname}</div>
+                            </div> : null
+                        ))}
                     </div>
-                    <Link to="../hospital">
-                        <div>병원 정보 더 보기 <FontAwesomeIcon icon={faArrowRight}/></div>
-                    </Link>
+                    <div className='moveBoard'>
+                        <Link to="../hospital">
+                            병원 정보 더 보기 <FontAwesomeIcon icon={faArrowRight}/>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

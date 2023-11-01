@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const HospitalMap = ({hospitalAddress}) => {
+const HospitalMap = ({ hospitalAddress }) => {
 
     const mapRef = useRef(null); // hook (참조)
     var options = {
@@ -16,21 +16,17 @@ const HospitalMap = ({hospitalAddress}) => {
             if (status === window.kakao.maps.services.Status.OK) {
                 
                 var coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-                
+                var map = new window.kakao.maps.Map(mapRef.current, options);
+
+                var markerPosition = coords;
                     // 결과값으로 받은 위치를 마커로 표시합니다
                 var marker = new window.kakao.maps.Marker({
                     map: map,
-                    position: coords,
+                    position: markerPosition,
                 });
 
-                var markerPosition = coords;
-                var marker = new window.kakao.maps.Marker({
-                    position: markerPosition
-                });
-
-                var map = new window.kakao.maps.Map(mapRef.current, options);
                 marker.setMap(map);
-                map.setCenter(coords);
+                map.setCenter(markerPosition);
             }
         })
     }, [hospitalAddress])

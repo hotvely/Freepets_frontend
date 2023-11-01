@@ -127,7 +127,7 @@ const HospitalReviewView = () => {
         postCode: formData.postCode,
         pCommentCode: commentResult.data.superHrCommentCode,
         cCommentCode: commentResult.data.hrCommentCode,
-        url: `http://localhost:3000/hr/view/${formData.postCode}`,
+        url: `http://localhost:3000/hospital/view/${formData.postCode}`,
       };
       await addhospitalRevieNotification(notiData);
       await getCommentHandler(code);
