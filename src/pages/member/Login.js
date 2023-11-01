@@ -16,10 +16,15 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => {
-    if (getTokenCookie() != undefined) {
-      return state.user;
+    if (getTokenCookie() !== undefined) {
+      if (Object.keys(state.user).length !== 0) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
     } else {
       if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }

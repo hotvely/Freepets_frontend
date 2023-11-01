@@ -1,16 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
-import { asyncFindId } from "../../components/store/userSlice";
+import { asyncFindId, userLogout } from "../../components/store/userSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getTokenCookie } from "../../api/cookie";
 
 const MemberFindId = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() !== undefined) {
+      if (Object.keys(state.user).length !== 0) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
   });
-
   const findID = (e) => {
     e.preventDefault();
     const formData = {

@@ -1,5 +1,7 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../store/userSlice";
 
 const Styled = styled.div`
   .comment-btn {
@@ -19,8 +21,20 @@ const Styled = styled.div`
 `;
 
 const CommentBtnComponent = (props) => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => {
-    return state.user;
+    if (getTokenCookie() !== undefined) {
+      if (Object.keys(state.user).length !== 0) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
   });
 
   const writer = props.writer;

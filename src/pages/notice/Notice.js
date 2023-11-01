@@ -284,7 +284,7 @@ const Notice = () => {
 
   const user = useSelector((state) => {
     if (getTokenCookie() !== undefined) {
-      if (state.user.user) {
+      if (Object.keys(state.user).length !== 0) {
         return state.user;
       } else {
         return JSON.parse(localStorage.getItem("user"));
