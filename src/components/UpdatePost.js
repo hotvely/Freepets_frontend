@@ -12,7 +12,9 @@ import CommunityPost from "./Community/CommunityPost";
 import Notice from "../pages/notice/Notice";
 import NoticePost from "./NoticePost";
 import { addNoticeBoard, updateNoticeAPI } from "../api/notice";
-import { updateCommunity } from "../api/community";
+import { updateCommunity, updateLostAPI } from "../api/community";
+import { addLostAPI } from "../api/community";
+
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
@@ -140,10 +142,13 @@ const UpdatePost = () => {
     //formData객체에 데이터 추가 하는법
     //formData.서버쪽데이터이름 = 보내는데이터;
     console.log(formData);
-
+    let url = "../";
     if (select == 1) {
       await updateCommunity(formData);
+      url = "/community";
     } else if (select == 2) {
+      console.log("번호 몇 번" + select);
+      await updateLostAPI(formData);
     } else if (select == 3) {
       formData.sitterPrice = rank1;
       formData.sitterLoc = rank2;
@@ -155,7 +160,7 @@ const UpdatePost = () => {
     } else if (select == 5) {
       await updateNoticeAPI(formData);
     }
-    navigate("../");
+    navigate(url);
   };
 
   const InputDescHandler = (e) => {

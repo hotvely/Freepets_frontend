@@ -214,25 +214,28 @@ const CommonView = () => {
   };
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  console.log(user);
-  // const user = useSelector((state) => {
-  //   if (getTokenCookie() != undefined) {
-  //     console.log("쿠키 있!");
-  //     if (state.user != {}) {
-  //       return state.user;
-  //     }
-  //     return JSON.parse(localStorage.getItem("user"));
-  //   } else {
-  //     if (localStorage.getItem("user")) {
-  //       console.log("호출..?");
-  //       dispatch(userLogout());
-  //     }
-  //   }
-  // });
+  // const user = useSelector((state) => state.user);
+  // console.log(user);
+  const user = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (Object.keys(state.user).length !== 0) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
+  });
   //const user = JSON.parse(localStorage.getItem("user"));
-  const viewBtn = post && post.member && post.member.id === user.id;
 
+  const viewBtn = post && post?.member && post?.member?.id === user?.id;
+  console.log("버튼 눌러" + viewBtn);
+  console.log("게시글작성자" + post?.member?.id);
+  console.log("유저" + user?.id);
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
   };

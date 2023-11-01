@@ -166,6 +166,7 @@ const MainContentBox = styled.div`
           }
           #media-info-writer {
             display: flex;
+            justify-content: space-between;
             align-items: center;
             padding: 2px;
             p {
@@ -353,13 +354,17 @@ const LMediaList = () => {
 
                       <div id="media-info-writer">
                         <p>{media?.member?.nickname}</p>
+                        <p>
+                          조회
+                          <span id="viewCount">{media?.lostViewCount}</span>회
+                          ㆍ추천
+                          <span id="LikeCount">{media?.lostLikeCount}</span>회
+                        </p>
                       </div>
 
                       <div id="media-info-detail">
                         <p>
                           <span>{dateFormatDefault(media?.lostDate)}</span>
-                          ㆍ조회수
-                          <span id="viewCount">{media?.lostViewCount}</span>회
                         </p>
                       </div>
                     </div>

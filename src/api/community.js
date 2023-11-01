@@ -47,6 +47,7 @@ export const addCommunityComment = async (data) => {
 };
 
 export const updateCommunity = async (data) => {
+  console.log("커뮤니티수정" + data);
   return await instance.put("community", data);
 };
 
@@ -104,10 +105,16 @@ export const addLostAPI = async (data) => {
 };
 
 export const updateLostAPI = async (data) => {
-  return await instance.put("lost", data);
+  console.log("로스트 데이터 맞아?" + data);
+  return await instance.put("community/lost", data);
+};
+
+export const updateLostLike = async (data) => {
+  console.log("좋아요: " + data);
+  return await instance.post("community/lost/like", data);
 };
 
 export const deleteLostAPI = async (id) => {
-  console.log("삭제 됐나?");
-  return await instance.delete(`lost/${id}`);
+  console.log("로스트 삭제 됐나?");
+  return await instance.delete(`community/lost/${id}`);
 };

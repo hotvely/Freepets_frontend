@@ -9,7 +9,6 @@ import hamster from "../../../resources/hamster.test.jpg";
 import { Link } from "react-router-dom";
 import {
   getLostAPI,
-  // updateCommunity,
   deleteLostAPI,
   getCommentsAPI,
   getCommentAPI,
@@ -193,18 +192,18 @@ const LostView = () => {
     setLiked(result.data.commonLikeCount);
   };
 
-  const UpdateCommunityAPI = (event) => {
+  const UpdateLostHandler = (event) => {
     const id = event.target.value;
-
-    navigate(`../${id}/update/1`);
+    console.log("분실게시판 아이디:" + id);
+    navigate(`../${id}/update/2`);
   };
 
-  const DeleteCommunityAPI = async (event) => {
+  const DeleteLostHandler = async (event) => {
     const id = event.target.value;
 
     alert("게시물이 삭제되었습니다.");
     await deleteLostAPI(id);
-    navigate("../../");
+    navigate("../");
   };
   // const user = useSelector((state) => state.user);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -632,14 +631,14 @@ const LostView = () => {
             <button
               className="update-btn"
               // id={post?.commonCode}
-              onClick={UpdateCommunityAPI}
+              onClick={UpdateLostHandler}
               value={post?.lostCode}
             >
               수정
             </button>
             <button
               className="delete-btn"
-              onClick={DeleteCommunityAPI}
+              onClick={DeleteLostHandler}
               value={post?.lostCode}
             >
               삭제
