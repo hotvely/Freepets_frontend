@@ -5,7 +5,10 @@ import { useParams } from "react-router-dom";
 import { addMessage, getMessageList, getMessageOne } from "../api/chatting";
 import { dateFormatDefault } from "../api/utils";
 import { getMemberByIdAPI } from "../api/auth";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getTokenCookie } from "../api/cookie";
+import { addNoticeNotification } from "../components/Notification";
+import { userLogout } from "../components/store/userSlice";
 
 const Main = styled.div`
     width: 100%;
@@ -177,8 +180,22 @@ const Chatting = () => {
     const [messages, setMessages] = useState([]);
     const [nickname, setNickname] = useState();
     const { id } = useParams();
+    const dispatch = useDispatch();
 
-    const data = JSON.parse(localStorage.getItem('user'));
+    const data = useSelector((state) => {
+        if (getTokenCookie() !== undefined) {
+          if (Object.keys(state.user).length !== 0) {
+            return state.user;
+          } else {
+            return JSON.parse(localStorage.getItem("user"));
+          }
+        } else {
+          if (localStorage.getItem("user")) {
+            console.log("로그아웃 !!!");
+            dispatch(userLogout());
+          }
+        }
+      });
 
     const onSendMessage = async () => {
         const formData = new FormData();
@@ -190,6 +207,15 @@ const Chatting = () => {
         const resultOne = await getMessageOne(result.data.chattingCode);
         setMessages([...messages, resultOne.data]);
         setContent('');
+
+        if(result !== null) {
+            const NotiFormData = {
+                token: data?.token,
+                id: id,
+                url : `http://localhost:3000/chatting/${data.id}`,
+            }
+            await addNoticeNotification(NotiFormData);
+        };
     };
 
     const getMessageAPI = async () => {

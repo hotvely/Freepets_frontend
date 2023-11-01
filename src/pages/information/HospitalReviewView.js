@@ -19,7 +19,7 @@ import CommentComponent from "../../components/comment/CommentComponent";
 import CommentBtnComponent from "../../components/comment/CommentBtnComponent";
 import ReCommentComponent from "../../components/comment/ReCommentComponent";
 import UpdateCommentComponent from "../../components/comment/UpdateCommentComponent";
-import { addNoticeNotification } from "../../components/Notification";
+import { addhospitalRevieNotification }  from "../../components/Notification";
 import ProfileComponent from "../../components/member/ProfileComponent";
 import {
   MainStlye,
@@ -129,7 +129,7 @@ const HospitalReviewView = () => {
         cCommentCode: commentResult.data.hrCommentCode,
         url: `http://localhost:3000/hr/view/${formData.postCode}`,
       };
-      await addNoticeNotification(notiData);
+      await addhospitalRevieNotification(notiData);
       await getCommentHandler(code);
       e.target.commentDesc.value = null;
     } else {

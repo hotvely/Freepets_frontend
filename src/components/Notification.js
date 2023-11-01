@@ -80,7 +80,7 @@ export const addNoticeNotification = async (formData) => {
   //data <- 전달할..유저id, 게시판 코드, 게시글 코드, 댓글 코드, 현재 게시글 url 링크 주소 들어 있어야 함
   console.log(formData);
   const data = {
-    id: formData.id,
+    id: formData.token,
     boardCode: 5,
     postCode: formData.postCode,
     parentCommentCode: formData.pCommentCode,

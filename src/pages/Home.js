@@ -57,7 +57,7 @@ const StyledMain = styled.main`
         }
       }
       .ourStroy {
-        margin-top: 2rem;
+        margin-top: 2.5rem;
         width: 100%;
         display: flex;
         justify-content: center;
@@ -82,7 +82,7 @@ const StyledMain = styled.main`
               font-size: 1.5rem;
               color: #2E6578;
               font-weight: bold;
-              margin-bottom: 2rem;
+              margin-bottom: 2.5rem;
             }
     
             .center-end {
@@ -199,7 +199,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-        </div>
+          </div>
           </div>
         </div>
       </StyledMain>
