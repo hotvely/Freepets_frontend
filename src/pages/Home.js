@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Banner from "../assets/image.png";
+import Banner from "../assets/Freepets main.png";
 import findMe from "../assets/findMe.png";
 import styled from "styled-components";
 import loupe from "../assets/loupe.png";
@@ -73,6 +73,7 @@ const StyledMain = styled.main`
             display: flex;
             flex-direction: column;
             width: 70%;
+            font-family: 'Noto Sans KR', sans-serif;
     
             .center-start {
               width: 100%;
@@ -89,6 +90,7 @@ const StyledMain = styled.main`
               width: 100%;
               display: flex;
               justify-content: space-between;
+              padding-bottom: 4rem;
     
               .center-end_container {
                 display: flex;
@@ -105,6 +107,7 @@ const StyledMain = styled.main`
                   font-size: 1.5rem;
                   font-weight: bold;
                   margin-bottom: 5px;
+                  font-family: 'Archivo', sans-serif
                 }
     
                 .center-end_container-name {

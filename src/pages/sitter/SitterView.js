@@ -9,6 +9,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getTokenCookie } from "../../api/cookie";
 import { userLogout } from "../../components/store/userSlice";
+import banner from "../../resources/bannerTest.png";
 
 const Main = styled.div`
     display: flex;
@@ -16,6 +17,7 @@ const Main = styled.div`
     width: 100%;
     height: 100%;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
 `
 const MainBox = styled.div`
@@ -477,7 +479,7 @@ const SitterView = () => {
 
     return (
         <Main>
-            <div style={{width : "100%", height : "100px", backgroundColor: "black", marginBottom : "50px", padding: "0px 10px"}}></div>
+            <img src={banner} style={{width: "100%", height: "150px", marginBottom: "30px", objectFit: "cover"}}/>
             <MainBox>
                 <MainContent>
                     <div className="main-header" key={boardView?.boardCode}>

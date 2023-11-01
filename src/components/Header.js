@@ -11,6 +11,7 @@ const StyledHeader = styled.header`
   position: fixed;
   width: 100%;
   z-index: 10;
+  font-family: 'Archivo', sans-serif;
   nav {
     display: flex;
     justify-content: space-between;

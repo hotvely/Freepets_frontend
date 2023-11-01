@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 const TotalSearch = () => {
     const [searchParams] = useSearchParams();
     const search = searchParams.get('search');
+    
     useEffect(() => {
         if(search === null) {
             console.log('?');

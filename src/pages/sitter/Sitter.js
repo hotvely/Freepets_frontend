@@ -16,6 +16,7 @@ import {
   getSitterSearch,
   getSitterPriceOrder,
 } from "../../api/sitter";
+import banner from "../../resources/bannerTest.png";
 
 const Main = styled.div`
   margin: 0px 40px;
@@ -23,6 +24,7 @@ const Main = styled.div`
   width: 100%;
   height: 100%;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
 
   .page {
@@ -270,15 +272,7 @@ const Sitter = () => {
 
   return (
     <Main>
-      <div
-        style={{
-          width: "100%",
-          height: "100px",
-          backgroundColor: "black",
-          marginBottom: "50px",
-          padding: "0px 10px",
-        }}
-      ></div>
+      <img src={banner} style={{width: "100%", height: "150px", marginBottom: "30px", objectFit: "cover"}}/>
       <MainBox>
         <MainHeader>
           <div className="header-start">
