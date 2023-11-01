@@ -145,21 +145,23 @@ const CommunityList = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const postData = commonPost.map((post) => ({
-      commonCode: post.commonCode,
-      commonTitle: post.commonTitle,
-      commonCommentCount: post.commonCommentCount,
-      nickName: post?.member?.nickname,
-      commonDate: dateFormatTrans(post.commonDate),
-      commonViewCount: post.commonViewCount,
-      commonLikeCount: post.commonLikeCount,
-    }));
-    setData(postData);
+    if (commonPost) {
+      const postData = commonPost?.map((post) => ({
+        commonCode: post.commonCode,
+        commonTitle: post.commonTitle,
+        commonCommentCount: post.commonCommentCount,
+        nickName: post?.member?.nickname,
+        commonDate: dateFormatTrans(post.commonDate),
+        commonViewCount: post.commonViewCount,
+        commonLikeCount: post.commonLikeCount,
+      }));
+      setData(postData);
+    }
   }, [commonPost]);
 
   return (
     <ContentStyle>
-      {commonPost.length === 0 ? (
+      {commonPost?.length === 0 ? (
         <div
           style={{
             display: "flex",
