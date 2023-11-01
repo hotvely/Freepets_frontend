@@ -38,6 +38,7 @@ const asyncFindPwd = createAsyncThunk(
 );
 
 const asyncUpdate = createAsyncThunk("userSlice/asyncUpdate", async (data) => {
+  console.log(data);
   const result = await updateAPI(data);
   return result.data;
 });
@@ -79,7 +80,7 @@ const userSlice = createSlice({
     builder
       .addCase(asyncLogin.pending, (state, action) => {})
       .addCase(asyncLogin.rejected, (state, action) => {
-        return null;
+        return alert("로그인 실패");
       })
       .addCase(asyncLogin.fulfilled, (state, action) => {
         if (action.payload.deleteAccountYN === "N") {
@@ -107,10 +108,10 @@ const userSlice = createSlice({
     });
 
     builder.addCase(asyncUpdate.fulfilled, (state, action) => {
-      if (action.payload.token !== "undefined") {
-        localStorage.setItem("token", action.payload.token);
-        localStorage.setItem("user", JSON.stringify(action.payload));
-      }
+      // if (action.payload.token !== "undefined") {
+      //   localStorage.setItem("token", action.payload.token);
+      //   localStorage.setItem("user", JSON.stringify(action.payload));
+      // }
       return action.payload;
     });
     builder.addCase(asyncDelete.fulfilled, (state, action) => {

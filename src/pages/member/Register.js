@@ -331,7 +331,7 @@ const Register = () => {
   };
   const checkPassword = (e) => {
     if (e.target != null) {
-      const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+      const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
       const isValid = regExp.test(e.target.value);
       setPasswordValid(isValid);
     }
@@ -454,7 +454,7 @@ const Register = () => {
             </div>
             {passwordVaild ? null : (
               <Explanation>
-                <span>비밀번호는 특수문자 포함한 16자리 입니다</span>
+                <span>비밀번호는 특수문자 포함한 8~16자리 까지 입니다</span>
               </Explanation>
             )}
             <div className="form_item">
@@ -471,7 +471,7 @@ const Register = () => {
             </div>
             {phoneValid ? null : (
               <Explanation>
-                <span>비밀번호는 - 을 제외한 11자리 숫자로 입니다</span>
+                <span>비밀번호는 - 을 제외한 11자리 숫자 입니다</span>
               </Explanation>
             )}
             <div className="form_item">

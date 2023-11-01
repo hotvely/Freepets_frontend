@@ -32,7 +32,7 @@ const ContentStyle = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 0;
-  width: 90%;
+  width: 100%;
   div {
     display: flex;
     justify-content: space-around;

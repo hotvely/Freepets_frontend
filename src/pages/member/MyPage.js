@@ -22,7 +22,6 @@ import MyPageMain from "../../components/css/MyPageMain";
 import { deleteBookmarkAPI, getBookmarkAPI } from "../../api/bookmark";
 import { dateFormatDefault } from "../../api/utils";
 import { getTokenCookie } from "../../api/cookie";
-
 const MyPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
