@@ -261,8 +261,8 @@ const LMediaList = () => {
       const result = await getSearchLostList(
         page,
         searchKeyword,
-        searchType
-        // orderBy
+        searchType,
+        orderBy
       );
       console.log("글이 들어와?" + result.data.lostList);
       setMediae(result.data.lostList);

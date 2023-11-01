@@ -91,14 +91,14 @@ export const getLostAPI = async (id) => {
 export const getSearchLostList = async (
   page,
   searchKeyword,
-  searchType
-  // orderBy
+  searchType,
+  orderBy
 ) => {
   console.log("searchType" + searchType);
   console.log("page" + page);
   console.log("searchKeyword" + searchKeyword);
-  // console.log("orderBy" + orderBy);
-  let url = `community/lost/search?page=${page}&searchKeyword=${searchKeyword}&searchType=${searchType}`;
+  console.log("orderBy" + orderBy);
+  let url = `community/lost/search?page=${page}&orderBy=${orderBy}&searchKeyword=${searchKeyword}&searchType=${searchType}`;
   return await instance.get(url);
 };
 
