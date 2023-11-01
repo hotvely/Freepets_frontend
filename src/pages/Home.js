@@ -132,7 +132,11 @@ const Home = () => {
 
   const user = useSelector((state) => {
     if (getTokenCookie() !== undefined) {
-      if (state.user.user) {
+      if (state.user) {
+        if(state.user == {})
+        {
+          return JSON.parse(localStorage.getItem("user")); 
+        }
         return state.user;
       } else {
         return JSON.parse(localStorage.getItem("user"));

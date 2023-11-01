@@ -137,10 +137,10 @@ const MemberUpdate = (props) => {
       {console.log(isOpen)}
 
       <div
-        onClick={(e) => {
-          if (e.target.className.includes("Overlay")) setIsOpen(true);
-          else setIsOpen(false);
-        }}
+        // onClick={(e) => {
+        //   if (e.target.className.includes("Overlay")) setIsOpen(true);
+        //   else setIsOpen(false);
+        // }}
       >
         <Modal
           isOpen={isOpen}
