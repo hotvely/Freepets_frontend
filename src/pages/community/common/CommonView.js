@@ -387,7 +387,6 @@ const CommonView = () => {
     };
     if (formData.commentDesc) {
       const addCommentResult = await addCommunityComment(formData);
-
       const commonData = {
         token: user?.token,
         postCode: formData.postCode,
@@ -447,14 +446,6 @@ const CommonView = () => {
   const selected_Comment_handler = () => {
     setSelected_Comment(0);
   };
-
-  // useEffect(() => {
-  //   const asyncHandler = async () => {
-  //     CommunityPostAPI(code);
-  //     getCommentHandler(code);
-  //   };
-  //   asyncHandler();
-  // }, []);
 
   useEffect(() => {
     const asyncHandler = async () => {
@@ -573,7 +564,7 @@ const CommonView = () => {
                                 </div>
                                 <CommentBtnComponent
                                   code={comment?.commonCommentCode}
-                                  writer={comment?.member?.id}
+                                  writer={comment?.user?.id}
                                   updateCommentHandler={updateCommentHandler}
                                   deleteCommentHandler={deleteCommentHandler}
                                 />
@@ -625,7 +616,7 @@ const CommonView = () => {
 
                                             <CommentBtnComponent
                                               code={comment?.commonCommentCode}
-                                              writer={comment?.member.id}
+                                              writer={comment?.user?.id}
                                               updateCommentHandler={
                                                 updateCommentHandler
                                               }

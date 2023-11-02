@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import banner from "../../../resources/bannerTest.png";
 import yange from "../../../resources/yaonge.jpg";
@@ -28,6 +28,8 @@ import ReCommentComponent from "../../../components/comment/ReCommentComponent";
 import CommentBtnComponent from "../../../components/comment/CommentBtnComponent";
 import ProfileComponent from "../../../components/member/ProfileComponent";
 import { addNotificationAPI } from "../../../api/auth";
+import { getTokenCookie } from "../../../api/cookie";
+import { userLogout } from "../../../components/store//userSlice";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -275,8 +277,8 @@ const LostView = () => {
   //좋아요
   const [liked, setLiked] = useState(0);
   // 북마크
-  const [isIconActive, setIsIconActive] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
+  // const [isIconActive, setIsIconActive] = useState(false);
+  // const [bookmark, setBookmark] = useState(false);
 
   const LostPostAPI = async (code) => {
     const result = await getLostAPI(code);
@@ -298,8 +300,23 @@ const LostView = () => {
     await deleteLostAPI(id);
     navigate("../");
   };
-  // const user = useSelector((state) => state.user);
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (Object.keys(state.user).length !== 0) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
+  });
+
   const viewBtn = post && post.member && post.member.id === user.id;
 
   const ScrollToTopBtn = () => {
@@ -309,7 +326,7 @@ const LostView = () => {
   const BookMarkBtn = async () => {
     //나중에 북마크 경로로
     const formData = {
-      boardName: "community",
+      boardName: "lost",
       postCode: code,
       token: user?.token,
     };
@@ -402,7 +419,7 @@ const LostView = () => {
         }
       }
     };
-
+    console.log(comments);
     handler();
   }, [succUpdate]);
 
@@ -525,7 +542,7 @@ const LostView = () => {
                                 </div>
                                 <CommentBtnComponent
                                   code={comment?.lostCommentCode}
-                                  writer={comment?.member?.id}
+                                  writer={comment?.user?.id}
                                   updateCommentHandler={updateCommentHandler}
                                   deleteCommentHandler={deleteCommentHandler}
                                 />
@@ -577,7 +594,7 @@ const LostView = () => {
 
                                             <CommentBtnComponent
                                               code={comment?.lostCommentCode}
-                                              writer={comment?.member.id}
+                                              writer={comment?.user?.id}
                                               updateCommentHandler={
                                                 updateCommentHandler
                                               }
