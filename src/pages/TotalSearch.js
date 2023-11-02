@@ -38,7 +38,7 @@ const TotalSearch = () => {
                         <p id='title'>공지사항</p>
                     </div>
                     <div className='board'>
-                        {noticeList != null ? 
+                        {noticeList != undefined ? 
                             noticeList.map((item, i) => (
                                 i <= 2 ? 
                                 <div className='board-list' key={i} id={item.noticeCode} onClick={(e) => {navigate(`../notice/noticeView/${e.currentTarget.id}`)}}>
