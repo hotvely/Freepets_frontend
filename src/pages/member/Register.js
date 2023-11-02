@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { registerAPI } from "../../api/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   asyncRegister,
@@ -9,9 +8,6 @@ import {
   userReset,
 } from "../../components/store/userSlice";
 import { getTokenCookie } from "../../api/cookie";
-import { useDaumPostcodePopup } from "react-daum-postcode";
-import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
-import KakaoAPI from "./KakaoPostAPI";
 
 const Explanation = styled.div`
   span {
@@ -290,7 +286,7 @@ const Register = () => {
   let [address, setAddress] = useState("");
   const [newwindow, setNewWindow] = useState();
   //-------------useState
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const user = useSelector((state) => {
     if (getTokenCookie() !== undefined) {
@@ -301,7 +297,6 @@ const Register = () => {
       }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -309,21 +304,16 @@ const Register = () => {
 
   useEffect(() => {
     if (!user) return;
-    // console.log(user);
-    // console.log(Object.keys(user).length);
     if (user !== null && Object.keys(user).length !== 0) {
-      console.log("가입성공");
-      navigate("/main");
+      <Link to={"/main"} />;
     } else {
       if (user === null) {
-        console.log("이미 가입된 회원");
         alert("가입 되어 있음");
         dispatch(userReset());
       }
-      navigate("/auth/register");
+      <Link to={"/auth/register"} />;
     }
   }, [user]);
-  // console.log(user);
 
   const checkId = (e) => {
     if (e.target != null) {
@@ -409,13 +399,12 @@ const Register = () => {
       address: address + e.target.detalAddress.value,
       nickname: e.target.userNickname.value,
     };
-    console.log(formData);
 
     if (idValid && passwordVaild && phoneValid && emailValid) {
       const response = await dispatch(await asyncRegister(formData));
 
       if (response.payload) {
-        navigate("/main");
+        <Link to={"/main"} />;
       }
     } else return alert("양식을 지켜주세요.");
   };
@@ -518,6 +507,10 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={(e) => {
+                    if (address) {
+                      setAddress("");
+                    }
+
                     e.preventDefault();
                     e.stopPropagation();
                     const newwindow = window.open(

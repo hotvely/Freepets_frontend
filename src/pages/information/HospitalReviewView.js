@@ -32,7 +32,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { userLogout } from "../../components/store/userSlice";
 import { getTokenCookie } from "../../api/cookie";
 
-
 const HospitalReviewView = () => {
   const { code } = useParams();
   const navigate = useNavigate();
@@ -44,7 +43,7 @@ const HospitalReviewView = () => {
   const [selectedComment, setSelectedComment] = useState(0);
   const [content, setContent] = useState("");
   const dispatch = useDispatch();
-  
+
   const data = useSelector((state) => {
     if (getTokenCookie() !== undefined) {
       if (Object.keys(state.user).length !== 0) {
@@ -72,36 +71,35 @@ const HospitalReviewView = () => {
 
   const onUpdateClick = async () => {
     navigate(`../${code}/update/4`);
-  }
+  };
 
   const onDeleteClick = async () => {
-    const response = window.confirm('정말로 삭제하시겠습니까?');
-    if(response) {
+    const response = window.confirm("정말로 삭제하시겠습니까?");
+    if (response) {
       await deleteBoard(code);
-      navigate('../');
+      navigate("../");
     }
   };
 
   const onLikeBtn = async () => {
     const formData = new FormData();
-    formData.append('hospitalReview.hospitalReviewCode', code);
-    formData.append('member.id', data?.id);
+    formData.append("hospitalReview.hospitalReviewCode", code);
+    formData.append("member.id", data?.id);
     const result = await likeAddorDelete(formData);
     setLike(result.data.likeCount);
   };
 
   const onBookMarkBtn = async () => {
     const formData = {
-      boardName: 'hospitalReview',
+      boardName: "hospitalReview",
       postCode: code,
       token: data?.token,
     };
 
     const result = await addBookmarkAPI(formData);
-    if(!result.data) {
+    if (!result.data) {
       alert("이미 북마크에 등록되었습니다.");
     } else alert("북마크에 등록되었습니다.");
-    
   };
 
   const getCommentHandler = async (code) => {
@@ -114,13 +112,13 @@ const HospitalReviewView = () => {
     const parentCode = e.target.commentDesc.id;
     const formData = {
       token: data?.token,
-      boardName: 'hospitalReview',
+      boardName: "hospitalReview",
       postCode: code,
       parentCommentCode: parentCode,
-      commentDesc: e.target.commentDesc.value
+      commentDesc: e.target.commentDesc.value,
     };
 
-    if(formData.commentDesc) {
+    if (formData.commentDesc) {
       const commentResult = await addComment(formData);
       if(parentCode > 0) {
         const result = await getHrCommentOne(parentCode);
@@ -168,8 +166,8 @@ const HospitalReviewView = () => {
   };
 
   const deleteCommentHandler = async (commentCode) => {
-    const response = window.confirm('정말로 삭제하시겠습니까?');
-    if(response) {
+    const response = window.confirm("정말로 삭제하시겠습니까?");
+    if (response) {
       await deleteComment(commentCode);
       await getCommentHandler(code);
     }
@@ -184,7 +182,7 @@ const HospitalReviewView = () => {
     const asyncHandler = async () => {
       boardViewAPI();
       getCommentHandler(code);
-    }
+    };
     asyncHandler();
   }, []);
 
@@ -193,22 +191,22 @@ const HospitalReviewView = () => {
       if (succUpdate) {
         const formData = {
           commentCode: currClickBtn,
-          commentDesc: content
+          commentDesc: content,
         };
         const result = await updateComment(formData);
-      if (result.data) {
-        setSuccUpdate(false);
-        setCurrClickBtn(-1);
-        getCommentHandler(code);
+        if (result.data) {
+          setSuccUpdate(false);
+          setCurrClickBtn(-1);
+          getCommentHandler(code);
+        }
       }
-    }
     };
     handler();
   }, [succUpdate]);
 
   return (
     <MainStlye>
-        <MainBanner>
+      <MainBanner>
         <div className="banner-img">
           <img src={banner} alt="배너 이미지" />
         </div>
@@ -228,7 +226,9 @@ const HospitalReviewView = () => {
 
                 <div className="profile-area">
                   <div className="writer-info">
-                    <div className="writer">{boardView?.memberDTO?.nickname}</div>
+                    <div className="writer">
+                      {boardView?.memberDTO?.nickname}
+                    </div>
                   </div>
                   <div className="article-info">
                     <span>{dateFormatDefault(boardView?.date)}</span>
@@ -242,23 +242,21 @@ const HospitalReviewView = () => {
                   [ <span>{boardView?.commentCount}</span> ]
                 </button>
                 <button className="bookmark" onClick={onBookMarkBtn}>
-                  <FontAwesomeIcon 
-                  icon={faBookmark}
-                  style={{fontSize: "1.5rem",
-                  color: "#ddd"}}/>
+                  <FontAwesomeIcon
+                    icon={faBookmark}
+                    style={{ fontSize: "1.5rem", color: "#ddd" }}
+                  />
                 </button>
               </div>
             </div>
             <div className="hospital-container">
-                <div id="hospitalName"># {boardView?.hospitalName}</div>
-                <div id="hospitalAddress">{boardView?.hospitalAddress}</div>
+              <div id="hospitalName"># {boardView?.hospitalName}</div>
+              <div id="hospitalAddress">{boardView?.hospitalAddress}</div>
             </div>
           </div>
           <div className="article-container">
             <div className="hospitalMap-container">
-              <HospitalMap 
-              hospitalAddress={boardView?.hospitalAddress}
-              />
+              <HospitalMap hospitalAddress={boardView?.hospitalAddress} />
             </div>
             <div
               className="ql-editor"
@@ -310,14 +308,14 @@ const HospitalReviewView = () => {
                                 <div>
                                   {dateFormatDefault(comment?.hrCommentDate)}
                                 </div>
-                                {data?.id == comment?.member.id ? 
-                                <CommentBtnComponent
-                                code={comment?.hrCommentCode}
-                                writer={comment?.member?.id}
-                                updateCommentHandler={updateCommentHandler}
-                                deleteCommentHandler={deleteCommentHandler}
-                              /> : null
-                              }                               
+                                {data?.id == comment?.member.id ? (
+                                  <CommentBtnComponent
+                                    code={comment?.hrCommentCode}
+                                    writer={comment?.member?.id}
+                                    updateCommentHandler={updateCommentHandler}
+                                    deleteCommentHandler={deleteCommentHandler}
+                                  />
+                                ) : null}
                               </div>
                             </div>
                             {currClickBtn === comment?.hrCommentCode ? (
@@ -360,18 +358,18 @@ const HospitalReviewView = () => {
                                               desc={comment.hrCommentDesc}
                                               date={comment.hrCommentDate}
                                             />
-                                            {data?.id == comment.member.id ? 
-                                            <CommentBtnComponent
-                                            code={comment?.hrCommentCode}
-                                            writer={comment?.member.id}
-                                            updateCommentHandler={
-                                              updateCommentHandler
-                                            }
-                                            deleteCommentHandler={
-                                              deleteCommentHandler
-                                            }
-                                          /> : null
-                                          }                                           
+                                            {data?.id == comment.member.id ? (
+                                              <CommentBtnComponent
+                                                code={comment?.hrCommentCode}
+                                                writer={comment?.member.id}
+                                                updateCommentHandler={
+                                                  updateCommentHandler
+                                                }
+                                                deleteCommentHandler={
+                                                  deleteCommentHandler
+                                                }
+                                              />
+                                            ) : null}
                                           </div>
                                           {currClickBtn ==
                                           comment.hrCommentCode ? (
@@ -408,9 +406,7 @@ const HospitalReviewView = () => {
                                     className="commentView_btn"
                                     id={`${comment.hrCommentCode}`}
                                     onClick={(e) => {
-                                      setSelectedComment(
-                                        comment.hrCommentCode
-                                      );
+                                      setSelectedComment(comment.hrCommentCode);
                                     }}
                                   >
                                     댓글 보기
@@ -437,28 +433,28 @@ const HospitalReviewView = () => {
           </div>
         </div>
         <div className="article-bottom-btn">
-        {boardView?.memberDTO?.id == data?.id ? 
-        <div
-        className="left-btn"
-        // style={{ display: viewBtn ? "block" : "none" }}
-      >
-        <button
-          className="update-btn"
-          onClick={onUpdateClick}
-          value={boardView?.commonCode}
-        >
-          수정
-        </button>
-        <button
-          className="delete-btn"
-          onClick={onDeleteClick}
-          value={boardView?.commonCode}
-        >
-          삭제
-        </button>
-      </div> : null
-        }
-          
+          {boardView?.memberDTO?.id == data?.id ? (
+            <div
+              className="left-btn"
+              // style={{ display: viewBtn ? "block" : "none" }}
+            >
+              <button
+                className="update-btn"
+                onClick={onUpdateClick}
+                value={boardView?.commonCode}
+              >
+                수정
+              </button>
+              <button
+                className="delete-btn"
+                onClick={onDeleteClick}
+                value={boardView?.commonCode}
+              >
+                삭제
+              </button>
+            </div>
+          ) : null}
+
           <div className="right-btn">
             <button className="list-btn">
               <Link to={`../`}>목록</Link>
