@@ -38,13 +38,15 @@ const TotalSearch = () => {
                         <p id='title'>공지사항</p>
                     </div>
                     <div className='board'>
-                        {noticeList.map((item, i) => (
-                            i <= 2 ? 
-                            <div className='board-list' key={i} id={item.noticeCode} onClick={(e) => {navigate(`../notice/noticeView/${e.currentTarget.id}`)}}>
-                                <div>{item.noticeTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.noticeTitle.split(search)[1]}</div>
-                                <div>{item.member?.nickname}</div>
-                            </div> : null
-                        ))}                       
+                        {noticeList != null ? 
+                            noticeList.map((item, i) => (
+                                i <= 2 ? 
+                                <div className='board-list' key={i} id={item.noticeCode} onClick={(e) => {navigate(`../notice/noticeView/${e.currentTarget.id}`)}}>
+                                    <div>{item.noticeTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.noticeTitle.split(search)[1]}</div>
+                                    <div>{item.member?.nickname}</div>
+                                </div> : null
+                            )) : <div>검색 결과가 없습니다.</div>
+                        }                                              
                     </div>
                     <div className='moveBoard'>
                         <Link to="../notice">
