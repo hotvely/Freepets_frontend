@@ -301,7 +301,6 @@ const Register = () => {
       }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -309,21 +308,16 @@ const Register = () => {
 
   useEffect(() => {
     if (!user) return;
-    // console.log(user);
-    // console.log(Object.keys(user).length);
     if (user !== null && Object.keys(user).length !== 0) {
-      console.log("가입성공");
       navigate("/main");
     } else {
       if (user === null) {
-        console.log("이미 가입된 회원");
         alert("가입 되어 있음");
         dispatch(userReset());
       }
       navigate("/auth/register");
     }
   }, [user]);
-  // console.log(user);
 
   const checkId = (e) => {
     if (e.target != null) {
@@ -409,7 +403,6 @@ const Register = () => {
       address: address + e.target.detalAddress.value,
       nickname: e.target.userNickname.value,
     };
-    console.log(formData);
 
     if (idValid && passwordVaild && phoneValid && emailValid) {
       const response = await dispatch(await asyncRegister(formData));

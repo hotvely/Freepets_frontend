@@ -23,7 +23,6 @@ import { deleteBookmarkAPI, getBookmarkAPI } from "../../api/bookmark";
 import { dateFormatDefault } from "../../api/utils";
 import { getTokenCookie } from "../../api/cookie";
 const MyPage = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,7 +39,6 @@ const MyPage = () => {
       }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -90,7 +88,6 @@ const MyPage = () => {
 
   const openModalHandler = (e) => {
     setIsOpen(true);
-    console.log(isOpen);
     document.body.style.overflow = "hidden";
   };
 
@@ -101,13 +98,11 @@ const MyPage = () => {
   const getNotiHandler = async () => {
     const result = await getNoticeNotification(user.token);
 
-    console.log(result.data);
     setNotifications([...result.data]);
   };
 
   const getBookmarkHandler = async () => {
     const result = await getBookmarkAPI(user.token);
-    console.log(result);
     setBookmark([...result.data]);
   };
 
@@ -118,7 +113,6 @@ const MyPage = () => {
       .className.split("check-Alarm notification")[1];
 
     const result = await deleteNoticeNotification(code);
-    console.log(result.data);
 
     setNotifications([]);
   };
@@ -223,7 +217,6 @@ const MyPage = () => {
                     ) : (
                       <div>"게시판정보?"</div>
                     )}
-                    {console.log(noti)}
                     {noti?.childComment?.parentCommentCode > 0 ? (
                       <>
                         <div className="commentTitle">
@@ -231,7 +224,6 @@ const MyPage = () => {
                         </div>
                         <div>게시글에 작성한</div>
                         <div className="commentDesc">
-                          {console.log(noti.parentComment.commentDesc)}
                           {noti.parentComment.commentDesc}
                         </div>
                         <div>댓글에 대댓글이 달렸습니다.</div>
@@ -253,7 +245,6 @@ const MyPage = () => {
 
         {bookmark?.map((bookmark) => (
           <div className="Post" key={bookmark.bookmarkCode}>
-            {console.log(bookmark)}
             <img src={image}></img>
             <div className="postInfo_basic">{bookmark.nickname}</div>
             <div className="postInfo_boardname">
