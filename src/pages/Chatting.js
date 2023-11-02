@@ -7,7 +7,7 @@ import { dateFormatDefault } from "../api/utils";
 import { getMemberByIdAPI } from "../api/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { getTokenCookie } from "../api/cookie";
-import { addNoticeNotification } from "../components/Notification";
+import { addChatNotification } from "../components/Notification";
 import { userLogout } from "../components/store/userSlice";
 
 const Main = styled.div`
@@ -202,7 +202,6 @@ const Chatting = () => {
         formData.append('token', data.token);
         formData.append('receiver.id', id);
         formData.append('chattingContent', content);
-        console.log(formData);
         const result = await addMessage(formData);
         const resultOne = await getMessageOne(result.data.chattingCode);
         setMessages([...messages, resultOne.data]);
@@ -210,10 +209,10 @@ const Chatting = () => {
 
         if(result !== null) {
             const NotiFormData = {
-                token: data?.token,
                 id: id,
                 url : `http://localhost:3000/chatting/${data.id}`,
             }
+            await addChatNotification(NotiFormData);
         };
     };
 
