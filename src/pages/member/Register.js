@@ -302,19 +302,6 @@ const Register = () => {
     }
   });
 
-  useEffect(() => {
-    if (!user) return;
-    if (user !== null && Object.keys(user).length !== 0) {
-      <Link to={"/main"} />;
-    } else {
-      if (user === null) {
-        alert("가입 되어 있음");
-        dispatch(userReset());
-      }
-      <Link to={"/auth/register"} />;
-    }
-  }, [user]);
-
   const checkId = (e) => {
     if (e.target != null) {
       const regExp = /^[0-9a-zA-Z]([-_]?[0-9a-zA-Z]){3,16}$/;
