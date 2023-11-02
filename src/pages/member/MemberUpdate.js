@@ -95,7 +95,6 @@ const MemberUpdate = (props) => {
       overflow: "auto",
     },
   };
-  const [img, setImg] = useState();
   const [phoneValid, setPhoneValid] = useState(true);
   const [emailValid, setEmailValid] = useState(true);
 
@@ -104,6 +103,7 @@ const MemberUpdate = (props) => {
   const setIsOpen = () => {
     props.props.setIsOpen();
   };
+
   const isOpen = props.props.isOpen;
   const user = props.props.user;
 
@@ -166,6 +166,7 @@ const MemberUpdate = (props) => {
       setPhoneValid(isValid);
     }
   };
+
   return (
     <Modal
       isOpen={isOpen}

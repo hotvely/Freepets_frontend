@@ -240,10 +240,6 @@ const MyPage = () => {
                       `'${noti.boardDTO.title}' 게시글에 댓글이 달렸습니다. `
                     )}
                   </div>
-                  <div className="check_Alarm-info">
-                    <div>2시간전...</div>
-                    <div>hotvely</div>
-                  </div>
                 </div>
               </Link>
             </div>
