@@ -72,6 +72,11 @@
     cursor: pointer;
 }
 
+.board-list_null {
+    display: flex;
+    justify-content: center;
+}
+
 .moveBoard {
     width: 100%;
     padding: 15px;

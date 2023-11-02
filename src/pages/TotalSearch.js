@@ -31,6 +31,7 @@ const TotalSearch = () => {
         <div className='main-top'>
             <div><span id='search'>{search}</span>에 대한 검색 결과입니다.</div>
         </div>
+        {console.log(noticeList)}
         <div className='main-center'>
             <div className='main-center_container'>
                 <div className='main-center_container_div'>
@@ -38,14 +39,14 @@ const TotalSearch = () => {
                         <p id='title'>공지사항</p>
                     </div>
                     <div className='board'>
-                        {noticeList != undefined ? 
+                        {noticeList.length !== 0 ? 
                             noticeList.map((item, i) => (
                                 i <= 2 ? 
                                 <div className='board-list' key={i} id={item.noticeCode} onClick={(e) => {navigate(`../notice/noticeView/${e.currentTarget.id}`)}}>
                                     <div>{item.noticeTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.noticeTitle.split(search)[1]}</div>
                                     <div>{item.member?.nickname}</div>
                                 </div> : null
-                            )) : <div>검색 결과가 없습니다.</div>
+                            )) : <div className='board-list_null'>검색 결과가 없습니다.</div>
                         }                                              
                     </div>
                     <div className='moveBoard'>
@@ -59,13 +60,15 @@ const TotalSearch = () => {
                         <p id='title'>시터</p>
                     </div>
                     <div className='board'>
-                        {sitterList.map((item, i) => (
+                        {sitterList.length != 0 ?
+                            sitterList.map((item, i) => (
                             i <= 2 ? 
                             <div className='board-list' key={i} id={item.sitterCode} onClick={(e) => {navigate(`../sitter/view/${e.currentTarget.id}`)}}>
                                 <div>{item.sitterTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.sitterTitle.split(search)[1]}</div>
                                 <div>{item.member?.nickname}</div>
                             </div> : null
-                        ))}
+                            )) : <div className='board-list_null'>검색 결과가 없습니다.</div>
+                        }
                     </div>
                     <div className='moveBoard'>
                         <Link to="../sitter">
@@ -80,13 +83,15 @@ const TotalSearch = () => {
                         <p id='title'>커뮤니티</p>
                     </div>
                     <div className='board'>
-                        {communityList.map((item, i) => (
+                        {communityList.length != 0 ?
+                            communityList.map((item, i) => (
                             i <= 2 ? 
                             <div className='board-list' key={i} id={item.commonCode} onClick={(e) => {navigate(`../community/common/commonview/${e.currentTarget.id}/undefined`)}}>
                                 <div>{item.commonTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.commonTitle.split(search)[1]}</div>
                                 <div>{item.member?.nickname}</div>
                             </div> : null
-                        ))}
+                            )) : <div className='board-list_null'>검색 결과가 없습니다.</div>
+                        }
                     </div>
                     <div className='moveBoard'>
                         <Link to="../community">
@@ -99,13 +104,15 @@ const TotalSearch = () => {
                         <p id='title'>병원 정보</p>
                     </div>
                     <div className='board'>
-                        {hospitalList.map((item, i) => (
+                        {hospitalList.length != 0 ?
+                            hospitalList.map((item, i) => (
                             i <= 2 ? 
                             <div className='board-list' key={i} id={item.hospitalReviewCode} onClick={(e) => {navigate(`../hospital/view/${e.currentTarget.id}`)}}>
                                 <div>{item.hospitalReviewTitle.split(search)[0]}<span className='keyword'>{search}</span>{item.hospitalReviewTitle.split(search)[1]}</div>
                                 <div>{item.member?.nickname}</div>
                             </div> : null
-                        ))}
+                            )) : <div className='board-list_null'>검색 결과가 없습니다.</div>
+                        }
                     </div>
                     <div className='moveBoard'>
                         <Link to="../hospital">

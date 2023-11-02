@@ -49,6 +49,16 @@ export const getHrComment = async (id) => {
   return await instance.get(url);
 };
 
+export const getHrCommentReAll = async (superCode) => {
+  let url = `hr/comment/${superCode}`;
+  return await instance.get(url);
+}
+
+export const getHrCommentOne = async (code) => {
+  let url = `hr/comment/one/${code}`;
+  return await instance.get(url);
+}
+
 export const getChildrenComment = async (id) => {
   let url = `hr/comment/${id}`;
   return await instance.get(url);

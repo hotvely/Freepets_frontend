@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { getOneBoard, 
         deleteBoard, 
         likeAddorDelete, 
-        getHrComment, 
+        getHrComment,
+        getHrCommentOne,
         addComment,
         deleteComment,
         updateComment } from "../../api/info";
@@ -46,7 +47,7 @@ const HospitalReviewView = () => {
   
   const data = useSelector((state) => {
     if (getTokenCookie() !== undefined) {
-      if (state.user.user) {
+      if (Object.keys(state.user).length !== 0) {
         return state.user;
       } else {
         return JSON.parse(localStorage.getItem("user"));
@@ -121,19 +122,37 @@ const HospitalReviewView = () => {
 
     if(formData.commentDesc) {
       const commentResult = await addComment(formData);
+      if(parentCode > 0) {
+        const result = await getHrCommentOne(parentCode);
+        console.log(result?.data);
+        if(result?.data?.member?.id != data.id) {
+          const notiData = {
+            id: result?.data?.member?.id,
+            postCode: formData.postCode,
+            pCommentCode: commentResult.data.superHrCommentCode,
+            cCommentCode: commentResult.data.hrCommentCode,
+            url: `http://localhost:3000/hospital/view/${formData.postCode}`,
+          };
+          await addhospitalRevieNotification(notiData);
+        }
+      } else {
+        if(boardView?.memberDTO?.id != data.id) {
+          const notiData = {
+            id: boardView?.memberDTO?.id,
+            postCode: formData.postCode,
+            pCommentCode: commentResult.data.superHrCommentCode,
+            cCommentCode: commentResult.data.hrCommentCode,
+            url: `http://localhost:3000/hospital/view/${formData.postCode}`,
+          };
 
-      const notiData = {
-        token: data?.token,
-        postCode: formData.postCode,
-        pCommentCode: commentResult.data.superHrCommentCode,
-        cCommentCode: commentResult.data.hrCommentCode,
-        url: `http://localhost:3000/hospital/view/${formData.postCode}`,
-      };
-      await addhospitalRevieNotification(notiData);
+          await addhospitalRevieNotification(notiData);
+        }
+      }
+      
       await getCommentHandler(code);
       e.target.commentDesc.value = null;
     } else {
-      alert('댓글 작성 후 등록 버튼을 눌러 주세요!');
+      alert('로그인이 필요합니다.');
     }
   };
 
