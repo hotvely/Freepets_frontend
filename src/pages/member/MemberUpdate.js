@@ -106,9 +106,6 @@ const MemberUpdate = (props) => {
   };
   const isOpen = props.props.isOpen;
   const user = props.props.user;
-  const dispatch = () => {
-    props.props.dispatch();
-  };
 
   const formDataHandler = async (e) => {
     e.preventDefault();
@@ -123,19 +120,17 @@ const MemberUpdate = (props) => {
     formData.append("phone", e.target.password.value);
     formData.append("memberInfo", e.target.userInfo.value);
 
-    console.log(formData);
     for (let key in formData) {
       let file = null;
       if (e.target.img.files[0] != undefined) {
         file = e.target.img.files[0];
       }
-      console.log(file);
+
       if (key != "token" && (formData[key].length > 0 || file != {})) {
         formData.append("file", file);
-        console.log(formData);
+
         const result = await updateAPI(formData);
-        console.log(result.data);
-        console.log("데이터 전송 후 수정 완료");
+
         alert("정보 수정 완료!");
 
         userSave(result.data);
@@ -172,76 +167,70 @@ const MemberUpdate = (props) => {
     }
   };
   return (
-    <>
-      <Modal
-        isOpen={isOpen}
-        style={customModalStyled}
-        onRequestClose={() => {
-          setIsOpen(true);
-        }}
-        ariaHideApp={false}
-      >
-        <FormInput>
-          <form className="form" onSubmit={formDataHandler}>
-            <div className="inputForm_title">정보 수정</div>
-            <div className="inputForm">
-              변경할 비밀번호
-              <input
-                type="password"
-                name="password"
-                onChange={checkPassword}
-              ></input>
-            </div>
-            {passwordVaild ? null : (
-              <span className="error">
-                비밀번호는 특수문자 포함한 8~16자리 까지 입니다
-              </span>
-            )}
-            <div className="inputForm">
-              변경할 닉네임 <input type="text" name="nickname"></input>
-            </div>
-            <div className="inputForm">
-              변경할 이미지 <input type="file" name="img"></input>
-            </div>
-            <div className="inputForm">
-              변경할 E-mail
-              <input type="text" name="email" onChange={checkEmail}></input>
-            </div>
-            {emailValid ? null : (
-              <span className="error">
-                @, .com을 포함한 이메일 양식을 지켜주세요
-              </span>
-            )}
-            <div className="inputForm">
-              변경할 전화번호
-              <input
-                type="text"
-                name="phone"
-                onChange={checkPhoneNumber}
-              ></input>
-            </div>
-            {phoneValid ? null : (
-              <span className="error">
-                비밀번호는 - 을 제외한 11자리 숫자 입니다
-              </span>
-            )}
-            <div className="inputForm">
-              자기소개 <textarea name="userInfo"></textarea>
-            </div>
-            <div className="btn">
-              <button type="submit">submit</button>
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                }}
-              >
-                exit
-              </button>
-            </div>
-          </form>
-        </FormInput>
-      </Modal>
-    </>
+    <Modal
+      isOpen={isOpen}
+      style={customModalStyled}
+      onRequestClose={() => {
+        setIsOpen(true);
+      }}
+      ariaHideApp={false}
+    >
+      <FormInput>
+        <form className="form" onSubmit={formDataHandler}>
+          <div className="inputForm_title">정보 수정</div>
+          <div className="inputForm">
+            변경할 비밀번호
+            <input
+              type="password"
+              name="password"
+              onChange={checkPassword}
+            ></input>
+          </div>
+          {passwordVaild ? null : (
+            <span className="error">
+              비밀번호는 특수문자 포함한 8~16자리 까지 입니다
+            </span>
+          )}
+          <div className="inputForm">
+            변경할 닉네임 <input type="text" name="nickname"></input>
+          </div>
+          <div className="inputForm">
+            변경할 이미지 <input type="file" name="img"></input>
+          </div>
+          <div className="inputForm">
+            변경할 E-mail
+            <input type="text" name="email" onChange={checkEmail}></input>
+          </div>
+          {emailValid ? null : (
+            <span className="error">
+              @, .com을 포함한 이메일 양식을 지켜주세요
+            </span>
+          )}
+          <div className="inputForm">
+            변경할 전화번호
+            <input type="text" name="phone" onChange={checkPhoneNumber}></input>
+          </div>
+          {phoneValid ? null : (
+            <span className="error">
+              비밀번호는 - 을 제외한 11자리 숫자 입니다
+            </span>
+          )}
+          <div className="inputForm">
+            자기소개 <textarea name="userInfo"></textarea>
+          </div>
+          <div className="btn">
+            <button type="submit">submit</button>
+            <button
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              exit
+            </button>
+          </div>
+        </form>
+      </FormInput>
+    </Modal>
   );
 };
 

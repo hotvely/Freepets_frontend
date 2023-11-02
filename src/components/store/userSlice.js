@@ -19,13 +19,12 @@ const asyncRegister = createAsyncThunk(
 
 const asyncLogin = createAsyncThunk("userSlice/asyncLogin", async (data) => {
   const response = await loginAPI(data);
-  console.log(response.data);
   return response.data;
 });
 
 const asyncFindId = createAsyncThunk("userSlice/asyncFindId", async (data) => {
   const response = await findIdAPI(data);
-  console.log(response);
+
   return response.data;
 });
 
@@ -38,7 +37,6 @@ const asyncFindPwd = createAsyncThunk(
 );
 
 const asyncUpdate = createAsyncThunk("userSlice/asyncUpdate", async (data) => {
-  console.log(data);
   const result = await updateAPI(data);
   return result.data;
 });
@@ -56,7 +54,6 @@ const userSlice = createSlice({
       return action.payload;
     },
     userLogout: (state, action) => {
-      console.log("로그아웃!!");
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       return action.payload;
@@ -98,12 +95,10 @@ const userSlice = createSlice({
       });
 
     builder.addCase(asyncFindId.fulfilled, (state, action) => {
-      console.log(action.payload);
       return action.payload;
     });
 
     builder.addCase(asyncFindPwd.fulfilled, (state, action) => {
-      console.log(action.payload);
       return action.payload;
     });
 

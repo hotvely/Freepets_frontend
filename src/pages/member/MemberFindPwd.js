@@ -1,27 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
-import { asyncFindPwd, userLogout } from "../../components/store/userSlice";
-import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { asyncFindPwd } from "../../components/store/userSlice";
 import { useNavigate } from "react-router-dom";
-import { getTokenCookie } from "../../api/cookie";
 
 const MemberFindPwd = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const user = useSelector((state) => {
-    if (getTokenCookie() !== undefined) {
-      if (Object.keys(state.user).length !== 0) {
-        return state.user;
-      } else {
-        return JSON.parse(localStorage.getItem("user"));
-      }
-    } else {
-      if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
-        dispatch(userLogout());
-      }
-    }
-  });
 
   const findPwd = (e) => {
     e.preventDefault();
@@ -29,10 +12,6 @@ const MemberFindPwd = () => {
     dispatch(asyncFindPwd(formData));
     navigate("/main");
   };
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <>

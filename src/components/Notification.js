@@ -75,6 +75,18 @@ export const addhospitalRevieNotification = async (formData) => {
   return addNotificationAPI(data);
 };
 
+export const addChatNotification = async (formData) => {
+  //data <- 유저id, 게시판 코드, 게시글 코드, 댓글 코드, 현재 게시글 url 링크 주소 들어 있어야 함
+  console.log(formData);
+  const data = {
+    id: formData.id,
+    boardCode: 6,
+    url: formData.url,
+  };
+  console.log(data);
+  return addNotificationAPI(data);
+};
+
 // --------------- 공지사항 에서 알림 추가 하는법!!!
 export const addNoticeNotification = async (formData) => {
   //data <- 전달할..유저id, 게시판 코드, 게시글 코드, 댓글 코드, 현재 게시글 url 링크 주소 들어 있어야 함
