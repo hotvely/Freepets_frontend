@@ -4,8 +4,8 @@ const StyledLSide = styled.div`
   background-color: white;
   display: flex;
   justify-content: center;
-  flex: 0 0 250px;
-  margin-left: 100px;
+  flex: 0 0 200px;
+  margin-left: 50px;
   height: 130vh;
   /* padding-left: 50px; */
 
@@ -13,7 +13,7 @@ const StyledLSide = styled.div`
 
   .Laside {
     display: flex;
-    flex: 0 0 250px;
+    flex: 0 0 220px;
     justify-content: center;
     align-items: start;
     border: 8px solid skyblue;

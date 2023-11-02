@@ -51,12 +51,12 @@ const MyPageMain = styled.main`
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 280px;
-        height: 280px;
+        width: 200px;
+        height: 200px;
 
         .profileImg {
-          width: 200px;
-          height: 200px;
+          width: 150px;
+          height: 150px;
           border-radius: 50%;
 
           position: absolute;
@@ -65,8 +65,8 @@ const MyPageMain = styled.main`
 
         .profileBorder {
           position: absolute;
-          width: 280px;
-          height: 280px;
+          width: 200px;
+          height: 200px;
           z-index: -1;
         }
       }
@@ -93,15 +93,18 @@ const MyPageMain = styled.main`
         align-items: center;
 
         p {
-          font-size: 1.15rem;
+          font-size: 1rem;
           font-weight: bold;
           width: 30%;
           color: rgb(129, 129, 129);
+          flex-basis: 70px;
+          flex-shrink: 0;
         }
-        div {
-          font-size: 1.15rem;
+        .info {
+          font-size: 1rem;
           font-weight: bold;
-          width: 70%;
+          flex-basis: 150px;
+          flex-grow: 1;
           white-space: normal;
           line-height: 150%;
         }

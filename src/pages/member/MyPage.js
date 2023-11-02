@@ -142,35 +142,35 @@ const MyPage = () => {
         <div className="profileInfo">
           <div>
             <p>Id</p>
-            <div>{user?.id}</div>
+            <div className="info">{user?.id}</div>
           </div>
           <div>
             <p>E-mail</p>
-            <div>{user?.email}</div>
+            <div className="info">{user?.email}</div>
           </div>
           <div>
             <p>Phone</p>
-            <div>{phoneFormatter(user?.phone)}</div>
+            <div className="info">{phoneFormatter(user?.phone)}</div>
           </div>
           <div>
             <p>Address</p>
-            <div>{user?.address}</div>
+            <div className="info">{user?.address}</div>
           </div>
           <div>
             <p>생일</p>
-            <div>{dateFormatter(user?.birth)}</div>
+            <div className="info">{dateFormatter(user?.birth)}</div>
           </div>
           <div>
             <p>가입일</p>
-            <div>{dateFormatter(user?.createAccountDate)}</div>
+            <div className="info">{dateFormatter(user?.createAccountDate)}</div>
           </div>
           <div>
             <p>Grade</p>
-            <div>{user?.authority}</div>
+            <div className="info">{user?.authority}</div>
           </div>
           <div>
             <p>Info</p>
-            <div>
+            <div className="info">
               {user?.memberInfo == null ? "유저의 정보 입력" : user?.memberInfo}
             </div>
           </div>
