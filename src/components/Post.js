@@ -133,8 +133,6 @@ const Post = () => {
 
     let url = "../";
     if (select == 1) {
-      // formData.append("communityTitle", title);
-      // console.log(formData);
       await addCommunity(formData);
       url = "/community";
     } else if (select == 2) {

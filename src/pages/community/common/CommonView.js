@@ -145,6 +145,98 @@ const MainContentBox = styled.div`
       }
       .comment-box {
         border-top: 1px solid #3a98b9;
+
+        .commentBox {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin: 20px 0;
+          img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+          }
+        }
+        .commentBox2 {
+          ul {
+            li {
+              .comment {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                .comment-content {
+                  font-size: 0.9rem;
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  justify-content: space-between;
+                  flex-wrap: wrap;
+                  .comment-desc {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    .commentTextBox {
+                      padding: 13px;
+                      height: 100%;
+                      display: flex;
+                      flex-direction: column;
+                      word-break: break-all;
+                    }
+                  }
+                  .comment-last {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .commentDate-btn {
+                      display: flex;
+                      flex-direction: row;
+                      align-items: center;
+                    }
+                  }
+                }
+                .reCommentViewBtn {
+                  margin-top: 20px;
+
+                  button {
+                    border: 0;
+                    padding: 5px;
+                    border-radius: 5px;
+                    background-color: #98dbf2;
+                    color: white;
+                    margin: 0 5px;
+                  }
+
+                  ul {
+                    margin-top: 20px;
+                    li {
+                      margin-bottom: 20px;
+                      .recomment-desc {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+
+                      button {
+                        border: 0;
+                        padding: 5px;
+                        border-radius: 5px;
+                        background-color: #98dbf2;
+                        color: white;
+                        margin: 0 5px;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .recomment {
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -214,25 +306,28 @@ const CommonView = () => {
   };
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  console.log(user);
-  // const user = useSelector((state) => {
-  //   if (getTokenCookie() != undefined) {
-  //     console.log("쿠키 있!");
-  //     if (state.user != {}) {
-  //       return state.user;
-  //     }
-  //     return JSON.parse(localStorage.getItem("user"));
-  //   } else {
-  //     if (localStorage.getItem("user")) {
-  //       console.log("호출..?");
-  //       dispatch(userLogout());
-  //     }
-  //   }
-  // });
+  // const user = useSelector((state) => state.user);
+  // console.log(user);
+  const user = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (Object.keys(state.user).length !== 0) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
+  });
   //const user = JSON.parse(localStorage.getItem("user"));
-  const viewBtn = post && post.member && post.member.id === user.id;
 
+  const viewBtn = post && post?.member && post?.member?.id === user?.id;
+  console.log("버튼 눌러" + viewBtn);
+  console.log("게시글작성자" + post?.member?.id);
+  console.log("유저" + user?.id);
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
   };
@@ -281,64 +376,32 @@ const CommonView = () => {
   };
 
   const addCommentHandler = async (e) => {
-    console.log(e.target.commentDesc.id);
     e.preventDefault();
-    if (user?.token) {
-      const parentCode = e.target.commentDesc.id;
-      const formData = {
+    const parentCode = e.target.commentDesc.id;
+    const formData = {
+      token: user?.token,
+      boardName: "community",
+      postCode: code,
+      parentCommentCode: parentCode,
+      commentDesc: e.target.commentDesc.value,
+    };
+    if (formData.commentDesc) {
+      const addCommentResult = await addCommunityComment(formData);
+      const commonData = {
         token: user?.token,
-        boardName: "community",
-        postCode: code,
-        parentCommentCode: parentCode, //          부모 댓글의 코드를 백으로 넘기는 법
-        commentDesc: e.target.commentDesc.value,
+        postCode: formData.postCode,
+        pCommentCode: addCommentResult.data.commonCommentCodeSuper,
+        cCommenntCode: addCommentResult.data.commonCommentCode,
+        url: `http://localhost:3000/community/commonView/${formData.postCode}`,
       };
-      if (formData.commentDesc) {
-        const addCommentResult = await addCommunityComment(formData);
-        console.log(addCommentResult.data);
-
-        CommunityPostAPI(code);
-        if (parentCode > 0) {
-          // 부모 댓글 있을때.
-          console.log(parentCode);
-          const result = await getCommentAPI(parentCode);
-          console.log(result.data);
-
-          if (result.data.member.id != user.id) {
-            const commonData = {
-              id: result.data.member.id,
-              postCode: formData.postCode,
-              pCommentCode: addCommentResult.data.commonCommentCodeSuper,
-              cCommenntCode: addCommentResult.data.commonCommentCode,
-              url: `http://localhost:3000/community/commonView/${formData.postCode}`,
-            };
-            await addNotificationAPI(commonData);
-          } else {
-            alert("댓글 작성자와 일치하여 알림이 가지 않습니다.");
-          }
-        } else {
-          if (post.member.id != user?.id) {
-            const commonData = {
-              id: post.member.id,
-              postCode: formData.postCode,
-              pCommentCode: addCommentResult.data.commonCommentCodeSuper,
-              cCommenntCode: addCommentResult.data.commonCommentCode,
-              url: `http://localhost:3000/community/commonView/${formData.postCode}`,
-            };
-            await addNotificationAPI(commonData);
-          } else {
-            alert("작성자가 같아서 알림이 가지 않음");
-          }
-        }
-      }
-      console.log("여기까지 오나?");
+      await addNotificationAPI(commonData);
       await getCommentHandler(code);
-
       e.target.commentDesc.value = null;
     } else {
-      alert("로그인이 필요합니다.");
+      alert("댓글 작성자와 일치하여 알림이 가지 않습니다.");
     }
   };
-  console.log(comments);
+
   const updateCommentHandler = async (code) => {
     // 댓글 수정 버튼을 눌렀을 때 실행해야 하는 로직을 처리하기 위한 함수
     if (code == currClickBtn) {
@@ -383,14 +446,6 @@ const CommonView = () => {
   const selected_Comment_handler = () => {
     setSelected_Comment(0);
   };
-
-  // useEffect(() => {
-  //   const asyncHandler = async () => {
-  //     CommunityPostAPI(code);
-  //     getCommentHandler(code);
-  //   };
-  //   asyncHandler();
-  // }, []);
 
   useEffect(() => {
     const asyncHandler = async () => {
@@ -453,7 +508,7 @@ const CommonView = () => {
                     icon={faBookmark}
                     style={{
                       fontSize: "1rem",
-                      // color: iconColor,
+                      color: "#F4CE14",
                       marginRight: "10px",
                     }}
                   />
@@ -509,7 +564,7 @@ const CommonView = () => {
                                 </div>
                                 <CommentBtnComponent
                                   code={comment?.commonCommentCode}
-                                  writer={comment?.member?.id}
+                                  writer={comment?.user?.id}
                                   updateCommentHandler={updateCommentHandler}
                                   deleteCommentHandler={deleteCommentHandler}
                                 />
@@ -561,7 +616,7 @@ const CommonView = () => {
 
                                             <CommentBtnComponent
                                               code={comment?.commonCommentCode}
-                                              writer={comment?.member.id}
+                                              writer={comment?.user?.id}
                                               updateCommentHandler={
                                                 updateCommentHandler
                                               }

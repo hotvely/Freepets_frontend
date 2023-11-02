@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import banner from "../../../resources/bannerTest.png";
 import yange from "../../../resources/yaonge.jpg";
@@ -9,14 +9,14 @@ import hamster from "../../../resources/hamster.test.jpg";
 import { Link } from "react-router-dom";
 import {
   getLostAPI,
-  // updateCommunity,
-  deleteLostAPI,
-  getCommentsAPI,
-  getCommentAPI,
   addCommunityComment,
-  deleteCommunityComment,
-  updateCommunityLike,
-  updateCommentAPI,
+  updateLostLike,
+  deleteLostAPI,
+  getLostCommentsAPI,
+  getLostCommentAPI,
+  addLostCommentAPI,
+  updateLostCommentAPI,
+  deleteLostCommentAPI,
 } from "../../../api/community";
 import { dateFormatDefault } from "../../../api/utils";
 import { faBookmark, faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -28,6 +28,8 @@ import ReCommentComponent from "../../../components/comment/ReCommentComponent";
 import CommentBtnComponent from "../../../components/comment/CommentBtnComponent";
 import ProfileComponent from "../../../components/member/ProfileComponent";
 import { addNotificationAPI } from "../../../api/auth";
+import { getTokenCookie } from "../../../api/cookie";
+import { userLogout } from "../../../components/store//userSlice";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -143,6 +145,98 @@ const MainContentBox = styled.div`
       }
       .comment-box {
         border-top: 1px solid #3a98b9;
+
+        .commentBox {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin: 20px 0;
+          img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+          }
+        }
+        .commentBox2 {
+          ul {
+            li {
+              .comment {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                .comment-content {
+                  font-size: 0.9rem;
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  justify-content: space-between;
+                  flex-wrap: wrap;
+                  .comment-desc {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    .commentTextBox {
+                      padding: 13px;
+                      height: 100%;
+                      display: flex;
+                      flex-direction: column;
+                      word-break: break-all;
+                    }
+                  }
+                  .comment-last {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .commentDate-btn {
+                      display: flex;
+                      flex-direction: row;
+                      align-items: center;
+                    }
+                  }
+                }
+                .reCommentViewBtn {
+                  margin-top: 20px;
+
+                  button {
+                    border: 0;
+                    padding: 5px;
+                    border-radius: 5px;
+                    background-color: #98dbf2;
+                    color: white;
+                    margin: 0 5px;
+                  }
+
+                  ul {
+                    margin-top: 20px;
+                    li {
+                      margin-bottom: 20px;
+                      .recomment-desc {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+
+                      button {
+                        border: 0;
+                        padding: 5px;
+                        border-radius: 5px;
+                        background-color: #98dbf2;
+                        color: white;
+                        margin: 0 5px;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .recomment {
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -183,69 +277,66 @@ const LostView = () => {
   //좋아요
   const [liked, setLiked] = useState(0);
   // 북마크
-  const [isIconActive, setIsIconActive] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
+  // const [isIconActive, setIsIconActive] = useState(false);
+  // const [bookmark, setBookmark] = useState(false);
 
   const LostPostAPI = async (code) => {
     const result = await getLostAPI(code);
     console.log("데이터?" + result);
     setPost(result.data);
-    setLiked(result.data.commonLikeCount);
+    setLiked(result.data.lostLikeCount);
   };
 
-  const UpdateCommunityAPI = (event) => {
+  const UpdateLostHandler = (event) => {
     const id = event.target.value;
-
-    navigate(`../${id}/update/1`);
+    console.log("분실게시판 아이디:" + id);
+    navigate(`../${id}/update/2`);
   };
 
-  const DeleteCommunityAPI = async (event) => {
+  const DeleteLostHandler = async (event) => {
     const id = event.target.value;
 
     alert("게시물이 삭제되었습니다.");
     await deleteLostAPI(id);
-    navigate("../../");
+    navigate("../");
   };
-  // const user = useSelector((state) => state.user);
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (Object.keys(state.user).length !== 0) {
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("로그아웃 !!!");
+        dispatch(userLogout());
+      }
+    }
+  });
+
   const viewBtn = post && post.member && post.member.id === user.id;
 
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
   };
 
-  const iconColor = isIconActive ? "#FF5733" : "#F4CE14";
   const BookMarkBtn = async () => {
     //나중에 북마크 경로로
     const formData = {
-      boardName: "community",
+      boardName: "lost",
       postCode: code,
       token: user?.token,
     };
     window.scrollTo(0, 0);
 
-    if (bookmark) {
-      // 북마크 삭제
-      const deleteResult = await deleteBookmarkAPI(code);
-      console.log("삭제 :" + deleteResult);
-      if (deleteResult) {
-        alert("북마크가 해제되었습니다.");
-        setBookmark(false);
-        setIsIconActive(false);
-      } else {
-        alert("북마크 해제에 실패했습니다.");
-      }
-    } else {
-      // 북마크 등록
-      const addResult = await addBookmarkAPI(formData);
-      if (addResult.data) {
-        alert("북마크 되었습니다.");
-        setBookmark(true);
-        setIsIconActive(true);
-      } else {
-        alert("북마크 등록에 실패했습니다.");
-      }
-    }
+    // 북마크 등록
+    const result = await addBookmarkAPI(formData);
+    if (!result.data) {
+      alert("이미 북마크에 등록되었습니다.");
+    } else alert("북마크에 등록되었습니다.");
   };
 
   const NavListPage = () => {
@@ -261,7 +352,7 @@ const LostView = () => {
     };
     console.log("게시글번호 : " + code);
 
-    const result = await updateCommunityLike(formData);
+    const result = await updateLostLike(formData);
     if (result.data) {
       setLiked(liked + 1);
     } else {
@@ -270,64 +361,34 @@ const LostView = () => {
   };
 
   const getCommentHandler = async (code) => {
-    const result = await getCommentsAPI(code);
+    const result = await getLostCommentsAPI(code);
     setComments([...result.data]);
+    console.log("댓글리스트: " + result.data);
   };
 
   const addCommentHandler = async (e) => {
-    console.log(e.target.commentDesc.id);
     e.preventDefault();
-    if (user?.token) {
-      const parentCode = e.target.commentDesc.id;
-      const formData = {
-        token: user.token,
-        boardName: "lost",
-        postCode: code,
-        parentCommentCode: parentCode, //          부모 댓글의 코드를 백으로 넘기는 법
-        commentDesc: e.target.commentDesc.value,
+    const parentCode = e.target.commentDesc.id;
+    const formData = {
+      token: user.token,
+      boardName: "lost",
+      postCode: code,
+      parentCommentCode: parentCode, //          부모 댓글의 코드를 백으로 넘기는 법
+      commentDesc: e.target.commentDesc.value,
+    };
+    if (formData.commentDesc) {
+      const addCommentResult = await addLostCommentAPI(formData);
+      const lostData = {
+        token: user?.token,
+        postCode: formData.postCode,
+        pCommentCode: addCommentResult.data.lostCommentCodeSuper,
+        cCommenntCode: addCommentResult.data.lostCommentCode,
+        url: `http://localhost:3000/community/lost/lostView/${formData.postCode}`,
       };
-      if (formData.commentDesc) {
-        const addCommentResult = await addCommunityComment(formData);
-        console.log(addCommentResult.data);
-
-        if (parentCode > 0) {
-          // 부모 댓글 있을때.
-          console.log(parentCode);
-          const result = await getCommentAPI(parentCode);
-          console.log(result.data);
-
-          if (result.data.member.id != user.id) {
-            const commonData = {
-              id: result.data.member.id,
-              postCode: formData.postCode,
-              pCommentCode: addCommentResult.data.commonCommentCodeSuper,
-              cCommenntCode: addCommentResult.data.commonCommentCode,
-              url: `http://localhost:3000/community/commonView/${formData.postCode}`,
-            };
-            await addNotificationAPI(commonData);
-          } else {
-            alert("댓글 작성자와 일치하여 알림이 가지 않습니다.");
-          }
-        } else {
-          if (post.member.id != user?.id) {
-            const commonData = {
-              id: post.member.id,
-              postCode: formData.postCode,
-              pCommentCode: addCommentResult.data.commonCommentCodeSuper,
-              cCommenntCode: addCommentResult.data.commonCommentCode,
-              url: `http://localhost:3000/community/commonView/${formData.postCode}`,
-            };
-            await addNotificationAPI(commonData);
-          } else {
-            alert("작성자가 같아서 알림이 가지 않음");
-          }
-        }
-      }
-
+      await addNotificationAPI(lostData);
       await getCommentHandler(code);
-      e.target.commentDesc.value = null;
     } else {
-      alert("로그인이 필요합니다.");
+      alert("댓글 작성자와 일치하여 알림이 가지 않습니다.");
     }
   };
 
@@ -349,7 +410,7 @@ const LostView = () => {
           commentDesc: content,
         };
         console.log(formData);
-        const result = await updateCommentAPI(formData);
+        const result = await updateLostCommentAPI(formData);
         console.log(result.data);
         if (result.data) {
           setSuccUpdate(false);
@@ -358,7 +419,7 @@ const LostView = () => {
         }
       }
     };
-
+    console.log(comments);
     handler();
   }, [succUpdate]);
 
@@ -367,21 +428,14 @@ const LostView = () => {
   };
 
   const deleteCommentHandler = async (commentCode) => {
-    await deleteCommunityComment(commentCode);
+    await deleteLostCommentAPI(commentCode);
     await getCommentHandler(code);
+    await LostPostAPI(code);
   };
 
   const selected_Comment_handler = () => {
     setSelected_Comment(0);
   };
-
-  // useEffect(() => {
-  //   const asyncHandler = async () => {
-  //     CommunityPostAPI(code);
-  //     getCommentHandler(code);
-  //   };
-  //   asyncHandler();
-  // }, []);
 
   useEffect(() => {
     const asyncHandler = async () => {
@@ -433,7 +487,7 @@ const LostView = () => {
                     icon={faBookmark}
                     style={{
                       fontSize: "1rem",
-                      color: iconColor,
+                      color: "#F4CE14",
                       marginRight: "10px",
                     }}
                   />
@@ -488,13 +542,12 @@ const LostView = () => {
                                 </div>
                                 <CommentBtnComponent
                                   code={comment?.lostCommentCode}
-                                  writer={comment?.member?.id}
+                                  writer={comment?.user?.id}
                                   updateCommentHandler={updateCommentHandler}
                                   deleteCommentHandler={deleteCommentHandler}
                                 />
                               </div>
                             </div>
-                            {console.log(comment)}
                             {currClickBtn === comment?.lostCommentCode ? (
                               comment?.member?.id === user?.id ? (
                                 <>
@@ -541,7 +594,7 @@ const LostView = () => {
 
                                             <CommentBtnComponent
                                               code={comment?.lostCommentCode}
-                                              writer={comment?.member.id}
+                                              writer={comment?.user?.id}
                                               updateCommentHandler={
                                                 updateCommentHandler
                                               }
@@ -632,14 +685,14 @@ const LostView = () => {
             <button
               className="update-btn"
               // id={post?.commonCode}
-              onClick={UpdateCommunityAPI}
+              onClick={UpdateLostHandler}
               value={post?.lostCode}
             >
               수정
             </button>
             <button
               className="delete-btn"
-              onClick={DeleteCommunityAPI}
+              onClick={DeleteLostHandler}
               value={post?.lostCode}
             >
               삭제

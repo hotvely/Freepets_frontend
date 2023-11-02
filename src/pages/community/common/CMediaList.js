@@ -183,6 +183,7 @@ const MainContentBox = styled.div`
           }
           #media-info-writer {
             display: flex;
+            justify-content: space-between;
             align-items: center;
             padding: 2px;
             p {
@@ -392,13 +393,17 @@ const CMediaList = () => {
 
                   <div id="media-info-writer">
                     <p>{media?.member?.nickname}</p>
+                    <p>
+                      조회
+                      <span id="viewCount">{media?.commonViewCount}</span>회
+                      ㆍ추천
+                      <span id="likeCount">{media?.commonLikeCount}</span>회
+                    </p>
                   </div>
 
                   <div id="media-info-detail">
                     <p>
                       <span>{dateFormatDefault(media?.commonDate)}</span>
-                      ㆍ조회수
-                      <span id="viewCount">{media?.commonViewCount}</span>회
                     </p>
                   </div>
                 </div>

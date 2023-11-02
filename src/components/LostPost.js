@@ -2,6 +2,7 @@ const LostPost = ({ setTitle }) => {
   const onChange = (e) => {
     setTitle(e.target.value);
   };
+
   return (
     <div className="input-rank">
       <div className="input-end">

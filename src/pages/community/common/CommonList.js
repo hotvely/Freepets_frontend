@@ -120,9 +120,9 @@ const CommunityList = (props) => {
           {row.original.commonCommentCount > 0 ? (
             <div>
               {row.original.commonTitle}{" "}
-              <div style={{ color: "#C70039" }}>
+              <span style={{ color: "#C70039" }}>
                 [ {row.original.commonCommentCount} ]
-              </div>
+              </span>
             </div>
           ) : (
             <div>{row.original.commonTitle}</div>

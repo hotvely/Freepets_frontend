@@ -35,6 +35,10 @@ export const getCommentsAPI = async (postCode) => {
 export const getCommentAPI = async (code) => {
   return await instance.get(`community/comment/${code}`);
 };
+// export const getReCommentsAPI = async (pCode) => {
+//   let url = `community/comment/${pCode}`;
+//   return await instance.get(url);
+// };
 
 export const addCommunity = async (data) => {
   console.log("글쓰기 데이터 갔냐고...");
@@ -47,6 +51,7 @@ export const addCommunityComment = async (data) => {
 };
 
 export const updateCommunity = async (data) => {
+  console.log("커뮤니티수정" + data);
   return await instance.put("community", data);
 };
 
@@ -86,14 +91,14 @@ export const getLostAPI = async (id) => {
 export const getSearchLostList = async (
   page,
   searchKeyword,
-  searchType
-  // orderBy
+  searchType,
+  orderBy
 ) => {
   console.log("searchType" + searchType);
   console.log("page" + page);
   console.log("searchKeyword" + searchKeyword);
-  // console.log("orderBy" + orderBy);
-  let url = `community/lost/search?page=${page}&searchKeyword=${searchKeyword}&searchType=${searchType}`;
+  console.log("orderBy" + orderBy);
+  let url = `community/lost/search?page=${page}&orderBy=${orderBy}&searchKeyword=${searchKeyword}&searchType=${searchType}`;
   return await instance.get(url);
 };
 
@@ -104,10 +109,42 @@ export const addLostAPI = async (data) => {
 };
 
 export const updateLostAPI = async (data) => {
-  return await instance.put("lost", data);
+  console.log("로스트 데이터 맞아?" + data);
+  return await instance.put("community/lost", data);
+};
+
+export const updateLostLike = async (data) => {
+  console.log("좋아요: " + data);
+  return await instance.post("community/lost/like", data);
 };
 
 export const deleteLostAPI = async (id) => {
-  console.log("삭제 됐나?");
-  return await instance.delete(`lost/${id}`);
+  console.log("로스트 삭제 됐나?");
+  return await instance.delete(`community/lost/${id}`);
+};
+
+export const getLostCommentsAPI = async (postCode) => {
+  let url = `community/lost/${postCode}/comments`;
+  return await instance.get(url);
+};
+export const getLostCommentAPI = async (code) => {
+  return await instance.get(`community/lost/comment/${code}`);
+};
+export const getLostReCommentsAPI = async (pCode) => {
+  let url = `community/lost/comment/${pCode}`;
+  return await instance.get(url);
+};
+
+export const addLostCommentAPI = async (data) => {
+  console.log("분실덕굴: " + data);
+  return await instance.post("community/lost/comment", data);
+};
+
+export const updateLostCommentAPI = async (data) => {
+  console.log("UpdateCommentAPI 시작");
+  return await instance.put("community/lost/comment", data);
+};
+
+export const deleteLostCommentAPI = async (code) => {
+  return await instance.delete(`community/lost/comment/${code}`);
 };
