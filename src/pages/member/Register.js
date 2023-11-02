@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   asyncRegister,
@@ -286,7 +286,7 @@ const Register = () => {
   let [address, setAddress] = useState("");
   const [newwindow, setNewWindow] = useState();
   //-------------useState
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => {
     if (getTokenCookie() !== undefined) {
@@ -404,7 +404,7 @@ const Register = () => {
       const response = await dispatch(await asyncRegister(formData));
 
       if (response.payload) {
-        <Link to={"/main"} />;
+        navigate("/main");
       }
     } else return alert("양식을 지켜주세요.");
   };

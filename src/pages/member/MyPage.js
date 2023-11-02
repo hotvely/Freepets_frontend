@@ -92,17 +92,17 @@ const MyPage = () => {
   };
 
   const deleteUser = () => {
-    dispatch(asyncDelete({ token: user.token }));
+    dispatch(asyncDelete({ token: user?.token }));
   };
 
   const getNotiHandler = async () => {
-    const result = await getNoticeNotification(user.token);
+    const result = await getNoticeNotification(user?.token);
 
     setNotifications([...result.data]);
   };
 
   const getBookmarkHandler = async () => {
-    const result = await getBookmarkAPI(user.token);
+    const result = await getBookmarkAPI(user?.token);
     setBookmark([...result.data]);
   };
 
