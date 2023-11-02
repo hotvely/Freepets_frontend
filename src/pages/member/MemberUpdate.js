@@ -120,28 +120,30 @@ const MemberUpdate = (props) => {
     formData.append("phone", e.target.password.value);
     formData.append("memberInfo", e.target.userInfo.value);
 
-    for (let key in formData) {
-      let file = null;
-      if (e.target.img.files[0] != undefined) {
-        file = e.target.img.files[0];
+    if (isOpen) {
+      for (let key in formData) {
+        let file = null;
+        if (e.target.img.files[0] != undefined) {
+          file = e.target.img.files[0];
+        }
+
+        if (key != "token" && (formData[key].length > 0 || file != {})) {
+          formData.append("file", file);
+
+          const result = await updateAPI(formData);
+
+          alert("정보 수정 완료!");
+
+          userSave(result.data);
+          localStorage.setItem("user", JSON.stringify(result.data));
+
+          setIsOpen(false);
+          return true;
+        }
       }
-
-      if (key != "token" && (formData[key].length > 0 || file != {})) {
-        formData.append("file", file);
-
-        const result = await updateAPI(formData);
-
-        alert("정보 수정 완료!");
-
-        userSave(result.data);
-        localStorage.setItem("user", JSON.stringify(result.data));
-
-        setIsOpen(false);
-        return true;
-      }
+      alert("모든 입력값이 비어 있습니다.");
+      return false;
     }
-    alert("모든 입력값이 비어 있습니다.");
-    return false;
   };
 
   const checkPassword = (e) => {
