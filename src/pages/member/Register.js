@@ -410,160 +410,158 @@ const Register = () => {
   };
 
   return (
-    <>
-      <RegisterPage>
-        <div className="homeLink">
-          <a href="/main">Freepets</a>
-        </div>
-        <div className="registerContent">
-          <form className="registerForm" onSubmit={formDataHandler}>
-            <div className="form_item_first">
-              <span>😄아이디</span>
-              <input
-                type="text"
-                name="userId"
-                placeholder="아이디"
-                onChange={checkId}
-                required
-              ></input>
-            </div>
-            {idValid ? null : (
-              <Explanation>
-                <span>
-                  아이디는 '-','_' 을 제외한 특수문자 사용불가, 4~16자리 입니다
-                </span>
-              </Explanation>
-            )}
-            <div className="form_item">
-              <span>😄비밀번호</span>
-              <input
-                type="password"
-                name="userPwd"
-                placeholder="비밀번호"
-                onChange={checkPassword}
-                required
-              ></input>
-            </div>
-            {passwordVaild ? null : (
-              <Explanation>
-                <span>비밀번호는 특수문자 포함한 8~16자리 까지 입니다</span>
-              </Explanation>
-            )}
-            <div className="form_item">
-              <span>😄전화번호</span>
-              <input
-                type="text"
-                name="userPhone"
-                maxLength="11"
-                onChange={checkPhoneNumber}
-                placeholder="전화번호"
-                required
-                style={{ color: phoneValid ? "black" : "red" }}
-              ></input>
-            </div>
-            {phoneValid ? null : (
-              <Explanation>
-                <span>비밀번호는 - 을 제외한 11자리 숫자 입니다</span>
-              </Explanation>
-            )}
-            <div className="form_item">
-              <span>😄이메일</span>
-              <input
-                type="email"
-                name="userEmail"
-                placeholder="e_mail"
-                onChange={checkEmail}
-                required
-              ></input>
-            </div>
-            {emailValid ? null : (
-              <Explanation>
-                <span>@, .com을 포함한 이메일 양식을 지켜주세요</span>
-              </Explanation>
-            )}
-            <div className="form_item">
-              <span>😄이름</span>
-              <input
-                type="text"
-                name="userName"
-                placeholder="이름"
-                required
-              ></input>
-            </div>
-            <div className="form_item radio">{checkGender()}</div>
-            <div className="form_item">
-              <span>😄생일</span>
-              <input
-                type="date"
-                name="userBithday"
-                value={date}
-                onChange={dateHandler}
-                required
-              ></input>
-            </div>
-            <div className="form_item address">
-              <div className="header">
-                <span>😄주소찾기</span>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    if (address) {
-                      setAddress("");
-                    }
-
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const newwindow = window.open(
-                      "http://localhost:3000/auth/API",
-                      "_blank",
-                      "width=500, height=502"
-                    );
-                    setNewWindow(newwindow);
-                  }}
-                >
-                  주소찾기
-                </button>
-              </div>
-              {address ? closeWindowHandler() : null}
-              <div className="detailAddress">
-                <span>{address}</span>
-                <input placeholder="상세주소" name="detalAddress"></input>
-              </div>
-            </div>
-            <div className="form_item_last">
-              <span>😄닉네임</span>
-              <input
-                type="text"
-                name="userNickname"
-                placeholder="닉네임"
-                required
-              ></input>
-            </div>
-            <button
-              type="submit"
-              className={`${btnClick ? "registerBtnClicked" : "registerBtn"}`}
-              onMouseDown={() => setBtnClick(true)}
-              onMouseUp={() => setBtnClick(false)}
-            >
-              회원가입
-            </button>
-          </form>
-          <div className="registerFooter">
-            <a className="fALink" href="#">
-              비밀번호 찾기
-            </a>
-            <span>|</span>
-            <a className="fALink" href="#">
-              아이디 찾기
-            </a>
-            <span>|</span>
-            <a className="fALink" href="#">
-              회원가입
-            </a>
+    <RegisterPage>
+      <div className="homeLink">
+        <a href="/main">Freepets</a>
+      </div>
+      <div className="registerContent">
+        <form className="registerForm" onSubmit={formDataHandler}>
+          <div className="form_item_first">
+            <span>😄아이디</span>
+            <input
+              type="text"
+              name="userId"
+              placeholder="아이디"
+              onChange={checkId}
+              required
+            ></input>
           </div>
+          {idValid ? null : (
+            <Explanation>
+              <span>
+                아이디는 '-','_' 을 제외한 특수문자 사용불가, 4~16자리 입니다
+              </span>
+            </Explanation>
+          )}
+          <div className="form_item">
+            <span>😄비밀번호</span>
+            <input
+              type="password"
+              name="userPwd"
+              placeholder="비밀번호"
+              onChange={checkPassword}
+              required
+            ></input>
+          </div>
+          {passwordVaild ? null : (
+            <Explanation>
+              <span>비밀번호는 특수문자 포함한 8~16자리 까지 입니다</span>
+            </Explanation>
+          )}
+          <div className="form_item">
+            <span>😄전화번호</span>
+            <input
+              type="text"
+              name="userPhone"
+              maxLength="11"
+              onChange={checkPhoneNumber}
+              placeholder="전화번호"
+              required
+              style={{ color: phoneValid ? "black" : "red" }}
+            ></input>
+          </div>
+          {phoneValid ? null : (
+            <Explanation>
+              <span>비밀번호는 - 을 제외한 11자리 숫자 입니다</span>
+            </Explanation>
+          )}
+          <div className="form_item">
+            <span>😄이메일</span>
+            <input
+              type="email"
+              name="userEmail"
+              placeholder="e_mail"
+              onChange={checkEmail}
+              required
+            ></input>
+          </div>
+          {emailValid ? null : (
+            <Explanation>
+              <span>@, .com을 포함한 이메일 양식을 지켜주세요</span>
+            </Explanation>
+          )}
+          <div className="form_item">
+            <span>😄이름</span>
+            <input
+              type="text"
+              name="userName"
+              placeholder="이름"
+              required
+            ></input>
+          </div>
+          <div className="form_item radio">{checkGender()}</div>
+          <div className="form_item">
+            <span>😄생일</span>
+            <input
+              type="date"
+              name="userBithday"
+              value={date}
+              onChange={dateHandler}
+              required
+            ></input>
+          </div>
+          <div className="form_item address">
+            <div className="header">
+              <span>😄주소찾기</span>
+              <button
+                type="button"
+                onClick={(e) => {
+                  if (address) {
+                    setAddress("");
+                  }
+
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const newwindow = window.open(
+                    "http://localhost:3000/auth/API",
+                    "_blank",
+                    "width=500, height=502"
+                  );
+                  setNewWindow(newwindow);
+                }}
+              >
+                주소찾기
+              </button>
+            </div>
+            {address ? closeWindowHandler() : null}
+            <div className="detailAddress">
+              <span>{address}</span>
+              <input placeholder="상세주소" name="detalAddress"></input>
+            </div>
+          </div>
+          <div className="form_item_last">
+            <span>😄닉네임</span>
+            <input
+              type="text"
+              name="userNickname"
+              placeholder="닉네임"
+              required
+            ></input>
+          </div>
+          <button
+            type="submit"
+            className={`${btnClick ? "registerBtnClicked" : "registerBtn"}`}
+            onMouseDown={() => setBtnClick(true)}
+            onMouseUp={() => setBtnClick(false)}
+          >
+            회원가입
+          </button>
+        </form>
+        <div className="registerFooter">
+          <a className="fALink" href="#">
+            비밀번호 찾기
+          </a>
+          <span>|</span>
+          <a className="fALink" href="#">
+            아이디 찾기
+          </a>
+          <span>|</span>
+          <a className="fALink" href="#">
+            회원가입
+          </a>
         </div>
-      </RegisterPage>
-    </>
+      </div>
+    </RegisterPage>
   );
 };
 

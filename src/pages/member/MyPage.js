@@ -217,7 +217,9 @@ const MyPage = () => {
                     ) : (
                       <div>"게시판정보?"</div>
                     )}
-                    {noti?.childComment?.parentCommentCode > 0 ? (
+                    {noti.boardCode == 6 ? (
+                      "채팅이 도착 했습니다. Click"
+                    ) : noti.childComment.parentComment > 0 ? (
                       <>
                         <div className="commentTitle">
                           {noti.boardDTO.title}
