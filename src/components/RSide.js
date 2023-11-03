@@ -228,6 +228,7 @@ const RSide = () => {
                           margin: "0px 5px",
                         }}
                       />
+                      <span>바람</span>
                     </span>
                   ) : weather?.weather[0].description.includes("fog") ? (
                     <span>

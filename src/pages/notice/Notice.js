@@ -24,8 +24,7 @@ import { getTokenCookie } from "../../api/cookie";
 import { userLogout } from "../../components/store/userSlice";
 
 const MainStlye = styled.div`
-  padding: 0 20px;
-  flex-basis: 800px;
+  flex-basis: 50%;
   flex-shrink: 0;
   flex-grow: 1;
 `;

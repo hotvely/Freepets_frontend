@@ -203,19 +203,19 @@ const MyPage = () => {
                 <div className="check-Alarm-Content">
                   <div className="check_Alarm-info">
                     {noti.boardCode == 1 ? (
-                      <div>커뮤니티게시판</div>
+                      <div className="boardName">커뮤니티게시판</div>
                     ) : noti.boardCode == 2 ? (
-                      <div>분실 신고게시판</div>
+                      <div className="boardName">분실 신고게시판</div>
                     ) : noti.boardCode == 3 ? (
-                      <div>시터게시판</div>
+                      <div className="boardName">시터게시판</div>
                     ) : noti.boardCode == 4 ? (
-                      <div>병원 정보게시판</div>
+                      <div className="boardName">병원 정보게시판</div>
                     ) : noti.boardCode == 5 ? (
-                      <div>공지사항게시판</div>
+                      <div className="boardName">공지사항게시판</div>
                     ) : noti.boardCode == 6 ? (
-                      <div>채팅</div>
+                      <div className="boardName">채팅</div>
                     ) : (
-                      <div>"게시판정보?"</div>
+                      <div className="boardName">"게시판정보?"</div>
                     )}
                     {noti.boardCode == 6 ? (
                       "채팅이 도착 했습니다. Click"
@@ -231,7 +231,10 @@ const MyPage = () => {
                         <div>댓글에 대댓글이 달렸습니다.</div>
                       </>
                     ) : (
-                      `'${noti.boardDTO?.title}' 게시글에 댓글이 달렸습니다. `
+                      <div className="notiContent">
+                        <div className="postTitle">{noti.boardDTO?.title}</div>
+                        <div>게시글에 댓글이 달렸습니다.</div>
+                      </div>
                     )}
                   </div>
                 </div>

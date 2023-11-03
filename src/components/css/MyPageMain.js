@@ -2,8 +2,10 @@ import styled from "styled-components";
 
 const MyPageMain = styled.main`
   margin: 0;
-  flex: 0 1 100%-800px;
-  padding: 0 100px;
+  flex-basis: 700px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  padding: 0 60px;
   img {
     width: 100%;
   }
@@ -138,9 +140,9 @@ const MyPageMain = styled.main`
     .check-Alarm {
       display: flex;
       flex-direction: row;
-      width: 100%;
+      width: 600px;
       align-items: center;
-      justify-content: center;
+      justify-content: start;
       margin: 20px 0;
 
       img {
@@ -156,7 +158,6 @@ const MyPageMain = styled.main`
       }
 
       .check-Alarm-Content {
-        width: 800px;
         height: 50px;
 
         /* margin-right: 100px; */
@@ -166,12 +167,28 @@ const MyPageMain = styled.main`
 
         .check_Alarm-info {
           display: flex;
+          align-items: center;
           flex-direction: row;
           margin: 5px 0;
-          flex-basis: 750px;
           flex-grow: 1;
-          div {
+
+          .boardName {
+            width: 130px;
           }
+
+          .notiContent {
+            width: 350px;
+            display: flex;
+            flex-direction: row;
+          }
+
+          .postTitle {
+            width: 100px;
+            white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정합니다. */
+            overflow: hidden; /* 요소의 내용이 너무 길어지면 숨깁니다. */
+            text-overflow: ellipsis; /* 생략 부호(...)를 사용하여 표시됩니다. */
+          }
+
           .commentTitle {
             margin-left: 20px;
             white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정합니다. */
@@ -203,7 +220,7 @@ const MyPageMain = styled.main`
       flex-direction: row;
       align-items: center;
       flex-basis: 50px;
-      width: 750px;
+      width: 550px;
 
       margin-top: 20px;
       margin-left: 70px;
@@ -226,9 +243,11 @@ const MyPageMain = styled.main`
         font-weight: bold;
       }
       .postInfo_title {
-        flex: 0 1 300px;
+        flex: 0 1 200px;
         padding-left: 20px;
         text-overflow: ellipsis;
+        white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정합니다. */
+        overflow: hidden; /* 요소의 내용이 너무 길어지면 숨깁니다. */
       }
       .postInfo_date {
         flex: 0 1 150px;
