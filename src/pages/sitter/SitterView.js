@@ -519,7 +519,7 @@ const SitterView = () => {
                         </div>
                         <div className="write-content">
                             <div className="write-content_header">      
-                                <img src={data.memberImg !== null ? data.memberImg : Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
+                                <img src={data?.memberImg !== null ? data?.memberImg : Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
                                 <div className="write-content_header-start">
                                     <div className="write-content_header-start_name">
                                         <p id="nickname">{data?.nickname}</p>

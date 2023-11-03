@@ -288,15 +288,9 @@ const HospitalReviewView = () => {
                     comment?.superHrCommentCode > 0 ? null : (
                       <li key={comment.hrCommentCode}>
                         <div className="comment">
-                          {
-                            // 유저 정보
-                          }
                           <div className="comment-content">
                             <div className="comment-desc">
                               <ProfileComponent props={comment?.member} />
-                              {
-                                // 댓글 정보
-                              }
                               <div className="commentTextBox">
                                 <p> {comment?.hrCommentDesc}</p>
                               </div>
@@ -328,22 +322,14 @@ const HospitalReviewView = () => {
                           </div>
                           <div className="reCommentViewBtn">
                             {
-                              // 대댓글 보기, 대댓글 작성 코드
-
-                              // 상태 값으로 저장하고 있는 숫자와 선택한 댓글의 코드가 같은 경우에?
                               selectedComment == comment?.hrCommentCode ? (
                                 <div>
-                                  {
-                                    // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
-                                  }
-
                                   <button
                                     className="commentView_btn"
                                     onClick={selectCommentHandler}
                                   >
                                     댓글 보기 닫기
                                   </button>
-                                  {/* 대댓글 호출 로직 */}
                                   <ul>
                                     {comments?.map((comment) =>
                                       comment?.superHrCommentCode <
@@ -389,17 +375,12 @@ const HospitalReviewView = () => {
                                   </ul>
 
                                   <CommentComponent
-                                    // props={{ num1: currClickComment, num2: 10, num3: 100 }}    //<- 여러개 던질때
                                     props={selectedComment}
                                     ref={addCommentHandler}
                                   />
                                 </div>
                               ) : (
                                 <div>
-                                  {
-                                    //id에 상위 댓글의 코드 값을 넣어서 버튼 id부여함.
-                                    // 부여한 이유는... 댓글 작성의 경우에 CommentComponent를 호출해서 재사용 하기 위함
-                                  }
                                   <button
                                     className="commentView_btn"
                                     id={`${comment.hrCommentCode}`}
@@ -414,7 +395,6 @@ const HospitalReviewView = () => {
                             }
                           </div>
                         </div>
-
                         <hr
                           style={{
                             width: "100%",
@@ -434,7 +414,6 @@ const HospitalReviewView = () => {
           {boardView?.memberDTO?.id == data?.id ? (
             <div
               className="left-btn"
-              // style={{ display: viewBtn ? "block" : "none" }}
             >
               <button
                 className="update-btn"

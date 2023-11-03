@@ -14,6 +14,9 @@ import NoticePost from "./NoticePost";
 import { addNoticeBoard, updateNoticeAPI } from "../api/notice";
 import { updateCommunity, updateLostAPI } from "../api/community";
 import { addLostAPI } from "../api/community";
+import { useSelector, useDispatch } from "react-redux";
+import { getTokenCookie } from "../api/cookie";
+import { userLogout } from "./store/userSlice";
 
 const Main = styled.div`
   margin: 0px 40px;
@@ -125,23 +128,36 @@ const UpdatePost = () => {
   const [rank1, setRank1] = useState();
   const [rank2, setRank2] = useState();
   const [title, setTitle] = useState();
+  const dispatch = useDispatch();
+
+  const data = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        if(state.user.user == {})
+        {
+          return JSON.parse(localStorage.getItem("user")); 
+        }
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        dispatch(userLogout());
+      }
+    }
+  });
 
   const onClick = async () => {
-    const data = JSON.parse(localStorage.getItem("user"));
-    // const token = JSON.parse(localStorage.getItem("token"));
-    const token = localStorage.getItem("token");
-    console.log(token);
+
     const formData = {
       title: title,
       desc: desc,
       token: data.token,
-      boardCode: postCode, // 백 게시글 코드 : 프론트에서 보낼 게시글 코드
-      code: boardCode, // 백에서는 게시판 코드 : 프론트에서도 게시판 코드
+      boardCode: postCode, 
+      code: boardCode, 
     };
 
-    //formData객체에 데이터 추가 하는법
-    //formData.서버쪽데이터이름 = 보내는데이터;
-    console.log(formData);
     let url = "../";
     if (select == 1) {
       await updateCommunity(formData);

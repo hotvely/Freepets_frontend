@@ -11,9 +11,13 @@ import { addHospitalBoard } from "../api/info";
 import { addCommunity } from "../api/community";
 import { addLostAPI } from "../api/community";
 import CommunityPost from "./Community/CommunityPost";
-import Notice from "../pages/notice/Notice";
+import banner from "./../resources/bannerTest.png";
 import NoticePost from "./NoticePost";
 import { addNoticeBoard } from "../api/notice";
+import { useSelector, useDispatch } from "react-redux";
+import { getTokenCookie } from "../api/cookie";
+import { userLogout } from "./store/userSlice";
+
 const Main = styled.div`
   margin: 0px 40px;
   display: flex;
@@ -21,6 +25,7 @@ const Main = styled.div`
   height: 100%;
   justify-content: center;
   flex-direction: column;
+  align-items: center;
 `;
 const MainBox = styled.main`
   display: flex;
@@ -122,9 +127,28 @@ const Post = () => {
   const [rank1, setRank1] = useState();
   const [rank2, setRank2] = useState();
   const [title, setTitle] = useState();
-  const onClick = async () => {
-    const data = JSON.parse(localStorage.getItem("user"));
+  const dispatch = useDispatch();
 
+  const data = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        if(state.user.user == {})
+        {
+          return JSON.parse(localStorage.getItem("user")); 
+        }
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        dispatch(userLogout());
+      }
+    }
+  });
+
+  const onClick = async () => {
+    
     const formData = new FormData();
 
     formData.append("title", title);
@@ -208,15 +232,7 @@ const Post = () => {
   );
   return (
     <Main>
-      <div
-        style={{
-          width: "100%",
-          height: "100px",
-          backgroundColor: "black",
-          marginBottom: "50px",
-          padding: "0px 10px",
-        }}
-      ></div>
+       <img src={banner} style={{width: "100%", height: "150px", marginBottom: "30px", objectFit: "cover"}}/>
       <MainBox>
         <div className="header-content">
           <select className="select select-category" onChange={selectChange}>
