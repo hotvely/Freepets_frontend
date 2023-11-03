@@ -223,6 +223,7 @@ const LMediaList = () => {
   const [searchType, setSearchType] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState();
   const [mediae, setMediae] = useState([]);
+  const [image, setImage] = useState();
   const navigate = useNavigate();
 
   const page = searchPage != null ? searchPage : 1;
@@ -322,15 +323,13 @@ const LMediaList = () => {
                 {mediae.map((media, index) => (
                   <div className="media-content" key={index}>
                     <div className="media-thumbnail">
+                      {console.log(media.lostDesc.match(/<img\s+src\s*=\s*['"]([^'"]*)['"]/)?.[1])}
                       <Link to={`/community/lost/lostview/${media?.lostCode}`}>
                         <p>
                           <img
                             src={
-                              hamster
-                              //   media.lostDesc.substring(
-                              //   media.lostDesc.indexOf('<img src="') + 10,
-                              //   media.lostDesc.indexOf('">')
-                              // )
+                              media.lostDesc.match(/<img\s+src\s*=\s*['"]([^'"]*)['"]/)?.[1] !== undefined ?
+                              media.lostDesc.match(/<img\s+src\s*=\s*['"]([^'"]*)['"]/)?.[1] : hamster
                             }
                             alt="미디어썸네일"
                           />

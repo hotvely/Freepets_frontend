@@ -195,6 +195,7 @@ const Post = () => {
                 images.push(file);
                 setImg(images);
                 resolve(result.url);
+                console.log(result);
               })
               .catch((error) => {
                 reject("Upload 실패");
