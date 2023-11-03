@@ -484,7 +484,7 @@ const SitterView = () => {
                         </div>
                         <div className="main-header_end">
                             <div className="main-header_end-user">
-                                <img src={Img} style={{width : "100px", height: "100px", objectFit: "cover"}}/>
+                                <img src={boardView?.memberDTO.memberImg !== null ? boardView?.memberDTO.memberImg : Img} style={{width : "100px", height: "100px", objectFit: "cover"}}/>
                                 <div className="main-header_end-user_info">
                                     <div className="main-header_end-user_info-name">
                                         <p id="nickname">{boardView?.memberDTO.nickname}</p>
@@ -519,7 +519,7 @@ const SitterView = () => {
                         </div>
                         <div className="write-content">
                             <div className="write-content_header">      
-                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
+                                <img src={data.memberImg !== null ? data.memberImg : Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
                                 <div className="write-content_header-start">
                                     <div className="write-content_header-start_name">
                                         <p id="nickname">{data?.nickname}</p>
@@ -546,7 +546,7 @@ const SitterView = () => {
                         {reviews.map((items) => (
                         <div className="review-content" key={items?.sitterReviewCode}>
                             <div className="review-content_start">
-                                <img src={Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
+                                <img src={items?.member.memberImg !== null ? items.member?.memberImg : Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
                                 <div className="review-content_start-user">
                                     <div className="review-content_start-user_name">
                                         <p id="nickname">{items?.member.nickname}</p>

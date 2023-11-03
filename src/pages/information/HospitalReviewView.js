@@ -220,7 +220,7 @@ const HospitalReviewView = () => {
             </div>
             <div className="writer-info">
               <div className="profile-img">
-                <img src={yaonge} alt="배너 이미지" />
+                <img src={boardView?.memberDTO?.memberImg !== null ? boardView?.memberDTO?.memberImg : yaonge} alt="유저 이미지" />
 
                 <div className="profile-area">
                   <div className="writer-info">
@@ -278,7 +278,7 @@ const HospitalReviewView = () => {
             <div className="comment-box">
               <div className="commentBox">
                 <div className="commentProfile">
-                  <img src={yaonge}></img>
+                  <img src={data?.memberImg !== null ? data?.memberImg : yaonge}></img>
                 </div>
                 <CommentComponent props={0} ref={addCommentHandler} />
               </div>

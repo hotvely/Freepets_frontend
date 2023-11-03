@@ -317,7 +317,7 @@ const Sitter = () => {
                 >
                   <div className="main-content_start">
                     <img
-                      src={Img}
+                      src={items.member.memberImg != null ? items.member.memberImg : Img}
                       style={{
                         width: "100px",
                         height: "100px",
