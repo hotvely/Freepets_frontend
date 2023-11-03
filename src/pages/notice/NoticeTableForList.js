@@ -3,24 +3,24 @@ import { useTable } from "react-table";
 import styled from "styled-components";
 
 const Styles = styled.div`
-  width: 100%;
-
   table {
-    width: 100%;
     display: flex;
     flex-direction: column;
     table-layout: fixed;
     thead {
       border-bottom: solid 1px #3a98b9;
       display: flex;
-      flex-direction: row;
+
       justify-content: space-between;
       tr {
-        th {
-          display: flex;
+        display: flex;
+        flex-direction: row;
 
+        th {
           height: 30px;
+          display: flex;
           align-items: center;
+
           justify-content: center;
           font-weight: bold;
           font-size: 1rem;
@@ -31,6 +31,8 @@ const Styles = styled.div`
     tbody {
       tr {
         border-bottom: #3a98b9;
+        display: flex;
+        flex-direction: row;
         td {
           display: flex;
           justify-content: center;
@@ -44,7 +46,7 @@ const Styles = styled.div`
       }
     }
   }
-
+  /* 
   tr {
     width: 100%;
     display: flex;
@@ -52,7 +54,7 @@ const Styles = styled.div`
     td {
       justify-content: center;
     }
-  }
+  } */
 `;
 
 const NoticeTableForList = ({ columns, data, onRowClick }) => {
@@ -70,12 +72,17 @@ const NoticeTableForList = ({ columns, data, onRowClick }) => {
                   style={
                     column.Header === "제목"
                       ? {
-                          width: "400px",
+                          width: "350px",
                           paddingTop: "8px",
                           paddingBottom: "8px",
                           fontSize: "0.9rem",
-
-                          flexGrow: "1",
+                        }
+                      : column.Header === "작성일"
+                      ? {
+                          width: "150px",
+                          paddingTop: "8px",
+                          paddingBottom: "8px",
+                          fontSize: "0.9rem",
                         }
                       : {
                           width: "120px",
@@ -107,12 +114,28 @@ const NoticeTableForList = ({ columns, data, onRowClick }) => {
                     style={
                       cell.column.Header === "제목"
                         ? {
-                            width: "400px",
+                            // flexBasis: "350px",
+                            // flexGrow: 1,
+                            // flexShrink: 0,
                             paddingTop: "8px",
                             paddingBottom: "8px",
                             fontSize: "0.9rem",
                             borderBottom: "1px solid #CDF5FD",
-                            flexGrow: "1",
+                            // flexGrow: "1",
+                            width: "350px",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            textOverflow: "ellipsis",
+                          }
+                        : cell.column.Header === "작성일"
+                        ? {
+                            width: "150px",
+                            paddingTop: "8px",
+                            paddingBottom: "8px",
+                            fontSize: "0.9rem",
+                            borderBottom: "1px solid #CDF5FD",
+
+                            textOverflow: "ellipsis",
                           }
                         : {
                             width: "120px",
@@ -120,6 +143,8 @@ const NoticeTableForList = ({ columns, data, onRowClick }) => {
                             paddingBottom: "8px",
                             fontSize: "0.9rem",
                             borderBottom: "1px solid #CDF5FD",
+
+                            textOverflow: "ellipsis",
                           }
                     }
                   >

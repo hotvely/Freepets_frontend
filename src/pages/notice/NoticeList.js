@@ -8,35 +8,17 @@ import Page from "../../components/Page";
 import { faKorvue } from "@fortawesome/free-brands-svg-icons";
 
 const MainStlye = styled.div`
-  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const MainBanner = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding-bottom: 30px;
-
-  .banner-img {
-    width: 100%;
-    img {
-      width: 100%;
-    }
-  }
-`;
 const ContentStyle = styled.div`
   display: flex;
+
   flex-direction: column;
   align-items: center;
   margin: 0;
-  width: 100%;
-  div {
-    display: flex;
-    justify-content: space-around;
-  }
 `;
 
 const NoticeList = (props) => {
@@ -58,10 +40,9 @@ const NoticeList = (props) => {
 
   // const [keyword, setKeyword] = useState();
   let sortNum = props.props.sortNum;
-
   let keyword = props.props.keyword ? props.props.keyword : "";
-
   let searchNum = props.props.searchNum;
+
   const changeDate = (tempArr) => {
     for (const item in tempArr) {
       tempArr[item].noticeDate = dateFormatDefault(tempArr[item].noticeDate);
@@ -116,8 +97,6 @@ const NoticeList = (props) => {
     }
   };
 
-  useEffect(() => {}, [boards]);
-
   useEffect(() => {
     if (page <= 1) getBoardHandler(1);
   }, []);
@@ -144,8 +123,6 @@ const NoticeList = (props) => {
       if (page != 1) navigate("../notice/?page=1");
     }
   }, [keyword]);
-
-  useEffect(() => {}, [boards]);
 
   useEffect(() => {
     console.log("페이지 유즈 이펙트");
