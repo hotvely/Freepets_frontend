@@ -53,7 +53,6 @@ const HospitalReviewView = () => {
       }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -122,7 +121,6 @@ const HospitalReviewView = () => {
       const commentResult = await addComment(formData);
       if(parentCode > 0) {
         const result = await getHrCommentOne(parentCode);
-        console.log(result?.data);
         if(result?.data?.member?.id != data.id) {
           const notiData = {
             id: result?.data?.member?.id,

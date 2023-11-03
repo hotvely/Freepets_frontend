@@ -31,7 +31,6 @@ const TotalSearch = () => {
         <div className='main-top'>
             <div><span id='search'>{search}</span>에 대한 검색 결과입니다.</div>
         </div>
-        {console.log(noticeList)}
         <div className='main-center'>
             <div className='main-center_container'>
                 <div className='main-center_container_div'>

@@ -24,7 +24,7 @@ import { getTokenCookie } from "../../api/cookie";
 import { userLogout } from "../../components/store/userSlice";
 
 const MainStlye = styled.div`
-  flex-basis: 50%;
+  flex-basis: 800px;
   flex-shrink: 0;
   flex-grow: 1;
 `;
@@ -32,7 +32,6 @@ const MainStlye = styled.div`
 const MainBanner = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
   padding-bottom: 0 30px;
   flex-basis: 800px;
   .banner-img {
@@ -45,8 +44,9 @@ const MainBanner = styled.div`
 
 const MainContentBox = styled.div`
   border: 1px solid #3a98b9;
-  flex-basis: 800px;
+  flex-basis: 600px;
   margin-top: 20px;
+  flex-shrink : 1;
   /* display: flex;
   flex-direction: column; */
 

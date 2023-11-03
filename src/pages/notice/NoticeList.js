@@ -8,7 +8,7 @@ import Page from "../../components/Page";
 import { faKorvue } from "@fortawesome/free-brands-svg-icons";
 
 const MainStlye = styled.div`
-  width: 100%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;

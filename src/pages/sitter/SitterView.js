@@ -331,7 +331,6 @@ const SitterView = () => {
           }
         } else {
           if (localStorage.getItem("user")) {
-            console.log("로그아웃 !!!");
             dispatch(userLogout());
           }
         }
@@ -414,14 +413,11 @@ const SitterView = () => {
     }
 
     const onBookMarkBtn = async () => {
-        console.log('안녕');
         const formData = {
             boardName: 'sitter',
             postCode: code,
             token: data?.token,
         }
-
-        console.log(formData);
         const result = await addBookmarkAPI(formData);
         if(!result.data) {
             alert('이미 북마크에 등록되었습니다.')

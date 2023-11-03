@@ -234,7 +234,6 @@ const Sitter = () => {
 
   const selectChange = (e) => {
     let selectValue = e.target.value;
-    console.log(selectValue);
     setSelect(selectValue);
   };
 
