@@ -219,14 +219,14 @@ const MyPage = () => {
                     )}
                     {noti.boardCode == 6 ? (
                       "채팅이 도착 했습니다. Click"
-                    ) : noti.childComment.parentComment > 0 ? (
+                    ) : noti.childComment?.parentComment > 0 ? (
                       <>
                         <div className="commentTitle">
                           {noti.boardDTO?.title}
                         </div>
                         <div>게시글에 작성한</div>
                         <div className="commentDesc">
-                          {noti.parentComment.commentDesc}
+                          {noti?.parentComment.commentDesc}
                         </div>
                         <div>댓글에 대댓글이 달렸습니다.</div>
                       </>

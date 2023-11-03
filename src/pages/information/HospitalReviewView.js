@@ -53,7 +53,6 @@ const HospitalReviewView = () => {
       }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -122,7 +121,6 @@ const HospitalReviewView = () => {
       const commentResult = await addComment(formData);
       if(parentCode > 0) {
         const result = await getHrCommentOne(parentCode);
-        console.log(result?.data);
         if(result?.data?.member?.id != data.id) {
           const notiData = {
             id: result?.data?.member?.id,
@@ -222,7 +220,7 @@ const HospitalReviewView = () => {
             </div>
             <div className="writer-info">
               <div className="profile-img">
-                <img src={yaonge} alt="배너 이미지" />
+                <img src={boardView?.memberDTO?.memberImg !== null ? boardView?.memberDTO?.memberImg : yaonge} alt="유저 이미지" />
 
                 <div className="profile-area">
                   <div className="writer-info">
@@ -280,7 +278,7 @@ const HospitalReviewView = () => {
             <div className="comment-box">
               <div className="commentBox">
                 <div className="commentProfile">
-                  <img src={yaonge}></img>
+                  <img src={data?.memberImg !== null ? data?.memberImg : yaonge}></img>
                 </div>
                 <CommentComponent props={0} ref={addCommentHandler} />
               </div>

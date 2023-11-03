@@ -191,7 +191,6 @@ const Chatting = () => {
           }
         } else {
           if (localStorage.getItem("user")) {
-            console.log("로그아웃 !!!");
             dispatch(userLogout());
           }
         }
@@ -218,7 +217,6 @@ const Chatting = () => {
 
     const getMessageAPI = async () => {
         const result = await getMessageList(data.token, id);
-        console.log(result.data);
         setMessages(result.data);
     };
 

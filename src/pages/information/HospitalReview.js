@@ -366,7 +366,7 @@ const HospitalReview = () => {
               >
                 <div className="main-content_start">
                   <img
-                    src={yaonge}
+                    src={item.member.memberImg != null ? item.member.memberImg : yaonge}
                     style={{
                       width: "100px",
                       height: "100px",

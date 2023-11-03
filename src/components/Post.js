@@ -140,7 +140,6 @@ const Post = () => {
     } else if (select == 3) {
       formData.append("sitterPrice", rank1);
       formData.append("sitterLoc", rank2);
-      console.log(formData);
       await addSitterBoard(formData);
     } else if (select == 4) {
       formData.append("hospitalName", rank1);
@@ -193,15 +192,13 @@ const Post = () => {
             })
               .then((response) => response.json())
               .then((result) => {
-                console.log(result);
                 images.push(file);
                 setImg(images);
-                console.log(images);
                 resolve(result.url);
+                console.log(result);
               })
               .catch((error) => {
                 reject("Upload 실패");
-                console.log("Error : " + error);
               });
           });
         },
