@@ -66,7 +66,6 @@ const NoticeView = () => {
       }
     } else {
       if (localStorage.getItem("user")) {
-        console.log("로그아웃 !!!");
         dispatch(userLogout());
       }
     }
@@ -96,15 +95,14 @@ const NoticeView = () => {
 
       if (formData.commentDesc) {
         const addCommentResult = await addCommentAPI(formData);
-        console.log(addCommentResult);
+
         await getPostHandler(code);
         // 댓글 작성 비동기 함수가 돌기 때문에.. 여기서 알림 DB 추가 해주면 됨
         // 단, 게시글 작성자 아이디하고 현재 아이디 하고 같으면 알림 추가 안함
         if (parentCode > 0) {
           // 부모 댓글 있을때.
-          console.log(parentCode);
+
           const result = await getCommentAPI(parentCode);
-          console.log(result.data);
 
           // 부모 댓글 작성자와 대댓글 작성자가 다를때
           if (result.data.member.id != user.id) {
@@ -117,11 +115,10 @@ const NoticeView = () => {
               url: `http://localhost:3000/notice/noticeView/${formData.postCode}`,
             };
             await addNoticeNotification(notiData);
-            console.log("댓글 작성자랑 달라서 알림 감!");
           }
         } else {
           // 부모 댓글 없어서 그냥 댓글 달때
-          console.log(postData);
+
           if (postData?.member.id != user?.id) {
             const notiData = {
               id: postData.member.id,
@@ -144,14 +141,12 @@ const NoticeView = () => {
   };
 
   const addBookmarkHandler = async () => {
-    console.log(user);
     if (postData.noticeCode) {
       const formData = {
         boardName: "notice",
         postCode: postData.noticeCode,
         token: user?.token,
       };
-      console.log(formData);
 
       const result = await addBookmarkAPI(formData);
       if (!result.data) {
@@ -173,7 +168,6 @@ const NoticeView = () => {
         // await getPostHandler(code);
         setLikeCount(likeCount + 1);
       } else {
-        console.log("삭제 코드 들어옴");
         setLikeCount(likeCount - 1);
       }
     } else {
@@ -185,7 +179,6 @@ const NoticeView = () => {
     if (code == currClickBtn) {
       code = -1;
     }
-
     setCurrClickBtn(code);
   };
 
@@ -216,7 +209,6 @@ const NoticeView = () => {
 
   useEffect(() => {
     const handler = async () => {
-      console.log("페이지 시작..");
       await getPostHandler(code);
       await getCommentHandler(code);
     };
@@ -274,7 +266,6 @@ const NoticeView = () => {
                   <div className="article-info">
                     <span>{dateFormatDefault(postData?.noticeDate)}</span>
                     <span>ㆍ조회{postData?.noticeViews}</span>
-                    {/* <span>ㆍ댓글{postData?.noticeCommentCount}</span> */}
 
                     <span>ㆍ좋아요{likeCount}</span>
                   </div>
@@ -284,7 +275,6 @@ const NoticeView = () => {
                 <button className="comment-count-btn">
                   [ <span>{postData?.noticeCommentCount}</span> ]
                 </button>
-                <button className="url-copy-btn">URL복사</button>
                 <button
                   onClick={() => {
                     addBookmarkHandler();
@@ -381,9 +371,8 @@ const NoticeView = () => {
                               selected_Comment == comment?.noticeCommentCode ? (
                                 <div>
                                   {
-                                    // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까.. handler만들어서
+                                    // 댓글 작성 닫기 버튼을 누르게 되면 기존에 저장하고 있는 상태값 숫자를 리셋해 줘야함 set(0)하면 코드 컴파일 도중 실행 되니까..
                                   }
-
                                   <button
                                     className="commentView_btn"
                                     onClick={selected_Comment_handler}

@@ -5,7 +5,8 @@ const StyledLSide = styled.div`
   display: flex;
   justify-content: center;
   flex: 0 0 200px;
-  margin-left: 50px;
+  margin-left: 80px;
+  margin-right: 30px;
   height: 130vh;
   /* padding-left: 50px; */
 
