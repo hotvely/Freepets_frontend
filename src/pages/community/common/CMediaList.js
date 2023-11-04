@@ -234,7 +234,6 @@ const MainContentBox = styled.div`
 
 const CMediaList = () => {
   const param = useParams();
-  console.log(param);
 
   const [searchParams] = useSearchParams();
   const searchPage = searchParams.get("page");
@@ -361,10 +360,13 @@ const CMediaList = () => {
                     <p>
                       <img
                         src={
-                          hamster
-                          // media.commonDesc.substring(
-                          // media.commonDesc.indexOf('<img src="') + 10,
-                          // media.commonDesc.indexOf('">'))
+                          media.commonDesc.match(
+                            /<img\s+src\s*=\s*['"]([^'"]*)['"]/
+                          )?.[1] !== undefined
+                            ? media.commonDesc.match(
+                                /<img\s+src\s*=\s*['"]([^'"]*)['"]/
+                              )?.[1]
+                            : hamster
                         }
                         alt="미디어썸네일"
                       />

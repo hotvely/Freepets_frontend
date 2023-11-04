@@ -466,7 +466,14 @@ const LostView = () => {
             </div>
             <div className="writer-info">
               <div className="profile-img">
-                <img src={yange} alt="양이 이미지" />
+                <img
+                  src={
+                    post?.member?.memberImg !== null
+                      ? post?.member?.memberImg
+                      : yange
+                  }
+                  alt="양이 이미지"
+                />
               </div>
               <div className="profile-area">
                 <div className="writer-info">

@@ -325,9 +325,7 @@ const CommonView = () => {
   //const user = JSON.parse(localStorage.getItem("user"));
 
   const viewBtn = post && post?.member && post?.member?.id === user?.id;
-  console.log("버튼 눌러" + viewBtn);
-  console.log("게시글작성자" + post?.member?.id);
-  console.log("유저" + user?.id);
+
   const ScrollToTopBtn = () => {
     window.scrollTo(0, 0);
   };
@@ -487,7 +485,14 @@ const CommonView = () => {
             </div>
             <div className="writer-info">
               <div className="profile-img">
-                <img src={yange} alt="양이 이미지" />
+                <img
+                  src={
+                    post?.member?.memberImg !== null
+                      ? post?.member?.memberImg
+                      : yange
+                  }
+                  alt="양이 이미지"
+                />
               </div>
               <div className="profile-area">
                 <div className="writer-info">
@@ -532,7 +537,9 @@ const CommonView = () => {
             <div className="comment-box">
               <div className="commentBox">
                 <div className="commentProfile">
-                  {/* <img src={hamster}></img> */}
+                  <img
+                    src={user?.memberImg !== null ? user?.memberImg : yange}
+                  ></img>
                 </div>
                 <CommentComponent props={0} ref={addCommentHandler} />
               </div>
