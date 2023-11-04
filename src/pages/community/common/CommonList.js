@@ -8,6 +8,9 @@ import {
 import { dateFormatTrans } from "../../../api/utils";
 import CommunityTableForList from "../../../components/Community/CommunityTableForList";
 import Page from "../../../components/Page";
+import { useSelector, useDispatch } from "react-redux";
+import { getTokenCookie } from "../../../api/cookie";
+import { userLogout } from "../../../components/store/userSlice";
 
 const ContentStyle = styled.div`
   display: flex;
@@ -55,6 +58,22 @@ const CommunityList = (props) => {
   const searchType = props.props.searchType;
   const searchKeyword = props.props.searchKeyword;
   const [totalPages, setTotalPages] = useState();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => {
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      if (state.user != {}) {
+        return state.user;
+      }
+      return JSON.parse(localStorage.getItem("user"));
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
+  });
 
   const handleRowClick = (row) => {
     //ViewPage로 이동
@@ -182,9 +201,11 @@ const CommunityList = (props) => {
         <div className="paging-bar">
           <Page totalPages={totalPages} page={page} />
         </div>
-        <div id="write-btn">
-          <button onClick={navWrite}>글쓰기</button>
-        </div>
+        {user !== undefined ?
+          <div id="write-btn">
+            <button onClick={navWrite}>글쓰기</button>
+          </div> : null
+        }
       </div>
     </ContentStyle>
   );

@@ -263,6 +263,7 @@ const CMediaList = () => {
       }
     }
   });
+  
   console.log(user);
 
   const onClickList = (e) => {
@@ -423,9 +424,11 @@ const CMediaList = () => {
             <div className="paging-bar">
               <Page totalPages={totalPages} page={page} />
             </div>
-            <div id="write-btn">
-              <button onClick={navWrite}>글쓰기</button>
-            </div>
+            {user !== undefined ?
+              <div id="write-btn">
+                <button onClick={navWrite}>글쓰기</button>
+              </div> : null
+            }      
           </div>
         </div>
       );
