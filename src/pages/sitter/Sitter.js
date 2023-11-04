@@ -17,6 +17,9 @@ import {
   getSitterPriceOrder,
 } from "../../api/sitter";
 import banner from "../../resources/bannerTest.png";
+import { useSelector, useDispatch } from "react-redux";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../../components/store/userSlice";
 
 const Main = styled.div`
   margin: 0px 40px;
@@ -203,8 +206,27 @@ const Sitter = () => {
   const navigator = useNavigate();
   const [totalPages, setTotalPages] = useState();
   const [select, setSelect] = useState(1);
+  const dispatch = useDispatch();
 
   const page = searchPage != null ? searchPage : 1;
+
+  const data = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        if(state.user.user == {})
+        {
+          return JSON.parse(localStorage.getItem("user")); 
+        }
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        dispatch(userLogout());
+      }
+    }
+  });
 
   const NaviView = (e) => {
     e.preventDefault();
@@ -280,9 +302,11 @@ const Sitter = () => {
               <option value="2">높은 비용</option>
               <option value="3">낮은 비용</option>
             </select>
-            <button onClick={NavCreate} className="button-write">
+            {data !== undefined ?
+              <button onClick={NavCreate} className="button-write">
               글쓰기
-            </button>
+            </button> : null
+            }           
           </div>
           <div className="header-end">
             <div className="header-end-label">

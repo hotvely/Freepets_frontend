@@ -14,6 +14,9 @@ import {
 import { useEffect, useState } from "react";
 import Page from "../../components/Page";
 import { dateFormatTrans } from "../../api/utils";
+import { useSelector, useDispatch } from "react-redux";
+import { getTokenCookie } from "../../api/cookie";
+import { userLogout } from "../../components/store/userSlice";
 
 const MainStyle = styled.div`
   margin: 0px 40px;
@@ -260,8 +263,27 @@ const HospitalReview = () => {
   const [select1, setSelect1] = useState(1);
   const [select2, setSelect2] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const dispatch = useDispatch();
 
   const page = searchPage != null ? searchPage : 1;
+
+  const data = useSelector((state) => {
+    if (getTokenCookie() !== undefined) {
+      if (state.user.user) {
+        if(state.user.user == {})
+        {
+          return JSON.parse(localStorage.getItem("user")); 
+        }
+        return state.user;
+      } else {
+        return JSON.parse(localStorage.getItem("user"));
+      }
+    } else {
+      if (localStorage.getItem("user")) {
+        dispatch(userLogout());
+      }
+    }
+  });
 
   const NavWrite = () => {
     navigator("create");
@@ -329,9 +351,11 @@ const HospitalReview = () => {
               <option value="2">추천순</option>
               <option value="3">댓글수</option>
             </select>
-            <button className="button-write" onClick={NavWrite}>
+            {data !== undefined ?
+              <button onClick={NavWrite} className="button-write">
               글쓰기
-            </button>
+            </button> : null
+            }
           </div>
           <div className="header-end">
             <div className="header-end-label">

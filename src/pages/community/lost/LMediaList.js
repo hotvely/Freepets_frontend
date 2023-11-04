@@ -8,6 +8,9 @@ import { getLostList, getSearchLostList } from "../../../api/community";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { dateFormatDefault } from "../../../api/utils";
 import Page from "../../../components/Page";
+import { useSelector, useDispatch } from "react-redux";
+import { getTokenCookie } from "../../../api/cookie";
+import { userLogout } from "../../../components/store/userSlice";
 
 const MainStlye = styled.div`
   padding: 10px;
@@ -225,8 +228,24 @@ const LMediaList = () => {
   const [mediae, setMediae] = useState([]);
   const [image, setImage] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const page = searchPage != null ? searchPage : 1;
+
+  const user = useSelector((state) => {
+    if (getTokenCookie() != undefined) {
+      console.log("쿠키 있!");
+      if (state.user != {}) {
+        return state.user;
+      }
+      return JSON.parse(localStorage.getItem("user"));
+    } else {
+      if (localStorage.getItem("user")) {
+        console.log("호출..?");
+        dispatch(userLogout());
+      }
+    }
+  });
 
   const sortChangeHandler = (event) => {
     const selectedOrderBy = event.currentTarget.value;
@@ -394,9 +413,11 @@ const LMediaList = () => {
           <div className="paging-bar">
             <Page totalPages={totalPages} page={page} />
           </div>
-          <div id="write-btn">
-            <button onClick={navWrite}>글쓰기</button>
-          </div>
+          {user !== undefined ?
+            <div id="write-btn">
+              <button onClick={navWrite}>글쓰기</button>
+            </div> : null
+          }
         </div>
       </MainContentBox>
     </MainStlye>
