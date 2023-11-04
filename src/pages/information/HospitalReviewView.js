@@ -231,7 +231,7 @@ const HospitalReviewView = () => {
                   <div className="article-info">
                     <span>{dateFormatDefault(boardView?.date)}</span>
                     <span>ㆍ조회 {boardView?.viewCount}</span>
-                    <span>ㆍ좋아요 {boardView?.likeCount}</span>
+                    <span>ㆍ좋아요 {like}</span>
                   </div>
                 </div>
               </div>

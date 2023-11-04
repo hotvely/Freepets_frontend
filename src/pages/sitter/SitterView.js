@@ -255,6 +255,7 @@ const ReviewContent = styled.div`
                     display: flex;
                     flex-direction: column;
                     margin-left: 10px;
+                    width: 20%;
 
                     .review-content_start-user_name {
                         display: flex;

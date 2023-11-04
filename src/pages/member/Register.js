@@ -449,7 +449,7 @@ const Register = () => {
           </div>
           {phoneValid ? null : (
             <Explanation>
-              <span>비밀번호는 - 을 제외한 11자리 숫자 입니다</span>
+              <span>전화번호는 - 을 제외한 11자리 숫자 입니다</span>
             </Explanation>
           )}
           <div className="form_item">
