@@ -176,7 +176,7 @@ const MainBox = styled.div`
 `
 
 const Chatting = () => {
-    const [content, setContent] = useState();
+    const [content, setContent] = useState('');
     const [messages, setMessages] = useState([]);
     const [nickname, setNickname] = useState();
     const { id } = useParams();
@@ -230,9 +230,8 @@ const Chatting = () => {
     }
 
     useEffect(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-        getMessageAPI();
         getMemberNick();
+        getMessageAPI();
     }, []);
 
     return(
