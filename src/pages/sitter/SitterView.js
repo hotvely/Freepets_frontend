@@ -251,15 +251,22 @@ const ReviewContent = styled.div`
                 padding: 10px;
                 display: flex;
 
+                .review-content_start-user-img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50px;
+                    object-fit: cover;
+                }
+
                 .review-content_start-user {
                     display: flex;
                     flex-direction: column;
                     margin-left: 10px;
-                    width: 20%;
+                    width: 20%;                    
 
                     .review-content_start-user_name {
                         display: flex;
-
+                     
                         #nickname {
                             font-size: 0.9rem;
                             border: 1px solid #000;
@@ -547,7 +554,7 @@ const SitterView = () => {
                         {reviews.map((items) => (
                         <div className="review-content" key={items?.sitterReviewCode}>
                             <div className="review-content_start">
-                                <img src={items?.member.memberImg !== null ? items.member?.memberImg : Img} style={{width : "50px", height: "50px", borderRadius: "50px", objectFit: "cover"}}/>
+                                <img src={items?.member.memberImg !== null ? items.member?.memberImg : Img} className="review-content_start-user-img"/>
                                 <div className="review-content_start-user">
                                     <div className="review-content_start-user_name">
                                         <p id="nickname">{items?.member.nickname}</p>

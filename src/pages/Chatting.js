@@ -88,6 +88,8 @@ const MainBox = styled.div`
                         }
 
                         .sender-message_desc {
+                            margin-top: 5px;
+
                             #desc {
                                 width: 200px;
                                 font-size: 0.9rem;
@@ -135,6 +137,8 @@ const MainBox = styled.div`
                         }
 
                         .receiver-message_desc {
+                            margin-top: 5px;
+                            
                             #desc {
                                 width: 200px;
                                 font-size: 0.9rem;

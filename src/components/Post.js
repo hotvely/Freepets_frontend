@@ -242,7 +242,9 @@ const Post = () => {
             <option value="3">시터</option>
             <option value="4">병원 정보</option>
             <option> ------------ </option>
-            <option value="5">공지사항</option>
+            {data?.authority == "ADMIN" ? 
+              <option value="5">공지사항</option> : null
+            }           
           </select>
           {select == null ? (
             <div></div>
