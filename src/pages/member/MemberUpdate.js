@@ -115,9 +115,9 @@ const MemberUpdate = (props) => {
 
     formData.append("token", user.token);
     formData.append("password", e.target.password.value);
-    formData.append("nickname", e.target.password.value);
-    formData.append("email", e.target.password.value);
-    formData.append("phone", e.target.password.value);
+    formData.append("nickname", e.target.nickname.value);
+    formData.append("email", e.target.email.value);
+    formData.append("phone", e.target.phone.value);
     formData.append("memberInfo", e.target.userInfo.value);
 
     if (isOpen) {
