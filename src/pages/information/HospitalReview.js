@@ -328,7 +328,6 @@ const HospitalReview = () => {
     }
   }
 
-
   useEffect(() => {
     window.scrollTo(0, 0);
     if(keyword != null) {

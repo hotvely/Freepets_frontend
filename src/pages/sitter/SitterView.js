@@ -358,6 +358,8 @@ const SitterView = () => {
     const [style4, setStyle4] = useState(styleGray);
     const [style5, setStyle5] = useState(styleGray);
 
+    const starStyles = [style1, style2, style3, style4, style5];
+
 
     const onRatings = (event) => {
         switch(eval(event.currentTarget.value)) {
@@ -532,12 +534,10 @@ const SitterView = () => {
                                     <div className="write-content_header-start_name">
                                         <p id="nickname">{data?.nickname}</p>
                                     </div>
-                                    <div className="write-content_header-start_ratings">                                       
-                                        <button onClick={onRatings} value="1"><FontAwesomeIcon icon={faStar} style={style1}/></button>
-                                        <button onClick={onRatings} value="2"><FontAwesomeIcon icon={faStar} style={style2}/></button>
-                                        <button onClick={onRatings} value="3"><FontAwesomeIcon icon={faStar} style={style3}/></button>
-                                        <button onClick={onRatings} value="4"><FontAwesomeIcon icon={faStar} style={style4}/></button>
-                                        <button onClick={onRatings} value="5"><FontAwesomeIcon icon={faStar} style={style5}/></button>
+                                    <div className="write-content_header-start_ratings">
+                                        {starStyles.map((style, i) => (
+                                            <button key={i + 1} onClick={onRatings} value={i + 1}><FontAwesomeIcon icon={faStar} style={style}/></button>
+                                        ))}
                                     </div>
                                 </div>                               
                             </div>
